@@ -1,9 +1,11 @@
 package com.syncworks.slight;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -35,5 +37,21 @@ public class MainActivity extends ActionBarActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	// 버튼 클릭시 호출
+	public void onClick(View v) {
+		Intent intent = null;
+		switch (v.getId()) {
+			// 블루투스 설정 버튼 클릭시
+			case R.id.btn_ble_set:
+				break;
+			// LED 효과 설정 버튼 클릭시
+			case R.id.btn_led_effect:
+				break;
+			// 타이머 설정 버튼 클릭시
+			case R.id.btn_timer_set:
+				break;
+		}
 	}
 }

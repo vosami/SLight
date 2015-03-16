@@ -6,11 +6,55 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context=".MainActivity">
-
-    <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
+                android:background="@color/White"
+                tools:context=".MainActivity"
+                style="@style/AppTheme">
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo_smartlight"
+        android:layout_centerHorizontal="true"/>
+    <Button
+        android:id="@+id/btn_ble_set"
+        android:layout_width="@dimen/activity_main_button_width"
+        android:layout_height="@dimen/activity_main_button_height"
+        android:layout_marginTop="@dimen/activity_main_vertical_margin"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/iv_logo"
+        android:textSize="@dimen/activity_main_button_txt_size"
+        android:textStyle="bold"
+        android:background="@drawable/btn_line_box"
+        android:textColor="@color/main_button_text_color"
+        android:drawableStart="@drawable/ic_action_bluetooth"
+        android:text="@string/btn_ble_set"
+        android:onClick="onClick"/>
+    <Button
+        android:id="@+id/btn_led_effect"
+        android:background="@drawable/btn_line_box"
+        android:layout_width="@dimen/activity_main_button_width"
+        android:layout_height="@dimen/activity_main_button_height"
+        android:layout_marginTop="@dimen/activity_main_vertical_margin"
+        android:layout_below="@id/btn_ble_set"
+        android:layout_centerHorizontal="true"
+        android:drawableStart="@drawable/ic_action_brightness_high"
+        android:textColor="@color/main_button_text_color"
+        android:textSize="@dimen/activity_main_button_txt_size"
+        android:textStyle="bold"
+        android:text="@string/btn_led_effect"
+        android:onClick="onClick"/>
+    <Button
+        android:id="@+id/btn_timer_set"
+        android:background="@drawable/btn_line_box"
+        android:layout_width="@dimen/activity_main_button_width"
+        android:layout_height="@dimen/activity_main_button_height"
+        android:layout_marginTop="@dimen/activity_main_vertical_margin"
+        android:layout_below="@id/btn_led_effect"
+        android:drawableStart="@drawable/ic_action_alarms"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/main_button_text_color"
+        android:textSize="@dimen/activity_main_button_txt_size"
+        android:textStyle="bold"
+        android:text="@string/btn_timer_set"
+        android:onClick="onClick"/>
 </RelativeLayout>

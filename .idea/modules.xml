@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectModuleManager">
-    <modules />
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/SLight.iml" filepath="$PROJECT_DIR$/SLight.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/define/define.iml" filepath="$PROJECT_DIR$/define/define.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dragndroplist/dragndroplist.iml" filepath="$PROJECT_DIR$/dragndroplist/dragndroplist.iml" />
+    </modules>
   </component>
 </project>
 
