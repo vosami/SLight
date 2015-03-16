@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/blelib" />
             <option value="$PROJECT_DIR$/define" />
             <option value="$PROJECT_DIR$/dragndroplist" />
+            <option value="$PROJECT_DIR$/ledselectlayout" />
           </set>
         </option>
       </GradleProjectSettings>

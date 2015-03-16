@@ -48,6 +48,8 @@ public class MainActivity extends ActionBarActivity {
 				break;
 			// LED 효과 설정 버튼 클릭시
 			case R.id.btn_led_effect:
+				intent = new Intent(this, LedEffectActivity.class);
+				startActivity(intent);
 				break;
 			// 타이머 설정 버튼 클릭시
 			case R.id.btn_timer_set:

@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/blelib/blelib.iml" filepath="$PROJECT_DIR$/blelib/blelib.iml" />
       <module fileurl="file://$PROJECT_DIR$/define/define.iml" filepath="$PROJECT_DIR$/define/define.iml" />
       <module fileurl="file://$PROJECT_DIR$/dragndroplist/dragndroplist.iml" filepath="$PROJECT_DIR$/dragndroplist/dragndroplist.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ledselectlayout/ledselectlayout.iml" filepath="$PROJECT_DIR$/ledselectlayout/ledselectlayout.iml" />
     </modules>
   </component>
 </project>

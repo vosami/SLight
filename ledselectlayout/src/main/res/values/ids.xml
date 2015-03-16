@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="id_color_led_1" type="id"/>
+    <item name="id_color_led_2" type="id"/>
+    <item name="id_color_led_3" type="id"/>
+
+    <item name="id_single_led_1" type="id"/>
+    <item name="id_single_led_2" type="id"/>
+    <item name="id_single_led_3" type="id"/>
+    <item name="id_single_led_4" type="id"/>
+    <item name="id_single_led_5" type="id"/>
+    <item name="id_single_led_6" type="id"/>
+    <item name="id_single_led_7" type="id"/>
+    <item name="id_single_led_8" type="id"/>
+    <item name="id_single_led_9" type="id"/>
+</resources>

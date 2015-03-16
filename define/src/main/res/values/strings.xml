@@ -13,4 +13,17 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_create_script">CreateScriptActivity</string>
+
+    <string name="led1_txt">Led1</string>
+    <string name="led2_txt">Led2</string>
+    <string name="led3_txt">Led3</string>
+    <string name="led4_txt">Led4</string>
+    <string name="led5_txt">Led5</string>
+    <string name="led6_txt">Led6</string>
+    <string name="led7_txt">Led7</string>
+    <string name="led8_txt">Led8</string>
+    <string name="led9_txt">Led9</string>
+    <string name="cled1_txt">Color Led 1</string>
+    <string name="cled2_txt">Color Led 2</string>
+    <string name="cled3_txt">Color Led 3</string>
 </resources>
