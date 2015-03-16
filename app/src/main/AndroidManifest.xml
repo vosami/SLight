@@ -6,8 +6,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:screenOrientation="portrait">
+        android:screenOrientation="portrait"
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -16,6 +16,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".BleSetActivity"
+            android:label="@string/title_activity_ble_set" >
+        </activity>
+        <activity
+            android:name=".TimerSetActivity"
+            android:label="@string/title_activity_timer_set" >
+        </activity>
+        <activity
+            android:name=".LedEffectActivity"
+            android:label="@string/title_activity_led_effect" >
         </activity>
     </application>
 

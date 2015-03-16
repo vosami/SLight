@@ -1,1 +1,1 @@
-include ':app', ':define', ':dragndroplist'
+include ':app', ':define', ':dragndroplist', ':blelib', ':GraphView-master'

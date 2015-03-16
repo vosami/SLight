@@ -1,4 +1,7 @@
 <resources>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_ble_set">BleSetActivity</string>
+    <string name="title_activity_timer_set">TimerSetActivity</string>
+    <string name="title_activity_led_effect">LedEffectActivity</string>
 </resources>
