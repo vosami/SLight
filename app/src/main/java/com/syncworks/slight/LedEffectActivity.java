@@ -1,14 +1,20 @@
 package com.syncworks.slight;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.syncworks.ledselectlayout.LedSelectLayout;
+import com.syncworks.ledviewlayout.LedViewLayout;
 
 
 public class LedEffectActivity extends ActionBarActivity {
+
+    // LED 선택 레이아웃
+    LedSelectLayout ledSelectLayout;
+    // LED 점멸 패턴 확인 레이아웃
+    LedViewLayout ledViewLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +49,9 @@ public class LedEffectActivity extends ActionBarActivity {
 
     private void findViews() {
         // LED 선택 레이아웃
-        LedSelectLayout ledSelectLayout = (LedSelectLayout) findViewById(R.id.led_select_layout);
+        ledSelectLayout = (LedSelectLayout) findViewById(R.id.led_select_layout);
+        // LED 점멸 패턴 확인 레이아웃
+        ledViewLayout = (LedViewLayout) findViewById(R.id.led_view_layout);
 
         // LED 선택 레이아웃 리스너 등록
         ledSelectLayout.setOnLedSelectListener(onLedSelectListener);

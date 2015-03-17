@@ -1,6 +1,7 @@
 package com.syncworks.ledviewlayout;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
@@ -51,6 +52,12 @@ public class LedViewLayout extends LinearLayout{
         activateBool[2] = Define.SINGLE_LED;
 
         LayoutInflater.from(context).inflate(R.layout.led_layout, this);
+        this.setOrientation(HORIZONTAL);
+        this.setBackgroundColor(Color.rgb(0,0,0));
+        /*LinearLayout.LayoutParams paramControl = (LayoutParams) this.getLayoutParams();
+        paramControl.setMarginStart(10);
+        paramControl.setMarginEnd(10);*/
+
         ledViews[0] = (LedView) findViewById(R.id.led_blink1);
         ledViews[1] = (LedView) findViewById(R.id.led_blink2);
         ledViews[2] = (LedView) findViewById(R.id.led_blink3);

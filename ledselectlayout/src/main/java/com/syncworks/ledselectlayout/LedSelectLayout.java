@@ -121,6 +121,9 @@ public class LedSelectLayout extends LinearLayout {
 		cbSingle[6].setOnLongClickListener(singleLongClickListener);
 		cbSingle[7].setOnLongClickListener(singleLongClickListener);
 		cbSingle[8].setOnLongClickListener(singleLongClickListener);
+
+        // 최초에 활성화 상태
+        setBtnSelected(R.id.id_single_led_1);
 	}
 
 	// Color 커넥터 클릭시 행동
