@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Drag and Drop 버튼-->
+    <item type="id" name="drag_handle" />
+    <!-- 아이템 Remove 버튼-->
+    <item type="id" name="click_remove" />
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="title_operator" />
+    <item type="id" name="bright_txt"/>
+    <item type="id" name="bright_val"/>
+    <item type="id" name="bright_after_txt"/>
+    <item type="id" name="delay_txt"/>
+    <item type="id" name="delay_val"/>
+    <item type="id" name="delay_after_txt"/>
+</resources>

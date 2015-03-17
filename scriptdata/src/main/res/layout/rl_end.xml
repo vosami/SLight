@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <!--Drag and Drop 버튼-->
+    <ImageView
+        android:id="@id/drag_handle"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/dragbtn"/>
+    <TextView
+        android:id="@id/title_operator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/op_end_txt"
+        android:textSize="@dimen/operator_text_size"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@id/delay_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_operator"
+        android:text="지연시간:"/>
+    <TextView
+        android:id="@id/delay_val"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_below="@id/title_operator"
+        android:layout_toEndOf="@id/delay_txt"
+        android:text="0"/>
+    <TextView
+        android:id="@id/delay_after_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_operator"
+        android:layout_toEndOf="@id/delay_val"
+        android:text="초"/>
+</RelativeLayout>

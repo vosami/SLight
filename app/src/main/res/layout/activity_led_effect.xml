@@ -28,12 +28,14 @@
             android:layout_height="wrap_content"
             android:text="뒤로"/>
         </LinearLayout>
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph_view"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_above="@id/menu_ll"/>
     <com.syncworks.verticalseekbar.VerticalSeekBar2
-        android:layout_marginStart="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/title_bar_layout"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_above="@id/menu_ll"/>
+        android:layout_above="@id/graph_view"/>
 </RelativeLayout>

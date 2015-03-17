@@ -60,4 +60,7 @@ public class Define {
 	public final static int OP_PASS_DATA = 					0xF5;
 	// 페이드(4Byte) - 명령어(1Byte)
 	public final static int OP_TRANSITION = 				0xF6;
+
+	public final static boolean SINGLE_SCRIPT = true;
+	public final static boolean DOUBLE_SCRIPT = false;
 }
