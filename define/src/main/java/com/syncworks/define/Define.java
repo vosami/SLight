@@ -12,11 +12,24 @@ public class Define {
 	public final static int NUMBER_OF_COLOR_LED = 3;
 
 	//
-	public final static int SINGLE_LED_123_ACTIVATE =       0;
-	public final static int SINGLE_LED_456_ACTIVATE =       1;
-	public final static int SINGLE_LED_789_ACTIVATE =       2;
+	public final static int SINGLE_LED_123_ACTIVATE =       1;
+	public final static int SINGLE_LED_456_ACTIVATE =       2;
+	public final static int SINGLE_LED_789_ACTIVATE =       4;
 	public final static boolean SINGLE_LED =               	true;
 	public final static boolean COLOR_LED =                	false;
+    public final static int SELECTED_LED1 =       			0x0001;
+    public final static int SELECTED_LED2 =       			0x0002;
+    public final static int SELECTED_LED3 =       			0x0004;
+    public final static int SELECTED_LED4 =       			0x0008;
+    public final static int SELECTED_LED5 =       			0x0010;
+    public final static int SELECTED_LED6 =       			0x0020;
+    public final static int SELECTED_LED7 =       			0x0040;
+    public final static int SELECTED_LED8 =       			0x0080;
+    public final static int SELECTED_LED9 =       			0x0100;
+    public final static int SELECTED_COLOR_LED1 =     		0x1007;
+    public final static int SELECTED_COLOR_LED2 =     		0x2038;
+    public final static int SELECTED_COLOR_LED3 =     		0x41C0;
+
 
 	/**
 	 * 명령어 리스트
