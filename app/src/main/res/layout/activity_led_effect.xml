@@ -5,6 +5,7 @@
                 tools:context="com.syncworks.slight.LedEffectActivity">
 
     <com.syncworks.ledselectlayout.LedSelectLayout
+        android:id="@+id/led_select_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

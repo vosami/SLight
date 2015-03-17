@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.syncworks.ledselectlayout.LedSelectLayout;
+
 
 public class LedEffectActivity extends ActionBarActivity {
 
@@ -12,6 +14,8 @@ public class LedEffectActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_led_effect);
+        // View 등록
+        findViews();
 	}
 
 
@@ -36,4 +40,26 @@ public class LedEffectActivity extends ActionBarActivity {
 
 		return super.onOptionsItemSelected(item);
 	}
+
+    private void findViews() {
+        // LED 선택 레이아웃
+        LedSelectLayout ledSelectLayout = (LedSelectLayout) findViewById(R.id.led_select_layout);
+
+        // LED 선택 레이아웃 리스너 등록
+        ledSelectLayout.setOnLedSelectListener(onLedSelectListener);
+    }
+
+    // LED 선택 레이아웃 리스너 설정
+    private LedSelectLayout.OnLedSelectListener onLedSelectListener = new LedSelectLayout.OnLedSelectListener() {
+        @Override
+        public void onLedSelect(boolean isSingleLed, int enabledLedGroup, int selectedLed) {
+
+        }
+
+        @Override
+        public void onLedCheck(boolean isSingleLed, int enabledLedGroup, int checkedLed) {
+
+        }
+    };
+
 }

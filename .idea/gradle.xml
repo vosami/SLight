@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/define" />
             <option value="$PROJECT_DIR$/dragndroplist" />
             <option value="$PROJECT_DIR$/ledselectlayout" />
+            <option value="$PROJECT_DIR$/ledviewlayout" />
           </set>
         </option>
       </GradleProjectSettings>
