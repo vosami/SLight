@@ -15,6 +15,25 @@
     <com.syncworks.titlebarlayout.TitleBarLayout
         android:id="@+id/title_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/led_view_layout"/>
+    <LinearLayout
+        android:id="@+id/menu_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#000000">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="뒤로"/>
+        </LinearLayout>
+    <com.syncworks.verticalseekbar.VerticalSeekBar2
+        android:layout_marginStart="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_bar_layout"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_above="@id/menu_ll"/>
 </RelativeLayout>

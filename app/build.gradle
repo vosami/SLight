@@ -26,4 +26,5 @@ dependencies {
 	compile project (':ledselectlayout')
     compile project (':ledviewlayout')
     compile project (':titlebarlayout')
+    compile project (':verticalseekbar')
 }
