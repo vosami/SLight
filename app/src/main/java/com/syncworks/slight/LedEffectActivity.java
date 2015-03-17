@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import com.syncworks.ledselectlayout.LedSelectLayout;
 import com.syncworks.ledviewlayout.LedViewLayout;
+import com.syncworks.titlebarlayout.TitleBarLayout;
 
 
 public class LedEffectActivity extends ActionBarActivity {
@@ -15,6 +16,8 @@ public class LedEffectActivity extends ActionBarActivity {
     LedSelectLayout ledSelectLayout;
     // LED 점멸 패턴 확인 레이아웃
     LedViewLayout ledViewLayout;
+    // 타이틀 바 레이아웃
+    TitleBarLayout titleBarLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,8 @@ public class LedEffectActivity extends ActionBarActivity {
         ledSelectLayout = (LedSelectLayout) findViewById(R.id.led_select_layout);
         // LED 점멸 패턴 확인 레이아웃
         ledViewLayout = (LedViewLayout) findViewById(R.id.led_view_layout);
+        // 타이틀 바 레이아웃
+        titleBarLayout = (TitleBarLayout) findViewById(R.id.title_bar_layout);
 
         // LED 선택 레이아웃 리스너 등록
         ledSelectLayout.setOnLedSelectListener(onLedSelectListener);
@@ -61,12 +66,12 @@ public class LedEffectActivity extends ActionBarActivity {
     private LedSelectLayout.OnLedSelectListener onLedSelectListener = new LedSelectLayout.OnLedSelectListener() {
         @Override
         public void onLedSelect(boolean isSingleLed, int enabledLedGroup, int selectedLed) {
-
+            titleBarLayout.setLedNumber(selectedLed);
         }
 
         @Override
         public void onLedCheck(boolean isSingleLed, int enabledLedGroup, int checkedLed) {
-
+            titleBarLayout.setLedNumber(checkedLed);
         }
     };
 

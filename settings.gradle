@@ -1,1 +1,1 @@
-include ':app', ':define', ':dragndroplist', ':blelib', ':GraphView-master', ':ledselectlayout', ':ledviewlayout'
+include ':app', ':define', ':dragndroplist', ':blelib', ':GraphView-master', ':ledselectlayout', ':ledviewlayout', ':titlebarlayout'
