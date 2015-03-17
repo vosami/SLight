@@ -27,4 +27,7 @@ dependencies {
     compile project (':ledviewlayout')
     compile project (':titlebarlayout')
     compile project (':verticalseekbar')
+	compile project (':blelib')
+	compile project (':GraphView-master')
+	compile project (':dragndroplist')
 }
