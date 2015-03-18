@@ -86,6 +86,8 @@ public class MainActivity extends ActionBarActivity {
 		switch (v.getId()) {
 			// 블루투스 설정 버튼 클릭시
 			case R.id.btn_ble_set:
+                intent = new Intent(this, BleSetActivity.class);
+                startActivity(intent);
 				break;
 			// LED 효과 설정 버튼 클릭시
 			case R.id.btn_led_effect:

@@ -302,7 +302,7 @@ public class BluetoothLeService extends Service {
 
     // 송수신 Profile 을 확인합니다.
     private void getGattService() {
-        // LEC 서비스를 지원하지 않는다면 False
+        // LEC 서비스를 지원하지 않는다면 중지
         BluetoothGattService gattService = mBluetoothGatt.getService(UUID_LEC_SERVICE);
         if (gattService == null) {
             Log.d(TAG,"getGattService" + "NULL");
@@ -319,7 +319,12 @@ public class BluetoothLeService extends Service {
 		readCharacteristic(charLecRx);
         Log.d(TAG,"getGattService : " + "Success");
     }
-
+    public boolean isAcquireNameService() {
+        if (charLecDevName != null) {
+            return true;
+        }
+        return false;
+    }
     // 장치 이름을 새로 설정합니다.
     public void writeDeviceName(String mDevName) {
         // 연결상태이며, Profile 캐릭터를 확인했으며, 데이터 길이가 20보다 작으면 데이터 송신

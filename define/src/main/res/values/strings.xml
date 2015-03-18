@@ -42,4 +42,25 @@
     <string name="op_default_detail">밝기와 지연 시간을 설정합니다.</string>
     <string name="op_start_detail">시작</string>
     <string name="dialog_script_operator_title">명령어 선택</string>
+
+    <!--공통 사용-->
+    <string name="lt">(</string>
+    <string name="gt">)</string>
+
+    <!--BleSet 에서 사용 Start-->
+    <string name="ble_not_support">스마트라이트와 연결할 수 없는 기기입니다.</string>
+    <string name="tv_cur_device_title">현재 설정된 장치</string>
+    <string name="cur_device_name">LED Control</string>
+    <string name="cur_device_addr">XX:XX:XX:XX:XX:XX</string>
+    <string name="btn_back">뒤로</string>
+    <string name="btn_save">저장</string>
+    <string name="btn_edit">수정</string>
+    <string name="btn_edit_complete">수정완료</string>
+    <string name="btn_ble_stop">중지</string>
+    <string name="btn_ble_scan">검색</string>
+    <string name="tv_radio_strength">전파 신호 세기 (전원이 꺼질 경우 리셋)</string>
+    <string name="tv_device_name">장치 이름 (영문, 숫자 입력 가능)</string>
+    <string name="hint_device_name">새 장치 이름을 입력하세요.</string>
+    <string name="tv_device_list_title">검색된 장치 목록</string>
+    <!--BleSet 에서 사용 End-->
 </resources>

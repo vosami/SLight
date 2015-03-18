@@ -31,11 +31,12 @@
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph_view"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:layout_above="@id/menu_ll"/>
-    <com.syncworks.verticalseekbar.VerticalSeekBar2
+    <com.syncworks.verticalseekbar.VerticalSeekBarPlus
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_below="@id/title_bar_layout"
         android:layout_above="@id/graph_view"/>
 </RelativeLayout>

@@ -86,16 +86,16 @@
     <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="appcompat-v7-21.0.3" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
-    <orderEntry type="module" module-name="GraphView-master" exported="" />
-    <orderEntry type="module" module-name="verticalseekbar" exported="" />
-    <orderEntry type="module" module-name="ledselectlayout" exported="" />
-    <orderEntry type="module" module-name="dragndroplist" exported="" />
-    <orderEntry type="module" module-name="define" exported="" />
+    <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
     <orderEntry type="module" module-name="blelib" exported="" />
     <orderEntry type="module" module-name="titlebarlayout" exported="" />
+    <orderEntry type="module" module-name="GraphView-master" exported="" />
     <orderEntry type="module" module-name="ledviewlayout" exported="" />
+    <orderEntry type="module" module-name="dragndroplist" exported="" />
+    <orderEntry type="module" module-name="ledselectlayout" exported="" />
+    <orderEntry type="module" module-name="define" exported="" />
+    <orderEntry type="module" module-name="verticalseekbar" exported="" />
   </component>
 </module>
 
