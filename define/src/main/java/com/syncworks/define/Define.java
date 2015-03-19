@@ -9,6 +9,9 @@ public class Define {
     // 블루투스 관련 설정
     public final static String BLE_ADDRESS = "BluetoothAddress";
 
+	// 데이터 배열의 최대 길이는 64로 정함
+	public final static int DATA_ARRAY_MAX = 64;
+
 	// Smart Light Single LED 갯수
 	public final static int NUMBER_OF_SINGLE_LED = 9;
 	// Smart Light Color Led 갯수
