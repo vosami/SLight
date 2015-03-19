@@ -39,6 +39,9 @@
         <service
             android:name="com.syncworks.vosami.blelib.BluetoothLeService"
             android:enabled="true"/>
+        <service
+            android:name="com.syncworks.vosami.blelib.BleAutoService"
+            android:enabled="true"/>
     </application>
 
 </manifest>

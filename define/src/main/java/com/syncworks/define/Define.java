@@ -6,6 +6,9 @@ package com.syncworks.define;
  * Created by 승현 on 2015-03-16.
  */
 public class Define {
+    // 블루투스 관련 설정
+    public final static String BLE_ADDRESS = "BluetoothAddress";
+
 	// Smart Light Single LED 갯수
 	public final static int NUMBER_OF_SINGLE_LED = 9;
 	// Smart Light Color Led 갯수

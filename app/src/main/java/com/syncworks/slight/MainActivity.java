@@ -1,64 +1,53 @@
 package com.syncworks.slight;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.syncworks.vosami.blelib.BluetoothLeService;
+import com.syncworks.define.Define;
+import com.syncworks.vosami.blelib.BleAutoService;
 
 
 public class MainActivity extends ActionBarActivity {
 	private final static String TAG = MainActivity.class.getSimpleName();
-
-	// 블루투스 서비스
-	private BluetoothLeService bluetoothLeService;
-	private BluetoothAdapter bluetoothAdapter;
-
-	// 블루투스 서비스 연결
-	private final ServiceConnection lecServiceConnection = new ServiceConnection() {
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			bluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
-			if (!bluetoothLeService.initialize()) {
-				Log.e(TAG, "Unable to initialize Bluetooth");
-			}
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-			bluetoothLeService = null;
-		}
-	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// 블루투스 장치 검색
-		Intent lecServiceIntent = new Intent(MainActivity.this, BluetoothLeService.class);
-		bindService(lecServiceIntent, lecServiceConnection, BIND_AUTO_CREATE);
-		final BluetoothManager mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-		bluetoothAdapter = mBluetoothManager.getAdapter();
-		if (bluetoothAdapter == null) {
-			Toast.makeText(this, "Ble not supported", Toast.LENGTH_SHORT).show();
-			return;
-		}
+        // 로그 메시지
+        Log.d(TAG,"onCreate");
 	}
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 설정된 블루투스 주소 가져오기
+        SLightPreference appPref = new SLightPreference(this);
+        String bleAddress = appPref.getString(SLightPreference.DEVICE_ADDR);
+        // 백그라운드 서비스 시작
+        Intent bleAutoServiceIntent = new Intent(getBaseContext(), BleAutoService.class);
+        bleAutoServiceIntent.putExtra(Define.BLE_ADDRESS,bleAddress);
+        startService(bleAutoServiceIntent);
+    }
 
-	@Override
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG,"onDestroy");
+        super.onDestroy();
+    }
+
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -96,6 +85,8 @@ public class MainActivity extends ActionBarActivity {
 				break;
 			// 타이머 설정 버튼 클릭시
 			case R.id.btn_timer_set:
+                intent = new Intent(this, TimerSetActivity.class);
+                startActivity(intent);
 				break;
 		}
 	}
