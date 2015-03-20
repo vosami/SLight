@@ -82,12 +82,16 @@ public class BluetoothLeService extends Service {
                 Log.i(TAG, "Attempting to start service discovery:" +
                         mBluetoothGatt.discoverServices());
 //                broadcastUpdate(intentAction);          // 메시지 전달
-                bleNotifier.bleConnected();
+                if (bleNotifier !=null) {
+                    bleNotifier.bleConnected();
+                }
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {       // 장치와 연결이 끊어지면
                 intentAction = ACTION_GATT_DISCONNECTED;
                 mConnectionState = STATE_DISCONNECTED;  // 연결 상태를 연결안됨으로 설정
 //                broadcastUpdate(intentAction);          // 메시지 전달
-                bleNotifier.bleDisconnected();
+                if (bleNotifier !=null) {
+                    bleNotifier.bleDisconnected();
+                }
                 Log.d(TAG, "Disconnected from GATT server.");   // 로그 메시지 표시
             }
         }
@@ -97,7 +101,9 @@ public class BluetoothLeService extends Service {
             //super.onServicesDiscovered(gatt, status);
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 getGattService();
-                bleNotifier.bleServiceDiscovered();
+                if (bleNotifier !=null) {
+                    bleNotifier.bleServiceDiscovered();
+                }
 //				broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
             } else {
                 Log.d(TAG, "onServicesDiscovered received: " + status);
@@ -109,7 +115,9 @@ public class BluetoothLeService extends Service {
             //super.onCharacteristicRead(gatt, characteristic, status);
             Log.d(TAG, "Data read");
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                bleNotifier.bleDataAvailable();
+                if (bleNotifier !=null) {
+                    bleNotifier.bleDataAvailable();
+                }
 //                broadcastUpdate(ACTION_DATA_AVAILABLE,characteristic);
             }
         }
@@ -118,7 +126,9 @@ public class BluetoothLeService extends Service {
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             //super.onCharacteristicChanged(gatt, characteristic);
 //            broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
-            bleNotifier.bleDataAvailable();
+            if (bleNotifier !=null) {
+                bleNotifier.bleDataAvailable();
+            }
         }
 
         // 쓰기 작업이 완료될 경우 콜백 함수
@@ -127,7 +137,9 @@ public class BluetoothLeService extends Service {
             //super.onCharacteristicWrite(gatt, characteristic, status);
             if (status == BluetoothGatt.GATT_SUCCESS) {
 //                broadcastUpdate(ACTION_DATA_WRITE_COMPLETE, characteristic);
-                bleNotifier.bleDataWriteComplete();
+                if (bleNotifier !=null) {
+                    bleNotifier.bleDataWriteComplete();
+                }
             }
 
         }

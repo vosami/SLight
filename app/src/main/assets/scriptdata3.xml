@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--제트엔진-->
+<Script>
+    <ScriptOrder>3</ScriptOrder>
+    <ScriptType>Single</ScriptType>
+    <ScriptDataList>
+        <ScriptData>
+            <ScriptBright>OP_START</ScriptBright>
+            <ScriptDuration>0</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>30</ScriptBright>
+            <ScriptDuration>5</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>80</ScriptBright>
+            <ScriptDuration>5</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>30</ScriptBright>
+            <ScriptDuration>5</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>OP_END</ScriptBright>
+            <ScriptDuration>0</ScriptDuration>
+        </ScriptData>
+    </ScriptDataList>
+</Script>

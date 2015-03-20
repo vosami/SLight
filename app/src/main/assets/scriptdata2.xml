@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--2번 깜박임-->
+<Script>
+    <ScriptOrder>2</ScriptOrder>
+    <ScriptType>Single</ScriptType>
+    <ScriptDataList>
+        <ScriptData>
+            <ScriptBright>OP_START</ScriptBright>
+            <ScriptDuration>0</ScriptDuration>
+        </ScriptData>
+        <!-- 100 밝기로 0.5초간(50*10ms) 유지-->
+        <ScriptData>
+            <ScriptBright>100</ScriptBright>
+            <ScriptDuration>50</ScriptDuration>
+        </ScriptData>
+        <!-- 0 밝기로 0.2초간(20*10ms) 유지-->
+        <ScriptData>
+            <ScriptBright>0</ScriptBright>
+            <ScriptDuration>20</ScriptDuration>
+        </ScriptData>
+        <!-- 100 밝기로 0.5초간(50*10ms) 유지-->
+        <ScriptData>
+            <ScriptBright>100</ScriptBright>
+            <ScriptDuration>50</ScriptDuration>
+        </ScriptData>
+        <!-- 0 밝기로 0.2초간(20*10ms) 유지-->
+        <ScriptData>
+            <ScriptBright>0</ScriptBright>
+            <ScriptDuration>20</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>OP_END</ScriptBright>
+            <ScriptDuration>0</ScriptDuration>
+        </ScriptData>
+    </ScriptDataList>
+</Script>

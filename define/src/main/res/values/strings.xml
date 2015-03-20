@@ -63,4 +63,16 @@
     <string name="hint_device_name">새 장치 이름을 입력하세요.</string>
     <string name="tv_device_list_title">검색된 장치 목록</string>
     <!--BleSet 에서 사용 End-->
+
+    <string-array name="led_blink_pattern_name">
+        <item>항상 켜기</item>
+        <item>1번 깜박임</item>
+        <item>2번 깜박임</item>
+        <item>제트엔진</item>
+        <item>공항활주로</item>
+        <item>이중섬광등</item>
+        <item>레이저</item>
+        <item>폭발</item>
+        <item>횃불</item>
+    </string-array>
 </resources>

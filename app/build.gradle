@@ -30,4 +30,5 @@ dependencies {
 	compile project (':blelib')
 	compile project (':GraphView-master')
 	compile project (':dragndroplist')
+    compile project (':scriptdata')
 }

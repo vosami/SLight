@@ -62,11 +62,13 @@ public class ScriptDataList {
 
 	public int getStartPosition() {
 		int startPos = 0;
-		for (int i=scriptDataList.size();i>=0;i--) {
+		for (int i=0;i<scriptDataList.size();i++) {
 			if (scriptDataList.get(i).getVal() == Define.OP_START) {
 				startPos = i;
-				break;
 			}
+            if (scriptDataList.get(i).getVal() == Define.OP_END) {
+                break;
+            }
 		}
 		return startPos;
 	}

@@ -53,7 +53,7 @@ public class BleAutoService extends Service implements Runnable, BleConsumer{
     @Override
     public void onCreate() {
         super.onCreate();
-        timeGapOfScanPeriod = 5000;
+        timeGapOfScanPeriod = 10000;
 
         // 스레드를 이용해 반복하여 로그 출력
         Thread bleAutoThread = new Thread(this);

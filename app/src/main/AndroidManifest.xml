@@ -2,9 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.syncworks.slight" >
 
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +17,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/smart_light_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,24 +27,30 @@
         <activity
             android:name=".BleSetActivity"
             android:label="@string/title_activity_ble_set"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".TimerSetActivity"
             android:label="@string/title_activity_timer_set"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".LedEffectActivity"
             android:label="@string/title_activity_led_effect"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
+
         <service
             android:name="com.syncworks.vosami.blelib.BluetoothLeService"
-            android:enabled="true"/>
+            android:enabled="true" />
         <service
             android:name="com.syncworks.vosami.blelib.BleAutoService"
-            android:enabled="true"/>
+            android:enabled="true" />
+
+        <activity
+            android:name=".TestActivity"
+            android:label="@string/title_activity_test" >
+        </activity>
     </application>
 
 </manifest>

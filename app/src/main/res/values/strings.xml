@@ -5,6 +5,7 @@
     <string name="title_activity_ble_set">BleSetActivity</string>
     <string name="title_activity_timer_set">TimerSetActivity</string>
     <string name="title_activity_led_effect">LedEffectActivity</string>
+    <string name="title_activity_test">TestActivity</string>
 
 
 </resources>
