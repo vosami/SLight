@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 
+import com.syncworks.define.Define;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,16 +86,25 @@ public class ScriptExecuteService extends Service implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+			for (int i=0;i< Define.NUMBER_OF_SINGLE_LED;i++) {
+				scriptActionParser(i);
+			}
         }
     }
 
+	// 스크립트 데이터 설정
     public void setScriptDataList(int position, List<ScriptData> scriptDataList) {
         scriptDataLists.set(position, scriptDataList);
     }
 
+	// 스크립트 데이터 가져오기
     public List<ScriptData> getScriptDataList(int position) {
         return scriptDataLists.get(position);
     }
 
 
+
+	private void scriptActionParser(int ledNumber) {
+		int val = scriptDataLists.get(ledNumber).get(0).getVal();
+	}
 }

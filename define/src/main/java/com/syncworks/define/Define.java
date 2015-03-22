@@ -66,6 +66,22 @@ public class Define {
 	public final static int OP_PASS_DATA = 					0xF5;
 	// 페이드(4Byte) - 명령어(1Byte)
 	public final static int OP_TRANSITION = 				0xF6;
+	/**
+	 * 지연 명령어
+	 */
+	public final static int DELAY_INFINITE = 				0xFFFF;
+
+	/**
+	 * PASS DATA 명령어
+ 	 */
+	public final static int PASS_DATA_NONE =				0x00;
+	public final static int PASS_DATA_INCREASE_INDEX = 		0x01;
+	public final static int PASS_DATA_ENABLE = 				0x02;
+	/*
+	#define PASS_DATA_NONE                  0x00
+			#define PASS_DATA_INCREASE_INDEX        0x01
+			#define PASS_DATA_ENABLE                0x02*/
+
 
 	public final static boolean SINGLE_SCRIPT = true;
 	public final static boolean DOUBLE_SCRIPT = false;
