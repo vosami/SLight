@@ -19,7 +19,7 @@ import java.util.ListIterator;
  */
 public class ScriptDataList implements List<ScriptData> {
 	private final static String TAG = ScriptDataList.class.getSimpleName();
-	//
+	// LED 번호
 	private int ledNumber = 0;
 	// 스크립트 데이터
 	private List<ScriptData> dataList;

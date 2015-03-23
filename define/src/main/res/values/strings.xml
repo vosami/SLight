@@ -64,7 +64,8 @@
     <string name="tv_device_list_title">검색된 장치 목록</string>
     <!--BleSet 에서 사용 End-->
 
-    <string-array name="led_blink_pattern_name">
+
+    <string-array name="single_pattern_name">
         <item>항상 켜기</item>
         <item>1번 깜박임</item>
         <item>2번 깜박임</item>
@@ -74,5 +75,10 @@
         <item>레이저</item>
         <item>폭발</item>
         <item>횃불</item>
+    </string-array>
+    <string-array name="color_pattern_name">
+        <item>항상 켜기</item>
+        <item>무지개</item>
+        <item>빨,녹,파 깜박이기</item>
     </string-array>
 </resources>

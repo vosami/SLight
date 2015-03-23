@@ -22,7 +22,8 @@ public class ScriptXmlHandler extends DefaultHandler {
     // 스크립트 타입
     private boolean scriptListType = Define.SINGLE_LED;
     // 스크립트 데이터
-    List<List<ScriptData>> scriptDataList = new ArrayList<>();
+//    List<List<ScriptData>> scriptDataList = new ArrayList<>();
+    List<ScriptDataList> scriptDataLists = new ArrayList<>();
     private int curListPos = 0;
     // XML 오류 확인용
     boolean elementOn = false;
@@ -43,11 +44,9 @@ public class ScriptXmlHandler extends DefaultHandler {
         return scriptListOrder;
     }
     // 해당 스크립트 리스트의 데이터 획득
-    public List<ScriptData> getScriptList(int selListPos) {
-        if (scriptDataList.size() > selListPos) {
-            return scriptDataList.get(selListPos);
-        }
-        return scriptDataList.get(0);
+    public ScriptDataList getScriptList(int selListPos) {
+
+        return scriptDataLists.get(selListPos);
     }
 
 
@@ -56,7 +55,7 @@ public class ScriptXmlHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         elementOn = true;
         if (qName.equals("ScriptDataList")) {
-            scriptDataList.add(new ArrayList<ScriptData>());
+            scriptDataLists.add(new ScriptDataList(0));
         } else if (qName.equals("ScriptData")) {
             bright = 0;
             duration = 0;
@@ -93,7 +92,7 @@ public class ScriptXmlHandler extends DefaultHandler {
         }
         // 스크립트 데이터 추가
         else if (qName.equalsIgnoreCase("ScriptData")) {
-            scriptDataList.get(curListPos).add(getScriptData());
+            scriptDataLists.get(curListPos).add(getScriptData());
             Log.d(TAG,"ScriptData:"+bright+","+duration);
         }
         // 밝기 값 설정

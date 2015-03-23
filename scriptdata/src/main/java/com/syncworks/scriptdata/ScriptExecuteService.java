@@ -7,7 +7,6 @@ import android.os.IBinder;
 
 import com.syncworks.define.Define;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,8 +23,9 @@ public class ScriptExecuteService extends Service implements Runnable{
     // 바인더
     private final IBinder sBinder = new ScriptBinder();
 
-    // LedDataList
-    List<List<ScriptData>> scriptDataLists;
+    // 스크립트 데이터 리스트
+    ScriptDataList[] scriptDataLists = new ScriptDataList[9];
+//    List<List<ScriptData>> scriptDataLists;
 
     public class ScriptBinder extends Binder {
         public ScriptExecuteService getService() {
@@ -52,6 +52,7 @@ public class ScriptExecuteService extends Service implements Runnable{
     @Override
     public void onCreate() {
         super.onCreate();
+        /*scriptDataLists.add(new ArrayList<ScriptData>());
         scriptDataLists.add(new ArrayList<ScriptData>());
         scriptDataLists.add(new ArrayList<ScriptData>());
         scriptDataLists.add(new ArrayList<ScriptData>());
@@ -59,8 +60,7 @@ public class ScriptExecuteService extends Service implements Runnable{
         scriptDataLists.add(new ArrayList<ScriptData>());
         scriptDataLists.add(new ArrayList<ScriptData>());
         scriptDataLists.add(new ArrayList<ScriptData>());
-        scriptDataLists.add(new ArrayList<ScriptData>());
-        scriptDataLists.add(new ArrayList<ScriptData>());
+        scriptDataLists.add(new ArrayList<ScriptData>());*/
     }
 
     // 다른 컴포넌트가 startService() 를 호출해서 서비스가 시작시 호출
@@ -94,17 +94,18 @@ public class ScriptExecuteService extends Service implements Runnable{
 
 	// 스크립트 데이터 설정
     public void setScriptDataList(int position, List<ScriptData> scriptDataList) {
-        scriptDataLists.set(position, scriptDataList);
+//        scriptDataLists.set(position, scriptDataList);
     }
 
 	// 스크립트 데이터 가져오기
-    public List<ScriptData> getScriptDataList(int position) {
-        return scriptDataLists.get(position);
+    public ScriptDataList getScriptDataList(int position) {
+//        return scriptDataLists.get(position);
+        return new ScriptDataList(0);
     }
 
 
 
 	private void scriptActionParser(int ledNumber) {
-		int val = scriptDataLists.get(ledNumber).get(0).getVal();
+//		int val = scriptDataLists.get(ledNumber).get(0).getVal();
 	}
 }

@@ -7,5 +7,21 @@
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
+    <string name="str_pattern_select">점멸 패턴을 선택하세요.</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--LedEffect 에서 사용 Start-->
+    <string name="tv_easy_bright">밝기 간편 선택</string>
+    <string name="tv_detail_bright">밝기 자세히 선택</string>
+    <string name="tv_title_current_bright">현재 선택된 밝기: </string>
+    <string name="btn_0_percent">OFF</string>
+    <string name="btn_20_percent">20%</string>
+    <string name="btn_40_percent">40%</string>
+    <string name="btn_60_percent">60%</string>
+    <string name="btn_80_percent">80%</string>
+    <string name="btn_100_percent">100%</string>
+    <!--LedEffect 에서 사용 End-->
 
 </resources>

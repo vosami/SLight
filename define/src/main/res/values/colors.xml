@@ -162,4 +162,12 @@
 
     <color name="LecBackground">#FF909090</color>
     <color name="color_of_connector_txt">#FFFFFF</color>
+
+    <!--단계별 색상-->
+    <color name="easy_single_0">#000000</color>
+    <color name="easy_single_20">#323232</color>
+    <color name="easy_single_40">#646464</color>
+    <color name="easy_single_60">#969696</color>
+    <color name="easy_single_80">#C9C9C9</color>
+    <color name="easy_single_100">#FFFFFF</color>
 </resources>

@@ -15,7 +15,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 	}
 
 	public void testScriptDataList() {
-		ScriptDataList dataList = new ScriptDataList();
+		ScriptDataList dataList = new ScriptDataList(0);
 		dataList.add(new ScriptData(0, 0));
 		dataList.add(new ScriptData(1, 2));
 		dataList.getDataListSize();
