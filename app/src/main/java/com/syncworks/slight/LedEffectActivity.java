@@ -3,7 +3,6 @@ package com.syncworks.slight;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -14,11 +13,14 @@ import com.syncworks.define.Define;
 import com.syncworks.ledselectlayout.LedSelectLayout;
 import com.syncworks.ledviewlayout.LedViewLayout;
 import com.syncworks.scriptdata.ScriptDataListSpinnerAdapter;
+import com.syncworks.slight.fragments.ColorAlwaysOn;
+import com.syncworks.slight.fragments.OnLedFragmentListener;
 import com.syncworks.slight.fragments.SingleAlwaysOn;
+import com.syncworks.slight.fragments.SingleFragment;
 import com.syncworks.titlebarlayout.TitleBarLayout;
 
 
-public class LedEffectActivity extends ActionBarActivity implements SingleAlwaysOn.OnFragmentInteractionListener{
+public class LedEffectActivity extends ActionBarActivity implements OnLedFragmentListener {
 
     // LED 선택 레이아웃
     LedSelectLayout ledSelectLayout;
@@ -32,6 +34,8 @@ public class LedEffectActivity extends ActionBarActivity implements SingleAlways
     // 단색 LED 항상 켜기용 Fragment
     Fragment curFragment;
     SingleAlwaysOn singleAlwaysOn;
+    SingleFragment singleFragment;
+    ColorAlwaysOn coloralwaysOn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,18 +118,38 @@ public class LedEffectActivity extends ActionBarActivity implements SingleAlways
 
     private void createFragments() {
         singleAlwaysOn = SingleAlwaysOn.newInstance("0","0");
+        singleFragment = SingleFragment.newInstance("0","0");
+        coloralwaysOn = ColorAlwaysOn.newInstance("0", "0");
     }
 
     private void replaceFragments() {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.ll_fragment,singleAlwaysOn);
+//        fragmentTransaction.add(R.id.ll_fragment,singleAlwaysOn);
+//        fragmentTransaction.add(R.id.ll_fragment,singleFragment);
+        fragmentTransaction.add(R.id.ll_fragment, coloralwaysOn);
         fragmentTransaction.commit();
 //        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
     }
 
+
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onSingleBrightAction(int currentBright) {
+
+    }
+
+    @Override
+    public void onColorChangeAction(int red, int green, int blue) {
+
+    }
+
+    @Override
+    public void onStartDelayAction(int startDelay) {
+
+    }
+
+    @Override
+    public void onEndDelayAction(int endDelay) {
 
     }
 }

@@ -1,8 +1,9 @@
 package com.syncworks.slight.fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.net.Uri;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,10 @@ import com.syncworks.slight.R;
  * Activities that contain this fragment must implement the
  * {@link OnLedFragmentListener} interface
  * to handle interaction events.
- * Use the {@link SingleAlwaysOn#newInstance} factory method to
+ * Use the {@link SingleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SingleAlwaysOn extends Fragment {
+public class SingleFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,11 +36,11 @@ public class SingleAlwaysOn extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SingleAlwaysOn.
+     * @return A new instance of fragment SingleFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SingleAlwaysOn newInstance(String param1, String param2) {
-        SingleAlwaysOn fragment = new SingleAlwaysOn();
+    public static SingleFragment newInstance(String param1, String param2) {
+        SingleFragment fragment = new SingleFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -47,7 +48,7 @@ public class SingleAlwaysOn extends Fragment {
         return fragment;
     }
 
-    public SingleAlwaysOn() {
+    public SingleFragment() {
         // Required empty public constructor
     }
 
@@ -64,13 +65,13 @@ public class SingleAlwaysOn extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_single_always_on, container, false);
+        return inflater.inflate(R.layout.fragment_single, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(int bright) {
+    public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onSingleBrightAction(bright);
+            mListener.onStartDelayAction(0);
         }
     }
 
@@ -81,7 +82,7 @@ public class SingleAlwaysOn extends Fragment {
             mListener = (OnLedFragmentListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnLedFragmentListener");
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -90,5 +91,7 @@ public class SingleAlwaysOn extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+
 
 }

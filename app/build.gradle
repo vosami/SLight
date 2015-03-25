@@ -31,4 +31,5 @@ dependencies {
 	compile project (':GraphView-master')
 	compile project (':dragndroplist')
     compile project (':scriptdata')
+    compile project (':colorpickerview')
 }
