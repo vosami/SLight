@@ -23,5 +23,17 @@
     <string name="btn_80_percent">80%</string>
     <string name="btn_100_percent">100%</string>
     <!--LedEffect 에서 사용 End-->
+    <string name="str_ratio">배</string>
+    <string name="str_ratio_min">0배</string>
+    <string name="str_ratio_max">10배</string>
+    <string name="str_sec">초</string>
+    <string name="str_sec_min">0.01초</string>
+    <string name="str_sec_max">20초</string>
+    <string name="str_sec_gap_min">0초</string>
+    <string name="str_sec_gap_max">2초</string>
+    <string name="title_effect_ratio">LED 효과 시간 비율: </string>
+    <string name="title_start_delay">시작 지연 시간: </string>
+    <string name="title_end_delay">종료 지연 시간: </string>
+    <string name="title_gap_delay">시간 차이: </string>
 
 </resources>

@@ -12,4 +12,6 @@ public interface OnLedFragmentListener {
     public void onStartDelayAction(int startDelay);
     // 종료 지연 시간 전달
     public void onEndDelayAction(int endDelay);
+    // 효과 지연 비율 전달
+    public void onEffectRatioAction(float ratio);
 }

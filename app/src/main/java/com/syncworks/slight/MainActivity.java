@@ -8,9 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.syncworks.define.Define;
-import com.syncworks.vosami.blelib.BleAutoService;
-
 
 public class MainActivity extends ActionBarActivity {
 	private final static String TAG = MainActivity.class.getSimpleName();
@@ -31,9 +28,9 @@ public class MainActivity extends ActionBarActivity {
         SLightPreference appPref = new SLightPreference(this);
         String bleAddress = appPref.getString(SLightPreference.DEVICE_ADDR);
         // 백그라운드 서비스 시작
-        Intent bleAutoServiceIntent = new Intent(getBaseContext(), BleAutoService.class);
+        /*Intent bleAutoServiceIntent = new Intent(getBaseContext(), BleAutoService.class);
         bleAutoServiceIntent.putExtra(Define.BLE_ADDRESS,bleAddress);
-        startService(bleAutoServiceIntent);
+        startService(bleAutoServiceIntent);*/
     }
 
     @Override
