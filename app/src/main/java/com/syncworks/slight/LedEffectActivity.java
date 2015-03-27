@@ -30,6 +30,8 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 
     // 설정 정보 기록
     LedSettingData ledSettingData;
+    // 현재 선택된 LED
+    private int thisSelectedLedNumber;
 
     // LED 선택 레이아웃
     LedSelectLayout ledSelectLayout;
@@ -93,7 +95,7 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         // 점멸 패턴 선택 레이아웃
         spPatternSelect = (Spinner) findViewById(R.id.sp_pattern_select);
         // 단색 LED 점멸 패턴 설정
-        setSpinnerPatternName(Define.SINGLE_LED);
+        setSpinnerPatternName(Define.SINGLE_LED, 0);
         // 세로 SeekBar
         verticalSeekBar = (VerticalSeekBarPlus) findViewById(R.id.vertical_seekbar);
 
@@ -103,30 +105,51 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
     }
 
     // 점멸 패턴 스피너에 설정
-    private void setSpinnerPatternName(boolean ledColor) {
+    private void setSpinnerPatternName(boolean ledColor, int pattern) {
         String[] patternName;
         ScriptDataListSpinnerAdapter spinnerAdapter;
         // SINGLE LED 점멸 패턴 데이터 가져오기
         if (ledColor == Define.SINGLE_LED) {
             patternName = getResources().getStringArray(R.array.single_pattern_name);
+            spinnerAdapter = new ScriptDataListSpinnerAdapter(this.getApplicationContext(),android.R.layout.simple_spinner_item, patternName);
+            spPatternSelect.setAdapter(spinnerAdapter);
+            spPatternSelect.setSelection(pattern);
+            spPatternSelect.setOnItemSelectedListener(singleItemSelectedListener);
         }
         else {
             patternName = getResources().getStringArray(R.array.color_pattern_name);
+            spinnerAdapter = new ScriptDataListSpinnerAdapter(this.getApplicationContext(),android.R.layout.simple_spinner_item, patternName);
+            spPatternSelect.setAdapter(spinnerAdapter);
+            spPatternSelect.setSelection(pattern);
+            spPatternSelect.setOnItemSelectedListener(colorItemSelectedListener);
         }
-        spinnerAdapter = new ScriptDataListSpinnerAdapter(this.getApplicationContext(),android.R.layout.simple_spinner_item, patternName);
-        spPatternSelect.setAdapter(spinnerAdapter);
-        spPatternSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
+
+    private AdapterView.OnItemSelectedListener singleItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener colorItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
 
     // LED 선택 레이아웃 리스너 설정
     private LedSelectLayout.OnLedSelectListener onLedSelectListener = new LedSelectLayout.OnLedSelectListener() {
@@ -134,19 +157,14 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         public void onLedSelect(boolean isSingleLed, int enabledLedGroup, int selectedLed) {
             Log.d(TAG, "Single:"+isSingleLed+", LedGroup:"+enabledLedGroup + ", SelectLed:"+selectedLed);
             if (isSingleLed == Define.SINGLE_LED) {
-                setSpinnerPatternName(Define.SINGLE_LED);
-            }
-            else
 
-            titleBarLayout.setLedNumber(selectedLed);
-            changeFragments(ledSettingData.getFragmentType(selectedLed),selectedLed);
-            /*if (isSingleLed == Define.SINGLE_LED) {
-                changeFragments(FragmentType.SINGLE_ALWAYS_ON,selectedLed);
+                setSpinnerPatternName(Define.SINGLE_LED, 0);
             }
             else {
-                changeFragments(FragmentType.COLOR_ALWAYS_ON,selectedLed);
-            }*/
-
+                setSpinnerPatternName(Define.COLOR_LED, selectedLed);
+            }
+            titleBarLayout.setLedNumber(selectedLed);
+            changeFragments(ledSettingData.getFragmentType(selectedLed),selectedLed);
         }
 
         @Override
@@ -205,6 +223,13 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
                 break;
         }
         fragmentTransaction.commit();
+    }
+
+    private void ledSetPattern(int ledNum, int pattern){
+
+    }
+    private void ledSetBright(int ledNum, int bright) {
+
     }
 
 
