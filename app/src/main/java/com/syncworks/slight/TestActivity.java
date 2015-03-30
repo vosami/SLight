@@ -1,8 +1,11 @@
 package com.syncworks.slight;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
@@ -12,27 +15,29 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.syncworks.scriptdata.ScriptExecuteService;
-import com.syncworks.scriptdata.ScriptXmlParser;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 
 public class TestActivity extends ActionBarActivity {
     private final static String TAG = TestActivity.class.getSimpleName();
 
+    // 메시지 수신 리시버
+    BrightReceiver receiver;
     // LED 실행 서비스
     ScriptExecuteService scriptExecuteService;
+    boolean mBound = false;         // 서비스 연결 여부
 
     private final ServiceConnection scriptExecuteServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-//            scriptExecuteService = ()
+            Log.d(TAG, "Service Connected");
+            ScriptExecuteService.ScriptBinder binder = (ScriptExecuteService.ScriptBinder) service;
+            scriptExecuteService = binder.getService();
+            mBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
+            mBound = false;
         }
     };
 
@@ -40,8 +45,28 @@ public class TestActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+    }
+    // 액티비티가 시작되면 서비스에 연결
+    @Override
+    protected void onStart() {
+        super.onStart();
+        receiver = new BrightReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ScriptExecuteService.CHANGE_BRIGHT_ACTION);
+        registerReceiver(receiver,intentFilter);
+        // 바인드 서비스
+        Intent intent = new Intent(this, ScriptExecuteService.class);
+        bindService(intent, scriptExecuteServiceConnection, Context.BIND_AUTO_CREATE);
+    }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(receiver);
+        if (mBound) {
+            unbindService(scriptExecuteServiceConnection);
+            mBound = false;
+        }
     }
 
     @Override
@@ -74,12 +99,12 @@ public class TestActivity extends ActionBarActivity {
     public void onTest(View v) {
         switch (v.getId()) {
             case R.id.btn_test:
-                parseXml();
+
                 break;
         }
     }
 
-    private void parseXml() {
+    /*private void parseXml() {
         AssetManager assetManager = getBaseContext().getAssets();
         String[] files = null;
         try {
@@ -96,5 +121,14 @@ public class TestActivity extends ActionBarActivity {
         }
 
 
+    }*/
+
+    private class BrightReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int[] dataPassed = intent.getIntArrayExtra("DATA_PASSED");
+            Log.d(TAG,"onReceive" + dataPassed[0]);
+        }
     }
 }

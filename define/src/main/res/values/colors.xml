@@ -170,4 +170,15 @@
     <color name="easy_single_60">#969696</color>
     <color name="easy_single_80">#C9C9C9</color>
     <color name="easy_single_100">#FFFFFF</color>
+    <!--Color 색상-->
+    <color name="easy_color_0_red">#FF0000</color>
+    <color name="easy_color_1_orange">#FF8C00</color>
+    <color name="easy_color_2_yellow">#FFFF00</color>
+    <color name="easy_color_3_green">#008000</color>
+    <color name="easy_color_4_blue">#0000FF</color>
+    <color name="easy_color_5_navy">#4B0082</color>
+    <color name="easy_color_6_purple">#800080</color>
+    <color name="easy_color_7_black">#000000</color>
+    <color name="easy_color_8_white">#FFFFFF</color>
+    <color name="easy_color_9_pink">#FF64E3</color>
 </resources>

@@ -46,6 +46,9 @@
         <service
             android:name="com.syncworks.vosami.blelib.BleAutoService"
             android:enabled="true" />
+        <service
+            android:name="com.syncworks.scriptdata.ScriptExecuteService"
+            android:enabled="true"/>
 
         <activity
             android:name=".TestActivity"

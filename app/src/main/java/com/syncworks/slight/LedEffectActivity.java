@@ -2,7 +2,14 @@ package com.syncworks.slight;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +22,7 @@ import com.syncworks.define.Define;
 import com.syncworks.ledselectlayout.LedSelectLayout;
 import com.syncworks.ledviewlayout.LedViewLayout;
 import com.syncworks.scriptdata.ScriptDataListSpinnerAdapter;
+import com.syncworks.scriptdata.ScriptExecuteService;
 import com.syncworks.slight.fragments.ColorAlwaysOn;
 import com.syncworks.slight.fragments.LedSettingData;
 import com.syncworks.slight.fragments.OnLedFragmentListener;
@@ -23,10 +31,34 @@ import com.syncworks.slight.fragments.SingleArrayFragment;
 import com.syncworks.slight.fragments.SingleFragment;
 import com.syncworks.titlebarlayout.TitleBarLayout;
 import com.syncworks.verticalseekbar.VerticalSeekBarPlus;
+import com.syncworks.vosami.blelib.BleConsumer;
+import com.syncworks.vosami.blelib.BleManager;
+import com.syncworks.vosami.blelib.BleNotifier;
 
 
-public class LedEffectActivity extends ActionBarActivity implements OnLedFragmentListener {
+public class LedEffectActivity extends ActionBarActivity implements OnLedFragmentListener,BleConsumer {
     private final static String TAG = LedEffectActivity.class.getSimpleName();
+
+    // 메시지 수신 리시버
+    private BrightReceiver receiver;
+    // LED 실행 서비스
+    private ScriptExecuteService scriptExecuteService;
+    private boolean mBound = false;         // 서비스 연결 여부
+
+    private final ServiceConnection scriptExecuteServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "Service Connected");
+            ScriptExecuteService.ScriptBinder binder = (ScriptExecuteService.ScriptBinder) service;
+            scriptExecuteService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBound = false;
+        }
+    };
 
     // 설정 정보 기록
     LedSettingData ledSettingData;
@@ -49,6 +81,8 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
     SingleFragment singleFragment;
     SingleArrayFragment singleArrayFragment;
     ColorAlwaysOn coloralwaysOn;
+    //블루투스 매니저
+    private BleManager bleManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +92,45 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         ledSettingData = LedSettingData.getInstance();
         // View 등록
         findViews();
+        // 변수 초기화
+        initVar();
 	}
 
+    private void initVar() {
+        thisSelectedLedNumber = Define.SELECTED_LED1;
+    }
 
-	@Override
+    @Override
+    protected void onStart() {
+        super.onStart();
+        receiver = new BrightReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ScriptExecuteService.CHANGE_BRIGHT_ACTION);
+        registerReceiver(receiver,intentFilter);
+        // 바인드 서비스
+        Intent intent = new Intent(this, ScriptExecuteService.class);
+        bindService(intent, scriptExecuteServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bleManager = BleManager.getBleManager(this);
+        bleManager.bind(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        bleManager.unbind(this);
+        unregisterReceiver(receiver);
+        if (mBound) {
+            unbindService(scriptExecuteServiceConnection);
+            mBound = false;
+        }
+    }
+
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_led_effect, menu);
@@ -130,7 +199,23 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
     private AdapterView.OnItemSelectedListener singleItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+            int tempLedNum = thisSelectedLedNumber;
+            int tempLedCount = 0;
+            for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                if (((tempLedNum>>i) & 0x01) != 0) {
+                    ledSettingData.setPattern(Define.SINGLE_LED,i,position);
+                    scriptExecuteService.parseXml(i,Define.SINGLE_LED,position);
+                    tempLedCount++;
+                }
+            }
+            // 프래그먼트 설정
+            if (position == 0) {
+                changeFragments(FragmentType.SINGLE_ALWAYS_ON,thisSelectedLedNumber);
+            } else if (tempLedCount > 1) {
+                changeFragments(FragmentType.SINGLE_ARRAY,thisSelectedLedNumber);
+            } else {
+                changeFragments(FragmentType.SINGLE,thisSelectedLedNumber);
+            }
         }
 
         @Override
@@ -142,7 +227,23 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
     private AdapterView.OnItemSelectedListener colorItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+            int tempLedNum = thisSelectedLedNumber>>12;
+            int tempLedCount = 0;
+            for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+                if (((tempLedNum>>i)&0x01) != 0) {
+                    ledSettingData.setPattern(Define.COLOR_LED,i,position);
+                    scriptExecuteService.parseXml(i,Define.COLOR_LED,position);
+                    tempLedCount++;
+                }
+                // 프래그먼트 설정
+                if (position == 0) {
+                    changeFragments(FragmentType.COLOR_ALWAYS_ON,thisSelectedLedNumber);
+                } else if (tempLedCount > 1) {
+                    changeFragments(FragmentType.SINGLE_ARRAY,thisSelectedLedNumber);
+                } else {
+                    changeFragments(FragmentType.SINGLE, thisSelectedLedNumber);
+                }
+            }
         }
 
         @Override
@@ -156,29 +257,45 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         @Override
         public void onLedSelect(boolean isSingleLed, int enabledLedGroup, int selectedLed) {
             Log.d(TAG, "Single:"+isSingleLed+", LedGroup:"+enabledLedGroup + ", SelectLed:"+selectedLed);
-            if (isSingleLed == Define.SINGLE_LED) {
-
-                setSpinnerPatternName(Define.SINGLE_LED, 0);
-            }
-            else {
-                setSpinnerPatternName(Define.COLOR_LED, selectedLed);
-            }
-            titleBarLayout.setLedNumber(selectedLed);
-            changeFragments(ledSettingData.getFragmentType(selectedLed),selectedLed);
+            // UI 설정
+            selectUI(isSingleLed,selectedLed);
         }
 
         @Override
         public void onLedCheck(boolean isSingleLed, int enabledLedGroup, int checkedLed) {
             Log.d(TAG, "Single:"+isSingleLed+", LedGroup:"+enabledLedGroup + ", CheckLed:"+checkedLed);
-            titleBarLayout.setLedNumber(checkedLed);
+            checkUI(isSingleLed,checkedLed);
+            /*titleBarLayout.setLedNumber(checkedLed);
             if (isSingleLed == Define.SINGLE_LED) {
                 changeFragments(FragmentType.SINGLE,checkedLed);
             }
             else {
                 changeFragments(FragmentType.SINGLE_ARRAY,checkedLed);
-            }
+            }*/
         }
     };
+    // ledSettingData 에 맞춰 UI를 설정
+    private void selectUI(boolean isSingle, int selectedLed) {
+        int pattern = ledSettingData.getPattern(selectedLed);
+        // 스피너의 점멸 패턴 불러오기
+        setSpinnerPatternName(isSingle, pattern);
+        // 타이틀 바 설정
+        titleBarLayout.setLedNumber(selectedLed);
+        // 프래그먼트 설정
+//        changeFragments(ledSettingData.getFragmentType(selectedLed),selectedLed);
+        // 현재 설정된 LED 번호 기억
+        thisSelectedLedNumber = selectedLed;
+    }
+
+    // LED 를 여러개 선택할 경우 UI 설정하고 데이터 초기화
+    private void checkUI(boolean isSingle, int checkedLed) {
+        // 스피너의 점멸 패턴 불러오기
+        setSpinnerPatternName(isSingle, 0);
+        // 타이틀 바 설정
+        titleBarLayout.setLedNumber(checkedLed);
+        // 현재 설정된 LED 번호 기억
+        thisSelectedLedNumber = checkedLed;
+    }
 
 
     private void createFragments() {
@@ -196,6 +313,39 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 //        fragmentTransaction.add(R.id.ll_fragment, coloralwaysOn);
         fragmentTransaction.commit();
 //        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    }
+
+    @Override
+    public void onBleServiceConnect() {
+        Log.d(TAG,"서비스 연결됨");
+
+        bleManager.setBleNotifier(new BleNotifier() {
+            @Override
+            public void bleConnected() {
+                Log.d(TAG,"Connected");
+            }
+
+            @Override
+            public void bleDisconnected() {
+                Log.d(TAG,"Disconnected");
+
+            }
+
+            @Override
+            public void bleServiceDiscovered() {
+
+            }
+
+            @Override
+            public void bleDataAvailable() {
+
+            }
+
+            @Override
+            public void bleDataWriteComplete() {
+
+            }
+        });
     }
 
     public enum FragmentType {
@@ -256,5 +406,18 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
     @Override
     public void onEffectRatioAction(float ratio) {
 
+    }
+
+    private class BrightReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int[] dataPassed = intent.getIntArrayExtra("DATA_PASSED");
+            Log.d(TAG,"onReceive" + dataPassed[0]);
+            for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                ledViewLayout.setLedColorData(i,dataPassed[i]);
+                ledViewLayout.reDraw();
+            }
+        }
     }
 }

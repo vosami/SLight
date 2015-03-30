@@ -40,13 +40,17 @@ public class ScriptDataList implements List<ScriptData> {
 	private int forCount = 0;
 	private int transitionCount = 0;
 
+    public ScriptDataList() {
+        ledNumber = 0;
+        dataList = new ArrayList<>();
+        initCurrentVar();
+    }
+
 	// 기본 생성자
 	public ScriptDataList(int ledNum) {
 		ledNumber = ledNum;
 		dataList = new ArrayList<>();
 		initCurrentVar();
-		dataList.add(new ScriptData(Define.OP_START,0));
-		dataList.add(new ScriptData(Define.OP_END,0));
 	}
 	// 생성자 - 데이터리스트 설정
 	public ScriptDataList(int ledNum, List<ScriptData> dataList) {
@@ -61,6 +65,11 @@ public class ScriptDataList implements List<ScriptData> {
 		currentDuration = 0;
 		currentIndex = 0;
 	}
+
+    public void setLedNumber(int ledNum) {
+        ledNumber = ledNum;
+    }
+
 	// 데이터 추가-인덱스
 	@Override
 	public void add(int location, ScriptData object) {
@@ -71,7 +80,12 @@ public class ScriptDataList implements List<ScriptData> {
 	// 데이터 추가
 	@Override
 	public boolean add(ScriptData object) {
-		if (getDataListSize() < Define.DATA_ARRAY_MAX + 1) {
+        int scriptDataSize = getDataListSize();
+        if (scriptDataSize == 0) {
+            dataList.add(object);
+            return true;
+        }
+		else if (scriptDataSize < Define.DATA_ARRAY_MAX + 1) {
 			int size = dataList.size();
 			int val = dataList.get(size-1).getVal();
 			if (val == Define.OP_END) {
@@ -103,7 +117,7 @@ public class ScriptDataList implements List<ScriptData> {
 	@Override
 	public boolean contains(Object object) {
 		int val = (int) object;
-		int compareVal = 0;
+		int compareVal;
 		if (val > Define.OP_CODE_MIN) {
 			for (int i = 0; i < dataList.size() - 1; i++) {
 				compareVal = dataList.get(i).getVal();
@@ -116,7 +130,7 @@ public class ScriptDataList implements List<ScriptData> {
 	}
 	// 사용 안함
 	@Override
-	public boolean containsAll(Collection<?> collection) {
+	public boolean containsAll(@NonNull Collection<?> collection) {
 		return dataList.containsAll(collection);
 	}
 	// 데이터 추출
@@ -133,7 +147,7 @@ public class ScriptDataList implements List<ScriptData> {
 	@Override
 	public int indexOf(Object object) {
 		int val = (int) object;
-		int compareVal = 0;
+		int compareVal;
 		if (val>Define.OP_CODE_MIN) {
 			for (int i=0;i < dataList.size() -1;i++) {
 				compareVal = dataList.get(i).getVal();
@@ -184,12 +198,12 @@ public class ScriptDataList implements List<ScriptData> {
 	}
 	// 사용 안함
 	@Override
-	public boolean removeAll(Collection<?> collection) {
+	public boolean removeAll(@NonNull Collection<?> collection) {
 		return dataList.removeAll(collection);
 	}
 	// 사용 안함
 	@Override
-	public boolean retainAll(Collection<?> collection) {
+	public boolean retainAll(@NonNull Collection<?> collection) {
 		return dataList.retainAll(collection);
 	}
 	// 데이터 수정
@@ -246,15 +260,13 @@ public class ScriptDataList implements List<ScriptData> {
 	// 데이터 카운트 확인
 	public int getDataListSize() {
 		int size = 0;
-		Iterator<ScriptData> itr = dataList.iterator();
-		while (itr.hasNext()) {
-			ScriptData sd = itr.next();
-			Log.d(TAG,"Data:"+sd.getVal() + "," + sd.getDuration());
-			if (sd.getVal() == Define.OP_TRANSITION) {
-				size++;
-			}
-			size++;
-		}
+        for (ScriptData sd : dataList) {
+            Log.d(TAG, "Data:" + sd.getVal() + "," + sd.getDuration());
+            if (sd.getVal() == Define.OP_TRANSITION) {
+                size++;
+            }
+            size++;
+        }
 		Log.d(TAG,"Size: " + size);
 		return size;
 	}
@@ -367,14 +379,13 @@ public class ScriptDataList implements List<ScriptData> {
 					// 밝기 값을 점차 증가 혹은 감소
 					case Define.OP_TRANSITION:
 						int transitionEnd = (duration>>4) & 0x000F;
-						int transitionBright = data1;
-						int plus_minus = 1 + (((data2>>7) & 0x0001) * (-2));
+                        int plus_minus = 1 + (((data2>>7) & 0x0001) * (-2));
 						// 단계별 밝기 설정
 						int gapBright = ((data2>>3) & 0x000F) + 1;
 						// 단계별 지연 설정
 						int gapDuration = 1 << (data2 & 0x0007);
 						// 밝기 설정
-						setBright(transitionBright + transitionCount * (plus_minus * gapBright));
+						setBright(data1 + transitionCount * (plus_minus * gapBright));
 						// 지연 설정
 						setDuration(gapDuration);
 
@@ -464,4 +475,5 @@ public class ScriptDataList implements List<ScriptData> {
 		}
 		return retVal;
 	}
+
 }

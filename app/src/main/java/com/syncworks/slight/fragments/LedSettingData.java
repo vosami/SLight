@@ -46,6 +46,26 @@ public class LedSettingData {
         return Define.SINGLE_LED;
     }
 
+    // 배열의 수와 Color 로 세팅 데이터 가져오기
+    public SetData getNaturalSetData(boolean isSingle, int ledNum) {
+        if (isSingle) {
+            return singleDatas[ledNum];
+        }
+        else {
+            return colorDatas[ledNum];
+        }
+    }
+
+    /**
+     * 점멸 패턴 설정
+     * @param isSingle Color or Single LED
+     * @param ledNum   led 번호
+     * @param pos      점멸 패턴 번호
+     */
+    public void setPattern(boolean isSingle, int ledNum, int pos) {
+        getNaturalSetData(isSingle,ledNum).pattern = pos;
+    }
+
     public SetData getSetData(int ledNum) {
         if (ledNum == Define.SELECTED_LED1) {
             return singleDatas[0];
@@ -187,11 +207,11 @@ public class LedSettingData {
     public int convertLedNumber(int ledNum) {
         int retLedNum = 0;
         if ((ledNum & Define.SELECTED_COLOR_LED1) == Define.SELECTED_COLOR_LED1) {
-            retLedNum = 1;
+            retLedNum = 0;
         } else if ((ledNum & Define.SELECTED_COLOR_LED2) == Define.SELECTED_COLOR_LED2) {
-            retLedNum = 4;
+            retLedNum = 1;
         } else if ((ledNum & Define.SELECTED_COLOR_LED3) == Define.SELECTED_COLOR_LED3) {
-            retLedNum = 7;
+            retLedNum = 2;
         } else if ((ledNum & Define.SELECTED_LED1) == Define.SELECTED_LED1) {
             retLedNum = 0;
         } else if ((ledNum & Define.SELECTED_LED2) == Define.SELECTED_LED2) {
