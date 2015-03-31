@@ -6,7 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
+import com.syncworks.define.Define;
 import com.syncworks.slight.R;
 
 /**
@@ -18,31 +22,30 @@ import com.syncworks.slight.R;
  * create an instance of this fragment.
  */
 public class SingleAlwaysOn extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int initBright;
 
     private OnLedFragmentListener mListener;
+
+    // Widgets
+    Button[] btnEasyBright = new Button[6];
+    Button btnPlus, btnMinus;
+    SeekBar sbBright;
+    TextView tvCurBright;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment SingleAlwaysOn.
      */
-    // TODO: Rename and change types and number of parameters
-    public static SingleAlwaysOn newInstance(String param1, String param2) {
+    public static SingleAlwaysOn newInstance(int bright) {
         SingleAlwaysOn fragment = new SingleAlwaysOn();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_PARAM1, bright);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,8 +58,7 @@ public class SingleAlwaysOn extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            initBright = getArguments().getInt(ARG_PARAM1);
         }
     }
 
@@ -64,15 +66,123 @@ public class SingleAlwaysOn extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_single_always_on, container, false);
+        View v = inflater.inflate(R.layout.fragment_single_always_on,container,false);
+        btnEasyBright[0] = (Button) v.findViewById(R.id.btn_easy_0_percent);
+        btnEasyBright[1] = (Button) v.findViewById(R.id.btn_easy_20_percent);
+        btnEasyBright[2] = (Button) v.findViewById(R.id.btn_easy_40_percent);
+        btnEasyBright[3] = (Button) v.findViewById(R.id.btn_easy_60_percent);
+        btnEasyBright[4] = (Button) v.findViewById(R.id.btn_easy_80_percent);
+        btnEasyBright[5] = (Button) v.findViewById(R.id.btn_easy_100_percent);
+
+        btnPlus = (Button) v.findViewById(R.id.btn_plus);
+        btnMinus = (Button) v.findViewById(R.id.btn_minus);
+        sbBright = (SeekBar) v.findViewById(R.id.sb_bright_detail);
+        tvCurBright = (TextView) v.findViewById(R.id.tv_current_bright);
+
+        sbBright.setMax(Define.OP_CODE_MIN-1);
+
+        btnEasyBright[0].setOnClickListener(brightClickListener);
+        btnEasyBright[1].setOnClickListener(brightClickListener);
+        btnEasyBright[2].setOnClickListener(brightClickListener);
+        btnEasyBright[3].setOnClickListener(brightClickListener);
+        btnEasyBright[4].setOnClickListener(brightClickListener);
+        btnEasyBright[5].setOnClickListener(brightClickListener);
+
+        btnPlus.setOnClickListener(sbBtnClickListener);
+        btnMinus.setOnClickListener(sbBtnClickListener);
+        sbBright.setOnSeekBarChangeListener(sbListener);
+
+        sbBright.setProgress(initBright);
+        return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(int bright) {
+    // 간편 선택 버튼 클릭 리스너
+    private View.OnClickListener brightClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch(v.getId()) {
+                case R.id.btn_easy_0_percent:
+                    sbBright.setProgress(0);
+                    doBrightChange(0);
+                    break;
+                case R.id.btn_easy_20_percent:
+                    sbBright.setProgress(38);
+                    doBrightChange(38);
+                    break;
+                case R.id.btn_easy_40_percent:
+                    sbBright.setProgress(77);
+                    doBrightChange(77);
+                    break;
+                case R.id.btn_easy_60_percent:
+                    sbBright.setProgress(115);
+                    doBrightChange(115);
+                    break;
+                case R.id.btn_easy_80_percent:
+                    sbBright.setProgress(153);
+                    doBrightChange(153);
+                    break;
+                case R.id.btn_easy_100_percent:
+                    sbBright.setProgress(Define.OP_CODE_MIN-1);
+                    doBrightChange(Define.OP_CODE_MIN-1);
+                    break;
+            }
+        }
+    };
+
+    // 플러스, 마이너스 버튼 클릭 리스너
+    private View.OnClickListener sbBtnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int progress = sbBright.getProgress();
+            switch(v.getId()) {
+                case R.id.btn_minus:
+                    sbBright.setProgress(progress-1);
+                    doBrightChange(sbBright.getProgress());
+                    break;
+                case R.id.btn_plus:
+                    sbBright.setProgress(progress+1);
+                    doBrightChange(sbBright.getProgress());
+                    break;
+            }
+        }
+    };
+
+    // SeekBar Change Listener
+    private SeekBar.OnSeekBarChangeListener sbListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            setTextView(progress);
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            doBrightChange(seekBar.getProgress());
+        }
+    };
+
+    private void setTextView(int progress) {
+        float ratioBright = (float)(progress * 100) / (Define.OP_CODE_MIN-1);
+        tvCurBright.setText(String.format("%.1f%%", ratioBright));
+    }
+
+    private void doBrightChange(int bright) {
         if (mListener != null) {
             mListener.onSingleBrightAction(bright);
         }
     }
+
+    public void setBright(int bright) {
+        for (int i=0;i<6;i++) {
+            btnEasyBright[i].setSelected(false);
+        }
+        sbBright.setProgress(bright);
+    }
+
 
     @Override
     public void onAttach(Activity activity) {

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">VerticalSeekBar</string>
+
+    <string name="after_text">배</string>
 </resources>

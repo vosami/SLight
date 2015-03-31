@@ -18,4 +18,10 @@
     <declare-styleable name="Theme">
         <attr name="android:disabledAlpha" />
     </declare-styleable>
+
+    <declare-styleable name="SeekBar_Plus">
+        <attr name="v_title" format="string"/>
+        <attr name="v_max" format="integer"/>
+        <attr name="v_progress" format="integer"/>
+    </declare-styleable>
 </resources>

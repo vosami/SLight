@@ -2,9 +2,10 @@ package com.syncworks.slight.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -28,10 +29,12 @@ public class ColorAlwaysOn extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param3";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int initRed;
+    private int initGreen;
+    private int initBlue;
+
 
     private OnLedFragmentListener mListener;
 
@@ -45,16 +48,14 @@ public class ColorAlwaysOn extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment ColorAlwaysOn.
      */
-    // TODO: Rename and change types and number of parameters
-    public static ColorAlwaysOn newInstance(String param1, String param2) {
+    public static ColorAlwaysOn newInstance(int red, int green, int blue) {
         ColorAlwaysOn fragment = new ColorAlwaysOn();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_PARAM1, red);
+        args.putInt(ARG_PARAM2, green);
+        args.putInt(ARG_PARAM3, blue);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,8 +68,9 @@ public class ColorAlwaysOn extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            initRed = getArguments().getInt(ARG_PARAM1);
+            initGreen = getArguments().getInt(ARG_PARAM2);
+            initBlue = getArguments().getInt(ARG_PARAM3);
         }
     }
 
@@ -90,11 +92,87 @@ public class ColorAlwaysOn extends Fragment {
         btnEasyColor[9] =(Button) v.findViewById(R.id.easy_color_9);
         easyTable = (TableLayout) v.findViewById(R.id.easy_table);
         colorPickerView = (ColorPickerView) v.findViewById(R.id.color_picker);
+        colorPickerView.setColor(Color.rgb(initRed, initGreen, initBlue));
 
         tbSelect.setOnCheckedChangeListener(tbListener);
+        colorPickerView.setOnTouchListener(touchListener);
+        btnEasyColor[0].setOnClickListener(clickListener);
+        btnEasyColor[1].setOnClickListener(clickListener);
+        btnEasyColor[2].setOnClickListener(clickListener);
+        btnEasyColor[3].setOnClickListener(clickListener);
+        btnEasyColor[4].setOnClickListener(clickListener);
+        btnEasyColor[5].setOnClickListener(clickListener);
+        btnEasyColor[6].setOnClickListener(clickListener);
+        btnEasyColor[7].setOnClickListener(clickListener);
+        btnEasyColor[8].setOnClickListener(clickListener);
+        btnEasyColor[9].setOnClickListener(clickListener);
         return v;
     }
 
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int newColor;
+            switch(v.getId()) {
+                case R.id.easy_color_0:
+                    newColor = getResources().getColor(R.color.easy_color_0_red);
+                    doColorChange((newColor >> 16) & 0xFF, (newColor >> 8) & 0xFF, (newColor) & 0xFF);
+                    break;
+                case R.id.easy_color_1:
+                    newColor = getResources().getColor(R.color.easy_color_1_orange);
+                    doColorChange((newColor >> 16) & 0xFF, (newColor >> 8) & 0xFF, (newColor) & 0xFF);
+                    break;
+                case R.id.easy_color_2:
+                    newColor = getResources().getColor(R.color.easy_color_2_yellow);
+                    doColorChange((newColor >> 16) & 0xFF, (newColor >> 8) & 0xFF, (newColor) & 0xFF);
+                    break;
+                case R.id.easy_color_3:
+                    newColor = getResources().getColor(R.color.easy_color_3_green);
+                    doColorChange((newColor >> 16) & 0xFF, (newColor >> 8) & 0xFF, (newColor) & 0xFF);
+                    break;
+                case R.id.easy_color_4:
+                    newColor = getResources().getColor(R.color.easy_color_4_blue);
+                    doColorChange((newColor >> 16) & 0xFF, (newColor >> 8) & 0xFF, (newColor) & 0xFF);
+                    break;
+                case R.id.easy_color_5:
+                    newColor = getResources().getColor(R.color.easy_color_5_navy);
+                    doColorChange((newColor >> 16) & 0xFF, (newColor >> 8) & 0xFF, (newColor) & 0xFF);
+                    break;
+                case R.id.easy_color_6:
+                    newColor = getResources().getColor(R.color.easy_color_6_purple);
+                    doColorChange((newColor >> 16) & 0xFF, (newColor >> 8) & 0xFF, (newColor) & 0xFF);
+                    break;
+                case R.id.easy_color_7:
+                    newColor = getResources().getColor(R.color.easy_color_7_black);
+                    doColorChange((newColor >> 16) & 0xFF, (newColor >> 8) & 0xFF, (newColor) & 0xFF);
+                    break;
+                case R.id.easy_color_8:
+                    newColor = getResources().getColor(R.color.easy_color_8_white);
+                    doColorChange((newColor >> 16) & 0xFF, (newColor >> 8) & 0xFF, (newColor) & 0xFF);
+                    break;
+                case R.id.easy_color_9:
+                    newColor = getResources().getColor(R.color.easy_color_9_pink);
+                    doColorChange((newColor >> 16) & 0xFF, (newColor >> 8) & 0xFF, (newColor) & 0xFF);
+                    break;
+            }
+        }
+    };
+
+    // Color Picker Touch Listener
+    private View.OnTouchListener touchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_UP:
+                    int newColor = colorPickerView.getColor();
+                    doColorChange((newColor >> 16) & 0xFF, (newColor >> 8) & 0xFF, (newColor) & 0xFF);
+                    break;
+            }
+            return false;
+        }
+    };
+
+    // 토글 버튼 Listener
     private CompoundButton.OnCheckedChangeListener tbListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -109,12 +187,15 @@ public class ColorAlwaysOn extends Fragment {
         }
     };
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    // 색 변화를 Activity 에 전달
+    private void doColorChange(int red, int green, int blue) {
         if (mListener != null) {
-            mListener.onColorChangeAction(100,0,0);
+            mListener.onColorChangeAction(red,green,blue);
         }
+        colorPickerView.setColor(Color.rgb(red, green, blue));
     }
+
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -133,6 +214,10 @@ public class ColorAlwaysOn extends Fragment {
         mListener = null;
     }
 
+    // Fragment 의 색상 설정
+    public void setFragment(int red, int green, int blue) {
+        colorPickerView.setColor(Color.rgb(red,green,blue));
+    }
 
 
 }

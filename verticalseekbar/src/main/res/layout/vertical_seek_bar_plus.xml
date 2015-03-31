@@ -5,18 +5,18 @@
         android:id="@+id/v_view_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
         android:textSize="15sp"
         android:textStyle="bold"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:text="Title"/>
     <TextView
         android:id="@+id/v_val_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@id/v_view_title"
         android:text="Value"/>
     <Button

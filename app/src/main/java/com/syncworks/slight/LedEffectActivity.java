@@ -299,20 +299,17 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 
 
     private void createFragments() {
-        singleAlwaysOn = SingleAlwaysOn.newInstance("0","0");
+        singleAlwaysOn = SingleAlwaysOn.newInstance(100);
         singleFragment = SingleFragment.newInstance(10,0,0);
         singleArrayFragment = SingleArrayFragment.newInstance(10,0,0);
-        coloralwaysOn = ColorAlwaysOn.newInstance("0", "0");
+        coloralwaysOn = ColorAlwaysOn.newInstance(100,100,100);
     }
 
     private void replaceFragments() {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.add(R.id.ll_fragment,singleAlwaysOn);
-        fragmentTransaction.add(R.id.ll_fragment,singleArrayFragment);
-//        fragmentTransaction.add(R.id.ll_fragment, coloralwaysOn);
+        fragmentTransaction.add(R.id.ll_fragment,singleAlwaysOn);
         fragmentTransaction.commit();
-//        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
     }
 
     @Override
@@ -385,12 +382,12 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 
     @Override
     public void onSingleBrightAction(int currentBright) {
-
+        Log.d(TAG, "Bright Change: " + currentBright);
     }
 
     @Override
     public void onColorChangeAction(int red, int green, int blue) {
-
+        Log.d(TAG,"Color Change: #"+Integer.toHexString(red)+Integer.toHexString(green)+Integer.toHexString(blue));
     }
 
     @Override
@@ -405,6 +402,16 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 
     @Override
     public void onEffectRatioAction(float ratio) {
+
+    }
+
+    @Override
+    public void onArrayGapDelayAction(int gapDelay) {
+
+    }
+
+    @Override
+    public void onArrayEndDelayAction(int endDelay) {
 
     }
 
