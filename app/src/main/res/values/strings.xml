@@ -25,7 +25,7 @@
     <!--LedEffect 에서 사용 End-->
     <string name="str_ratio">배</string>
     <string name="str_ratio_min">0배</string>
-    <string name="str_ratio_max">10배</string>
+    <string name="str_ratio_max">3배</string>
     <string name="str_sec">초</string>
     <string name="str_sec_min">0.01초</string>
     <string name="str_sec_max">20초</string>

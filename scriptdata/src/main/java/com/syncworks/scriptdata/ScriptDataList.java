@@ -19,6 +19,10 @@ import java.util.ListIterator;
  */
 public class ScriptDataList implements List<ScriptData> {
 	private final static String TAG = ScriptDataList.class.getSimpleName();
+    // 변환 데이터
+    private float effectRatio = 1;
+    private float brightRatio = 1;
+
 	// LED 번호
 	private int ledNumber = 0;
 	// 스크립트 데이터
@@ -186,12 +190,12 @@ public class ScriptDataList implements List<ScriptData> {
 	public ListIterator<ScriptData> listIterator(int location) {
 		return dataList.listIterator(location);
 	}
-	// 데이터 제외
+	// 데이터 제거
 	@Override
 	public ScriptData remove(int location) {
 		return dataList.remove(location);
 	}
-	// 데이터 제외
+	// 데이터 제거
 	@Override
 	public boolean remove(Object object) {
 		return dataList.remove(object);
@@ -283,9 +287,10 @@ public class ScriptDataList implements List<ScriptData> {
 			// 현재 데이터가 명령어가 아니라면
 			if (val < Define.OP_CODE_MIN) {
 				// 현재 밝기 조정
-				setBright(val);
+                setRatioBright(val);
 				// 지속 시간 갱신
-				setDuration(duration);
+                setEffectDuration(duration);
+//				setDuration(duration);
 				// 인덱스 증가
 				indexIncrease();
 			}
@@ -315,7 +320,7 @@ public class ScriptDataList implements List<ScriptData> {
 						// 랜덤 밝기 획득
 						int randVal = getRandomVal(duration);
 						// 밝기 설정
-						setBright(randVal);
+                        setRatioBright(randVal);
 						// 인덱스 증가
 						indexIncrease();
 						break;
@@ -329,7 +334,8 @@ public class ScriptDataList implements List<ScriptData> {
 						break;
 					case Define.OP_NOP:
 						// 지속 시간 갱신
-						setDuration(duration);
+                        setEffectDuration(duration);
+//						setDuration(duration);
 						// 인덱스 증가
 						indexIncrease();
 						break;
@@ -385,7 +391,7 @@ public class ScriptDataList implements List<ScriptData> {
 						// 단계별 지연 설정
 						int gapDuration = 1 << (data2 & 0x0007);
 						// 밝기 설정
-						setBright(data1 + transitionCount * (plus_minus * gapBright));
+                        setRatioBright(data1 + transitionCount * (plus_minus * gapBright));
 						// 지연 설정
 						setDuration(gapDuration);
 
@@ -422,12 +428,22 @@ public class ScriptDataList implements List<ScriptData> {
 		// 무한 지속 유지시간으로 설정되었다면 아무 것도 안함
 	}
 	// 밝기 설정
-	private void setBright(int brightness) {
+	/*private void setBright(int brightness) {
 		if (brightness <0 || brightness>= Define.OP_CODE_MIN) {
 			return;
 		}
 		currentBright = brightness;
-	}
+	}*/
+    // Bright Ratio 로 변환된 밝기
+    private void setRatioBright(int brightness) {
+        if (brightness <0 || brightness>= Define.OP_CODE_MIN) {
+            return;
+        }
+        currentBright = (int) (brightness * brightRatio);
+        if (currentBright >= Define.OP_CODE_MIN) {
+            currentBright = Define.OP_CODE_MIN -1;
+        }
+    }
 
 	private void setDuration(int duration) {
 		if (duration == 0xFF) {
@@ -435,6 +451,16 @@ public class ScriptDataList implements List<ScriptData> {
 		}
 		currentDuration = duration;
 	}
+    private void setEffectDuration(int duration) {
+        if (duration == 0xFF) {
+            currentDuration = Define.DELAY_INFINITE;
+        }
+        currentDuration = (int) (duration * effectRatio);
+        if (currentDuration >= 0xFF) {
+            currentDuration = 0xFF - 1;
+        }
+    }
+
 
 	private void indexIncrease() {
 		currentIndex++;
@@ -475,5 +501,33 @@ public class ScriptDataList implements List<ScriptData> {
 		}
 		return retVal;
 	}
+
+    public void setEffectRatio(float ratio) {
+        this.effectRatio = ratio;
+    }
+    public void setBrightRatio(float ratio) {
+        this.brightRatio = ratio;
+    }
+    // 시작 지연 설정
+    public void setStartDelay(int delay) {
+        int size = dataList.size();
+        for (int i=0;i<size;i++) {
+            int val = dataList.get(i).getVal();
+            if (val == Define.OP_START) {
+                dataList.set(i,new ScriptData(Define.OP_START,delay));
+            }
+        }
+    }
+    // 종료 지연 설정
+    public void setEndDelay(int delay) {
+        int size = dataList.size();
+        for (int i=0;i<size;i++) {
+            int val = dataList.get(i).getVal();
+            if (val == Define.OP_END) {
+                dataList.set(i,new ScriptData(Define.OP_END,delay));
+            }
+        }
+    }
+
 
 }

@@ -43,6 +43,15 @@ public class VerticalSeekBar extends SeekBar {
         super.onDraw(canvas);
     }
 
+    private OnSeekBarChangeListener onChangeListener;
+
+    @Override
+    public void setOnSeekBarChangeListener(OnSeekBarChangeListener l) {
+        //super.setOnSeekBarChangeListener(l);
+        this.onChangeListener = l;
+    }
+
+    private int lastProgress = 0;
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (!isEnabled()) {
@@ -50,18 +59,76 @@ public class VerticalSeekBar extends SeekBar {
         }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                onChangeListener.onStartTrackingTouch(this);
+                setPressed(true);
+                setSelected(true);
+                break;
             case MotionEvent.ACTION_MOVE:
+                super.onTouchEvent(event);
+                int progress = getMax() - (int) (getMax() * event.getY() / getHeight());
+
+                // Ensure progress stays within boundaries
+                if(progress < 0) {progress = 0;}
+                if(progress > getMax()) {progress = getMax();}
+                setProgress(progress);  // Draw progress
+                if(progress != lastProgress) {
+                    // Only enact listener if the progress has actually changed
+                    lastProgress = progress;
+                    onChangeListener.onProgressChanged(this, progress, true);
+                }
+
+                onSizeChanged(getWidth(), getHeight() , 0, 0);
+                setPressed(true);
+                setSelected(true);
+                break;
             case MotionEvent.ACTION_UP:
-                int i=0;
+                onChangeListener.onStopTrackingTouch(this);
+                setPressed(false);
+                setSelected(false);
+                /*int i=0;
                 i=getMax() - (int) (getMax() * event.getY() / getHeight());
                 setProgress(i);
                 onSizeChanged(getWidth(), getHeight(), 0, 0);
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     doVSeekBarEvent();	// 상위 View 로 값을 보냄
-                }
+                }*/
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                super.onTouchEvent(event);
+                setPressed(false);
+                setSelected(false);
                 break;
         }
         return true;
+    }
+
+    @Override
+    public synchronized void setProgress(int progress) {
+        super.setProgress(progress);
+        onSizeChanged(getWidth(), getHeight() , 0, 0);
+        if(progress != lastProgress) {
+            // Only enact listener if the progress has actually changed
+            lastProgress = progress;
+            onChangeListener.onProgressChanged(this, progress, true);
+        }
+    }
+
+    public synchronized void setProgressAndThumb(int progress) {
+        setProgress(progress);
+        onSizeChanged(getWidth(), getHeight() , 0, 0);
+        if(progress != lastProgress) {
+            // Only enact listener if the progress has actually changed
+            lastProgress = progress;
+            onChangeListener.onProgressChanged(this, progress, true);
+        }
+    }
+
+    public synchronized void setMaximum(int maximum) {
+        setMax(maximum);
+    }
+
+    public synchronized int getMaximum() {
+        return getMax();
     }
 
     public interface OnVSeekBarTouchListener {
@@ -69,6 +136,9 @@ public class VerticalSeekBar extends SeekBar {
     }
 
     public void setOnVSeekBarTouchListener(OnVSeekBarTouchListener listener) {
+        onVSeekBarTouchListener = listener;
+    }
+    public void setOnVTouchListener(OnVSeekBarTouchListener listener) {
         onVSeekBarTouchListener = listener;
     }
 

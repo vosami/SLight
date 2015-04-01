@@ -3,7 +3,6 @@ package com.syncworks.slight.fragments;
 import android.graphics.Color;
 
 import com.syncworks.define.Define;
-import com.syncworks.slight.LedEffectActivity;
 
 /**
  * Created by vosami on 2015-03-25.
@@ -34,7 +33,7 @@ public class LedSettingData {
         for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
             colorDatas[i] = new SetData();
             colorDatas[i].pattern = 0;
-            colorDatas[i].rgbData = Color.rgb(100,0,0);
+            colorDatas[i].rgbData = Color.rgb(100,100,100);
         }
     }
     public boolean getLedType(int ledNum) {
@@ -59,11 +58,18 @@ public class LedSettingData {
     /**
      * 점멸 패턴 설정
      * @param isSingle Color or Single LED
-     * @param ledNum   led 번호
+     * @param ledNumNatural   led 번호
      * @param pos      점멸 패턴 번호
      */
-    public void setPattern(boolean isSingle, int ledNum, int pos) {
-        getNaturalSetData(isSingle,ledNum).pattern = pos;
+    public void setPattern(boolean isSingle, int ledNumNatural, int pos) {
+        getNaturalSetData(isSingle,ledNumNatural).pattern = pos;
+    }
+
+    public int getPattern(boolean isSingle, int ledNumNatural) {
+        return getNaturalSetData(isSingle,ledNumNatural).pattern;
+    }
+    public int getPattern(int ledNum) {
+        return getSetData(ledNum).pattern;
     }
 
     public SetData getSetData(int ledNum) {
@@ -104,14 +110,129 @@ public class LedSettingData {
             return colorDatas[2];
         }
     }
-    public int getPattern(int ledNum) {
-        return getSetData(ledNum).pattern;
-    }
+
+    /*
     public void setPattern(int ledNum, int pattern) {
         getSetData(ledNum).pattern = pattern;
+    }*/
+    /*public int getBright(int ledNum) {
+        return getSetData(ledNum).bright;
+    }
+    public void setBright(int ledNum, int bright) {
+        getSetData(ledNum).bright = bright;
+    };*/
+    // 밝기 설정
+    public void setBright(boolean isSingle, int ledNumNatural, int bright) {
+        if (isSingle) {
+            getNaturalSetData(isSingle, ledNumNatural).bright = bright;
+        }
+        else {
+            getNaturalSetData(isSingle,ledNumNatural).rgbData = bright;
+        }
+    }
+    // Effect 지연 비율 설정
+    public void setEffectRatio(int ledNum, int ratio) {
+        // Color LED Array 선택시
+        if ((ledNum & 0x7000) != 0) {
+            for (int i=0; i<Define.NUMBER_OF_COLOR_LED;i++) {
+                if (((ledNum>>(12+i)) & 0x01) == 1) {
+                    colorDatas[i].ratioDelay = ratio;
+                }
+            }
+        }
+        // Single LED Array 선택시
+        else {
+            for (int i=0; i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                if (((ledNum>>i)& 0x01) == 1) {
+                    singleDatas[i].ratioDelay = ratio;
+                }
+            }
+        }
+    }
+    // 시작 지연 시간 설정
+    public void setStartDelay(int ledNum, int delay) {
+        // Color LED Array 선택시
+        if ((ledNum & 0x7000) != 0) {
+            for (int i=0; i<Define.NUMBER_OF_COLOR_LED;i++) {
+                if (((ledNum>>(12+i)) & 0x01) == 1) {
+                    colorDatas[i].startDelay = delay;
+                }
+            }
+        }
+        // Single LED Array 선택시
+        else {
+            for (int i=0; i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                if (((ledNum>>i)& 0x01) == 1) {
+                    singleDatas[i].startDelay = delay;
+                }
+            }
+        }
+    }
+    // 종료 지연 시간 설정
+    public void setEndDelay(int ledNum, int delay) {
+        // Color LED Array 선택시
+        if ((ledNum & 0x7000) != 0) {
+            for (int i=0; i<Define.NUMBER_OF_COLOR_LED;i++) {
+                if (((ledNum>>(12+i)) & 0x01) == 1) {
+                    colorDatas[i].endDelay = delay;
+                }
+            }
+        }
+        // Single LED Array 선택시
+        else {
+            for (int i=0; i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                if (((ledNum>>i)& 0x01) == 1) {
+                    singleDatas[i].endDelay = delay;
+                }
+            }
+        }
     }
 
-    // 프래그먼트 정보 획득
+    // LED 배열 사이 지연 시간 설정
+    public void setArrayGapDelay(int ledNum, int gapDelay, int endDelay) {
+        // Color LED Array 선택시
+        if ((ledNum & 0x7000) != 0) {
+            for (int i=0; i<Define.NUMBER_OF_COLOR_LED;i++) {
+                if (((ledNum>>(12+i)) & 0x01) == 1) {
+                    colorDatas[i].gapDelay = gapDelay;
+                    colorDatas[i].arrayEndDelay = endDelay;
+                    // TODO 시작, 종료 지연 시간 설정
+                }
+            }
+        }
+        // Single LED Array 선택시
+        else {
+            for (int i=0; i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                if (((ledNum>>i)& 0x01) == 1) {
+                    singleDatas[i].gapDelay = gapDelay;
+                    singleDatas[i].arrayEndDelay = endDelay;
+                    // TODO 시작, 종료 지연 시간 설정
+                }
+            }
+        }
+    }
+
+    public void setRatioBright(int ledNum, int ratioBright) {
+        // Color LED Array 선택시
+        if ((ledNum & 0x7000) != 0) {
+            for (int i=0; i<Define.NUMBER_OF_COLOR_LED;i++) {
+                if (((ledNum>>(12+i)) & 0x01) == 1) {
+                    colorDatas[i].ratioBright = ratioBright;
+                }
+            }
+        }
+        // Single LED Array 선택시
+        else {
+            for (int i=0; i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                if (((ledNum>>i)& 0x01) == 1) {
+                    singleDatas[i].ratioBright = ratioBright;
+                }
+            }
+        }
+    }
+
+
+    /*// 프래그먼트 정보 획득
     public LedEffectActivity.FragmentType getFragmentType(int ledNum) {
         LedEffectActivity.FragmentType retType = LedEffectActivity.FragmentType.SINGLE_ALWAYS_ON;
         switch (ledNum) {
@@ -202,9 +323,9 @@ public class LedSettingData {
         }
 
         return retType;
-    }
+    }*/
 
-    public int convertLedNumber(int ledNum) {
+    /*public int convertLedNumber(int ledNum) {
         int retLedNum = 0;
         if ((ledNum & Define.SELECTED_COLOR_LED1) == Define.SELECTED_COLOR_LED1) {
             retLedNum = 0;
@@ -232,7 +353,7 @@ public class LedSettingData {
             retLedNum = 8;
         }
         return 0;
-    }
+    }*/
 
     public class SetData {
         public int pattern = 0;
@@ -242,105 +363,10 @@ public class LedSettingData {
 
         public int startDelay = 0;
         public int gapDelay = 0;
+        public int arrayEndDelay = 0;
         public int endDelay = 0;
         public int ratioBright = 0;
         public int ratioDelay = 0;
 
-    }
-
-    public class SingleData {
-        private int singleSelectPattern = 0;
-        private int singleStartDelay = 0;
-        private int singleEndDelay = 0;
-        private int singleRatioBright = 10;
-        private int singleRatioDelay = 10;
-        private int singleBright = 0;
-
-        public void setSelectPattern(int pattern) {
-            singleSelectPattern = pattern;
-        }
-        public void setStartDelay(int delay) {
-            singleStartDelay = delay;
-        }
-        public void setEndDelay(int delay) {
-            singleEndDelay = delay;
-        }
-        public void setRatioBright(int ratio) {
-            singleRatioBright = ratio;
-        }
-        public void setRatioDelay(int ratio) {
-            singleRatioDelay = ratio;
-        }
-        public void setBright(int bright) {
-            singleBright = bright;
-        }
-        public int getSelectPattern() {
-            return singleSelectPattern;
-        }
-        public int getStartDelay() {
-            return singleStartDelay;
-        }
-        public int getEndDelay() {
-            return singleEndDelay;
-        }
-        public int getRatioBright() {
-            return singleRatioBright;
-        }
-        public int getRatioDelay() {
-            return singleRatioDelay;
-        }
-        public int getBright() {
-            return singleBright;
-        }
-    }
-
-
-    public class ColorData {
-        private int colorSelectPattern = 0;
-        private int colorStartDelay = 0;
-        private int colorEndDelay = 0;
-        private int colorRatioBright = 10;
-        private int colorRatioDelay = 10;
-        private int colorRedBright = 0;
-        private int colorGreenBright = 0;
-        private int colorBlueBright = 0;
-        public void setSelectPattern(int pattern) {
-            colorSelectPattern = pattern;
-        }
-        public void setStartDelay(int delay) {
-            colorStartDelay = delay;
-        }
-        public void setEndDelay(int delay) {
-            colorEndDelay = delay;
-        }
-        public void setRatioBright(int ratio) {
-            colorRatioDelay = ratio;
-        }
-        public void setRatioDelay(int ratio) {
-            colorStartDelay = ratio;
-        }
-        public void setColor(int red, int green, int blue) {
-            colorRedBright = red;
-            colorGreenBright = green;
-            colorBlueBright = blue;
-        }
-        public int getSelectPattern() {
-            return colorSelectPattern;
-        }
-        public int getStartDelay() {
-            return colorStartDelay;
-        }
-        public int getEndDelay() {
-            return colorEndDelay;
-        }
-        public int getRatioBright() {
-            return colorRatioBright;
-        }
-        public int getRatioDelay() {
-            return colorRatioDelay;
-        }
-        public int getBright() {
-            return Color.rgb(colorRedBright,colorGreenBright,colorBlueBright);
-        }
     }
 }

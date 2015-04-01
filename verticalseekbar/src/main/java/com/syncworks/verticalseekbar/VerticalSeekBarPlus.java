@@ -3,7 +3,9 @@ package com.syncworks.verticalseekbar;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -13,6 +15,9 @@ import android.widget.TextView;
  * Created by vosami on 2015-03-17.
  */
 public class VerticalSeekBarPlus extends RelativeLayout {
+
+    private OnVSeekBarListener onVSeekBarListener;
+    private String afterText;
 
     private String title;
     private int max;
@@ -55,7 +60,7 @@ public class VerticalSeekBarPlus extends RelativeLayout {
         tvTitle.setText(title);
         sbVertical.setMax(max);
         sbVertical.setProgress(progress);
-        String afterText = getResources().getString(R.string.after_text);
+        afterText = getResources().getString(R.string.after_text);
         float ratio;
         ratio = (float)max/10;
         tvMax.setText(String.format("%.1f%s",ratio,afterText));
@@ -63,5 +68,68 @@ public class VerticalSeekBarPlus extends RelativeLayout {
         tvMin.setText(String.format("%.1f%s",ratio,afterText));
         ratio = (float)(sbVertical.getProgress())/10;
         tvVal.setText(String.format("%.1f%s",ratio,afterText));
+
+        btnPlus.setOnClickListener(btnClickListener);
+        btnMinus.setOnClickListener(btnClickListener);
+        sbVertical.setOnSeekBarChangeListener(sbChangeListener);
+//        sbVertical.setOnVTouchListener(sbTouchListener);
+    }
+
+    private OnClickListener btnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int id = v.getId();
+            if (id == R.id.v_btn_plus) {
+
+                sbVertical.setProgress(sbVertical.getProgress()+1);
+                doChange(sbVertical.getProgress());
+            } else if (id == R.id.v_btn_minus) {
+                sbVertical.setProgress(sbVertical.getProgress()-1);
+                doChange(sbVertical.getProgress());
+            }
+        }
+    };
+
+    private VerticalSeekBar.OnVSeekBarTouchListener sbTouchListener = new VerticalSeekBar.OnVSeekBarTouchListener() {
+        @Override
+        public void onVSeekBarEvent() {
+            doChange(sbVertical.getProgress());
+        }
+    };
+
+    private SeekBar.OnSeekBarChangeListener sbChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            setTvVal(progress);
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            Log.i("info", "onStopTrackingTouch");
+            doChange(sbVertical.getProgress());
+        }
+    };
+
+    private void setTvVal(int progress) {
+        float ratio = (float)progress / 10;
+        tvVal.setText(String.format("%.1f%s",ratio,afterText));
+    }
+
+    public interface OnVSeekBarListener {
+        void onEvent(int progress);
+    }
+    public void setOnVSeekBarListener(OnVSeekBarListener listener) {
+        onVSeekBarListener = listener;
+    }
+
+    public void doChange(int progress) {
+        if (onVSeekBarListener != null) {
+            onVSeekBarListener.onEvent(progress);
+        }
     }
 }

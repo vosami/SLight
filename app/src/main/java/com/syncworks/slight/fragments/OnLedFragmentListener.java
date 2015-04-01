@@ -15,8 +15,5 @@ public interface OnLedFragmentListener {
     // 효과 지연 비율 전달
     public void onEffectRatioAction(float ratio);
     // Array 사이 지연 시간 전달
-    public void onArrayGapDelayAction(int gapDelay);
-    // Array 사이 종료 시간 전달
-    public void onArrayEndDelayAction(int endDelay);
-
+    public void onArrayGapDelayAction(int gapDelay, int endDelay);
 }

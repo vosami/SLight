@@ -110,7 +110,6 @@ public class ScriptExecuteService extends Service implements Runnable{
                 for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
                     oldBright[i] = curBright[i];
                 }
-//                Log.d(TAG,"curBright" + curBright[0]);
                 Intent intent = new Intent();
                 intent.setAction(CHANGE_BRIGHT_ACTION);
                 intent.putExtra("DATA_PASSED",curBright);
@@ -159,5 +158,87 @@ public class ScriptExecuteService extends Service implements Runnable{
         }
     }
 
+    /**
+     * 모든 LED 의 두번째 밝기를 조절(항상 켜기시에 실행)
+     * @param brights 9개 배열의 밝기 값 (OP_CODE_MIN 보다 작다면 밝기값 조절)
+     */
+    public void setAllDataBright(int[] brights) {
+        // 밝기 배열이 9이면 실행
+        if (brights.length == Define.NUMBER_OF_SINGLE_LED) {
+            for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                if (brights[i]<Define.OP_CODE_MIN) {
+                    ScriptData scriptData = scriptDataLists[i].get(1);
+                    scriptData.modData(brights[i], scriptData.getDuration());
+                    scriptDataLists[i].set(1, scriptData);
+                }
+            }
+        }
+    }
 
+    /**
+     * 해당 LED 의 스크립트 데이터 중 효과 시간을 비율로 수정
+     * @param ledNum LED 번호
+     * @param ratio  효과 시간 비율 (10은 1배 100은 10배)
+     */
+    public void setEffectRatio(int ledNum, float ratio) {
+        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+            if (((ledNum>>i)&0x01) == 1) {
+                scriptDataLists[i].setEffectRatio(ratio);
+            }
+        }
+    }
+
+    public void setStartDelay(int ledNum, int delay) {
+        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+            if (((ledNum>>i)&0x01) == 1) {
+                scriptDataLists[i].setStartDelay(delay);
+            }
+        }
+    }
+
+    public void setEndDelay(int ledNum, int delay) {
+        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+            if (((ledNum>>i)&0x01) == 1) {
+                scriptDataLists[i].setEndDelay(delay);
+            }
+        }
+    }
+
+    public void setArrayGapDelay(int ledNum, int gapDelay, int endDelay) {
+        // Color LED Array 선택시
+        if ((ledNum & 0x7000) != 0) {
+
+        }
+        // Single LED Array 선택시
+        else {
+            int ledStartCount = 0;
+            int ledEndCount = 0;
+            for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                // 시작 지연 설정
+                if (((ledNum>>i)&0x01) == 1) {
+                    scriptDataLists[i].setStartDelay(gapDelay*ledStartCount);
+                    ledStartCount++;
+                }
+                // 종료 지연 설정
+                if (((ledNum>>(8-i))&0x01) == 1) {
+                    scriptDataLists[8-i].setEndDelay(gapDelay*ledEndCount + endDelay);
+                    ledEndCount++;
+                }
+            }
+        }
+    }
+
+    public void setBrightRatio(int ledNum, float ratio) {
+        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+            if (((ledNum>>i)&0x01) == 1) {
+                scriptDataLists[i].setBrightRatio(ratio);
+            }
+        }
+    }
+
+    public void initCount() {
+        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+            scriptDataLists[i].initCurrentVar();
+        }
+    }
 }

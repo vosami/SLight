@@ -10,7 +10,7 @@
         </ScriptData>
         <ScriptData>
             <ScriptBright>100</ScriptBright>
-            <ScriptDuration>200</ScriptDuration>
+            <ScriptDuration>0</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>OP_END</ScriptBright>

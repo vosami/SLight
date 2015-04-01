@@ -11,7 +11,7 @@
         <ScriptData>
             <ScriptBright>0</ScriptBright>
             <ScriptColor>6579300</ScriptColor>
-            <ScriptDuration>200</ScriptDuration>
+            <ScriptDuration>0</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>OP_END</ScriptBright>

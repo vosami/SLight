@@ -14,6 +14,7 @@ import android.widget.TableLayout;
 import android.widget.ToggleButton;
 
 import com.syncworks.colorpickerview.ColorPickerView;
+import com.syncworks.define.Define;
 import com.syncworks.slight.R;
 
 /**
@@ -190,7 +191,10 @@ public class ColorAlwaysOn extends Fragment {
     // 색 변화를 Activity 에 전달
     private void doColorChange(int red, int green, int blue) {
         if (mListener != null) {
-            mListener.onColorChangeAction(red,green,blue);
+            int tRed = red * (Define.OP_CODE_MIN-1) / 255;
+            int tGreen = green * (Define.OP_CODE_MIN-1) /255;
+            int tBlue = blue * (Define.OP_CODE_MIN-1) / 255;
+            mListener.onColorChangeAction(tRed,tGreen,tBlue);
         }
         colorPickerView.setColor(Color.rgb(red, green, blue));
     }

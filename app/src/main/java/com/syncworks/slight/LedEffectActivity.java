@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
@@ -167,6 +168,8 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         setSpinnerPatternName(Define.SINGLE_LED, 0);
         // 세로 SeekBar
         verticalSeekBar = (VerticalSeekBarPlus) findViewById(R.id.vertical_seekbar);
+        // 세로 SeekBar 리스너 등록
+        verticalSeekBar.setOnVSeekBarListener(onVSeekBarListener);
 
         createFragments();
         replaceFragments();
@@ -203,8 +206,12 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
             int tempLedCount = 0;
             for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
                 if (((tempLedNum>>i) & 0x01) != 0) {
-                    ledSettingData.setPattern(Define.SINGLE_LED,i,position);
-                    scriptExecuteService.parseXml(i,Define.SINGLE_LED,position);
+                    // TODO 다른 앱 실행 후 돌아올 때 에러 발생 thread exiting with uncaught exception
+//                    scriptExecuteService.parseXml(i,Define.SINGLE_LED,position);
+                    if (ledSettingData.getPattern(Define.SINGLE_LED,i) != position) {
+                        scriptExecuteService.parseXml(i,Define.SINGLE_LED,position);
+                        ledSettingData.setPattern(Define.SINGLE_LED,i,position);
+                    }
                     tempLedCount++;
                 }
             }
@@ -231,8 +238,10 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
             int tempLedCount = 0;
             for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
                 if (((tempLedNum>>i)&0x01) != 0) {
-                    ledSettingData.setPattern(Define.COLOR_LED,i,position);
-                    scriptExecuteService.parseXml(i,Define.COLOR_LED,position);
+                    if (ledSettingData.getPattern(Define.COLOR_LED,i) != position) {
+                        scriptExecuteService.parseXml(i,Define.COLOR_LED,position);
+                        ledSettingData.setPattern(Define.COLOR_LED,i,position);
+                    }
                     tempLedCount++;
                 }
                 // 프래그먼트 설정
@@ -257,6 +266,7 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         @Override
         public void onLedSelect(boolean isSingleLed, int enabledLedGroup, int selectedLed) {
             Log.d(TAG, "Single:"+isSingleLed+", LedGroup:"+enabledLedGroup + ", SelectLed:"+selectedLed);
+            ledViewLayout.setActivateBool(enabledLedGroup);
             // UI 설정
             selectUI(isSingleLed,selectedLed);
         }
@@ -264,16 +274,21 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         @Override
         public void onLedCheck(boolean isSingleLed, int enabledLedGroup, int checkedLed) {
             Log.d(TAG, "Single:"+isSingleLed+", LedGroup:"+enabledLedGroup + ", CheckLed:"+checkedLed);
+            ledViewLayout.setActivateBool(enabledLedGroup);
+            // UI 설정
             checkUI(isSingleLed,checkedLed);
-            /*titleBarLayout.setLedNumber(checkedLed);
-            if (isSingleLed == Define.SINGLE_LED) {
-                changeFragments(FragmentType.SINGLE,checkedLed);
-            }
-            else {
-                changeFragments(FragmentType.SINGLE_ARRAY,checkedLed);
-            }*/
         }
     };
+
+    private VerticalSeekBarPlus.OnVSeekBarListener onVSeekBarListener = new VerticalSeekBarPlus.OnVSeekBarListener() {
+        @Override
+        public void onEvent(int progress) {
+            float ratio = (float)progress / 10;
+            scriptExecuteService.setBrightRatio(thisSelectedLedNumber,ratio);
+            ledSettingData.setRatioBright(thisSelectedLedNumber,progress);
+        }
+    };
+
     // ledSettingData 에 맞춰 UI를 설정
     private void selectUI(boolean isSingle, int selectedLed) {
         int pattern = ledSettingData.getPattern(selectedLed);
@@ -379,40 +394,87 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 
     }
 
-
+    /**
+     * Single 항상 켜기 - 밝기 값 설정
+     * @param currentBright : 밝기 값
+     */
     @Override
     public void onSingleBrightAction(int currentBright) {
         Log.d(TAG, "Bright Change: " + currentBright);
+        int[] brights = new int[Define.NUMBER_OF_SINGLE_LED];
+        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+            if (((thisSelectedLedNumber>>i)& 0x01) == 1) {
+                brights[i] = currentBright;
+                ledSettingData.setBright(Define.SINGLE_LED,i,currentBright);
+            }
+            else {
+                brights[i] = Define.OP_CODE_MIN;
+            }
+        }
+        scriptExecuteService.setAllDataBright(brights);
+        // TODO 데이터 송신
     }
 
+    /**
+     * Color 항상 켜기 - 밝기 값 설정
+     * @param red 적색
+     * @param green 녹색
+     * @param blue 청색
+     */
     @Override
     public void onColorChangeAction(int red, int green, int blue) {
         Log.d(TAG,"Color Change: #"+Integer.toHexString(red)+Integer.toHexString(green)+Integer.toHexString(blue));
+        int[] brights = new int[Define.NUMBER_OF_SINGLE_LED];
+        for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+            if (((thisSelectedLedNumber>>(12+i))&0x01) == 1) {
+                brights[i*3] = red;
+                brights[i*3+1] = green;
+                brights[i*3+2] = blue;
+                ledSettingData.setBright(Define.COLOR_LED,i, Color.rgb(red,green,blue));
+            }
+            else {
+                brights[i*3] = Define.OP_CODE_MIN;
+                brights[i*3+1] = Define.OP_CODE_MIN;
+                brights[i*3+2] = Define.OP_CODE_MIN;
+            }
+        }
+        scriptExecuteService.setAllDataBright(brights);
+        // TODO 데이터 송신
     }
 
     @Override
     public void onStartDelayAction(int startDelay) {
-
+        scriptExecuteService.setStartDelay(thisSelectedLedNumber,startDelay);
+        ledSettingData.setStartDelay(thisSelectedLedNumber,startDelay);
     }
 
     @Override
     public void onEndDelayAction(int endDelay) {
-
+        scriptExecuteService.setEndDelay(thisSelectedLedNumber,endDelay);
+        ledSettingData.setEndDelay(thisSelectedLedNumber,endDelay);
     }
 
+    /**
+     * 효과 지연 설정
+     * @param ratio 효과 지연 비율
+     */
     @Override
     public void onEffectRatioAction(float ratio) {
-
+        scriptExecuteService.setEffectRatio(thisSelectedLedNumber,ratio);
+        scriptExecuteService.initCount();
+        ledSettingData.setEffectRatio(thisSelectedLedNumber, (int) (ratio*10));
     }
 
+    /**
+     * LED 배열로 설정하여 순차 점멸 패턴 설정
+     * @param gapDelay 중간 지연 값
+     * @param endDelay 종료 지연 값
+     */
     @Override
-    public void onArrayGapDelayAction(int gapDelay) {
-
-    }
-
-    @Override
-    public void onArrayEndDelayAction(int endDelay) {
-
+    public void onArrayGapDelayAction(int gapDelay, int endDelay) {
+        scriptExecuteService.setArrayGapDelay(thisSelectedLedNumber,gapDelay, endDelay);
+        scriptExecuteService.initCount();
+        ledSettingData.setArrayGapDelay(thisSelectedLedNumber,gapDelay, endDelay);
     }
 
     private class BrightReceiver extends BroadcastReceiver {

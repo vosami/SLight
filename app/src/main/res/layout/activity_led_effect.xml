@@ -43,7 +43,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@id/title_bar_layout"
-        android:layout_above="@id/graph_view"/>
+        android:layout_above="@id/graph_view"
+        app:v_title="밝기비율"
+        app:v_max="100"
+        app:v_progress="10"/>
     <Spinner
         android:id="@+id/sp_pattern_select"
         android:layout_width="match_parent"

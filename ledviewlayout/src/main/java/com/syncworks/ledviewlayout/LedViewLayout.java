@@ -71,8 +71,26 @@ public class LedViewLayout extends LinearLayout{
     }
 
     // 단색 LED 컬러 LED 활성화 함수
-    public void setActivateBool(int idx, boolean bool) {
+    /*public void setActivateBool(int idx, boolean bool) {
         activateBool[idx] = bool;
+    }*/
+    public void setActivateBool(int ledGroup) {
+        if ((ledGroup & 0x01) != 0) {
+            activateBool[0] = Define.SINGLE_LED;
+        } else {
+            activateBool[0] = Define.COLOR_LED;
+        }
+        if ((ledGroup & 0x02) != 0) {
+            activateBool[1] = Define.SINGLE_LED;
+        } else {
+            activateBool[1] = Define.COLOR_LED;
+        }
+        if ((ledGroup & 0x04) != 0) {
+            activateBool[2] = Define.SINGLE_LED;
+        } else {
+            activateBool[2] = Define.COLOR_LED;
+        }
+        reDraw();
     }
 
     // LED 밝기 설정 함수

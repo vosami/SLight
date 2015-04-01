@@ -121,19 +121,19 @@ public class SingleArrayFragment extends Fragment {
                     break;
                 case R.id.btn_gap_minus:
                     sbGap.setProgress(sbGap.getProgress()-1);
-                    doGapChange(sbGap.getProgress());
+                    doGapChange(sbGap.getProgress(), sbEnd.getProgress());
                     break;
                 case R.id.btn_gap_plus:
                     sbGap.setProgress(sbGap.getProgress()+1);
-                    doGapChange(sbGap.getProgress());
+                    doGapChange(sbGap.getProgress(), sbEnd.getProgress());
                     break;
                 case R.id.btn_end_minus:
                     sbEnd.setProgress(sbEnd.getProgress()-1);
-                    doEndChange(sbEnd.getProgress());
+                    doGapChange(sbGap.getProgress(), sbEnd.getProgress());
                     break;
                 case R.id.btn_end_plus:
                     sbEnd.setProgress(sbEnd.getProgress()+1);
-                    doEndChange(sbEnd.getProgress());
+                    doGapChange(sbGap.getProgress(), sbEnd.getProgress());
                     break;
             }
         }
@@ -171,7 +171,7 @@ public class SingleArrayFragment extends Fragment {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            doGapChange(seekBar.getProgress());
+            doGapChange(sbGap.getProgress(), sbEnd.getProgress());
         }
     };
 
@@ -189,7 +189,7 @@ public class SingleArrayFragment extends Fragment {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            doEndChange(seekBar.getProgress());
+            doGapChange(sbGap.getProgress(), sbEnd.getProgress());
         }
     };
 
@@ -215,15 +215,9 @@ public class SingleArrayFragment extends Fragment {
         }
     }
 
-    private void doGapChange(int progress) {
+    private void doGapChange(int gapProgress, int endProgress) {
         if (mListener != null) {
-            mListener.onArrayGapDelayAction(progress);
-        }
-    }
-
-    private void doEndChange(int progress) {
-        if (mListener != null) {
-            mListener.onArrayEndDelayAction(progress);
+            mListener.onArrayGapDelayAction(gapProgress, endProgress);
         }
     }
 
