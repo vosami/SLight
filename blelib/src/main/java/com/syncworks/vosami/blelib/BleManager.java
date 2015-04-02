@@ -209,16 +209,24 @@ public class BleManager {
         return retBool;
     }
 
+    // 블루투스 연결
     public void bleConnect(String addr) {
         if (bluetoothLeService != null && bluetoothLeService.getStateConnect() == BluetoothLeService.STATE_DISCONNECTED) {
             bluetoothLeService.connect(addr);
         }
     }
-
+    // 블루투스 해제
     public void bleDisconnect() {
         if (bluetoothLeService != null && bluetoothLeService.getStateConnect() == BluetoothLeService.STATE_CONNECTED) {
             bluetoothLeService.disconnect();
         }
+    }
+    // 블루투스 연결 상태 확인
+    public int getBleConnectState() {
+        if (bluetoothLeService != null) {
+            return bluetoothLeService.getStateConnect();
+        }
+        return BluetoothLeService.STATE_DISCONNECTED;
     }
 
     public void setBleNotifier(BleNotifier notifier) {
@@ -230,4 +238,16 @@ public class BleManager {
         return bluetoothLeService.getBleNotifier();
 //        return this.bleNotifier;
     }
+    // 데이터 송신 메소드
+    public void writeTxData(byte[] mData) {
+        if (bluetoothLeService != null) {
+            int length = mData.length;
+            byte[] newData = new byte[length];
+            for (int i=0;i<length;i++) {
+                newData[i] = mData[i];
+            }
+            bluetoothLeService.writeTxList(newData);
+        }
+    }
+
 }

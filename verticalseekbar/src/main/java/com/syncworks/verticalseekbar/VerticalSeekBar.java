@@ -106,17 +106,7 @@ public class VerticalSeekBar extends SeekBar {
     public synchronized void setProgress(int progress) {
         super.setProgress(progress);
         onSizeChanged(getWidth(), getHeight() , 0, 0);
-        if(progress != lastProgress) {
-            // Only enact listener if the progress has actually changed
-            lastProgress = progress;
-            onChangeListener.onProgressChanged(this, progress, true);
-        }
-    }
-
-    public synchronized void setProgressAndThumb(int progress) {
-        setProgress(progress);
-        onSizeChanged(getWidth(), getHeight() , 0, 0);
-        if(progress != lastProgress) {
+        if(progress != lastProgress && onChangeListener != null) {
             // Only enact listener if the progress has actually changed
             lastProgress = progress;
             onChangeListener.onProgressChanged(this, progress, true);

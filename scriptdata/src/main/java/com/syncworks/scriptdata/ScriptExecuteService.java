@@ -241,4 +241,8 @@ public class ScriptExecuteService extends Service implements Runnable{
             scriptDataLists[i].initCurrentVar();
         }
     }
+
+    public byte[] getByteArray(int ledNum) {
+        return scriptDataLists[ledNum].toByteArray();
+    }
 }

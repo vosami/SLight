@@ -16,11 +16,14 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
  * Created by vosami on 2015-02-25.
  * 블루투스 서비스 클래스
+ *
  */
 public class BluetoothLeService extends Service {
     // 태그용 문자열
@@ -50,6 +53,10 @@ public class BluetoothLeService extends Service {
     public final static UUID UUID_LEC_DEV_NAME = UUID.fromString(LecGattAttributes.LEC_DEV_NAME_UUID);
     public final static UUID UUID_LEC_VERSION = UUID.fromString(LecGattAttributes.LEC_VERSION_UUID);
     public final static UUID UUID_LEC_TX_POWER = UUID.fromString(LecGattAttributes.LEC_TX_POWER_UUID);
+
+    // 송신 배열 (데이터 송신 명령시 배열에 우선 넣고 순서에 따라 송신)
+    private List<byte[]> txDataList;
+
 
     // 송수신 캐릭터 확인
     private BluetoothGattCharacteristic charLecTx = null;
@@ -126,9 +133,29 @@ public class BluetoothLeService extends Service {
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             //super.onCharacteristicChanged(gatt, characteristic);
 //            broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+            if (UUID_LEC_RX.equals(characteristic.getUuid())) {
+                final byte[] rx = characteristic.getValue();
+                Log.d(TAG, "Data Changed"+bytesToHex(rx));
+            }
+
+
             if (bleNotifier !=null) {
                 bleNotifier.bleDataAvailable();
             }
+        }
+
+        /**
+         * 바이트 to 헥스 변환
+         */
+        final protected char[] hexArray = "0123456789ABCDEF".toCharArray();
+        public String bytesToHex(byte[] bytes) {
+            char[] hexChars = new char[bytes.length * 2];
+            for ( int j = 0; j < bytes.length; j++ ) {
+                int v = bytes[j] & 0xFF;
+                hexChars[j * 2] = hexArray[v >>> 4];
+                hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+            }
+            return new String(hexChars);
         }
 
         // 쓰기 작업이 완료될 경우 콜백 함수
@@ -137,6 +164,14 @@ public class BluetoothLeService extends Service {
             //super.onCharacteristicWrite(gatt, characteristic, status);
             if (status == BluetoothGatt.GATT_SUCCESS) {
 //                broadcastUpdate(ACTION_DATA_WRITE_COMPLETE, characteristic);
+                Log.d(TAG,"Write Complete"+status);
+                if (txDataList.size() > 0) {
+                    txDataList.remove(0);
+                }
+                if (txDataList.size() > 0) {
+                    writeTxData(txDataList.get(0));
+                }
+
                 if (bleNotifier !=null) {
                     bleNotifier.bleDataWriteComplete();
                 }
@@ -169,11 +204,13 @@ public class BluetoothLeService extends Service {
             return BluetoothLeService.this;
         }
     }
+    // 서비스 바인드
     @Override
     public IBinder onBind(Intent intent) {
+        txDataList = new ArrayList<>();
         return mBinder;
     }
-
+    // 서비스 언바인드
     @Override
     public boolean onUnbind(Intent intent) {
         close();
@@ -376,10 +413,45 @@ public class BluetoothLeService extends Service {
     public void writeTxData(byte[] mData) {
         if (mConnectionState == STATE_CONNECTED &&
                 charLecTx != null) {
-            Log.d(TAG, "writeTxData");
+//            Log.d(TAG, "writeTxData");
             charLecTx.setValue(mData);
-            mBluetoothGatt.writeCharacteristic(charLecTx);
+            boolean retBool = mBluetoothGatt.writeCharacteristic(charLecTx);
+            Log.d(TAG, "writeTxData" + retBool);
         }
+    }
+
+    public void writeTxList(byte[] mData) {
+        if (mConnectionState == STATE_CONNECTED &&
+                charLecTx != null) {
+            /*byte[] mData1 = {0,1,2,3,4,5};
+            byte[] mData2 = {1,1,2,3,4,5};
+            byte[] mData3 = {2,1,2,3,4,5};
+            byte[] mData4 = {3,1,2,3,4,5};
+
+            txDataList.add(mData1);
+            txDataList.add(mData2);
+            txDataList.add(mData3);
+            txDataList.add(mData4);
+            txDataList.add(mData);*/
+
+            txDataList.add(mData);
+            if (txDataList.size() == 1) {
+                Log.i(TAG,"write");
+                writeTxData(mData);
+            }
+        }
+    }
+
+    private void pushTxList(byte[] mData) {
+        txDataList.add(mData);
+    }
+    private byte[] pullTxList() {
+        byte[] retData = null;
+        if (txDataList.size() > 0) {
+            retData = txDataList.get(0);
+            txDataList.remove(0);
+        }
+        return retData;
     }
 
     // 연결 상태 반환

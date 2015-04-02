@@ -35,7 +35,11 @@ import com.syncworks.verticalseekbar.VerticalSeekBarPlus;
 import com.syncworks.vosami.blelib.BleConsumer;
 import com.syncworks.vosami.blelib.BleManager;
 import com.syncworks.vosami.blelib.BleNotifier;
+import com.syncworks.vosami.blelib.BluetoothLeService;
 
+/**
+ * TODO 메시지 읽고 오면 에러 발생
+ */
 
 public class LedEffectActivity extends ActionBarActivity implements OnLedFragmentListener,BleConsumer {
     private final static String TAG = LedEffectActivity.class.getSimpleName();
@@ -118,6 +122,12 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         super.onResume();
         bleManager = BleManager.getBleManager(this);
         bleManager.bind(this);
+        // 블루투스 연결 상태 확인후 연결 시도
+        if (bleManager.getBleConnectState() != BluetoothLeService.STATE_CONNECTED) {
+            SLightPreference appPref = new SLightPreference(this);
+            String address = appPref.getString(SLightPreference.DEVICE_ADDR);
+            bleManager.bleConnect(address);
+        }
     }
 
     @Override
@@ -334,12 +344,12 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         bleManager.setBleNotifier(new BleNotifier() {
             @Override
             public void bleConnected() {
-                Log.d(TAG,"Connected");
+                Log.i(TAG,"Connected");
             }
 
             @Override
             public void bleDisconnected() {
-                Log.d(TAG,"Disconnected");
+                Log.i(TAG,"Disconnected");
 
             }
 
@@ -350,12 +360,12 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 
             @Override
             public void bleDataAvailable() {
-
+                Log.i(TAG,"bleDataAvailable");
             }
 
             @Override
             public void bleDataWriteComplete() {
-
+                Log.i(TAG,"bleDataWriteComplete");
             }
         });
     }
@@ -482,11 +492,109 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         @Override
         public void onReceive(Context context, Intent intent) {
             int[] dataPassed = intent.getIntArrayExtra("DATA_PASSED");
-            Log.d(TAG,"onReceive" + dataPassed[0]);
+//            Log.d(TAG,"onReceive" + dataPassed[0]);
             for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
                 ledViewLayout.setLedColorData(i,dataPassed[i]);
                 ledViewLayout.reDraw();
             }
+        }
+    }
+
+    // TODO OnClick Method
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.led_back:
+                this.finish();
+                break;
+            case R.id.led_menu:
+                for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                    byte[] scriptByte = scriptExecuteService.getByteArray(i);
+                    int scriptLength = scriptByte.length;
+                    for (int j=0;j<4;j++) {
+                        if (scriptLength > j*16) {
+                            byte[] txByte = new byte[20];
+                            txByte[0] = (byte)0x60;
+                            // LED 번호
+                            txByte[1] = (byte)i;
+                            // 시작 카운트
+                            txByte[2] = (byte)(j*16);
+                            // 갯수
+                            txByte[3] = (byte) 16;
+                            for (int k=0;k<16;k++) {
+                                if (scriptLength > j*16+k) {
+                                    txByte[4 + k] = scriptByte[j * 16 + k];
+                                }
+                                else {
+                                    txByte[4+k] = 0;
+                                }
+                            }
+                            bleManager.writeTxData(txByte);
+                        }
+                    }
+                }
+                byte[] mTx = {0x42,0,0,0};
+                bleManager.writeTxData(mTx);
+
+                /*byte[] mData = {0x60,0,0,16,(byte)0xC1,0,10,0,(byte)0xC2,0,0,0,0,0,0,0,0,0,0,0};
+                byte[] mData1 = {0x60,0,16,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+                bleManager.writeTxData(mData);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                mData[1] = 1;
+                mData1[1] = 1;
+                bleManager.writeTxData(mData);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                mData[1] = 2;
+                mData1[1] = 2;
+                bleManager.writeTxData(mData);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                mData[1] = 3;
+                mData1[1] = 3;
+                bleManager.writeTxData(mData);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                mData[1] = 4;
+                mData1[1] = 4;
+                bleManager.writeTxData(mData);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                mData[1] = 5;
+                mData1[1] = 5;
+                bleManager.writeTxData(mData);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                mData[1] = 6;
+                mData1[1] = 6;
+                bleManager.writeTxData(mData);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                mData[1] = 7;
+                mData1[1] = 7;
+                bleManager.writeTxData(mData);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                mData[1] = 8;
+                mData1[1] = 8;
+                bleManager.writeTxData(mData);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                bleManager.writeTxData(mData1);
+                break;*/
+            case R.id.led_save:
+                SLightPreference appPref = new SLightPreference(this);
+                String address = appPref.getString(SLightPreference.DEVICE_ADDR);
+                bleManager.bleConnect(address);
+                break;
         }
     }
 }

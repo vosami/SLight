@@ -22,12 +22,27 @@
         android:id="@+id/menu_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:background="#000000">
         <Button
+            android:id="@+id/led_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="뒤로"/>
+            android:text="뒤로"
+            android:onClick="onClick"/>
+        <Button
+            android:id="@+id/led_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="메뉴"
+            android:onClick="onClick"/>
+        <Button
+            android:id="@+id/led_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="저장"
+            android:onClick="onClick"/>
         </LinearLayout>
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph_view"
@@ -45,7 +60,7 @@
         android:layout_below="@id/title_bar_layout"
         android:layout_above="@id/graph_view"
         app:v_title="밝기비율"
-        app:v_max="100"
+        app:v_max="30"
         app:v_progress="10"/>
     <Spinner
         android:id="@+id/sp_pattern_select"
