@@ -29,19 +29,22 @@
             android:id="@+id/led_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="뒤로"
             android:onClick="onClick"/>
         <Button
             android:id="@+id/led_menu"
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="메뉴"
+            android:text="데이터 전송"
             android:onClick="onClick"/>
         <Button
             android:id="@+id/led_save"
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="저장"
+            android:text="테스트"
             android:onClick="onClick"/>
         </LinearLayout>
     <com.jjoe64.graphview.GraphView

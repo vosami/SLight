@@ -132,8 +132,8 @@ public class ScriptExecuteService extends Service implements Runnable{
      * @param pos XML 파일의 포지션
      */
     public void parseXml(int ledNum, boolean colorType, int pos) {
-        String[] singleFiles = {"scriptdata0.xml", "scriptdata1.xml", "scriptdata2.xml", "scriptdata3.xml", "scriptdata4.xml"};
-        String[] colorFiles = {"scriptcolordata0.xml"};
+        String[] singleFiles = {"scriptdata0.xml", "scriptdata1.xml", "scriptdata2.xml", "scriptdata3.xml", "scriptdata4.xml","scriptdata5.xml"};
+        String[] colorFiles = {"scriptcolordata0.xml","scriptcolordata1.xml"};
         AssetManager assetManager = getBaseContext().getAssets();
         try {
             InputStream is;

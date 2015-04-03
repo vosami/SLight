@@ -122,12 +122,7 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         super.onResume();
         bleManager = BleManager.getBleManager(this);
         bleManager.bind(this);
-        // 블루투스 연결 상태 확인후 연결 시도
-        if (bleManager.getBleConnectState() != BluetoothLeService.STATE_CONNECTED) {
-            SLightPreference appPref = new SLightPreference(this);
-            String address = appPref.getString(SLightPreference.DEVICE_ADDR);
-            bleManager.bleConnect(address);
-        }
+
     }
 
     @Override
@@ -340,6 +335,12 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
     @Override
     public void onBleServiceConnect() {
         Log.d(TAG,"서비스 연결됨");
+        // 블루투스 연결 상태 확인후 연결 시도
+        if (bleManager.getBleConnectState() != BluetoothLeService.STATE_CONNECTED) {
+            SLightPreference appPref = new SLightPreference(this);
+            String address = appPref.getString(SLightPreference.DEVICE_ADDR);
+            bleManager.bleConnect(address);
+        }
 
         bleManager.setBleNotifier(new BleNotifier() {
             @Override
@@ -517,9 +518,9 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
                             // LED 번호
                             txByte[1] = (byte)i;
                             // 시작 카운트
-                            txByte[2] = (byte)(j*16);
+                            txByte[2] = (byte)(j*8);
                             // 갯수
-                            txByte[3] = (byte) 16;
+                            txByte[3] = (byte) 8;
                             for (int k=0;k<16;k++) {
                                 if (scriptLength > j*16+k) {
                                     txByte[4 + k] = scriptByte[j * 16 + k];
@@ -535,65 +536,9 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
                 byte[] mTx = {0x42,0,0,0};
                 bleManager.writeTxData(mTx);
 
-                /*byte[] mData = {0x60,0,0,16,(byte)0xC1,0,10,0,(byte)0xC2,0,0,0,0,0,0,0,0,0,0,0};
-                byte[] mData1 = {0x60,0,16,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-                bleManager.writeTxData(mData);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                mData[1] = 1;
-                mData1[1] = 1;
-                bleManager.writeTxData(mData);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                mData[1] = 2;
-                mData1[1] = 2;
-                bleManager.writeTxData(mData);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                mData[1] = 3;
-                mData1[1] = 3;
-                bleManager.writeTxData(mData);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                mData[1] = 4;
-                mData1[1] = 4;
-                bleManager.writeTxData(mData);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                mData[1] = 5;
-                mData1[1] = 5;
-                bleManager.writeTxData(mData);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                mData[1] = 6;
-                mData1[1] = 6;
-                bleManager.writeTxData(mData);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                mData[1] = 7;
-                mData1[1] = 7;
-                bleManager.writeTxData(mData);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                mData[1] = 8;
-                mData1[1] = 8;
-                bleManager.writeTxData(mData);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                bleManager.writeTxData(mData1);
-                break;*/
             case R.id.led_save:
-                SLightPreference appPref = new SLightPreference(this);
-                String address = appPref.getString(SLightPreference.DEVICE_ADDR);
-                bleManager.bleConnect(address);
+                int state=bleManager.getBleConnectState();
+                Log.d(TAG,"Connect:"+state);
                 break;
         }
     }

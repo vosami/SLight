@@ -70,14 +70,15 @@
         <item>2번 깜박임</item>
         <item>제트엔진</item>
         <item>공항활주로</item>
-        <item>이중섬광등</item>
-        <item>레이저</item>
-        <item>폭발</item>
-        <item>횃불</item>
+        <item>김칠숙 건담</item>
+        <item>이중섬광등(비활성)</item>
+        <item>레이저(비활성)</item>
+        <item>폭발(비활성)</item>
+        <item>횃불(비활성)</item>
     </string-array>
     <string-array name="color_pattern_name">
         <item>항상 켜기</item>
-        <item>무지개</item>
+        <item>무드등</item>
         <item>빨,녹,파 깜박이기</item>
     </string-array>
 </resources>
