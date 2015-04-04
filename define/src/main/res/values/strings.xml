@@ -7,7 +7,7 @@
     <string name="txt_main_title">Smart-Light 설정 앱</string>
     <string name="btn_led_effect">LED 효과 설정</string>
     <string name="btn_ble_set">블루투스 설정</string>
-    <string name="btn_timer_set">타이머 설정</string>
+    <string name="btn_timer_set">기타 설정</string>
 
     <string name="title_activity_led_set">LedSetActivity</string>
     <string name="dummy_button">Dummy Button</string>

@@ -48,11 +48,16 @@
             android:enabled="true" />
         <service
             android:name="com.syncworks.scriptdata.ScriptExecuteService"
-            android:enabled="true"/>
+            android:enabled="true" />
 
         <activity
             android:name=".TestActivity"
             android:label="@string/title_activity_test" >
+        </activity>
+        <activity
+            android:name=".SLightSettingInfoActivity"
+            android:label="@string/title_activity_slight_setting_info"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

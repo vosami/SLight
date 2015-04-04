@@ -1,5 +1,6 @@
 package com.syncworks.slight;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -7,10 +8,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 
 public class MainActivity extends ActionBarActivity {
 	private final static String TAG = MainActivity.class.getSimpleName();
+
+	private Dialog mDialog = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +86,50 @@ public class MainActivity extends ActionBarActivity {
 				break;
 			// 타이머 설정 버튼 클릭시
 			case R.id.btn_timer_set:
-//                intent = new Intent(this, TimerSetActivity.class);
                 intent = new Intent(this, TestActivity.class);
                 startActivity(intent);
 				break;
+			// SLight 설치 방법 버튼 클릭시
+			case R.id.btn_slight_setting:
+				createDialog();
+				break;
 		}
 	}
+
+	/**
+	 * SLight 타입별 설치 방법 선택 다이얼로그
+	 */
+	private void createDialog() {
+		// custom dialog
+		mDialog = new Dialog(this);
+		mDialog.setContentView(R.layout.dialog_slight_select);
+		String dlgTitle = getResources().getString(R.string.select_slight_type);
+		mDialog.setTitle(dlgTitle);
+		Button btnScm100 = (Button) mDialog.findViewById(R.id.btn_scm100);
+		Button btnSpm100 = (Button) mDialog.findViewById(R.id.btn_spm100);
+		btnScm100.setOnClickListener(dlgListener);
+		btnSpm100.setOnClickListener(dlgListener);
+
+		mDialog.show();
+	}
+	// SLight 설치 방법 선택 다이얼로그 리스너
+	private View.OnClickListener dlgListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Intent intent = null;
+			switch (v.getId()) {
+				case R.id.btn_scm100:
+					intent = new Intent(getApplicationContext(), SLightSettingInfoActivity.class);
+					startActivity(intent);
+					mDialog.dismiss();
+					break;
+				case R.id.btn_spm100:
+					intent = new Intent(getApplicationContext(), SLightSettingInfoActivity.class);
+					startActivity(intent);
+					mDialog.dismiss();
+					break;
+			}
+		}
+	};
+
 }
