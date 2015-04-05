@@ -8,7 +8,7 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -58,6 +58,11 @@
         <activity
             android:name=".SLightSettingInfoActivity"
             android:label="@string/title_activity_slight_setting_info"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ScriptListActivity"
+            android:label="@string/title_activity_script_list"
             android:screenOrientation="portrait">
         </activity>
     </application>

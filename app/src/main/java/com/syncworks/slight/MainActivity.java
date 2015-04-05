@@ -86,7 +86,8 @@ public class MainActivity extends ActionBarActivity {
 				break;
 			// 타이머 설정 버튼 클릭시
 			case R.id.btn_timer_set:
-                intent = new Intent(this, TestActivity.class);
+                //intent = new Intent(this, TestActivity.class);
+				intent = new Intent(this, ScriptListActivity.class);
                 startActivity(intent);
 				break;
 			// SLight 설치 방법 버튼 클릭시
