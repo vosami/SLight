@@ -212,7 +212,9 @@ public class BleManager {
     // 블루투스 연결
     public void bleConnect(String addr) {
         if (bluetoothLeService != null && bluetoothLeService.getStateConnect() == BluetoothLeService.STATE_DISCONNECTED) {
-            bluetoothLeService.connect(addr);
+			if (addr.length() >5) {
+				bluetoothLeService.connect(addr);
+			}
         }
     }
     // 블루투스 해제

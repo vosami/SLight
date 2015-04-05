@@ -11,7 +11,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 	private final static String TAG = "ScriptDataList";
 	public ApplicationTest() {
 		super(Application.class);
-		testScriptDataList();
+		testByte();
 	}
 
 	public void testScriptDataList() {
@@ -22,6 +22,19 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 		byte[] bytes = dataList.toByteArray();
 		for (int i=0;i<bytes.length;i++) {
 			Log.d(TAG,"tt"+bytes[i]);
+		}
+	}
+
+	public void testByte() {
+		byte[] arrayByte = new byte[110];
+
+		for (int i =0;i<110;i++) {
+			arrayByte[i] = (byte)i;
+
+		}
+
+		for (int i=0;i<110;i++) {
+			Log.d(TAG,"array"+arrayByte[i]);
 		}
 	}
 }

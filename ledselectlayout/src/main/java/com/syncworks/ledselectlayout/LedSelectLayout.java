@@ -431,4 +431,32 @@ public class LedSelectLayout extends LinearLayout {
             onLedSelectListener.onLedCheck(isSingleLed, enabledLedGroup, checkedLed);
         }
     }
+	// Single LED 모두 선택 설정
+	public void selectAllLed() {
+		setBtnActivated(Define.SINGLE_LED_123_ACTIVATE, Define.SINGLE_LED);
+		setBtnActivated(Define.SINGLE_LED_456_ACTIVATE, Define.SINGLE_LED);
+		setBtnActivated(Define.SINGLE_LED_789_ACTIVATE, Define.SINGLE_LED);
+		// Color LED 는 모두 체크 해제 선택 해제
+		for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+			cbColor[i].setChecked(false);
+			cbColor[i].setSelected(false);
+		}
+		for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+			cbSingle[i].setChecked(true);
+		}
+	}
+	// Color Led 모두 선택 설정
+	public void selectAllColor() {
+		setBtnActivated(Define.SINGLE_LED_123_ACTIVATE, Define.COLOR_LED);
+		setBtnActivated(Define.SINGLE_LED_456_ACTIVATE, Define.COLOR_LED);
+		setBtnActivated(Define.SINGLE_LED_789_ACTIVATE, Define.COLOR_LED);
+		// Single LED 는 모두 체크 해제 선택 해제
+		for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+			cbSingle[i].setChecked(false);
+			cbSingle[i].setSelected(false);
+		}
+		for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+			cbColor[i].setChecked(true);
+		}
+	}
 }

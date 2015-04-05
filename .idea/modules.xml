@@ -12,6 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/ledselectlayout/ledselectlayout.iml" filepath="$PROJECT_DIR$/ledselectlayout/ledselectlayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/ledviewlayout/ledviewlayout.iml" filepath="$PROJECT_DIR$/ledviewlayout/ledviewlayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/scriptdata/scriptdata.iml" filepath="$PROJECT_DIR$/scriptdata/scriptdata.iml" />
+      <module fileurl="file://$PROJECT_DIR$/soundmeter/soundmeter.iml" filepath="$PROJECT_DIR$/soundmeter/soundmeter.iml" />
       <module fileurl="file://$PROJECT_DIR$/titlebarlayout/titlebarlayout.iml" filepath="$PROJECT_DIR$/titlebarlayout/titlebarlayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/verticalseekbar/verticalseekbar.iml" filepath="$PROJECT_DIR$/verticalseekbar/verticalseekbar.iml" />
     </modules>

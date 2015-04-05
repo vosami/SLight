@@ -10,7 +10,9 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -30,12 +32,18 @@ import com.syncworks.slight.fragments.OnLedFragmentListener;
 import com.syncworks.slight.fragments.SingleAlwaysOn;
 import com.syncworks.slight.fragments.SingleArrayFragment;
 import com.syncworks.slight.fragments.SingleFragment;
+import com.syncworks.soundmeter.SoundMeter;
 import com.syncworks.titlebarlayout.TitleBarLayout;
 import com.syncworks.verticalseekbar.VerticalSeekBarPlus;
 import com.syncworks.vosami.blelib.BleConsumer;
 import com.syncworks.vosami.blelib.BleManager;
 import com.syncworks.vosami.blelib.BleNotifier;
 import com.syncworks.vosami.blelib.BluetoothLeService;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * TODO 메시지 읽고 오면 에러 발생
@@ -504,11 +512,28 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
     // TODO OnClick Method
     public void onClick(View v) {
         switch (v.getId()) {
+			case R.id.btn_select_all_color:
+				ledSelectLayout.selectAllColor();
+				// UI 설정
+				checkUI(Define.COLOR_LED,
+								Define.SELECTED_COLOR_LED1|Define.SELECTED_COLOR_LED2|
+								Define.SELECTED_COLOR_LED3);
+				break;
+			case R.id.btn_select_all_led:
+				ledSelectLayout.selectAllLed();
+				// UI 설정
+				checkUI(Define.SINGLE_LED,
+								Define.SELECTED_LED1|Define.SELECTED_LED2|
+								Define.SELECTED_LED3|Define.SELECTED_LED4|
+								Define.SELECTED_LED5|Define.SELECTED_LED6|
+								Define.SELECTED_LED7|Define.SELECTED_LED8|
+								Define.SELECTED_LED9);
+				break;
             case R.id.led_back:
                 this.finish();
                 break;
             case R.id.led_menu:
-                for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                /*for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
                     byte[] scriptByte = scriptExecuteService.getByteArray(i);
                     int scriptLength = scriptByte.length;
                     for (int j=0;j<4;j++) {
@@ -534,12 +559,146 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
                     }
                 }
                 byte[] mTx = {0x42,0,0,0};
-                bleManager.writeTxData(mTx);
-
+                bleManager.writeTxData(mTx);*/
+				txThisData(thisSelectedLedNumber);
+				txCounterInit();
+				break;
             case R.id.led_save:
-                int state=bleManager.getBleConnectState();
-                Log.d(TAG,"Connect:"+state);
-                break;
+                /*txThisData(thisSelectedLedNumber);
+				txCounterInit();*/
+				recordHandler = new RecordHandler();
+				if (enableMic) {
+					enableMic = false;
+					testStopMic();
+				} else {
+					enableMic = true;
+					testMic();
+				}
+
+				break;
+
         }
     }
+
+	private void txCounterInit() {
+		byte[] mTx = {0x42,0,0,0};
+		bleManager.writeTxData(mTx);
+	}
+
+	private void txThisData(int selectedLedNum) {
+		for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+			if (((selectedLedNum >> i) & 0x01) == 1) {
+				txLedNum(i);
+			}
+		}
+	}
+
+	private void txAllData() {
+		for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+			txLedNum(i);
+		}
+	}
+
+	private void txLedNum(int ledNum) {
+		List<byte[]> mDataList = txDataFormatter(ledNum);
+		int dataCount = mDataList.size();
+		for (int i=0;i<dataCount;i++) {
+			bleManager.writeTxData(mDataList.get(i));
+		}
+	}
+
+	private List<byte[]> txDataFormatter(int ledNum) {
+		List<byte[]> txScriptList = new ArrayList<>();
+		byte[] fullScript = scriptExecuteService.getByteArray(ledNum);
+		int scriptLength = fullScript.length;
+		int scriptCount = (scriptLength / 16) + 1;
+		for (int i = 0; i<scriptCount; i++) {
+			int txCount = scriptLength - (i * 16);
+			if (txCount > 16) {
+				txCount = 16;
+			}
+			byte[] scriptData = new byte[txCount + 4];
+			scriptData[0] = Define.TX_MEMORY_WRITE;
+			scriptData[1] = (byte) ledNum;
+			scriptData[2] = (byte) (i*8);
+			scriptData[3] = (byte) (txCount/2);
+			for (int j=0;j<txCount;j++) {
+				scriptData[4+j] = fullScript[i*16 + j];
+			}
+			txScriptList.add(scriptData);
+			bleManager.writeTxData(scriptData);
+		}
+		return txScriptList;
+	}
+
+	private boolean enableMic = false;
+
+	private void testLevelMeter(int amp) {
+		byte[] levelData = new byte[10];
+		levelData[0] = Define.TX_MEMORY_WRITE;
+		levelData[1] = 0;
+		levelData[2] = 0;
+		levelData[3] = 3;
+		levelData[4] = (byte) Define.OP_START;
+		levelData[5] = 0;
+		if (amp >= Define.OP_CODE_MIN) {
+			amp = Define.OP_CODE_MIN - 1;
+		}
+		else if (amp <0) {
+			amp = 0;
+		}
+		levelData[6] = (byte)amp;
+		levelData[7] = 0;
+		levelData[8] = (byte) Define.OP_END;
+		levelData[9] = 0;
+		bleManager.writeTxData(levelData);
+	}
+
+	public SoundMeter sm = null;
+
+	private Timer micTimer = null;
+	private void testMic() {
+		sm = new SoundMeter();
+		sm.start();
+		micTimer = new Timer();
+		micTimer.scheduleAtFixedRate(new RecorderTask(), 0, 100);
+	}
+
+	private void testStopMic() {
+		micTimer.cancel();
+		micTimer.purge();
+		micTimer = null;
+		sm.stop();
+	}
+
+	public class RecorderTask extends TimerTask {
+
+		@Override
+		public void run() {
+			double k = sm.getAmplitude();
+
+			Message msg = recordHandler.obtainMessage();
+			msg.what = SEND_AMPLITUDE;
+			msg.arg1 = (int)k;
+			recordHandler.sendMessage(msg);
+		}
+	}
+
+	private final static int SEND_AMPLITUDE = 1;
+
+	private RecordHandler recordHandler = null;
+
+	private class RecordHandler extends Handler {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			switch (msg.what) {
+				case SEND_AMPLITUDE:
+//					Log.d(TAG,"Record"+msg.arg1);
+					int txAmp = msg.arg1 /8;
+					testLevelMeter(txAmp);
+					break;
+			}
+		}
+	}
 }

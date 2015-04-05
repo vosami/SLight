@@ -85,4 +85,9 @@ public class Define {
 
 	public final static boolean SINGLE_SCRIPT = true;
 	public final static boolean DOUBLE_SCRIPT = false;
+
+	/**
+	 * 송신 명령어
+	 */
+	public final static byte TX_MEMORY_WRITE = 0x60;
 }

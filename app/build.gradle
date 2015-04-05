@@ -32,4 +32,5 @@ dependencies {
 	compile project (':dragndroplist')
     compile project (':scriptdata')
     compile project (':colorpickerview')
+	compile project (':soundmeter')
 }
