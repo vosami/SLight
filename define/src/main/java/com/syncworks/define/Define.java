@@ -40,6 +40,8 @@ public class Define {
 	/**
 	 * 명령어 리스트
 	 */
+    // 기본 밝기 명령어
+    public final static int OP_BRIGHT =                     0x64;
 	// 밝기 값은 OP_CODE_MIN 이하의 값을 가짐
 	public final static int OP_CODE_MIN = 					0xC0;
 	// 시작 - 시작 명령어(1Byte) + 유지 시간(1Byte)

@@ -33,7 +33,7 @@
     <string name="op_fetch_txt">데이터 불러오기</string>
     <string name="op_random_val_txt">랜덤 밝기</string>
     <string name="op_random_delay_txt">랜덤 지연</string>
-    <string name="op_nop_txt">짧은 지연</string>
+    <string name="op_nop_txt">지연</string>
     <string name="op_long_delay_txt">오랜 지연</string>
     <string name="op_for_start_txt">반복(for) 시작</string>
     <string name="op_for_end_txt">반복(for) 종료</string>
@@ -41,7 +41,8 @@
     <string name="op_transition_txt">밝기 점차 변화</string>
     <string name="op_default_detail">밝기와 지연 시간을 설정합니다.</string>
     <string name="op_start_detail">시작</string>
-    <string name="dialog_script_operator_title">명령어 선택</string>
+    <string name="op_end_detail">종료</string>
+    <string name="dialog_script_operator_title">추가할 명령을 선택하세요.</string>
 
     <!--공통 사용-->
     <string name="lt">(</string>

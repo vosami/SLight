@@ -301,13 +301,13 @@ public class ScriptDataList implements List<ScriptData> {
 						// 시작 위치 설정
 						indexOfStart = currentIndex;
 						// 지속 시간 갱신
-						setDuration(duration);
+                        setSEDuration(duration);
 						// 인덱스 증가
 						indexIncrease();
 						break;
 					case Define.OP_END:
 						// 지속 시간 갱신
-						setDuration(duration);
+                        setSEDuration(duration);
 						// 시작 위치로 복귀
 						currentIndex = indexOfStart;
 						break;
@@ -449,15 +449,28 @@ public class ScriptDataList implements List<ScriptData> {
 		if (duration == 0xFF) {
 			currentDuration = Define.DELAY_INFINITE;
 		}
-		currentDuration = duration;
+        else {
+            currentDuration = duration;
+        }
 	}
+    // 시작 종료 명령어의 지연시간 설정
+    private void setSEDuration(int duration) {
+        if (duration >= 0xFF) {
+            currentDuration = Define.DELAY_INFINITE;
+        }
+        else {
+            currentDuration = duration<<3;
+        }
+    }
     private void setEffectDuration(int duration) {
         if (duration == 0xFF) {
             currentDuration = Define.DELAY_INFINITE;
         }
-        currentDuration = (int) (duration * effectRatio);
-        if (currentDuration >= 0xFF) {
-            currentDuration = 0xFF - 1;
+        else {
+            currentDuration = (int) (duration * effectRatio);
+            if (currentDuration >= 0xFF) {
+                currentDuration = 0xFF - 1;
+            }
         }
     }
 

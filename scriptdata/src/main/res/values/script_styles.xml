@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Drag 버튼-->
+    <style name="drag_btn">
+        <item name="android:contentDescription">@string/btn_drag_description</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:background">@drawable/dragbtn</item>
+    </style>
+    <!--좌측 스크립트 마진(For문에서 사용)-->
+    <style name="script_margin">
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/DarkOrange</item>
+        <item name="android:visibility">gone</item>
+    </style>
+    <!--좌측 스크립트 카운트-->
+    <style name="script_count">
+        <item name="android:layout_width">25dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:text">@string/temp_count</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_toEndOf">@id/script_margin</item>
+    </style>
+    <!--밝기 지정 명령에만 사용-->
+    <style name="view_bright">
+        <item name="android:layout_width">10dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_toStartOf">@id/drag_handle</item>
+        <item name="android:background">@color/Black</item>
+    </style>
+    <!--명령어 타이틀-->
+    <style name="title_operator">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_toEndOf">@id/script_count</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:textSize">@dimen/operator_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="script_value_text">
+        <item name="android:textSize">@dimen/value_text_size</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <!--첫번째 값 설명-->
+    <style name="first_description" parent="script_value_text">
+        <item name="android:layout_below">@id/title_operator</item>
+        <item name="android:layout_toEndOf">@id/script_count</item>
+    </style>
+    <!--첫번째 값-->
+    <style name="first_value" parent="script_value_text">
+        <item name="android:layout_below">@id/title_operator</item>
+        <item name="android:layout_toEndOf">@id/first_description</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:text">0</item>
+    </style>
+    <!--첫번째 값 단위-->
+    <style name="first_unit" parent="script_value_text">
+        <item name="android:layout_below">@id/title_operator</item>
+        <item name="android:layout_toEndOf">@id/first_value</item>
+    </style>
+
+    <!--두번째 값 설명-->
+    <style name="second_description" parent="script_value_text">
+        <item name="android:layout_below">@id/title_operator</item>
+        <item name="android:layout_toEndOf">@id/first_unit</item>
+        <item name="android:layout_marginStart">10dp</item>
+    </style>
+    <!--두번째 값-->
+    <style name="second_value" parent="script_value_text">
+        <item name="android:layout_below">@id/title_operator</item>
+        <item name="android:layout_toEndOf">@id/second_description</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:text">0</item>
+    </style>
+    <!--두번째 값 단위-->
+    <style name="second_unit" parent="script_value_text">
+        <item name="android:layout_below">@id/title_operator</item>
+        <item name="android:layout_toEndOf">@id/second_value</item>
+    </style>
+</resources>
