@@ -24,6 +24,7 @@ import android.widget.Spinner;
 import com.syncworks.define.Define;
 import com.syncworks.ledselectlayout.LedSelectLayout;
 import com.syncworks.ledviewlayout.LedViewLayout;
+import com.syncworks.scriptdata.ScriptDataList;
 import com.syncworks.scriptdata.ScriptDataListSpinnerAdapter;
 import com.syncworks.scriptdata.ScriptExecuteService;
 import com.syncworks.slight.fragments.ColorAlwaysOn;
@@ -529,6 +530,19 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 								Define.SELECTED_LED7|Define.SELECTED_LED8|
 								Define.SELECTED_LED9);
 				break;
+			case R.id.data_modify:
+				int ofLed = 0;
+				for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+					if (((thisSelectedLedNumber>>i) & 0x01) == 0x01) {
+						ofLed = i;
+						break;
+					}
+				}
+				ScriptDataList thisList = scriptExecuteService.getScriptDataList(ofLed);
+				ScriptListActivity.setScriptDataList(thisList);
+				Intent intent = new Intent(this,ScriptListActivity.class);
+				startActivityForResult(intent,3);
+				break;
             case R.id.led_back:
                 this.finish();
                 break;
@@ -579,6 +593,22 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 
         }
     }
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == 3) {
+			Log.d(TAG,"Data Result");
+			int ofLed = 0;
+			for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+				if (((thisSelectedLedNumber>>i) & 0x01) == 0x01) {
+					ofLed = i;
+					break;
+				}
+			}
+			scriptExecuteService.setDataList(ofLed,ScriptListActivity.getScriptDataList());
+		}
+	}
 
 	private void txCounterInit() {
 		byte[] mTx = {0x42,0,0,0};

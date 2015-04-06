@@ -9,4 +9,7 @@
     <string name="first_unit_bright">%</string>
     <string name="second_description_duration">지연시간:</string>
     <string name="second_unit_duration">초</string>
+    <string name="first_description_ref_val">기준밝기:</string>
+    <string name="first_description_ref_dur">기준지연:</string>
+    <string name="second_description_gap">랜덤범위:</string>
 </resources>

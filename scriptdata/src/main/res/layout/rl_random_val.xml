@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+    <!--Drag and Drop 버튼-->
+    <ImageView
+        style="@style/drag_btn"
+        android:id="@id/drag_handle"/>
+    <View
+        style="@style/view_bright"
+        android:id="@id/view_bright"/>
+    <View
+        style="@style/script_margin"
+        android:id="@id/script_margin"/>
+    <TextView
+        style="@style/script_count"
+        android:id="@id/script_count"/>
+    <TextView
+        style="@style/title_operator"
+        android:id="@id/title_operator"
+        android:text="@string/op_random_val_txt"/>
+    <TextView
+        style="@style/first_description"
+        android:id="@id/first_description"
+        android:text="@string/first_description_ref_val"/>
+    <TextView
+        style="@style/first_value"
+        android:id="@id/first_value"/>
+    <TextView
+        style="@style/first_unit"
+        android:id="@id/first_unit"
+        android:text="@string/first_unit_bright"/>
+    <TextView
+        style="@style/second_description"
+        android:id="@id/second_description"
+        android:text="@string/second_description_gap"/>
+    <TextView
+        style="@style/second_value"
+        android:id="@id/second_value"/>
+    <TextView
+        style="@style/second_unit"
+        android:id="@id/second_unit"
+        android:text="@string/first_unit_bright"/>
+</RelativeLayout>

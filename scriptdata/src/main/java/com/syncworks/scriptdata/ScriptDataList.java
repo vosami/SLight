@@ -63,6 +63,10 @@ public class ScriptDataList implements List<ScriptData> {
 		initCurrentVar();
 	}
 
+	public List<ScriptData> getDataList() {
+		return dataList;
+	}
+
 	// 변수 초기화
 	public void initCurrentVar() {
 		currentBright = 0;

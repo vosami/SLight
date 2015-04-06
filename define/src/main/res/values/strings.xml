@@ -37,11 +37,19 @@
     <string name="op_long_delay_txt">오랜 지연</string>
     <string name="op_for_start_txt">반복(for) 시작</string>
     <string name="op_for_end_txt">반복(for) 종료</string>
-    <string name="op_pass_data">다른 LED 제어</string>
+    <string name="op_pass_data_txt">다른 LED 제어</string>
     <string name="op_transition_txt">밝기 점차 변화</string>
+
     <string name="op_default_detail">밝기와 지연 시간을 설정합니다.</string>
-    <string name="op_start_detail">시작</string>
-    <string name="op_end_detail">종료</string>
+    <string name="op_start_detail">시작 지점을 지정합니다.</string>
+    <string name="op_end_detail">시작 지점으로 복귀합니다.</string>
+    <string name="op_random_val_detail">랜덤으로 밝기를 설정합니다.</string>
+    <string name="op_random_delay_detail">랜덤으로 지연 시간을 설정합니다.</string>
+    <string name="op_nop_detail">지연 시간을 설정합니다.</string>
+    <string name="op_for_start_detail">반복 시작 지점을 설정합니다.</string>
+    <string name="op_for_end_detail">반복 횟수를 설정하고 반복 시작 지점으로 복귀합니다.</string>
+    <string name="op_pass_data_detail">다른 LED 를 제어합니다.</string>
+    <string name="op_transition_detail">밝기를 점차 변화시킵니다.</string>
     <string name="dialog_script_operator_title">추가할 명령을 선택하세요.</string>
 
     <!--공통 사용-->
