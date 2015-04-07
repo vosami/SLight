@@ -2,7 +2,6 @@ package com.syncworks.slight;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +10,7 @@ import com.syncworks.define.Define;
 import com.syncworks.dragndroplist.DragSortController;
 import com.syncworks.dragndroplist.DragSortListView;
 import com.syncworks.scriptdata.DialogAddScriptData;
+import com.syncworks.scriptdata.DialogScriptInterface;
 import com.syncworks.scriptdata.ScriptAdapter;
 import com.syncworks.scriptdata.ScriptData;
 import com.syncworks.scriptdata.ScriptDataList;
@@ -22,15 +22,23 @@ public class ScriptListActivity extends ActionBarActivity {
 	private DragSortListView lvScript;
 	private DragSortController lvController;
 
-	private ScriptDataList scriptDataList;
+	private static ScriptDataList scriptDataList;
 	private ScriptAdapter scriptAdapter;
+
+	public static ScriptDataList getScriptDataList() {
+		return scriptDataList;
+	}
+
+	public static void setScriptDataList(ScriptDataList sl) {
+		scriptDataList = sl;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_script_list);
 		// 테스트용도로 리스트 생성
-		testMakeList();
+//		testMakeList();
 
 		lvScript = (DragSortListView) findViewById(R.id.lv_script_list);
 		lvController = buildController(lvScript);
@@ -111,19 +119,31 @@ public class ScriptListActivity extends ActionBarActivity {
         switch (v.getId()) {
             case R.id.btn_add_script:
                 DialogAddScriptData mDialog = new DialogAddScriptData(this);
+				mDialog.setAddScriptListener(new DialogScriptInterface() {
+					@Override
+					public void setScript(int val, int duration) {
+
+					}
+
+					@Override
+					public void addScript(int val, int duration) {
+						scriptDataList.add(new ScriptData(val,duration));
+						scriptAdapter.notifyDataSetChanged();
+					}
+				});
                 mDialog.show();
-//                scriptDataList.add(new ScriptData(100,100));
-//                scriptAdapter.notifyDataSetChanged();
-//                lvScript.invalidate();
+
                 break;
             case R.id.btn_test_script:
-                int size = scriptDataList.size();
+				setResult(3);
+				finish();
+                /*int size = scriptDataList.size();
                 int val, dur;
                 for (int i=0;i<size;i++) {
                     val = scriptDataList.get(i).getVal();
                     dur = scriptDataList.get(i).getDuration();
                     Log.d(TAG,"The "+i+"th Data:"+val+","+ dur);
-                }
+                }*/
                 break;
         }
     }

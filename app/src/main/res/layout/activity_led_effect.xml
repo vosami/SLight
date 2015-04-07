@@ -45,30 +45,51 @@
         android:id="@+id/menu_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:background="#000000">
-        <Button
-            android:id="@+id/led_back"
-            android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="그래프(X)"/>
+            <Button
+                android:id="@+id/data_modify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="데이터 수정"
+                android:onClick="onClick"/>
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="뒤로"
-            android:onClick="onClick"/>
-        <Button
-            android:id="@+id/led_menu"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="데이터 전송"
-            android:onClick="onClick"/>
-        <Button
-            android:id="@+id/led_save"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="테스트"
-            android:onClick="onClick"/>
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/led_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="뒤로"
+                android:onClick="onClick"/>
+            <Button
+                android:id="@+id/led_menu"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="데이터 전송"
+                android:onClick="onClick"/>
+            <Button
+                android:id="@+id/led_save"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사운드테스트"
+                android:onClick="onClick"/>
+            </LinearLayout>
+
         </LinearLayout>
     <!--<com.jjoe64.graphview.GraphView
         android:id="@+id/graph_view"

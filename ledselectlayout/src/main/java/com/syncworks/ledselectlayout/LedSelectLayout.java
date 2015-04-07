@@ -4,9 +4,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 
 import com.syncworks.define.Define;
 
@@ -24,6 +27,8 @@ public class LedSelectLayout extends LinearLayout {
 	// 체크박스
 	private CheckBox[] cbColor;
 	private CheckBox[] cbSingle;
+	// 버튼
+	private Button btnExpand;
 
     // 현재 활성화된 LED 그룹
     private int enabledLedGroup;
@@ -99,6 +104,10 @@ public class LedSelectLayout extends LinearLayout {
 		cbSingle[6] = (CheckBox) findViewById(R.id.id_single_led_7);
 		cbSingle[7] = (CheckBox) findViewById(R.id.id_single_led_8);
 		cbSingle[8] = (CheckBox) findViewById(R.id.id_single_led_9);
+
+		// 메뉴 확장 버튼
+		btnExpand = (Button) findViewById(R.id.btn_expand_menu);
+		btnExpand.setOnClickListener(clickListener);
 
 		// 클릭시 행동 설정
 		cbSingle[0].setOnClickListener(singleClickListener);
@@ -459,4 +468,35 @@ public class LedSelectLayout extends LinearLayout {
 			cbColor[i].setChecked(true);
 		}
 	}
+
+	// 버튼 클릭 리스너
+	private OnClickListener clickListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			int id = v.getId();
+			// 확장 메뉴 출력
+			if (id == R.id.btn_expand_menu) {
+				PopupMenu popup = new PopupMenu(getContext(),btnExpand);
+				popup.getMenuInflater().inflate(R.menu.popup_led_select,popup.getMenu());
+				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+					@Override
+					public boolean onMenuItemClick(MenuItem item) {
+						int id = item.getItemId();
+						if (id == R.id.menu_init_name){
+
+						} else if (id == R.id.menu_set_name) {
+
+						} else if (id == R.id.menu_select_all_led) {
+
+						} else if (id == R.id.menu_select_all_color) {
+
+						}
+						return false;
+					}
+				});
+				popup.show();
+			}
+		}
+	};
 }

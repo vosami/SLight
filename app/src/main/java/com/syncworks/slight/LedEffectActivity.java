@@ -24,6 +24,7 @@ import android.widget.Spinner;
 import com.syncworks.define.Define;
 import com.syncworks.ledselectlayout.LedSelectLayout;
 import com.syncworks.ledviewlayout.LedViewLayout;
+import com.syncworks.scriptdata.ScriptDataList;
 import com.syncworks.scriptdata.ScriptDataListSpinnerAdapter;
 import com.syncworks.scriptdata.ScriptExecuteService;
 import com.syncworks.slight.fragments.ColorAlwaysOn;
@@ -97,6 +98,11 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
     //블루투스 매니저
     private BleManager bleManager;
 
+	// 연결 상태 확인
+	private boolean connectionState = false;
+
+	private Menu menu = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -107,6 +113,8 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         findViews();
         // 변수 초기화
         initVar();
+
+
 	}
 
     private void initVar() {
@@ -131,6 +139,7 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         bleManager = BleManager.getBleManager(this);
         bleManager.bind(this);
 
+
     }
 
     @Override
@@ -148,6 +157,8 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_led_effect, menu);
+		this.menu = menu;
+		setConnectIcon(connectionState);
 		return true;
 	}
 
@@ -162,9 +173,26 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 		if (id == R.id.action_settings) {
 			return true;
 		}
+		else if (id == R.id.action_connect) {
+			return true;
+		}
 
 		return super.onOptionsItemSelected(item);
 	}
+
+	/**
+	 * ActionBar 의 연결 상태 아이콘 설정
+	 * @param stateConnect 연결상태(true:연결, false:끊김)
+	 */
+	private void setConnectIcon(boolean stateConnect) {
+		connectionState = stateConnect;
+		if (stateConnect) {
+			menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_connect));
+		} else {
+			menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_disconnect));
+		}
+	}
+
 
     private void findViews() {
         // LED 선택 레이아웃
@@ -340,6 +368,7 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         fragmentTransaction.commit();
     }
 
+	// 블루투스 서비스 Bind 인터페이스
     @Override
     public void onBleServiceConnect() {
         Log.d(TAG,"서비스 연결됨");
@@ -348,18 +377,27 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
             SLightPreference appPref = new SLightPreference(this);
             String address = appPref.getString(SLightPreference.DEVICE_ADDR);
             bleManager.bleConnect(address);
+			// 연결 상태 설정 - disconnect
+			connectionState = false;
         }
+		else {
+			// 연결 상태 설정 - Connected
+			connectionState = true;
+		}
 
         bleManager.setBleNotifier(new BleNotifier() {
             @Override
             public void bleConnected() {
                 Log.i(TAG,"Connected");
+				// 연결 상태 아이콘 설정 - Connected
+				setConnectIcon(true);
             }
 
             @Override
             public void bleDisconnected() {
                 Log.i(TAG,"Disconnected");
-
+				// 연결 상태 아이콘 설정 - disconnect
+				setConnectIcon(false);
             }
 
             @Override
@@ -529,6 +567,19 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 								Define.SELECTED_LED7|Define.SELECTED_LED8|
 								Define.SELECTED_LED9);
 				break;
+			case R.id.data_modify:
+				int ofLed = 0;
+				for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+					if (((thisSelectedLedNumber>>i) & 0x01) == 0x01) {
+						ofLed = i;
+						break;
+					}
+				}
+				ScriptDataList thisList = scriptExecuteService.getScriptDataList(ofLed);
+				ScriptListActivity.setScriptDataList(thisList);
+				Intent intent = new Intent(this,ScriptListActivity.class);
+				startActivityForResult(intent,3);
+				break;
             case R.id.led_back:
                 this.finish();
                 break;
@@ -579,6 +630,22 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 
         }
     }
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == 3) {
+			Log.d(TAG,"Data Result");
+			int ofLed = 0;
+			for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+				if (((thisSelectedLedNumber>>i) & 0x01) == 0x01) {
+					ofLed = i;
+					break;
+				}
+			}
+			scriptExecuteService.setDataList(ofLed,ScriptListActivity.getScriptDataList());
+		}
+	}
 
 	private void txCounterInit() {
 		byte[] mTx = {0x42,0,0,0};

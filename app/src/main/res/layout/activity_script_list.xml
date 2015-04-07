@@ -27,7 +27,7 @@
             android:id="@+id/btn_test_script"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="테스트"
+            android:text="완료"
             android:layout_weight="1"
             android:onClick="scriptClick"/>
     </LinearLayout>

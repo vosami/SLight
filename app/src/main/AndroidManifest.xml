@@ -37,7 +37,8 @@
         </activity>
         <activity
             android:name=".LedEffectActivity"
-            android:label="@string/title_activity_led_effect"
+            android:label="@string/btn_led_effect"
+            android:theme="@style/Theme.Apptheme_titlebar"
             android:screenOrientation="portrait" >
         </activity>
 

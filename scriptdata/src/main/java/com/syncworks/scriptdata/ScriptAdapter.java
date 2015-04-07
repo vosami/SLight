@@ -47,7 +47,7 @@ public class ScriptAdapter extends ArrayAdapter<ScriptData> {
 	}
 
     private View getLayout(int pos) {
-        View retView;
+        View retView = null;
         int val = objects.get(pos).getVal();
         int duration = objects.get(pos).getDuration();
         LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -62,7 +62,7 @@ public class ScriptAdapter extends ArrayAdapter<ScriptData> {
             tvCount.setText(Integer.toString(pos));
             // 밝기 텍스트 적용
             tvFirstVal = (TextView) retView.findViewById(R.id.first_value);
-            float brightPercent = (float)val / Define.OP_CODE_MIN *100;
+            float brightPercent = (float)val / (Define.OP_CODE_MIN-1) *100;
             mStr = String.format("%.1f",brightPercent);
             tvFirstVal.setText(mStr);
             // 밝기 값 적용
@@ -108,6 +108,31 @@ public class ScriptAdapter extends ArrayAdapter<ScriptData> {
                     }
                     tvFirstVal.setText(mStr);
                     break;
+				case Define.OP_RANDOM_VAL:
+					retView = inflater.inflate(R.layout.rl_random_val,null);
+					// 스크립트 카운트 적용
+					tvCount = (TextView) retView.findViewById(R.id.script_count);
+					tvCount.setText(Integer.toString(pos));
+					// 기준 밝기 텍스트 적용
+					tvFirstVal = (TextView) retView.findViewById(R.id.first_value);
+					float refBright = (float) (duration>>3) * 6 / (Define.OP_CODE_MIN-1) *100;
+					mStr = String.format("%.1f",refBright);
+					tvFirstVal.setText(mStr);
+					// 랜덤 범위 텍스트 적용
+					tvSecondVal = (TextView) retView.findViewById(R.id.second_value);
+					break;
+				case Define.OP_RANDOM_DELAY:
+					break;
+				case Define.OP_NOP:
+					break;
+				case Define.OP_FOR_START:
+					break;
+				case Define.OP_PASS_DATA:
+					break;
+				case Define.OP_FOR_END:
+					break;
+				case Define.OP_TRANSITION:
+					break;
                 default:
                     retView = inflater.inflate(R.layout.rl_default,null);
                     break;

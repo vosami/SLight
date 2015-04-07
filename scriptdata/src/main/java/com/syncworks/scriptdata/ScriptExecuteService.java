@@ -120,11 +120,14 @@ public class ScriptExecuteService extends Service implements Runnable{
 
 	// 스크립트 데이터 가져오기
     public ScriptDataList getScriptDataList(int position) {
-//        return scriptDataLists.get(position);
-        return new ScriptDataList(0);
+        return scriptDataLists[position];
+//        return new ScriptDataList(0);
     }
 
-
+	public void setDataList(int ledNum, ScriptDataList sdl) {
+		scriptDataLists[ledNum] = sdl;
+		Log.d(TAG,"test");
+	}
     /**
      * XML 파일을 Script Data로 변환하는 메소드
      * @param ledNum 스크립트 데이터의 LED 번호
