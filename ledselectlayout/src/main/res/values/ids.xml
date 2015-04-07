@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="btn_expand_menu" type="id"/>
+
     <item name="id_color_led_1" type="id"/>
     <item name="id_color_led_2" type="id"/>
     <item name="id_color_led_3" type="id"/>
