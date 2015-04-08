@@ -41,7 +41,12 @@ public class ScriptDataList implements List<ScriptData> {
 	// 패스 데이터
 	private static int[] passData = new int[9];
 
-	private int forCount = 0;
+    // FOR 설정 값
+	private int forRef = 0;
+    // FOR 카운트 값
+    private int forCount = 0;
+
+
 	private int transitionCount = 0;
 
     public ScriptDataList() {
@@ -349,28 +354,27 @@ public class ScriptDataList implements List<ScriptData> {
 						// 인덱스 증가
 						indexIncrease();
 						break;
+                    case Define.OP_VAR_VAL:
+                        int varSelect = (duration >> 6) & 0x03;
+//                        if (varSelect == )
+                        break;
+
 					case Define.OP_FOR_START:
 						// FOR 시작 위치 설정
 						indexOfFor = currentIndex;
 						// 변수 초기화
 						forCount = 0;
+                        forRef = duration;
 						// 인덱스 증가
 						indexIncrease();
 						break;
 					case Define.OP_FOR_END:
-						int forEnd = (duration>>4) & 0x000F;
-						// 비교값이 일치하면
-						if (forEnd <= forCount) {
-							// 다음 단계로 넘어감
-							indexIncrease();
-						}
-						// 비교값이 일치하지 않으면
-						else {
-							// 비교값 증가
-							forCount++;
-							// For 시작 위치로 돌아감
-							currentIndex = indexOfFor;
-						}
+                        if (forRef == forCount) {
+                            indexIncrease();
+                        } else {
+                            forCount++;
+                            currentIndex = indexOfFor + 1;
+                        }
 						break;
 					case Define.OP_JUMPTO:
 						currentIndex = duration;

@@ -58,6 +58,22 @@ public class Define {
 	public final static int OP_NOP = 						0xC7;
 	// 긴 지연(밝기 변화 없음) - 명령어(1Byte) + 유지시간(1Byte) * 128
 	public final static int OP_LONG_DELAY = 				0xC8;
+    // 변수 값으로 밝기 설정 - 명령어(1Byte) + 변수 선택(2bit,i,a,b,c) + 유지시간(6bit)
+    public final static int OP_VAR_VAL =                    0xC9;
+    // 변수 A 초기화
+    public final static int OP_INIT_DATA_A =                0xD0;
+    // 변수 B 초기화
+    public final static int OP_INIT_DATA_B =                0xD1;
+    // 변수 C 초기화
+    public final static int OP_INIT_DATA_C =                0xD2;
+    // 변수 연산 - 명령어(1Byte) + 연산(2bit,+,-,*,/) + 상수(6bit)
+    public final static int OP_CALC_VAR_A =                 0xD5;
+    public final static int OP_CALC_VAR_B =                 0xD6;
+    public final static int OP_CALC_VAR_C =                 0xD7;
+    // 변수 대입 - 명령어(1Byte) + 연산(2bit,+,-,*,/) + 변수(2bit,i,a,b,c) + 상수(4bit)
+    public final static int OP_PUT_VAR_A =                  0xDA;
+    public final static int OP_PUT_VAR_B =                  0xDB;
+    public final static int OP_PUT_VAR_C =                  0xDC;
 	// 반복문 시작 - 명령어(1Byte) +
 	public final static int OP_FOR_START = 					0xF0;
 	// 반복문 종료 - 명령어(1Byte) + 반복횟수(4bit) + 카운트(4bit)
@@ -79,10 +95,14 @@ public class Define {
 	public final static int PASS_DATA_NONE =				0x00;
 	public final static int PASS_DATA_INCREASE_INDEX = 		0x01;
 	public final static int PASS_DATA_ENABLE = 				0x02;
-	/*
-	#define PASS_DATA_NONE                  0x00
-			#define PASS_DATA_INCREASE_INDEX        0x01
-			#define PASS_DATA_ENABLE                0x02*/
+
+    /**
+     * VAR DATA 명령어
+     */
+    public final static int DATA_FOR_I =                0x03;
+    public final static int DATA_A =                    0x02;
+    public final static int DATA_B =                    0x01;
+    public final static int DATA_C =                    0x00;
 
 
 	public final static boolean SINGLE_SCRIPT = true;
