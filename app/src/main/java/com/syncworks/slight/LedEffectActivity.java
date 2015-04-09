@@ -180,17 +180,24 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        Log.d(TAG,"onPrepareOptionsMenu");
+        if (connectionState) {
+            menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_connect));
+        } else {
+            menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_disconnect));
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    /**
 	 * ActionBar 의 연결 상태 아이콘 설정
 	 * @param stateConnect 연결상태(true:연결, false:끊김)
 	 */
 	private void setConnectIcon(boolean stateConnect) {
 		connectionState = stateConnect;
-		if (stateConnect) {
-			menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_connect));
-		} else {
-			menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_disconnect));
-		}
+        invalidateOptionsMenu();
 	}
 
 
@@ -550,23 +557,6 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
     // TODO OnClick Method
     public void onClick(View v) {
         switch (v.getId()) {
-			case R.id.btn_select_all_color:
-				ledSelectLayout.selectAllColor();
-				// UI 설정
-				checkUI(Define.COLOR_LED,
-								Define.SELECTED_COLOR_LED1|Define.SELECTED_COLOR_LED2|
-								Define.SELECTED_COLOR_LED3);
-				break;
-			case R.id.btn_select_all_led:
-				ledSelectLayout.selectAllLed();
-				// UI 설정
-				checkUI(Define.SINGLE_LED,
-								Define.SELECTED_LED1|Define.SELECTED_LED2|
-								Define.SELECTED_LED3|Define.SELECTED_LED4|
-								Define.SELECTED_LED5|Define.SELECTED_LED6|
-								Define.SELECTED_LED7|Define.SELECTED_LED8|
-								Define.SELECTED_LED9);
-				break;
 			case R.id.data_modify:
 				int ofLed = 0;
 				for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {

@@ -1,6 +1,8 @@
 package com.syncworks.ledselectlayout;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,8 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import com.syncworks.define.Define;
 
@@ -20,6 +24,9 @@ import com.syncworks.define.Define;
  */
 public class LedSelectLayout extends LinearLayout {
 	private final static String TAG = LedSelectLayout.class.getSimpleName();
+    // 이름 설정 중인지 확인
+    private boolean isSettingName = false;
+
     // Activity 와 통신할 수 있는 리스너 설정
     private OnLedSelectListener onLedSelectListener;
 
@@ -27,6 +34,10 @@ public class LedSelectLayout extends LinearLayout {
 	// 체크박스
 	private CheckBox[] cbColor;
 	private CheckBox[] cbSingle;
+    private TextView[] tvColor;
+    private TextView[] tvSingle;
+
+
 	// 버튼
 	private Button btnExpand;
 
@@ -67,32 +78,30 @@ public class LedSelectLayout extends LinearLayout {
 		// 레이아웃 Inflate
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.led_select_layout,this);
-        // 활성화된 LED 는 Single LED로 설정
+
+        // 활성화된 LED 는 Single LED 로 설정
         enabledLedGroup = Define.SINGLE_LED_123_ACTIVATE | Define.SINGLE_LED_456_ACTIVATE | Define.SINGLE_LED_789_ACTIVATE;
 
 		// Smart Light 배경 색깔 적용
 		int lecBackgroundColor = getResources().getColor(R.color.LecBackground);
 		this.setBackgroundColor(lecBackgroundColor);
 		this.setOrientation(VERTICAL);
+
 		// Color LED 커넥터 갯수 설정
 		cbColor = new CheckBox[Define.NUMBER_OF_COLOR_LED];
+        tvColor = new TextView[Define.NUMBER_OF_COLOR_LED];
 		// Single LED 커넥터 갯수 설정
 		cbSingle = new CheckBox[Define.NUMBER_OF_SINGLE_LED];
+        tvSingle = new TextView[Define.NUMBER_OF_SINGLE_LED];
 
 		// Color 커넥터 컨트롤 획득
 		cbColor[0] = (CheckBox) findViewById(R.id.id_color_led_1);
 		cbColor[1] = (CheckBox) findViewById(R.id.id_color_led_2);
 		cbColor[2] = (CheckBox) findViewById(R.id.id_color_led_3);
-
-		// 클릭시 행동 설정
-		cbColor[0].setOnClickListener(colorClickListener);
-		cbColor[1].setOnClickListener(colorClickListener);
-		cbColor[2].setOnClickListener(colorClickListener);
-
-		// 롱클릭시 행동 설정
-		cbColor[0].setOnLongClickListener(colorLongClickListener);
-		cbColor[1].setOnLongClickListener(colorLongClickListener);
-		cbColor[2].setOnLongClickListener(colorLongClickListener);
+        // Color 커넥터 이름 컨트롤 획득
+        tvColor[0] = (TextView) findViewById(R.id.tv_color_led_1);
+        tvColor[1] = (TextView) findViewById(R.id.tv_color_led_2);
+        tvColor[2] = (TextView) findViewById(R.id.tv_color_led_3);
 
 		// Single 커넥터 컨트롤 획득
 		cbSingle[0] = (CheckBox) findViewById(R.id.id_single_led_1);
@@ -104,36 +113,66 @@ public class LedSelectLayout extends LinearLayout {
 		cbSingle[6] = (CheckBox) findViewById(R.id.id_single_led_7);
 		cbSingle[7] = (CheckBox) findViewById(R.id.id_single_led_8);
 		cbSingle[8] = (CheckBox) findViewById(R.id.id_single_led_9);
+        // Single 커넥터 이름 컨트롤 획득
+        tvSingle[0] = (TextView) findViewById(R.id.tv_single_led_1);
+        tvSingle[1] = (TextView) findViewById(R.id.tv_single_led_2);
+        tvSingle[2] = (TextView) findViewById(R.id.tv_single_led_3);
+        tvSingle[3] = (TextView) findViewById(R.id.tv_single_led_4);
+        tvSingle[4] = (TextView) findViewById(R.id.tv_single_led_5);
+        tvSingle[5] = (TextView) findViewById(R.id.tv_single_led_6);
+        tvSingle[6] = (TextView) findViewById(R.id.tv_single_led_7);
+        tvSingle[7] = (TextView) findViewById(R.id.tv_single_led_8);
+        tvSingle[8] = (TextView) findViewById(R.id.tv_single_led_9);
 
 		// 메뉴 확장 버튼
 		btnExpand = (Button) findViewById(R.id.btn_expand_menu);
 		btnExpand.setOnClickListener(clickListener);
 
-		// 클릭시 행동 설정
-		cbSingle[0].setOnClickListener(singleClickListener);
-		cbSingle[1].setOnClickListener(singleClickListener);
-		cbSingle[2].setOnClickListener(singleClickListener);
-		cbSingle[3].setOnClickListener(singleClickListener);
-		cbSingle[4].setOnClickListener(singleClickListener);
-		cbSingle[5].setOnClickListener(singleClickListener);
-		cbSingle[6].setOnClickListener(singleClickListener);
-		cbSingle[7].setOnClickListener(singleClickListener);
-		cbSingle[8].setOnClickListener(singleClickListener);
-
-		// 롱클릭시 행동 설정
-		cbSingle[0].setOnLongClickListener(singleLongClickListener);
-		cbSingle[1].setOnLongClickListener(singleLongClickListener);
-		cbSingle[2].setOnLongClickListener(singleLongClickListener);
-		cbSingle[3].setOnLongClickListener(singleLongClickListener);
-		cbSingle[4].setOnLongClickListener(singleLongClickListener);
-		cbSingle[5].setOnLongClickListener(singleLongClickListener);
-		cbSingle[6].setOnLongClickListener(singleLongClickListener);
-		cbSingle[7].setOnLongClickListener(singleLongClickListener);
-		cbSingle[8].setOnLongClickListener(singleLongClickListener);
-
-        // 최초에 활성화 상태
+		// 최초에 활성화 상태
         setBtnSelected(R.id.id_single_led_1);
+
+        // 버튼 클릭시 행동 설정
+        setLedClickListener();
 	}
+
+    // LED 버튼의 클릭시 행동 설정
+    private void setLedClickListener() {
+        if (isSettingName) {
+            for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+                cbColor[i].setOnClickListener(setNameClickListener);
+                cbColor[i].setOnLongClickListener(nullClickListener);
+            }
+            for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                cbSingle[i].setOnClickListener(setNameClickListener);
+                cbSingle[i].setOnLongClickListener(nullClickListener);
+            }
+        } else {
+            for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+                cbColor[i].setOnClickListener(colorClickListener);
+                cbColor[i].setOnLongClickListener(colorLongClickListener);
+            }
+            for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                cbSingle[i].setOnClickListener(singleClickListener);
+                cbSingle[i].setOnLongClickListener(singleLongClickListener);
+            }
+        }
+    }
+
+    private OnClickListener setNameClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            AlertDialog dialog = createSetNameDialog(v.getId());
+            dialog.show();
+        }
+    };
+
+    private OnLongClickListener nullClickListener = new OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            return true;
+        }
+    };
 
 	// Color 커넥터 클릭시 행동
 	private OnClickListener colorClickListener = new OnClickListener() {
@@ -453,6 +492,10 @@ public class LedSelectLayout extends LinearLayout {
 		for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
 			cbSingle[i].setChecked(true);
 		}
+        int checkedLed = Define.SELECTED_LED1|Define.SELECTED_LED2|Define.SELECTED_LED3|
+                Define.SELECTED_LED4|Define.SELECTED_LED5|Define.SELECTED_LED6|
+                Define.SELECTED_LED7|Define.SELECTED_LED8|Define.SELECTED_LED9;
+        doLedCheck(Define.SINGLE_LED, checkedLed);
 	}
 	// Color Led 모두 선택 설정
 	public void selectAllColor() {
@@ -467,7 +510,10 @@ public class LedSelectLayout extends LinearLayout {
 		for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
 			cbColor[i].setChecked(true);
 		}
+        int checkedLed = Define.SELECTED_COLOR_LED1|Define.SELECTED_COLOR_LED2|Define.SELECTED_COLOR_LED3;
+        doLedCheck(Define.COLOR_LED, checkedLed);
 	}
+
 
 	// 버튼 클릭 리스너
 	private OnClickListener clickListener = new OnClickListener() {
@@ -476,27 +522,88 @@ public class LedSelectLayout extends LinearLayout {
 			int id = v.getId();
 			// 확장 메뉴 출력
 			if (id == R.id.btn_expand_menu) {
-				PopupMenu popup = new PopupMenu(getContext(),btnExpand);
-				popup.getMenuInflater().inflate(R.menu.popup_led_select,popup.getMenu());
-				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                if (isSettingName) {
+                    isSettingName = false;
+                    setLedClickListener();
+                } else {
+                    PopupMenu popup = new PopupMenu(getContext(), btnExpand);
+                    popup.getMenuInflater().inflate(R.menu.popup_led_select, popup.getMenu());
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
-					@Override
-					public boolean onMenuItemClick(MenuItem item) {
-						int id = item.getItemId();
-						if (id == R.id.menu_init_name){
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            int id = item.getItemId();
+                            if (id == R.id.menu_init_name) {
 
-						} else if (id == R.id.menu_set_name) {
-
-						} else if (id == R.id.menu_select_all_led) {
-
-						} else if (id == R.id.menu_select_all_color) {
-
-						}
-						return false;
-					}
-				});
-				popup.show();
-			}
+                            } else if (id == R.id.menu_set_name) {
+                                isSettingName = true;
+                                setLedClickListener();
+                            } else if (id == R.id.menu_select_all_led) {
+                                selectAllLed();
+                            } else if (id == R.id.menu_select_all_color) {
+                                selectAllColor();
+                            }
+                            return false;
+                        }
+                    });
+                    popup.show();
+                }
+            }
 		}
 	};
+
+    private int vId;
+    private EditText etSetName;
+
+    private AlertDialog createSetNameDialog(int id) {
+        vId = id;
+        AlertDialog dialogBox = new AlertDialog.Builder(getContext())
+                .setTitle("이름을 설정하세요.")
+                .setMessage("LED")
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String nameStr = etSetName.getText().toString();
+                        if (vId == R.id.id_color_led_1) {
+                            tvColor[0].setText(nameStr);
+                        } else if (vId == R.id.id_color_led_2) {
+                            tvColor[1].setText(nameStr);
+                        } else if (vId == R.id.id_color_led_3) {
+                            tvColor[2].setText(nameStr);
+                        } else if (vId == R.id.id_single_led_1) {
+                            tvSingle[0].setText(nameStr);
+                        } else if (vId == R.id.id_single_led_2) {
+                            tvSingle[1].setText(nameStr);
+                        } else if (vId == R.id.id_single_led_3) {
+                            tvSingle[2].setText(nameStr);
+                        } else if (vId == R.id.id_single_led_4) {
+                            tvSingle[3].setText(nameStr);
+                        } else if (vId == R.id.id_single_led_5) {
+                            tvSingle[4].setText(nameStr);
+                        } else if (vId == R.id.id_single_led_6) {
+                            tvSingle[5].setText(nameStr);
+                        } else if (vId == R.id.id_single_led_7) {
+                            tvSingle[6].setText(nameStr);
+                        } else if (vId == R.id.id_single_led_8) {
+                            tvSingle[7].setText(nameStr);
+                        } else if (vId == R.id.id_single_led_9) {
+                            tvSingle[8].setText(nameStr);
+                        }
+
+                    }
+                })
+                .setNeutralButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+        Context context = getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.dialog_set_name,null);
+        etSetName = (EditText) layout.findViewById(R.id.et_set_name);
+        dialogBox.setView(layout);
+        return dialogBox;
+    }
+
 }

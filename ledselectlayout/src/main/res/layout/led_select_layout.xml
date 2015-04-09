@@ -16,12 +16,15 @@
             android:orientation="horizontal">
             <TextView
                 style="@style/cled_txt_style"
+                android:id="@id/tv_color_led_1"
                 android:text="@string/cled1_txt"/>
             <TextView
                 style="@style/cled_txt_style"
+                android:id="@id/tv_color_led_2"
                 android:text="@string/cled2_txt"/>
             <TextView
                 style="@style/cled_txt_style"
+                android:id="@id/tv_color_led_3"
                 android:text="@string/cled3_txt"/>
         </LinearLayout>
         <LinearLayout
@@ -53,30 +56,40 @@
             android:layout_below="@id/area_color_led">
             <TextView
                 style="@style/sled_txt_style"
+                android:id="@id/tv_single_led_1"
                 android:text="@string/led1_txt"/>
             <TextView
                 style="@style/sled_txt_style"
+                android:id="@id/tv_single_led_2"
                 android:text="@string/led2_txt"/>
             <TextView
                 style="@style/sled_txt_style"
+                android:id="@id/tv_single_led_3"
                 android:text="@string/led3_txt"/>
             <TextView
                 style="@style/sled_txt_style"
+                android:id="@id/tv_single_led_4"
                 android:text="@string/led4_txt"/>
             <TextView
                 style="@style/sled_txt_style"
+                android:id="@id/tv_single_led_5"
                 android:text="@string/led5_txt"/>
             <TextView
                 style="@style/sled_txt_style"
+                android:id="@id/tv_single_led_6"
                 android:text="@string/led6_txt"/>
             <TextView
                 style="@style/sled_txt_style"
-                android:text="@string/led7_txt"/>
+                android:id="@id/tv_single_led_7"
+                android:text="@string/led7_txt"
+                android:autoText="false" />
             <TextView
                 style="@style/sled_txt_style"
+                android:id="@id/tv_single_led_8"
                 android:text="@string/led8_txt"/>
             <TextView
                 style="@style/sled_txt_style"
+                android:id="@id/tv_single_led_9"
                 android:text="@string/led9_txt"/>
         </LinearLayout>
         <LinearLayout

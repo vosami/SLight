@@ -6,11 +6,13 @@
     </style>
 
     <style name="cled_txt_style">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/size_of_connector_txt</item>
         <item name="android:textColor">@color/color_of_connector_txt</item>
         <item name="android:layout_weight">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
     </style>
     <style name="sled_txt_style" parent="cled_txt_style">
         <item name="android:gravity">center_horizontal</item>

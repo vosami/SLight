@@ -4,31 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.syncworks.slight.LedEffectActivity">
-    <LinearLayout
-        android:id="@+id/ll_select_all"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/btn_select_all_color"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:textSize="12sp"
-            android:text="Select All Color Led1~3"
-            android:onClick="onClick"/>
-        <Button
-            android:id="@+id/btn_select_all_led"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:textSize="12sp"
-            android:text="Select All Led1~9"
-            android:onClick="onClick"/>
-        </LinearLayout>
     <com.syncworks.ledselectlayout.LedSelectLayout
         android:id="@+id/led_select_layout"
-        android:layout_below="@id/ll_select_all"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <com.syncworks.ledviewlayout.LedViewLayout
