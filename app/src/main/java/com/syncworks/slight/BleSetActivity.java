@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.syncworks.slightpref.SLightPref;
 import com.syncworks.vosami.blelib.BluetoothDeviceAdapter;
 import com.syncworks.vosami.blelib.BluetoothLeService;
 
@@ -47,7 +48,7 @@ public class BleSetActivity extends ActionBarActivity {
     private static final int REQUEST_ENABLE_BT = 1;
 
     // 장치 설정 확인
-    SLightPreference appPref;
+    SLightPref appPref = null;
 
     // 블루투스 서비스
     private BluetoothLeService slService;
@@ -97,7 +98,7 @@ public class BleSetActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ble_set);
-        appPref = new SLightPreference(this);
+        appPref = new SLightPref(this);
         findViews();
 
         // 블루투스 장치 검색
@@ -177,8 +178,8 @@ public class BleSetActivity extends ActionBarActivity {
         etDevName = (EditText) findViewById(R.id.et_device_name);
 
         // 설정 읽어오기, 장치 이름, 장치 주소를 TextView 에 표시
-        String mDeviceName = appPref.getString(SLightPreference.DEVICE_NAME);
-        String mDeviceAddr = appPref.getString(SLightPreference.DEVICE_ADDR);
+        String mDeviceName = appPref.getString(SLightPref.DEVICE_NAME);
+        String mDeviceAddr = appPref.getString(SLightPref.DEVICE_ADDR);
         tvDeviceName.setText(mDeviceName);
         tvDeviceAddr.setText(mDeviceAddr);
 
@@ -204,8 +205,8 @@ public class BleSetActivity extends ActionBarActivity {
 
     // 현재 설정된 장치 이름과, 주소를 Preference 에 저장
     private void savePreference() {
-        appPref.putString(SLightPreference.DEVICE_NAME, tvDeviceName.getText().toString());
-        appPref.putString(SLightPreference.DEVICE_ADDR, tvDeviceAddr.getText().toString());
+        appPref.putString(SLightPref.DEVICE_NAME, tvDeviceName.getText().toString());
+        appPref.putString(SLightPref.DEVICE_ADDR, tvDeviceAddr.getText().toString());
     }
 
 

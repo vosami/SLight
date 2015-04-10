@@ -16,6 +16,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.syncworks.define.Define;
+import com.syncworks.slightpref.SLightPref;
 
 /**
  * Created with Android Studio
@@ -26,6 +27,8 @@ public class LedSelectLayout extends LinearLayout {
 	private final static String TAG = LedSelectLayout.class.getSimpleName();
     // 이름 설정 중인지 확인
     private boolean isSettingName = false;
+    // 설정 관련
+    private SLightPref appPref = null;
 
     // Activity 와 통신할 수 있는 리스너 설정
     private OnLedSelectListener onLedSelectListener;
@@ -75,6 +78,8 @@ public class LedSelectLayout extends LinearLayout {
 	}
 
 	private void init(Context context) {
+        // 설정 불러오기
+        appPref = new SLightPref(context);
 		// 레이아웃 Inflate
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.led_select_layout,this);
@@ -133,10 +138,49 @@ public class LedSelectLayout extends LinearLayout {
 
         // 버튼 클릭시 행동 설정
         setLedClickListener();
+
+        // LED 텍스트 설정
+        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+            tvSingle[i].setText(getTvLed(Define.SINGLE_LED,i));
+        }
+        for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+            tvColor[i].setText(getTvLed(Define.COLOR_LED,i));
+        }
 	}
+
+    private void setTvLed (boolean isSingle, int ledNum, String mData) {
+        if (isSingle) {
+            if (ledNum >= Define.NUMBER_OF_SINGLE_LED) {
+                return;
+            }
+            tvSingle[ledNum].setText(mData);
+            appPref.putString(SLightPref.DEVICE_LED_NAME[ledNum],mData);
+        } else {
+            if (ledNum >= Define.NUMBER_OF_COLOR_LED) {
+                return;
+            }
+            tvColor[ledNum].setText(mData);
+            appPref.putString(SLightPref.DEVICE_COLOR_LED_NAME[ledNum],mData);
+        }
+    }
+
+    public String getTvLed(boolean isSingle, int ledNum) {
+        if (isSingle) {
+            if (ledNum >= Define.NUMBER_OF_SINGLE_LED) {
+                return "ERROR";
+            }
+            return appPref.getString(SLightPref.DEVICE_LED_NAME[ledNum]);
+        } else {
+            if (ledNum >= Define.NUMBER_OF_COLOR_LED) {
+                return "ERROR";
+            }
+            return appPref.getString(SLightPref.DEVICE_COLOR_LED_NAME[ledNum]);
+        }
+    }
 
     // LED 버튼의 클릭시 행동 설정
     private void setLedClickListener() {
+        // LED 이름 설정 모드
         if (isSettingName) {
             for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
                 cbColor[i].setOnClickListener(setNameClickListener);
@@ -146,7 +190,9 @@ public class LedSelectLayout extends LinearLayout {
                 cbSingle[i].setOnClickListener(setNameClickListener);
                 cbSingle[i].setOnLongClickListener(nullClickListener);
             }
-        } else {
+        }
+        // LED 선택 모드
+        else {
             for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
                 cbColor[i].setOnClickListener(colorClickListener);
                 cbColor[i].setOnLongClickListener(colorLongClickListener);
@@ -565,31 +611,30 @@ public class LedSelectLayout extends LinearLayout {
                     public void onClick(DialogInterface dialog, int which) {
                         String nameStr = etSetName.getText().toString();
                         if (vId == R.id.id_color_led_1) {
-                            tvColor[0].setText(nameStr);
+                            setTvLed(Define.COLOR_LED,0,nameStr);
                         } else if (vId == R.id.id_color_led_2) {
-                            tvColor[1].setText(nameStr);
+                            setTvLed(Define.COLOR_LED,1,nameStr);
                         } else if (vId == R.id.id_color_led_3) {
-                            tvColor[2].setText(nameStr);
+                            setTvLed(Define.COLOR_LED,2,nameStr);
                         } else if (vId == R.id.id_single_led_1) {
-                            tvSingle[0].setText(nameStr);
+                            setTvLed(Define.SINGLE_LED,0,nameStr);
                         } else if (vId == R.id.id_single_led_2) {
-                            tvSingle[1].setText(nameStr);
+                            setTvLed(Define.SINGLE_LED,1,nameStr);
                         } else if (vId == R.id.id_single_led_3) {
-                            tvSingle[2].setText(nameStr);
+                            setTvLed(Define.SINGLE_LED,2,nameStr);
                         } else if (vId == R.id.id_single_led_4) {
-                            tvSingle[3].setText(nameStr);
+                            setTvLed(Define.SINGLE_LED,3,nameStr);
                         } else if (vId == R.id.id_single_led_5) {
-                            tvSingle[4].setText(nameStr);
+                            setTvLed(Define.SINGLE_LED,4,nameStr);
                         } else if (vId == R.id.id_single_led_6) {
-                            tvSingle[5].setText(nameStr);
+                            setTvLed(Define.SINGLE_LED,5,nameStr);
                         } else if (vId == R.id.id_single_led_7) {
-                            tvSingle[6].setText(nameStr);
+                            setTvLed(Define.SINGLE_LED,6,nameStr);
                         } else if (vId == R.id.id_single_led_8) {
-                            tvSingle[7].setText(nameStr);
+                            setTvLed(Define.SINGLE_LED,7,nameStr);
                         } else if (vId == R.id.id_single_led_9) {
-                            tvSingle[8].setText(nameStr);
+                            setTvLed(Define.SINGLE_LED,8,nameStr);
                         }
-
                     }
                 })
                 .setNeutralButton("취소", new DialogInterface.OnClickListener() {
@@ -605,5 +650,4 @@ public class LedSelectLayout extends LinearLayout {
         dialogBox.setView(layout);
         return dialogBox;
     }
-
 }

@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.syncworks.slightpref.SLightPref;
+
 
 public class MainActivity extends ActionBarActivity {
 	private final static String TAG = MainActivity.class.getSimpleName();
@@ -29,8 +31,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         // 설정된 블루투스 주소 가져오기
-        SLightPreference appPref = new SLightPreference(this);
-        String bleAddress = appPref.getString(SLightPreference.DEVICE_ADDR);
+        SLightPref appPref = new SLightPref(this);
+        String bleAddress = appPref.getString(SLightPref.DEVICE_ADDR);
         // 백그라운드 서비스 시작
         /*Intent bleAutoServiceIntent = new Intent(getBaseContext(), BleAutoService.class);
         bleAutoServiceIntent.putExtra(Define.BLE_ADDRESS,bleAddress);

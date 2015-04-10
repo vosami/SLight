@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.syncworks.slightpref.SLightPref;
 import com.syncworks.vosami.blelib.BleConsumer;
 import com.syncworks.vosami.blelib.BleManager;
 import com.syncworks.vosami.blelib.BleNotifier;
@@ -102,8 +103,8 @@ public class TimerSetActivity extends ActionBarActivity implements BleConsumer{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_connect:
-                SLightPreference appPref = new SLightPreference(this);
-                String addr = appPref.getString(SLightPreference.DEVICE_ADDR);
+                SLightPref appPref = new SLightPref(this);
+                String addr = appPref.getString(SLightPref.DEVICE_ADDR);
                 bleManager.bleConnect(addr);
                 break;
             case R.id.btn_disconnect:

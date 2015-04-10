@@ -33,6 +33,7 @@ import com.syncworks.slight.fragments.OnLedFragmentListener;
 import com.syncworks.slight.fragments.SingleAlwaysOn;
 import com.syncworks.slight.fragments.SingleArrayFragment;
 import com.syncworks.slight.fragments.SingleFragment;
+import com.syncworks.slightpref.SLightPref;
 import com.syncworks.soundmeter.SoundMeter;
 import com.syncworks.titlebarlayout.TitleBarLayout;
 import com.syncworks.verticalseekbar.VerticalSeekBarPlus;
@@ -381,8 +382,8 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         Log.d(TAG,"서비스 연결됨");
         // 블루투스 연결 상태 확인후 연결 시도
         if (bleManager.getBleConnectState() != BluetoothLeService.STATE_CONNECTED) {
-            SLightPreference appPref = new SLightPreference(this);
-            String address = appPref.getString(SLightPreference.DEVICE_ADDR);
+            SLightPref appPref = new SLightPref(this);
+            String address = appPref.getString(SLightPref.DEVICE_ADDR);
             bleManager.bleConnect(address);
 			// 연결 상태 설정 - disconnect
 			connectionState = false;
