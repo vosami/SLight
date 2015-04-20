@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--공항 활주로-->
 <Script>
-    <ScriptOrder>4</ScriptOrder>
+    <ScriptName>공항 활주로</ScriptName>
     <ScriptType>Single</ScriptType>
     <ScriptDataList>
         <ScriptData>

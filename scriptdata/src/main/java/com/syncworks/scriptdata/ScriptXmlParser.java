@@ -62,4 +62,9 @@ public class ScriptXmlParser {
         }
         return scriptDataList;
     }
+
+    public static String parseName(InputStream is) {
+        String retStr = null;
+        return retStr;
+    }
 }

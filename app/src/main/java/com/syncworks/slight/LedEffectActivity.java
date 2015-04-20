@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.syncworks.define.Define;
 import com.syncworks.ledselectlayout.LedSelectLayout;
@@ -42,6 +43,12 @@ import com.syncworks.vosami.blelib.BleManager;
 import com.syncworks.vosami.blelib.BleNotifier;
 import com.syncworks.vosami.blelib.BluetoothLeService;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -244,7 +251,53 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
             spPatternSelect.setSelection(pattern);
             spPatternSelect.setOnItemSelectedListener(colorItemSelectedListener);
         }
+    }
 
+    private void testFile() {
+        FilenameFilter filenameFilter = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                return filename.endsWith("xml");
+            }
+        };
+        File file = getFilesDir();
+        File[] files = file.listFiles(filenameFilter);
+        String [] titleList = new String [files.length];
+        Log.d(TAG,"Count" + files.length);
+        for (int i=0;i<files.length;i++){
+            titleList[i] = files[i].getName();
+            Log.d(TAG,titleList[i]);
+        }
+    }
+    private void testFile1() {
+        String filename = "test.xml";
+        String txtStr = "Hello World";
+        String temp = getFilesDir().getAbsolutePath();
+        File file = new File(this.getFilesDir(),filename);
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(file);
+            outputStream.write(txtStr.getBytes());
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, "Save Success", Toast.LENGTH_SHORT).show();
+
+        try {
+            FileInputStream fis = openFileInput(filename);
+            byte[] data = new byte[fis.available()];
+            while(fis.read(data) != -1) {}
+            fis.close();
+            String ttemp = new String(data);
+            Toast.makeText(this, ttemp, Toast.LENGTH_SHORT).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -256,7 +309,6 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
             for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
                 if (((tempLedNum>>i) & 0x01) != 0) {
                     // TODO 다른 앱 실행 후 돌아올 때 에러 발생 thread exiting with uncaught exception
-//                    scriptExecuteService.parseXml(i,Define.SINGLE_LED,position);
                     if (ledSettingData.getPattern(Define.SINGLE_LED,i) != position) {
                         scriptExecuteService.parseXml(i,Define.SINGLE_LED,position);
                         ledSettingData.setPattern(Define.SINGLE_LED,i,position);
@@ -572,37 +624,12 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 				startActivityForResult(intent,3);
 				break;
             case R.id.led_back:
-                this.finish();
+//                this.finish();
+                testFile();
                 break;
             case R.id.led_menu:
-                /*for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
-                    byte[] scriptByte = scriptExecuteService.getByteArray(i);
-                    int scriptLength = scriptByte.length;
-                    for (int j=0;j<4;j++) {
-                        if (scriptLength > j*16) {
-                            byte[] txByte = new byte[20];
-                            txByte[0] = (byte)0x60;
-                            // LED 번호
-                            txByte[1] = (byte)i;
-                            // 시작 카운트
-                            txByte[2] = (byte)(j*8);
-                            // 갯수
-                            txByte[3] = (byte) 8;
-                            for (int k=0;k<16;k++) {
-                                if (scriptLength > j*16+k) {
-                                    txByte[4 + k] = scriptByte[j * 16 + k];
-                                }
-                                else {
-                                    txByte[4+k] = 0;
-                                }
-                            }
-                            bleManager.writeTxData(txByte);
-                        }
-                    }
-                }
-                byte[] mTx = {0x42,0,0,0};
-                bleManager.writeTxData(mTx);*/
-				txThisData(thisSelectedLedNumber);
+//				txThisData(thisSelectedLedNumber);
+                txAllData();
 				txCounterInit();
 				break;
             case R.id.led_save:

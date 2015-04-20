@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--제트엔진-->
 <Script>
-    <ScriptOrder>3</ScriptOrder>
+    <ScriptName>제트엔진</ScriptName>
     <ScriptType>Single</ScriptType>
     <ScriptDataList>
         <ScriptData>

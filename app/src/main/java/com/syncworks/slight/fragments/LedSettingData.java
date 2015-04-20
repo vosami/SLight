@@ -9,6 +9,7 @@ import com.syncworks.define.Define;
  */
 public class LedSettingData {
 
+    private int enabledLedGroup;
     private SetData[] singleDatas = new SetData[Define.NUMBER_OF_SINGLE_LED];
     private SetData[] colorDatas = new SetData[Define.NUMBER_OF_COLOR_LED];
 
@@ -25,6 +26,7 @@ public class LedSettingData {
         initVar();
     }
     private void initVar() {
+        enabledLedGroup = 7;
         for (int i=0;i< Define.NUMBER_OF_SINGLE_LED;i++) {
             singleDatas[i] = new SetData();
             singleDatas[i].pattern = 0;
@@ -231,129 +233,6 @@ public class LedSettingData {
         }
     }
 
-
-    /*// 프래그먼트 정보 획득
-    public LedEffectActivity.FragmentType getFragmentType(int ledNum) {
-        LedEffectActivity.FragmentType retType = LedEffectActivity.FragmentType.SINGLE_ALWAYS_ON;
-        switch (ledNum) {
-            case Define.SELECTED_COLOR_LED1:
-                if (colorDatas[0].pattern == 0) {
-                    retType = LedEffectActivity.FragmentType.COLOR_ALWAYS_ON;
-                } else {
-                    retType = LedEffectActivity.FragmentType.SINGLE;
-                }
-                break;
-            case Define.SELECTED_COLOR_LED2:
-                if (colorDatas[1].pattern == 0) {
-                    retType = LedEffectActivity.FragmentType.COLOR_ALWAYS_ON;
-                } else {
-                    retType = LedEffectActivity.FragmentType.SINGLE;
-                }
-                break;
-            case Define.SELECTED_COLOR_LED3:
-                if (colorDatas[2].pattern == 0) {
-                    retType = LedEffectActivity.FragmentType.COLOR_ALWAYS_ON;
-                } else {
-                    retType = LedEffectActivity.FragmentType.SINGLE;
-                }
-                break;
-            case Define.SELECTED_LED1:
-                if (singleDatas[0].pattern == 0) {
-                    retType = LedEffectActivity.FragmentType.SINGLE_ALWAYS_ON;
-                } else {
-                    retType = LedEffectActivity.FragmentType.SINGLE;
-                }
-                break;
-            case Define.SELECTED_LED2:
-                if (singleDatas[1].pattern == 0) {
-                    retType = LedEffectActivity.FragmentType.SINGLE_ALWAYS_ON;
-                } else {
-                    retType = LedEffectActivity.FragmentType.SINGLE;
-                }
-                break;
-            case Define.SELECTED_LED3:
-                if (singleDatas[2].pattern == 0) {
-                    retType = LedEffectActivity.FragmentType.SINGLE_ALWAYS_ON;
-                } else {
-                    retType = LedEffectActivity.FragmentType.SINGLE;
-                }
-                break;
-            case Define.SELECTED_LED4:
-                if (singleDatas[3].pattern == 0) {
-                    retType = LedEffectActivity.FragmentType.SINGLE_ALWAYS_ON;
-                } else {
-                    retType = LedEffectActivity.FragmentType.SINGLE;
-                }
-                break;
-            case Define.SELECTED_LED5:
-                if (singleDatas[4].pattern == 0) {
-                    retType = LedEffectActivity.FragmentType.SINGLE_ALWAYS_ON;
-                } else {
-                    retType = LedEffectActivity.FragmentType.SINGLE;
-                }
-                break;
-            case Define.SELECTED_LED6:
-                if (singleDatas[5].pattern == 0) {
-                    retType = LedEffectActivity.FragmentType.SINGLE_ALWAYS_ON;
-                } else {
-                    retType = LedEffectActivity.FragmentType.SINGLE;
-                }
-                break;
-            case Define.SELECTED_LED7:
-                if (singleDatas[6].pattern == 0) {
-                    retType = LedEffectActivity.FragmentType.SINGLE_ALWAYS_ON;
-                } else {
-                    retType = LedEffectActivity.FragmentType.SINGLE;
-                }
-                break;
-            case Define.SELECTED_LED8:
-                if (singleDatas[7].pattern == 0) {
-                    retType = LedEffectActivity.FragmentType.SINGLE_ALWAYS_ON;
-                } else {
-                    retType = LedEffectActivity.FragmentType.SINGLE;
-                }
-                break;
-            case Define.SELECTED_LED9:
-                if (singleDatas[8].pattern == 0) {
-                    retType = LedEffectActivity.FragmentType.SINGLE_ALWAYS_ON;
-                } else {
-                    retType = LedEffectActivity.FragmentType.SINGLE;
-                }
-                break;
-        }
-
-        return retType;
-    }*/
-
-    /*public int convertLedNumber(int ledNum) {
-        int retLedNum = 0;
-        if ((ledNum & Define.SELECTED_COLOR_LED1) == Define.SELECTED_COLOR_LED1) {
-            retLedNum = 0;
-        } else if ((ledNum & Define.SELECTED_COLOR_LED2) == Define.SELECTED_COLOR_LED2) {
-            retLedNum = 1;
-        } else if ((ledNum & Define.SELECTED_COLOR_LED3) == Define.SELECTED_COLOR_LED3) {
-            retLedNum = 2;
-        } else if ((ledNum & Define.SELECTED_LED1) == Define.SELECTED_LED1) {
-            retLedNum = 0;
-        } else if ((ledNum & Define.SELECTED_LED2) == Define.SELECTED_LED2) {
-            retLedNum = 1;
-        } else if ((ledNum & Define.SELECTED_LED3) == Define.SELECTED_LED3) {
-            retLedNum = 2;
-        } else if ((ledNum & Define.SELECTED_LED4) == Define.SELECTED_LED4) {
-            retLedNum = 3;
-        } else if ((ledNum & Define.SELECTED_LED5) == Define.SELECTED_LED5) {
-            retLedNum = 4;
-        } else if ((ledNum & Define.SELECTED_LED6) == Define.SELECTED_LED6) {
-            retLedNum = 5;
-        } else if ((ledNum & Define.SELECTED_LED7) == Define.SELECTED_LED7) {
-            retLedNum = 6;
-        } else if ((ledNum & Define.SELECTED_LED8) == Define.SELECTED_LED8) {
-            retLedNum = 7;
-        } else if ((ledNum & Define.SELECTED_LED9) == Define.SELECTED_LED9) {
-            retLedNum = 8;
-        }
-        return 0;
-    }*/
 
     public class SetData {
         public int pattern = 0;

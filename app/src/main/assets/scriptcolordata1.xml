@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--항상 켜기-->
 <Script>
-    <ScriptOrder>0</ScriptOrder>
+    <ScriptName>빨녹파</ScriptName>
     <ScriptType>Color</ScriptType>
     <ScriptDataList>
         <ScriptData>

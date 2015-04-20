@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--2번 깜박임-->
 <Script>
-    <ScriptOrder>2</ScriptOrder>
+    <ScriptName>2번 깜박임</ScriptName>
     <ScriptType>Single</ScriptType>
     <ScriptDataList>
         <ScriptData>

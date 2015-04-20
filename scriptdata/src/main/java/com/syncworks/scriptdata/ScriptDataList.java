@@ -243,6 +243,7 @@ public class ScriptDataList implements List<ScriptData> {
 	}
 
 	public byte[] toByteArray() {
+        int tempVal, tempDuration;
 		byte[] byteArray;
 		int dataListSize = getDataListSize()*2;
 		int byteArrayCount = 0;
@@ -250,8 +251,32 @@ public class ScriptDataList implements List<ScriptData> {
 		byteArray = new byte[dataListSize];
 		for (int i=0;i<dataList.size();i++) {
 			thisData = dataList.get(i);
-			byteArray[byteArrayCount++] = (byte) thisData.getVal();
-			byteArray[byteArrayCount++] = (byte) thisData.getDuration();
+            tempVal = thisData.getVal();
+            tempDuration = thisData.getDuration();
+            if (tempVal < Define.OP_CODE_MIN) {
+                // 밝기 비율 적용
+                tempVal = (int)(tempVal * brightRatio);
+                if (tempVal >= Define.OP_CODE_MIN) {
+                    tempVal = Define.OP_CODE_MIN - 1;
+                }
+                // 지연 비율 적용
+                if (tempDuration != 0xFF) {
+                    tempDuration = (int) (tempDuration * effectRatio);
+                    if (tempDuration >= 0xFF) {
+                        tempDuration = 0xFF-1;
+                    }
+                }
+            } else if (tempVal == Define.OP_NOP) {
+                // 지연 비율 적용
+                if (tempDuration != 0xFF) {
+                    tempDuration = (int) (tempDuration * effectRatio);
+                    if (tempDuration >= 0xFF) {
+                        tempDuration = 0xFF-1;
+                    }
+                }
+            }
+			byteArray[byteArrayCount++] = (byte) tempVal;
+			byteArray[byteArrayCount++] = (byte) tempDuration;
 			if (thisData.getSize() == Define.DOUBLE_SCRIPT) {
 				byteArray[byteArrayCount++] = (byte) thisData.getData1();
 				byteArray[byteArrayCount++] = (byte) thisData.getData2();

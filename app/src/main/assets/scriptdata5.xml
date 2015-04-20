@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--항상 켜기-->
 <Script>
-    <ScriptOrder>0</ScriptOrder>
+    <ScriptName>김칠숙 건담</ScriptName>
     <ScriptType>Single</ScriptType>
     <ScriptDataList>
         <ScriptData>
