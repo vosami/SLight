@@ -28,6 +28,7 @@ import com.syncworks.ledviewlayout.LedViewLayout;
 import com.syncworks.scriptdata.ScriptDataList;
 import com.syncworks.scriptdata.ScriptDataListSpinnerAdapter;
 import com.syncworks.scriptdata.ScriptExecuteService;
+import com.syncworks.scriptdata.ScriptFileManager;
 import com.syncworks.slight.fragments.ColorAlwaysOn;
 import com.syncworks.slight.fragments.LedSettingData;
 import com.syncworks.slight.fragments.OnLedFragmentListener;
@@ -47,7 +48,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -254,7 +254,9 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
     }
 
     private void testFile() {
-        FilenameFilter filenameFilter = new FilenameFilter() {
+        ScriptFileManager sfm = new ScriptFileManager(this);
+        sfm.resetData();
+        /*FilenameFilter filenameFilter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
                 return filename.endsWith("xml");
@@ -267,7 +269,7 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         for (int i=0;i<files.length;i++){
             titleList[i] = files[i].getName();
             Log.d(TAG,titleList[i]);
-        }
+        }*/
     }
     private void testFile1() {
         String filename = "test.xml";
@@ -625,6 +627,8 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 				break;
             case R.id.led_back:
 //                this.finish();
+
+                testFile1();
                 testFile();
                 break;
             case R.id.led_menu:

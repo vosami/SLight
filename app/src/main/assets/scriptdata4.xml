@@ -2,6 +2,7 @@
 <!--공항 활주로-->
 <Script>
     <ScriptName>공항 활주로</ScriptName>
+    <ScriptNameEn>Airport Runway</ScriptNameEn>
     <ScriptType>Single</ScriptType>
     <ScriptDataList>
         <ScriptData>

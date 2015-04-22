@@ -63,8 +63,29 @@ public class ScriptXmlParser {
         return scriptDataList;
     }
 
-    public static String parseName(InputStream is) {
-        String retStr = null;
-        return retStr;
+    public static ScriptNameData parseName(InputStream is) {
+        ScriptNameData snData = null;
+
+        try {
+            // SAXParser 에서 XML Reader 생성
+            XMLReader xmlReader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
+            // 핸들러 생성
+            ScriptNameXmlHandler scriptNameXmlHandler = new ScriptNameXmlHandler();
+            // XML 리더에 핸들러 설정
+            xmlReader.setContentHandler(scriptNameXmlHandler);
+            // XML Parse 시작
+            xmlReader.parse(new InputSource(is));
+            // 이름 데이터 가져오기
+            snData = scriptNameXmlHandler.getNameData();
+
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return snData;
     }
 }

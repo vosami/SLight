@@ -2,6 +2,7 @@
 <!--항상 켜기-->
 <Script>
     <ScriptName>빨녹파</ScriptName>
+    <ScriptNameEn>RedGreenBlue</ScriptNameEn>
     <ScriptType>Color</ScriptType>
     <ScriptDataList>
         <ScriptData>

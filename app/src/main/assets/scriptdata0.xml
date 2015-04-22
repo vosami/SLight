@@ -2,6 +2,7 @@
 <!--항상 켜기-->
 <Script>
     <ScriptName>항상 켜기</ScriptName>
+    <ScriptNameEn>Always On</ScriptNameEn>
     <ScriptType>Single</ScriptType>
     <ScriptDataList>
         <ScriptData>

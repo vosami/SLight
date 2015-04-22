@@ -2,6 +2,7 @@
 <!--1번 깜박임-->
 <Script>
     <ScriptName>1번 깜박임</ScriptName>
+    <ScriptNameEn>Flash One</ScriptNameEn>
     <ScriptType>Single</ScriptType>
     <ScriptDataList>
         <ScriptData>
