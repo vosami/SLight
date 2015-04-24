@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--제트엔진-->
 <Script>
-    <ScriptName>제트엔진</ScriptName>
-    <ScriptNameEn>Jet Engine</ScriptNameEn>
+    <ScriptName>* 제트엔진</ScriptName>
+    <ScriptNameEn>* Jet Engine</ScriptNameEn>
     <ScriptType>Single</ScriptType>
     <ScriptDataList>
         <ScriptData>

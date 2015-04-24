@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--항상 켜기-->
 <Script>
-    <ScriptName>항상 켜기</ScriptName>
-    <ScriptNameEn>Always On</ScriptNameEn>
+    <ScriptName>* 항상 켜기</ScriptName>
+    <ScriptNameEn>* Always On</ScriptNameEn>
     <ScriptType>Color</ScriptType>
     <ScriptDataList>
         <ScriptData>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--항상 켜기-->
 <Script>
-    <ScriptName>테스트</ScriptName>
-    <ScriptNameEn>Test</ScriptNameEn>
+    <ScriptName>* 테스트</ScriptName>
+    <ScriptNameEn>* Test</ScriptNameEn>
     <ScriptDataList>
         <ScriptData>
             <ScriptBright>OP_START</ScriptBright>

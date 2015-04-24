@@ -60,6 +60,7 @@ public class Define {
 	public final static int OP_LONG_DELAY = 				0xC8;
     // 변수 값으로 밝기 설정 - 명령어(1Byte) + 변수 선택(2bit,i,a,b,c) + 유지시간(6bit)
     public final static int OP_VAR_VAL =                    0xC9;
+    public final static int OP_SOUND_VAL =                  0xCA;
     // 변수 A 초기화
     public final static int OP_INIT_DATA_A =                0xD0;
     // 변수 B 초기화
@@ -111,5 +112,26 @@ public class Define {
 	/**
 	 * 송신 명령어
 	 */
+    // EEPROM 에 데이터 기록(0:명령어, 1~2:주소, 3:길이, 4~19:기록데이터)
+    public final static byte TX_EEPROM_WRITE = 0x40;
+    // EEPROM 의 데이터 읽음(0:명령어, 1~2:주소, 3:길이)
+    public final static byte TX_EEPROM_READ = 0x41;
+    // 카운트 초기화(0:명령어, 1~3:Reserved)
+    public final static byte TX_INIT_COUNT = 0x42;
+    // I2C Write (0:명령어, 1:Device Address, 2:속도, 3~4:주소, 5:길이, 6~19:기록 데이터)
+    public final static byte TX_I2C_WRITE = 0x50;
+    // I2C Write (0:명령어, 1:Device Address, 2:속도, 3~4:주소, 5:길이)
+    public final static byte TX_I2C_READ = 0x51;
+    // 점멸 패턴 기록 (0:명령어, 1:제어할 LED 번호, 2:시작 번지, 3:길이, 4~19:기록데이터)
 	public final static byte TX_MEMORY_WRITE = 0x60;
+    // 점멸 패턴 읽어오기 (0:명령어, 1:제어할 LED 번호, 2:시작 번지, 3:길이)
+    public final static byte TX_MEMORY_READ = 0x61;
+    // 현재 시간 재설정 (0:명령어, 1~4:현재시간)
+    public final static byte TX_TIME_RELOAD = 0x70;
+    // 현재 시간 읽어오기 (0:명령어, 1~3:Reserved)
+    public final static byte TX_TIME_READ = 0x71;
+    // 알람 시간 설정 (0:명령어, 1:선택 알람, 2:요일, 3:시간, 4:분, 5:유지시간-0이면 OFF)
+    public final static byte TX_ALARM_WRITE = (byte) 0x72;
+    // EEPROM 초기화 (0:명령어, 1~3:Reserved)
+    public final static byte TX_INIT_SET = (byte) 0x80;
 }

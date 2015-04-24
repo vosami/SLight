@@ -375,12 +375,13 @@ public class ScriptDataList implements List<ScriptData> {
 						break;
 					case Define.OP_LONG_DELAY:
 						// 지속 시간 갱신
-						setDuration(duration<<8);
+						setDuration(duration<<4);
 						// 인덱스 증가
 						indexIncrease();
 						break;
                     case Define.OP_VAR_VAL:
                         int varSelect = (duration >> 6) & 0x03;
+                        int tempDuration = duration & 0x3F;
 //                        if (varSelect == )
                         break;
 

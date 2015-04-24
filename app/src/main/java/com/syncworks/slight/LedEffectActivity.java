@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.syncworks.define.Define;
 import com.syncworks.ledselectlayout.LedSelectLayout;
@@ -44,11 +43,6 @@ import com.syncworks.vosami.blelib.BleManager;
 import com.syncworks.vosami.blelib.BleNotifier;
 import com.syncworks.vosami.blelib.BluetoothLeService;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -60,7 +54,8 @@ import java.util.TimerTask;
 
 public class LedEffectActivity extends ActionBarActivity implements OnLedFragmentListener,BleConsumer {
     private final static String TAG = LedEffectActivity.class.getSimpleName();
-
+    // 스크립트 파일 목록 생성 매니저
+    private ScriptFileManager scriptFileManager = null;
     // 메시지 수신 리시버
     private BrightReceiver receiver;
     // LED 실행 서비스
@@ -115,6 +110,9 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_led_effect);
+        scriptFileManager = new ScriptFileManager(this);
+        scriptFileManager.resetData();
+
         // 설정 정보 초기화
         ledSettingData = LedSettingData.getInstance();
         // View 등록
@@ -236,72 +234,45 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
     private void setSpinnerPatternName(boolean ledColor, int pattern) {
         String[] patternName;
         ScriptDataListSpinnerAdapter spinnerAdapter;
+        int patternArraySize = 0;
         // SINGLE LED 점멸 패턴 데이터 가져오기
         if (ledColor == Define.SINGLE_LED) {
-            patternName = getResources().getStringArray(R.array.single_pattern_name);
+            patternName = scriptFileManager.getArrayName(Define.SINGLE_LED, "kr");
+//            patternName = getResources().getStringArray(R.array.single_pattern_name);
             spinnerAdapter = new ScriptDataListSpinnerAdapter(this.getApplicationContext(),android.R.layout.simple_spinner_item, patternName);
             spPatternSelect.setAdapter(spinnerAdapter);
             spPatternSelect.setSelection(pattern);
             spPatternSelect.setOnItemSelectedListener(singleItemSelectedListener);
         }
         else {
-            patternName = getResources().getStringArray(R.array.color_pattern_name);
+            patternName = scriptFileManager.getArrayName(Define.COLOR_LED, "kr");
+//            patternName = getResources().getStringArray(R.array.color_pattern_name);
             spinnerAdapter = new ScriptDataListSpinnerAdapter(this.getApplicationContext(),android.R.layout.simple_spinner_item, patternName);
             spPatternSelect.setAdapter(spinnerAdapter);
             spPatternSelect.setSelection(pattern);
             spPatternSelect.setOnItemSelectedListener(colorItemSelectedListener);
         }
     }
+/*
 
-    private void testFile() {
-        ScriptFileManager sfm = new ScriptFileManager(this);
-        sfm.resetData();
-        /*FilenameFilter filenameFilter = new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String filename) {
-                return filename.endsWith("xml");
+    private void copyFile(File source, File dest) throws IOException{
+        InputStream input = null;
+        OutputStream output = null;
+        try {
+            AssetManager am = getAssets();
+            input = am.open("scriptdata0.xml");
+//            input = new FileInputStream(source);
+            output = new FileOutputStream(dest);
+            byte[] buf = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = input.read(buf)) > 0) {
+                output.write(buf, 0, bytesRead);
             }
-        };
-        File file = getFilesDir();
-        File[] files = file.listFiles(filenameFilter);
-        String [] titleList = new String [files.length];
-        Log.d(TAG,"Count" + files.length);
-        for (int i=0;i<files.length;i++){
-            titleList[i] = files[i].getName();
-            Log.d(TAG,titleList[i]);
-        }*/
-    }
-    private void testFile1() {
-        String filename = "test.xml";
-        String txtStr = "Hello World";
-        String temp = getFilesDir().getAbsolutePath();
-        File file = new File(this.getFilesDir(),filename);
-        FileOutputStream outputStream = null;
-        try {
-            outputStream = new FileOutputStream(file);
-            outputStream.write(txtStr.getBytes());
-            outputStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } finally {
+            input.close();
+            output.close();
         }
-        Toast.makeText(this, "Save Success", Toast.LENGTH_SHORT).show();
-
-        try {
-            FileInputStream fis = openFileInput(filename);
-            byte[] data = new byte[fis.available()];
-            while(fis.read(data) != -1) {}
-            fis.close();
-            String ttemp = new String(data);
-            Toast.makeText(this, ttemp, Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
+    }*/
 
     private AdapterView.OnItemSelectedListener singleItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
@@ -627,9 +598,6 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 				break;
             case R.id.led_back:
 //                this.finish();
-
-                testFile1();
-                testFile();
                 break;
             case R.id.led_menu:
 //				txThisData(thisSelectedLedNumber);

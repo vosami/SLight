@@ -5,8 +5,6 @@ import android.content.res.AssetManager;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +36,51 @@ public class ScriptFileManager {
         colorNameData = new ArrayList<>();
     }
 
+    public int getSize(boolean type) {
+        if (type) {
+            return singleNameData.size();
+        } else {
+            return colorNameData.size();
+        }
+    }
+
+    public String[] getArrayName(boolean type,String langType) {
+        String[] retStrArray = null;
+        int sizeOfArray = 0;
+        if (type) {
+            sizeOfArray = singleNameData.size();
+            retStrArray = new String[sizeOfArray];
+            for (int i=0;i<sizeOfArray;i++) {
+                retStrArray[i] = getName(singleNameData.get(i),langType);
+            }
+        } else {
+            sizeOfArray = colorNameData.size();
+            retStrArray = new String[sizeOfArray];
+            for (int i=0;i<sizeOfArray;i++) {
+                retStrArray[i] = getName(colorNameData.get(i),langType);
+            }
+        }
+        return retStrArray;
+    }
+
+    private String getName(ScriptNameData snData,String langType) {
+        String name = null;
+        String nameEn = null;
+        name = snData.getName();
+        nameEn = snData.getNameEn();
+
+        if (langType.equalsIgnoreCase("kr") && name != null) {
+            return name;
+        } else if (nameEn != null) {
+            return nameEn;
+        } else {
+            return "none";
+        }
+    }
+
     public void resetData() {
+        singleNameData.clear();
+        colorNameData.clear();
         openAssetFile();
         openFilesDir();
     }
@@ -56,12 +98,15 @@ public class ScriptFileManager {
                     is = assetManager.open(fileList[i]);
                     snData = ScriptXmlParser.parseName(is);
                     if (snData.getName() != null || snData.getNameEn() != null) {
+                        snData.setDirOfFile(ScriptNameData.DIR_ASSET);
+                        snData.setNameOfFile(fileList[i]);
                         if (snData.getType()) {
                             singleNameData.add(snData);
                         } else {
                             colorNameData.add(snData);
                         }
                     }
+                    is.close();
                     Log.d("test"+i,snData.getName());
                 }
             }
@@ -81,18 +126,19 @@ public class ScriptFileManager {
         };
         File file = context.getFilesDir();
         File[] files = file.listFiles(filenameFilter);
-        String[] fileList = new String[files.length];
-        try {
-            FileInputStream is = null;
-            for (int i=0;i<fileList.length;i++) {
-                fileList[i] = files[i].getName();
-                is = context.openFileInput(fileList[i]);
-                snData = ScriptXmlParser.parseName(is);
-                Log.d("test"+i,fileList[i]);
 
+        for (int i=0;i<files.length;i++) {
+            files[i].getName();
+            snData = ScriptXmlParser.testParse(files[i]);
+            if (snData.getName() != null || snData.getNameEn() != null) {
+                snData.setDirOfFile(ScriptNameData.DIR_FILES);
+                snData.setNameOfFile(files[i].getName());
+                if (snData.getType()) {
+                    singleNameData.add(snData);
+                } else {
+                    colorNameData.add(snData);
+                }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
     }
 

@@ -4,11 +4,13 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 /**
@@ -88,4 +90,25 @@ public class ScriptXmlParser {
 
         return snData;
     }
+
+    public static ScriptNameData testParse(File source) {
+        ScriptNameData scriptNameData = null;
+        // SAXParser 에서 XML Reader 생성
+        try {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+            // 핸들러 생성
+            ScriptNameXmlHandler scriptNameXmlHandler = new ScriptNameXmlHandler();
+            saxParser.parse(source,scriptNameXmlHandler);
+            scriptNameData = scriptNameXmlHandler.getNameData();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return scriptNameData;
+    }
+
 }
