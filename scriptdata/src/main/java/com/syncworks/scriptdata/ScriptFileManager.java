@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
 
+import com.syncworks.define.Define;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -36,13 +38,37 @@ public class ScriptFileManager {
         colorNameData = new ArrayList<>();
     }
 
-    public int getSize(boolean type) {
-        if (type) {
-            return singleNameData.size();
-        } else {
-            return colorNameData.size();
-        }
-    }
+	public String getFileName(boolean type, int pos) {
+		if (type) {
+			if (pos >= singleNameData.size()) {
+				return Define.FILE_DEFAULT;
+			} else {
+				return singleNameData.get(pos).getNameOfFile();
+			}
+		} else {
+			if (pos >= colorNameData.size()) {
+				return Define.FILE_COLOR_DEFAULT;
+			} else {
+				return colorNameData.get(pos).getNameOfFile();
+			}
+		}
+	}
+
+	public boolean getDirType(boolean type, int pos) {
+		if (type) {
+			if (pos >= singleNameData.size()) {
+				return Define.DIR_ASSET;
+			} else {
+				return singleNameData.get(pos).getDirType();
+			}
+		} else {
+			if (pos >= colorNameData.size()) {
+				return Define.DIR_ASSET;
+			} else {
+				return colorNameData.get(pos).getDirType();
+			}
+		}
+	}
 
     public String[] getArrayName(boolean type,String langType) {
         String[] retStrArray = null;

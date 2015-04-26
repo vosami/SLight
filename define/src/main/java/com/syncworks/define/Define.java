@@ -134,4 +134,12 @@ public class Define {
     public final static byte TX_ALARM_WRITE = (byte) 0x72;
     // EEPROM 초기화 (0:명령어, 1~3:Reserved)
     public final static byte TX_INIT_SET = (byte) 0x80;
+
+	/**
+	 * 디렉토리 관련
+	 */
+	public final static boolean DIR_ASSET = true;
+	public final static boolean DIR_FILES = false;
+	public final static String FILE_DEFAULT = "scriptdata0.xml";
+	public final static String FILE_COLOR_DEFAULT = "scriptcolordata0.xml";
 }

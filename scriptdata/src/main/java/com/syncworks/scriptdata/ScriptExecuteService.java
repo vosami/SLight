@@ -51,7 +51,7 @@ public class ScriptExecuteService extends Service implements Runnable{
     public void onCreate() {
         super.onCreate();
         for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
-            parseXml(i,Define.SINGLE_LED,0);
+            parseXml(i,Define.SINGLE_LED,Define.DIR_ASSET,Define.FILE_DEFAULT);
             oldBright[i] = 0;
             curBright[i] = 0;
         }
@@ -134,7 +134,7 @@ public class ScriptExecuteService extends Service implements Runnable{
      * @param colorType 불러올 XML 파일의 Color 타입
      * @param pos XML 파일의 포지션
      */
-    public void parseXml(int ledNum, boolean colorType, int pos) {
+    /*public void parseXml(int ledNum, boolean colorType, int pos) {
         String[] singleFiles = {"scriptdata0.xml", "scriptdata1.xml", "scriptdata2.xml", "scriptdata3.xml", "scriptdata4.xml","scriptdata5.xml"};
         String[] colorFiles = {"scriptcolordata0.xml","scriptcolordata1.xml"};
         AssetManager assetManager = getBaseContext().getAssets();
@@ -159,7 +159,40 @@ public class ScriptExecuteService extends Service implements Runnable{
                 scriptDataLists[i].initCurrentVar();
             }
         }
-    }
+    }*/
+
+	public void parseXml(int ledNum, boolean colorType, boolean dir, String fileName) {
+		// 억세스 디렉토리가 ASSET 경로일 때
+		if (dir) {
+			readAssetFile(ledNum, colorType, fileName);
+		}
+		// 억세스 디렉토리가 파일 경로일 때
+		else {
+			readFilesDir(ledNum, colorType, fileName);
+		}
+	}
+
+	private void readAssetFile(int ledNum, boolean colorType, String fileName) {
+		AssetManager assetManager = getBaseContext().getAssets();
+		try {
+			InputStream is = assetManager.open(fileName);
+			if (colorType == Define.SINGLE_LED) {
+				scriptDataLists[ledNum] = ScriptXmlParser.parse(is, ledNum);
+			}
+			else {
+				List<ScriptDataList> mData = ScriptXmlParser.parseColor(is,ledNum);
+				scriptDataLists[ledNum] = mData.get(0);
+				scriptDataLists[ledNum+1] = mData.get(1);
+				scriptDataLists[ledNum+2] = mData.get(2);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void readFilesDir(int ledNum, boolean colorType, String fileName) {
+
+	}
 
     /**
      * 모든 LED 의 두번째 밝기를 조절(항상 켜기시에 실행)

@@ -74,6 +74,11 @@ public class LedSettingData {
         return getSetData(ledNum).pattern;
     }
 
+	// AlwaysOn 에서 사용하는 밝기 정보 가져오기
+	public int getBright(int ledNum) {
+		return getSetData(ledNum).bright;
+	}
+
     public SetData getSetData(int ledNum) {
         if (ledNum == Define.SELECTED_LED1) {
             return singleDatas[0];
@@ -248,4 +253,25 @@ public class LedSettingData {
         public int ratioDelay = 0;
 
     }
+	// SelectedLed 를 LED Number 로 변환
+	public static int convertLedNum(int selectedLed) {
+		int retVal = 0;
+		// Color Led 라면
+		if ((selectedLed & 0x7000) != 0) {
+			for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+				if (((selectedLed >> (i * 3)) & 0x01) != 0) {
+					retVal = i;
+				}
+			}
+		}
+		// Single Led 라면
+		else {
+			for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+				if (((selectedLed >> i) & 0x01) != 0) {
+					retVal = i;
+				}
+			}
+		}
+		return retVal;
+	}
 }

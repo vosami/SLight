@@ -26,10 +26,14 @@ public class SingleAlwaysOn extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
 
-    private int initBright;
+
 
     private OnLedFragmentListener mListener;
 
+	private boolean isActive = true;
+
+	// Vars
+	private int initBright;
     // Widgets
     Button[] btnEasyBright = new Button[6];
     Button btnPlus, btnMinus;
@@ -47,6 +51,7 @@ public class SingleAlwaysOn extends Fragment {
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, bright);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -92,11 +97,24 @@ public class SingleAlwaysOn extends Fragment {
         btnMinus.setOnClickListener(sbBtnClickListener);
         sbBright.setOnSeekBarChangeListener(sbListener);
 
-        sbBright.setProgress(initBright);
+
         return v;
     }
 
-    // 간편 선택 버튼 클릭 리스너
+	@Override
+	public void onStart() {
+		super.onStart();
+		isActive = true;
+		sbBright.setProgress(initBright);
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		isActive = false;
+	}
+
+	// 간편 선택 버튼 클릭 리스너
     private View.OnClickListener brightClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -200,5 +218,15 @@ public class SingleAlwaysOn extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+	public void setInitBright(int bright) {
+		Bundle args = getArguments();
+		if (args != null) {
+			args.putInt(ARG_PARAM1,bright);
+		}
+		if (isActive) {
+			setBright(bright);
+		}
+	}
 
 }
