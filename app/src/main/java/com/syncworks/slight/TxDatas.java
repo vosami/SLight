@@ -2,6 +2,7 @@ package com.syncworks.slight;
 
 import com.syncworks.define.Define;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public class TxDatas {
 	}
 
 	public static List<byte[]> formatMemWrite(int ledNum, byte[] arrayByte) {
-		List<byte[]> txScriptList = null;
+		List<byte[]> txScriptList = new ArrayList<>();
 		int scriptLength = arrayByte.length;
 		int scriptCount = (scriptLength / 16) + 1;
 		for (int i = 0; i<scriptCount; i++) {
@@ -56,4 +57,9 @@ public class TxDatas {
 		byte[] txScriptData = {Define.TX_ALARM_WRITE,(byte)enumAlarm,(byte)enumDay,(byte)hour, (byte)min, (byte)hold};
 		return txScriptData;
 	}
+
+    public static byte[] formatMemToRom() {
+        byte[] txScriptData = {Define.TX_MEM_TO_ROM, 0, 0, 0};
+        return txScriptData;
+    }
 }

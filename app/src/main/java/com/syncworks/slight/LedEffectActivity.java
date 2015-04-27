@@ -654,6 +654,7 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
                 txAllData();
 				break;
             case R.id.led_save:
+                bleManager.writeTxData(TxDatas.formatMemToRom());
                 /*txThisData(thisSelectedLedNumber);
 				txCounterInit();*/
 				/*recordHandler = new RecordHandler();

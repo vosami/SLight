@@ -118,6 +118,8 @@ public class Define {
     public final static byte TX_EEPROM_READ = 0x41;
     // 카운트 초기화(0:명령어, 1~3:Reserved)
     public final static byte TX_INIT_COUNT = 0x42;
+    // RAM 의 점멸 패턴을 EEPROM 에 기록
+    public final static byte TX_MEM_TO_ROM = 0x43;
     // I2C Write (0:명령어, 1:Device Address, 2:속도, 3~4:주소, 5:길이, 6~19:기록 데이터)
     public final static byte TX_I2C_WRITE = 0x50;
     // I2C Write (0:명령어, 1:Device Address, 2:속도, 3~4:주소, 5:길이)
