@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanSettings;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -30,6 +32,8 @@ import android.widget.Toast;
 import com.syncworks.slightpref.SLightPref;
 import com.syncworks.vosami.blelib.BluetoothDeviceAdapter;
 import com.syncworks.vosami.blelib.BluetoothLeService;
+import com.syncworks.vosami.blelib.scanner.SlightScanCallback;
+import com.syncworks.vosami.blelib.scanner.SlightScanner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +50,14 @@ public class BleSetActivity extends ActionBarActivity {
     // 기타 정의
     public final static long SCAN_PERIOD = 10000;        // 블루투스 검색 시간 설정 10초
     private static final int REQUEST_ENABLE_BT = 1;
+    private List<ScanFilter> scanFilters = new ArrayList<ScanFilter>();
+    private ScanSettings scanSettings;
+
+    // 블루투스 스캐너 관련
+    private Handler scanHandler = new Handler();
+    private boolean isScanning = false;		// 장치 검색 중인지 확인
+
+    private SlightScanner scanner = null;
 
     // 장치 설정 확인
     SLightPref appPref = null;
@@ -54,7 +66,7 @@ public class BleSetActivity extends ActionBarActivity {
     private BluetoothLeService slService;
     private BluetoothAdapter bluetoothAdapter;
     private List<BluetoothDevice> mDevice = new ArrayList<BluetoothDevice>();
-    private boolean isScanning = false;		// 장치 검색 중인지 확인
+
     private boolean isEditing = false;		// 에디트 모드인지 확인
 
     // 장치 이름, 장치 주소 표시 TextView
@@ -111,8 +123,11 @@ public class BleSetActivity extends ActionBarActivity {
             Toast.makeText(this, strNotSupport, Toast.LENGTH_LONG).show();
             return;
         }
+        scanner = SlightScanner.createScanner(this, 10000, scanCallback);
+
         // 장치 검색 시작
-        scanLedDevice();
+//        scanLedDevice();
+        beginScanning();
 	}
     // Activity 가 사용자가 보이도록 앞으로 올 경우
     @Override
@@ -137,7 +152,9 @@ public class BleSetActivity extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         if (isScanning) {       // 장치 검색 중이면...
-            scanLedDevice();    // 검색 중지
+//            scanLedDevice();    // 검색 중지
+//            beginScanning();
+            scanner.stop();
         }
         if (slServiceConnection != null)
             unbindService(slServiceConnection);
@@ -237,7 +254,9 @@ public class BleSetActivity extends ActionBarActivity {
                 }
                 break;
             case R.id.btn_ble_scan:
-                scanLedDevice();
+//                scanLedDevice();
+//                beginScanning();
+                stopScanning();
                 break;
         }
     }
@@ -336,6 +355,7 @@ public class BleSetActivity extends ActionBarActivity {
             });
         }
     };
+
 
     // 진행 중 다이얼로그 보여주기
     private void showProgressDialog() {
@@ -450,4 +470,31 @@ public class BleSetActivity extends ActionBarActivity {
             Log.d(TAG,"SendThread End");
         }
     }
+
+    private void beginScanning() {
+        scanner.start();
+    }
+
+    private void stopScanning() {
+        scanner.stop();
+    }
+
+    private SlightScanCallback scanCallback = new SlightScanCallback() {
+        @Override
+        public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
+            Log.d(TAG,"address"+device.getAddress());
+
+
+            mDevice.add(device);
+            slAdapter.addRssi(rssi);   // RSSI 데이터 추가
+            slAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onEnd() {
+
+        }
+    };
+
+
 }
