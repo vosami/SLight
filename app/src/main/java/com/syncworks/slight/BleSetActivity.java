@@ -1,21 +1,12 @@
 package com.syncworks.slight;
 
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.ScanFilter;
-import android.bluetooth.le.ScanSettings;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -31,31 +22,24 @@ import android.widget.Toast;
 
 import com.syncworks.slightpref.SLightPref;
 import com.syncworks.vosami.blelib.BluetoothDeviceAdapter;
-import com.syncworks.vosami.blelib.BluetoothLeService;
 import com.syncworks.vosami.blelib.scanner.SlightScanCallback;
 import com.syncworks.vosami.blelib.scanner.SlightScanner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 
 public class BleSetActivity extends ActionBarActivity {
     // 디버그용 TAG
     private final static String TAG = BleSetActivity.class.getSimpleName();
 
-    // 다이얼로그
-    ProgressDialog progressDialog = null;
 
     // 기타 정의
     public final static long SCAN_PERIOD = 10000;        // 블루투스 검색 시간 설정 10초
     private static final int REQUEST_ENABLE_BT = 1;
-    private List<ScanFilter> scanFilters = new ArrayList<ScanFilter>();
-    private ScanSettings scanSettings;
 
     // 블루투스 스캐너 관련
     private Handler scanHandler = new Handler();
-    private boolean isScanning = false;		// 장치 검색 중인지 확인
 
     private SlightScanner scanner = null;
 
@@ -63,11 +47,9 @@ public class BleSetActivity extends ActionBarActivity {
     SLightPref appPref = null;
 
     // 블루투스 서비스
-    private BluetoothLeService slService;
     private BluetoothAdapter bluetoothAdapter;
-    private List<BluetoothDevice> mDevice = new ArrayList<BluetoothDevice>();
+    private List<BluetoothDevice> mDevice = new ArrayList<>();
 
-    private boolean isEditing = false;		// 에디트 모드인지 확인
 
     // 장치 이름, 장치 주소 표시 TextView
     TextView tvDeviceName, tvDeviceAddr;
@@ -79,32 +61,6 @@ public class BleSetActivity extends ActionBarActivity {
     ListView deviceList;
     BluetoothDeviceAdapter slAdapter;
 
-    // 전송 명령어
-    private final static int SEND_CONNECT = 0;
-    private final static int SEND_DEVICE_NAME = 1;
-    private final static int SEND_TX_POWER = 2;
-    private final static int SEND_START = 0;
-    private final static int SEND_COMPLETE = 3;
-    private int sendCommand = 0;
-
-    private boolean isWriteComplete = false;
-
-    // 블루투스 서비스 연결
-    private final ServiceConnection slServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            slService = ((BluetoothLeService.LocalBinder) service).getService();
-            if (!slService.initialize()) {
-                Log.e(TAG, "Unable to initialize Bluetooth");
-            }
-            Log.d(TAG, "I get the SmartLight Service");
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            slService = null;
-        }
-    };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +70,7 @@ public class BleSetActivity extends ActionBarActivity {
         findViews();
 
         // 블루투스 장치 검색
-        Intent slServiceIntent = new Intent(BleSetActivity.this, BluetoothLeService.class);
-        bindService(slServiceIntent, slServiceConnection, BIND_AUTO_CREATE);
+
         final BluetoothManager mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = mBluetoothManager.getAdapter();
         if (bluetoothAdapter == null) {
@@ -139,25 +94,20 @@ public class BleSetActivity extends ActionBarActivity {
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
 
-        registerReceiver(slUpdateReceiver, makeGattUpdateIntentFilter());
     }
     // Activity 가 더이상 보이지 않을 경우
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(slUpdateReceiver);
     }
 
     // Activity 가 종료될 때
     @Override
     protected void onDestroy() {
-        if (isScanning) {       // 장치 검색 중이면...
-//            scanLedDevice();    // 검색 중지
-//            beginScanning();
+        if (scanner.getStateScanning()) {       // 장치 검색 중이면...
             scanner.stop();
         }
-        if (slServiceConnection != null)
-            unbindService(slServiceConnection);
+
         super.onDestroy();
     }
 
@@ -236,242 +186,22 @@ public class BleSetActivity extends ActionBarActivity {
                 savePreference();
                 break;
             case R.id.btn_edit:
-                // 현재 수정 모드라면
-                if (isEditing) {
-                    btnEdit.setText(getString(R.string.btn_edit));
-                    isEditing = false;
-                    //showProgressDialog();
-                    llDevName.setVisibility(View.GONE);
-                    // 데이터 전송
-                    sendBleSetting();
-                }
-                // 현재 수정 모드가 아니라면
-                else {
-                    btnEdit.setText(getString(R.string.btn_edit_complete));
-                    isEditing = true;
-                    llDevName.setVisibility(View.VISIBLE);
-//                    llRadioPower.setVisibility(View.VISIBLE);
-                }
+
                 break;
             case R.id.btn_ble_scan:
-//                scanLedDevice();
-//                beginScanning();
-                stopScanning();
-                break;
-        }
-    }
-
-    private static IntentFilter makeGattUpdateIntentFilter() {
-        final IntentFilter intentFilter = new IntentFilter();
-
-        intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
-        intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
-        intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
-        intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
-        intentFilter.addAction(BluetoothLeService.ACTION_DATA_WRITE_COMPLETE);
-
-        return intentFilter;
-    }
-
-    private final BroadcastReceiver slUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            // 연결 완료 메시지를 받으면
-            if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
-                Log.d(TAG, "Connected");
-            } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                Log.d(TAG, "Disconnected");
-            } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                Log.d(TAG, "Service Discovered");
-            } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                Log.d(TAG, "Data Available");
-            } else if (BluetoothLeService.ACTION_DATA_WRITE_COMPLETE.equals(action)) {
-                Log.d(TAG, "Data Write Complete");
-                isWriteComplete = true;
-            }
-        }
-    };
-
-    // 블루투스 장치를 스캔한다.
-    private void scanLedDevice() {
-        // 화면에 표시되는 UI Widget 은 핸들러 사용하여 처리
-        final Handler handler = new Handler();
-        final Runnable mHandlerRun = new Runnable() {
-            @Override
-            public void run() {
-                if (isScanning) {
-                    btnBleScan.setText(getString(R.string.btn_ble_stop));
+                if (scanner.getStateScanning()) {
+                    stopScanning();
                 } else {
-                    btnBleScan.setText(getString(R.string.btn_ble_scan));
+                    beginScanning();
+                    btnBleScan.setText(getString(R.string.btn_ble_stop));
                 }
-            }
-        };
-        // 쓰레드를 이용하여 장치 검색
-        new Thread() {
-            @Override
-            public void run() {
-                if (isScanning) {	// 현재 스캔 중이라면...
-                    bluetoothAdapter.stopLeScan(mLeScanCallback);	// 스캔을 멈춘다.
-                    isScanning = false;
-                    handler.post(mHandlerRun);
 
-                } else {			// 스캔중이 아니라면...
-                    UUID[] uuids = new UUID[1];
-                    uuids[0] = BluetoothLeService.UUID_LEC_SERVICE;
-                    bluetoothAdapter.startLeScan(uuids,mLeScanCallback); // 스캔 시작
-                    isScanning = true;
-                    handler.post(mHandlerRun);
-                    try {
-                        Thread.sleep(SCAN_PERIOD);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    bluetoothAdapter.stopLeScan(mLeScanCallback);
-                    isScanning = false;
-                    handler.post(mHandlerRun);
-                }
-            }
-        }.start();
-    }
-    // 블루투스 검색 결과 콜백 함수
-    private BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
-
-        @Override
-        public void onLeScan(final BluetoothDevice device, final int rssi,
-                             byte[] scanRecord) {
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (device != null) {
-                        if (mDevice.indexOf(device) == -1) {
-                            mDevice.add(device);
-                            slAdapter.addRssi(rssi);   // RSSI 데이터 추가
-                            slAdapter.notifyDataSetChanged();
-                        }
-                    }
-                }
-            });
-        }
-    };
-
-
-    // 진행 중 다이얼로그 보여주기
-    private void showProgressDialog() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("전송중입니다.");
-        // 다이얼로그 화면에 출력
-        progressDialog.show();
-    }
-    // 진행 중 다이얼로그 해제
-    private void dismissProgressDialog() {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
-    }
-
-    SendHandler sendHandler = null;
-    SendThread sendThread = null;
-    private void sendBleSetting() {
-        sendHandler = new SendHandler();
-        sendThread = new SendThread();
-        sendThread.start();
-    }
-
-    private class SendHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case SEND_START:
-//                    showProgressDialog();
-
-                    break;
-                case SEND_DEVICE_NAME:
-                    if (slService.isAcquireNameService()) {
-                        String mDevName = etDevName.getText().toString();
-                        slService.writeDeviceName(mDevName);
-                        isWriteComplete = false;
-                        sendCommand++;
-                    }
-                    break;
-                case SEND_COMPLETE:
-                    sendThread.stopThread();
-                    dismissProgressDialog();
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    private class SendThread extends Thread implements Runnable {
-        private boolean isPlay = false;
-        public SendThread() {
-            isPlay = true;
-        }
-        public void stopThread() {
-            isPlay = false;
-        }
-
-        @Override
-        public void run() {
-            super.run();
-            int runningCount = 0;
-            while (isPlay) {
-                if (runningCount == 0) {
-                    Message msg = sendHandler.obtainMessage();
-                    msg.what = SEND_START;
-                    sendHandler.sendMessage(msg);
-                    // 스캔 중이라면 스캔 중지
-                    if (isScanning) {
-                        scanLedDevice();
-                    }
-                    // 연결 상태가 아니라면 연결 시도
-                    if (slService.getStateConnect() != BluetoothLeService.STATE_CONNECTED) {
-                        slService.connect(tvDeviceAddr.getText().toString());
-                    }
-                    runningCount++;
-                    Log.d(TAG,"SEND_START");
-                }
-                else if (runningCount == 1) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (slService.isAcquireNameService()) {
-                        String mDevName = etDevName.getText().toString();
-                        isWriteComplete = false;
-                        slService.writeDeviceName(mDevName);
-                        runningCount++;
-                    }
-                    Log.d(TAG,"SEND_DEVICE_NAME");
-                    /*Message msg = sendHandler.obtainMessage();
-                    msg.what = SEND_DEVICE_NAME;
-                    Log.d(TAG,"SEND_DEVICE_NAME");*/
-//                    sendHandler.sendMessage(msg);
-//                    runningCount++;
-                }
-                else if (runningCount == 2) {
-                    if (isWriteComplete) {
-                        slService.disconnect();
-                        sendCommand = 0;
-                        isWriteComplete = false;
-                        runningCount++;
-                        Message msg = sendHandler.obtainMessage();
-                        msg.what = SEND_COMPLETE;
-                        sendHandler.sendMessage(msg);
-                    }
-                }
-            }
-            Log.d(TAG,"SendThread End");
+                break;
         }
     }
 
     private void beginScanning() {
+        slAdapter.clear();
         scanner.start();
     }
 
@@ -481,18 +211,32 @@ public class BleSetActivity extends ActionBarActivity {
 
     private SlightScanCallback scanCallback = new SlightScanCallback() {
         @Override
-        public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
-            Log.d(TAG,"address"+device.getAddress());
+        public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d(TAG,"address"+device.getAddress());
+                    if (device != null) {
+                        if (mDevice.indexOf(device) == -1) {
+                            mDevice.add(device);
+                            slAdapter.addRssi(rssi);   // RSSI 데이터 추가
+                            slAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            });
 
 
-            mDevice.add(device);
-            slAdapter.addRssi(rssi);   // RSSI 데이터 추가
-            slAdapter.notifyDataSetChanged();
         }
 
         @Override
         public void onEnd() {
-
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    btnBleScan.setText(getString(R.string.btn_ble_scan));
+                }
+            });
         }
     };
 

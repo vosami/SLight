@@ -70,12 +70,10 @@ public abstract class SlightScanner {
     public void stop() {
         Log.d(TAG, "stop() called");
         mScanCycleStopTime = 0;
-        /*if (isScanning) {
-            scanLeDevice(false);
-        }
-        if (mBluetoothAdapter != null) {
-            stopScan();
-        }*/
+    }
+
+    public boolean getStateScanning() {
+        return isScanning;
     }
 
     protected abstract void stopScan();
