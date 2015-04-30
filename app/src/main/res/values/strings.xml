@@ -45,5 +45,6 @@
     <string name="title_gap_delay">시간 차이: </string>
     <string name="title_activity_slight_setting_info">SLightSettingInfoActivity</string>
     <string name="title_activity_script_list">ScriptListActivity</string>
+    <string name="title_activity_test_db">TestDb</string>
 
 </resources>
