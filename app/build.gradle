@@ -34,4 +34,5 @@ dependencies {
     compile project (':colorpickerview')
 	compile project (':soundmeter')
     compile project (':slightpref')
+	compile project (':endlessadapter')
 }

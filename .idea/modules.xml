@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/colorpickerview/colorpickerview.iml" filepath="$PROJECT_DIR$/colorpickerview/colorpickerview.iml" />
       <module fileurl="file://$PROJECT_DIR$/define/define.iml" filepath="$PROJECT_DIR$/define/define.iml" />
       <module fileurl="file://$PROJECT_DIR$/dragndroplist/dragndroplist.iml" filepath="$PROJECT_DIR$/dragndroplist/dragndroplist.iml" />
+      <module fileurl="file://$PROJECT_DIR$/endlessadapter/endlessadapter.iml" filepath="$PROJECT_DIR$/endlessadapter/endlessadapter.iml" />
       <module fileurl="file://$PROJECT_DIR$/ledselectlayout/ledselectlayout.iml" filepath="$PROJECT_DIR$/ledselectlayout/ledselectlayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/ledviewlayout/ledviewlayout.iml" filepath="$PROJECT_DIR$/ledviewlayout/ledviewlayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/scriptdata/scriptdata.iml" filepath="$PROJECT_DIR$/scriptdata/scriptdata.iml" />
@@ -19,4 +20,3 @@
     </modules>
   </component>
 </project>
-

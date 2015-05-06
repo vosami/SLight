@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -20,11 +20,14 @@
             android:name=".MainActivity"
             android:label="@string/smart_light_name"
             android:screenOrientation="portrait" >
-            <!--<intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".BleSetActivity"
@@ -79,6 +82,12 @@
             android:name=".TestDb"
             android:label="@string/title_activity_test_db"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ScriptDataActivity"
+            android:label="@string/title_activity_script_data"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Apptheme_titlebar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
