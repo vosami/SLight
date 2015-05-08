@@ -51,5 +51,6 @@
     <string name="tab1_script_data">단색</string>
     <string name="tab2_script_data">칼라</string>
     <string name="tab3_script_data">저장소</string>
+    <string name="title_activity_slight_setting">SlightSettingActivity</string>
 
 </resources>
