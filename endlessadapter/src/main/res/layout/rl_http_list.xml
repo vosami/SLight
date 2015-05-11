@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rl_http_list"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="3dp"
@@ -24,13 +25,13 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:text="항상 켜기"/>
-    <ImageView
+    <Button
         android:id="@+id/iv_add_script"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerInParent="true"
-        android:src="@drawable/ic_plus"/>
+        android:background="@drawable/ic_plus"/>
     <TextView
         android:id="@+id/tv_wr_name"
         android:layout_width="wrap_content"

@@ -3,6 +3,7 @@ package com.syncworks.slight.fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,9 @@ public class FragmentHttpDataList extends Fragment implements EndlessListView.En
 
         endlessListView.setListener(this);
 
+
+        //endlessListView.setOnItemClickListener(onItemClickListener);
+
         new HttpPostTask().execute(Integer.toString(0));
 
         return v;
@@ -82,13 +86,13 @@ public class FragmentHttpDataList extends Fragment implements EndlessListView.En
             ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 
             httpPost = new HttpPost("http://dspblog.co.kr/slight/get_script_list.php");
-            //±âº» ÆÄ¶ó¹ÌÅÍ¸¦ ¸¸µé°í
+            //ê¸°ë³¸ íŒŒë¼ë¯¸í„°ë¥¼ ë§Œë“¤ê³ 
             HttpParams httpParams = new BasicHttpParams();
-            //¼­¹ö¿Í ¿¬°áµÇ°í ÀÀ´äÀ» ¹Ş´Â ½Ã°£À» Á¤ÇØÁİ´Ï´Ù.
+            //ì„œë²„ì™€ ì—°ê²°ë˜ê³  ì‘ë‹µì„ ë°›ëŠ” ì‹œê°„ì„ ì •í•´ì¤ë‹ˆë‹¤.
             HttpConnectionParams.setConnectionTimeout(httpParams, 2500);
-            //¼­¹öÀÇ ¼ÒÄÏ ¿¬°á ½Ã°£À» Á¤ÇØÁİ´Ï´Ù.
+            //ì„œë²„ì˜ ì†Œì¼“ ì—°ê²° ì‹œê°„ì„ ì •í•´ì¤ë‹ˆë‹¤.
             HttpConnectionParams.setSoTimeout(httpParams, 2500);
-            // ÆÄ¶ó¹ÌÅÍ¸¦ ¼³Á¤ÇØ Áİ´Ï´Ù.
+            // íŒŒë¼ë¯¸í„°ë¥¼ ì„¤ì •í•´ ì¤ë‹ˆë‹¤.
             httpPost.setParams(httpParams);
 
             nameValuePairs.add(new BasicNameValuePair("count", params[0]));
@@ -109,17 +113,6 @@ public class FragmentHttpDataList extends Fragment implements EndlessListView.En
         @Override
         protected void onPostExecute(JSONArray jsonArray) {
             super.onPostExecute(jsonArray);
-           /* BufferedReader reader = null;
-            JSONArray jsonArray = null;
-
-            try {
-                reader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent(), "UTF-8"));
-                String json = reader.readLine();
-                JSONTokener jsonTokener = new JSONTokener(json);
-                jsonArray = new JSONArray(jsonTokener);
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }*/
 
             if (jsonArray != null) {
                 for (int i=0;i<jsonArray.length();i++) {
@@ -144,6 +137,7 @@ public class FragmentHttpDataList extends Fragment implements EndlessListView.En
                         httpListData.add(tempData);
                         httpListAdapter = new HttpListAdapter(getActivity().getBaseContext(),0, httpListData);
                         endlessListView.setAdapter(httpListAdapter);
+                        httpListAdapter.setOnHttpListEventListener(onHttpListEventListener);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -153,4 +147,17 @@ public class FragmentHttpDataList extends Fragment implements EndlessListView.En
             }
         }
     }
+
+    private HttpListAdapter.OnHttpListEventListener onHttpListEventListener = new HttpListAdapter.OnHttpListEventListener() {
+        @Override
+        public void onListClickEvent(int wrCount) {
+            Log.d("test", "List-" + wrCount);
+        }
+
+        @Override
+        public void onAddClickEvent(int wrCount) {
+            Log.d("test", "Add-" + wrCount);
+        }
+    };
+
 }

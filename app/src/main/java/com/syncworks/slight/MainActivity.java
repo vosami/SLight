@@ -89,12 +89,16 @@ public class MainActivity extends ActionBarActivity {
 			// 타이머 설정 버튼 클릭시
 			case R.id.btn_timer_set:
                 //intent = new Intent(this, TestActivity.class);
-				intent = new Intent(this, ScriptListActivity.class);
+				intent = new Intent(this, SlightSettingActivity.class);
                 startActivity(intent);
 				break;
 			// SLight 설치 방법 버튼 클릭시
 			case R.id.btn_slight_setting:
 				createDialog();
+				break;
+			case R.id.btn_script_list:
+				intent = new Intent(this, ScriptDataActivity.class);
+				startActivity(intent);
 				break;
 		}
 	}
