@@ -34,6 +34,8 @@ public class SingleFragment extends Fragment {
     private int startDelay;
     private int endDelay;
 
+    private boolean isActive = false;
+
     private OnLedFragmentListener mListener;
 
     // Widgets
@@ -135,6 +137,21 @@ public class SingleFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        isActive = true;
+        sbEffect.setProgress(getArguments().getInt(ARG_PARAM1));
+        sbStart.setProgress(getArguments().getInt(ARG_PARAM2));
+        sbEnd.setProgress(getArguments().getInt(ARG_PARAM3));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        isActive = false;
+    }
+
     // SeekBar 체인지 리스너
     private SeekBar.OnSeekBarChangeListener sbListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
@@ -228,6 +245,22 @@ public class SingleFragment extends Fragment {
         tvEndVal.setText(df.format(sec));
     }
 
+    private void setParam(LedSettingData.SetData setData) {
+        sbEffect.setProgress(setData.ratioDelay);
+        sbStart.setProgress(setData.startDelay);
+        sbEnd.setProgress(setData.endDelay);
+    }
 
+    public void setInitParam(LedSettingData.SetData setData) {
+        Bundle args = getArguments();
+        if (args != null) {
+            args.putInt(ARG_PARAM1, setData.ratioDelay);
+            args.putInt(ARG_PARAM2, setData.startDelay);
+            args.putInt(ARG_PARAM3, setData.endDelay);
+        }
+        if (isActive) {
+            setParam(setData);
+        }
+    }
 
 }

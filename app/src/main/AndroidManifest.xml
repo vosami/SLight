@@ -93,7 +93,8 @@
         <activity
             android:name=".SlightSettingActivity"
             android:label="@string/title_activity_slight_setting"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Apptheme_titlebar">
 
         </activity>
     </application>

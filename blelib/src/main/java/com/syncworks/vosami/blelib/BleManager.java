@@ -252,4 +252,10 @@ public class BleManager {
         }
     }
 
+    public void writeName(String name) {
+        if (bluetoothLeService != null) {
+            bluetoothLeService.writeDeviceName(name);
+        }
+    }
+
 }

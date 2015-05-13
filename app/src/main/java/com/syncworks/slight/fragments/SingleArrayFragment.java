@@ -31,6 +31,8 @@ public class SingleArrayFragment extends Fragment {
     private int gapDelay;
     private int endDelay;
 
+    private boolean isActive = false;
+
     private OnLedFragmentListener mListener;
 
     private Button btnEffectMinus, btnEffectPlus, btnGapMinus, btnGapPlus, btnEndMinus, btnEndPlus;
@@ -105,6 +107,21 @@ public class SingleArrayFragment extends Fragment {
         sbGap.setProgress(gapDelay);
         sbEnd.setProgress(endDelay);
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        isActive = true;
+        sbEffect.setProgress(getArguments().getInt(ARG_PARAM1));
+        sbGap.setProgress(getArguments().getInt(ARG_PARAM2));
+        sbEnd.setProgress(getArguments().getInt(ARG_PARAM3));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        isActive = false;
     }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
@@ -236,6 +253,21 @@ public class SingleArrayFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+
+    public void setInit(int ratioDelay, int gapDelay, int endDelay) {
+        Bundle args = getArguments();
+        if (args != null) {
+            args.putInt(ARG_PARAM1, ratioDelay);
+            args.putInt(ARG_PARAM2, gapDelay);
+            args.putInt(ARG_PARAM3, endDelay);
+        }
+        if (isActive) {
+            sbEffect.setProgress(ratioDelay);
+            sbGap.setProgress(gapDelay);
+            sbEnd.setProgress(endDelay);
+        }
     }
 
 }

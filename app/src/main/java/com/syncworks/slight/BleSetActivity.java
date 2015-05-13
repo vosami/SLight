@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.syncworks.slight.util.CustomToast;
 import com.syncworks.slightpref.SLightPref;
 import com.syncworks.vosami.blelib.BluetoothDeviceAdapter;
 import com.syncworks.vosami.blelib.scanner.SlightScanCallback;
@@ -184,6 +185,8 @@ public class BleSetActivity extends ActionBarActivity {
                 break;
             case R.id.btn_save:
                 savePreference();
+                CustomToast.middleBottom(this, getString(R.string.ble_set_save_preference));
+                this.finish();
                 break;
             case R.id.btn_edit:
 

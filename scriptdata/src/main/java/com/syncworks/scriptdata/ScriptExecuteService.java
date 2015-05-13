@@ -118,6 +118,8 @@ public class ScriptExecuteService extends Service implements Runnable{
         }
     }
 
+
+
 	// 스크립트 데이터 가져오기
     public ScriptDataList getScriptDataList(int position) {
         return scriptDataLists[position];
@@ -132,7 +134,7 @@ public class ScriptExecuteService extends Service implements Runnable{
      * XML 파일을 Script Data로 변환하는 메소드
      * @param ledNum 스크립트 데이터의 LED 번호
      * @param colorType 불러올 XML 파일의 Color 타입
-     * @param pos XML 파일의 포지션
+     * pos XML 파일의 포지션
      */
     /*public void parseXml(int ledNum, boolean colorType, int pos) {
         String[] singleFiles = {"scriptdata0.xml", "scriptdata1.xml", "scriptdata2.xml", "scriptdata3.xml", "scriptdata4.xml","scriptdata5.xml"};
@@ -162,8 +164,13 @@ public class ScriptExecuteService extends Service implements Runnable{
     }*/
 
 	public void parseXml(int ledNum, boolean colorType, boolean dir, String fileName) {
+        Log.d(TAG,"ledNum="+ledNum);
+        Log.d(TAG,"colorType="+colorType);
+        Log.d(TAG,"dirType="+dir);
+        Log.d(TAG,"fileName="+fileName);
 		// 억세스 디렉토리가 ASSET 경로일 때
 		if (dir) {
+            Log.d(TAG,"");
 			readAssetFile(ledNum, colorType, fileName);
 		}
 		// 억세스 디렉토리가 파일 경로일 때
@@ -181,9 +188,9 @@ public class ScriptExecuteService extends Service implements Runnable{
 			}
 			else {
 				List<ScriptDataList> mData = ScriptXmlParser.parseColor(is,ledNum);
-				scriptDataLists[ledNum] = mData.get(0);
-				scriptDataLists[ledNum+1] = mData.get(1);
-				scriptDataLists[ledNum+2] = mData.get(2);
+				scriptDataLists[(ledNum*3)] = mData.get(0);
+				scriptDataLists[(ledNum*3)+1] = mData.get(1);
+				scriptDataLists[(ledNum*3)+2] = mData.get(2);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

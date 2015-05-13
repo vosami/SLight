@@ -96,6 +96,7 @@
             android:drawableStart="@drawable/ic_action_edit"
             android:textSize="14sp"
             android:textColor="@color/White"
+            android:visibility="gone"
             android:text="@string/btn_edit"
             android:onClick="onClick"/>
     </RelativeLayout>

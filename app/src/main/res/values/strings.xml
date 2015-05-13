@@ -20,6 +20,9 @@
     <string name="btn_slight_setting">SLight\n설치 방법</string>
     <string name="select_slight_type">SLight 타입을 선택하세요.</string>
 
+    <!--Ble Set Activity 에서 사용-->
+    <string name="ble_set_save_preference">블루투스 연결 설정 완료</string>
+
     <!--LedEffect 에서 사용 Start-->
     <string name="tv_easy_bright">밝기 간편 선택</string>
     <string name="tv_detail_bright">밝기 자세히 선택</string>
@@ -51,6 +54,6 @@
     <string name="tab1_script_data">단색</string>
     <string name="tab2_script_data">칼라</string>
     <string name="tab3_script_data">저장소</string>
-    <string name="title_activity_slight_setting">SlightSettingActivity</string>
+    <string name="title_activity_slight_setting">SLight 기타 설정</string>
 
 </resources>

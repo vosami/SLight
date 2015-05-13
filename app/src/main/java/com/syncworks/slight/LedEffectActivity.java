@@ -34,6 +34,7 @@ import com.syncworks.slight.fragments.OnLedFragmentListener;
 import com.syncworks.slight.fragments.SingleAlwaysOn;
 import com.syncworks.slight.fragments.SingleArrayFragment;
 import com.syncworks.slight.fragments.SingleFragment;
+import com.syncworks.slight.util.CustomToast;
 import com.syncworks.slightpref.SLightPref;
 import com.syncworks.soundmeter.SoundMeter;
 import com.syncworks.titlebarlayout.TitleBarLayout;
@@ -100,6 +101,7 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
     SingleFragment singleFragment;
     SingleArrayFragment singleArrayFragment;
     ColorAlwaysOn coloralwaysOn;
+
     //블루투스 매니저
     private BleManager bleManager;
 
@@ -119,6 +121,7 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         ledSettingData = LedSettingData.getInstance();
         // View 등록
         findViews();
+
         // 변수 초기화
         initVar();
 
@@ -138,7 +141,7 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         receiver = new BrightReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ScriptExecuteService.CHANGE_BRIGHT_ACTION);
-        registerReceiver(receiver,intentFilter);
+        registerReceiver(receiver, intentFilter);
         // 바인드 서비스
         Intent intent = new Intent(this, ScriptExecuteService.class);
         bindService(intent, scriptExecuteServiceConnection, Context.BIND_AUTO_CREATE);
@@ -180,11 +183,18 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
-		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		else if (id == R.id.action_connect) {
+		if (id == R.id.action_connect) {
+            if (connectionState) {
+                bleManager.bleDisconnect();
+                Log.d(TAG,"연결되었습니다.");
+            } else {
+                SLightPref appPref = new SLightPref(this);
+                String address = appPref.getString(SLightPref.DEVICE_ADDR);
+                bleManager.bleConnect(address);
+                CustomToast.middleTop(this,"연결 시도중입니다.");
+                Log.d(TAG,"연결 X");
+            }
+
 			return true;
 		}
 
@@ -193,7 +203,7 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        Log.d(TAG,"onPrepareOptionsMenu");
+        Log.d(TAG, "onPrepareOptionsMenu");
         if (connectionState) {
             menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_connect));
         } else {
@@ -211,7 +221,9 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         invalidateOptionsMenu();
 	}
 
-
+    /**
+     * 레이아웃 내의 뷰를 사용할 수 있도록 등록
+     */
     private void findViews() {
         // LED 선택 레이아웃
         ledSelectLayout = (LedSelectLayout) findViewById(R.id.led_select_layout);
@@ -243,7 +255,6 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         // SINGLE LED 점멸 패턴 데이터 가져오기
         if (ledColor == Define.SINGLE_LED) {
             patternName = scriptFileManager.getArrayName(Define.SINGLE_LED, "kr");
-//            patternName = getResources().getStringArray(R.array.single_pattern_name);
             spinnerAdapter = new ScriptDataListSpinnerAdapter(this.getApplicationContext(),android.R.layout.simple_spinner_item, patternName);
             spPatternSelect.setAdapter(spinnerAdapter);
             spPatternSelect.setSelection(pattern);
@@ -251,33 +262,13 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         }
         else {
             patternName = scriptFileManager.getArrayName(Define.COLOR_LED, "kr");
-//            patternName = getResources().getStringArray(R.array.color_pattern_name);
             spinnerAdapter = new ScriptDataListSpinnerAdapter(this.getApplicationContext(),android.R.layout.simple_spinner_item, patternName);
             spPatternSelect.setAdapter(spinnerAdapter);
             spPatternSelect.setSelection(pattern);
             spPatternSelect.setOnItemSelectedListener(colorItemSelectedListener);
         }
     }
-/*
 
-    private void copyFile(File source, File dest) throws IOException{
-        InputStream input = null;
-        OutputStream output = null;
-        try {
-            AssetManager am = getAssets();
-            input = am.open("scriptdata0.xml");
-//            input = new FileInputStream(source);
-            output = new FileOutputStream(dest);
-            byte[] buf = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = input.read(buf)) > 0) {
-                output.write(buf, 0, bytesRead);
-            }
-        } finally {
-            input.close();
-            output.close();
-        }
-    }*/
 
     private AdapterView.OnItemSelectedListener singleItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
@@ -286,9 +277,9 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
             int tempLedCount = 0;
             for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
                 if (((tempLedNum>>i) & 0x01) != 0) {
-                    // TODO 다른 앱 실행 후 돌아올 때 에러 발생 thread exiting with uncaught exception
                     if (ledSettingData.getPattern(Define.SINGLE_LED,i) != position) {
-						parseXml(i,Define.SINGLE_LED,position);
+						parseXml(i, Define.SINGLE_LED, position);
+
                         /*scriptExecuteService.parseXml(i,Define.SINGLE_LED,
 								scriptFileManager.getDirType(Define.SINGLE_LED,position),
 								scriptFileManager.getFileName(Define.SINGLE_LED,position));
@@ -347,9 +338,13 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
     };
 
 	private void parseXml(int ledNum, boolean colorType, int position) {
-		scriptExecuteService.parseXml(ledNum, colorType,
-				scriptFileManager.getDirType(colorType,position),
-				scriptFileManager.getFileName(colorType,position));
+        if (mBound) {
+            scriptExecuteService.parseXml(ledNum, colorType,
+                    scriptFileManager.getDirType(colorType, position),
+                    scriptFileManager.getFileName(colorType, position));
+        } /*else {
+            CustomToast.middleBottom(this,"서비스에 연결하지 못했습니다.");
+        }*/
 		ledSettingData.setPattern(colorType,ledNum,position);
 	}
 
@@ -360,7 +355,6 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
             Log.d(TAG, "Single:"+isSingleLed+", LedGroup:"+enabledLedGroup + ", SelectLed:"+selectedLed);
             ledViewLayout.setActivateBool(enabledLedGroup);
             // UI 설정
-			// TODO 칼라, 싱글 선택
             selectUI(isSingleLed,enabledLedGroup,selectedLed);
         }
 
@@ -369,7 +363,7 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
             Log.d(TAG, "Single:"+isSingleLed+", LedGroup:"+enabledLedGroup + ", CheckLed:"+checkedLed);
             ledViewLayout.setActivateBool(enabledLedGroup);
             // UI 설정
-            checkUI(isSingleLed,checkedLed);
+            checkUI(isSingleLed, enabledLedGroup,checkedLed);
         }
     };
 
@@ -400,9 +394,9 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
 					parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED2),Define.SINGLE_LED,ledSettingData.getPattern(Define.SELECTED_LED2));
 					parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED3),Define.SINGLE_LED,ledSettingData.getPattern(Define.SELECTED_LED3));
 				} else if (selectedLed == Define.SELECTED_LED4 || selectedLed == Define.SELECTED_LED5 || selectedLed == Define.SELECTED_LED6) {
-					parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED1),Define.SINGLE_LED,ledSettingData.getPattern(Define.SELECTED_LED4));
-					parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED2),Define.SINGLE_LED,ledSettingData.getPattern(Define.SELECTED_LED5));
-					parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED3),Define.SINGLE_LED,ledSettingData.getPattern(Define.SELECTED_LED6));
+					parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED4),Define.SINGLE_LED,ledSettingData.getPattern(Define.SELECTED_LED4));
+					parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED5),Define.SINGLE_LED,ledSettingData.getPattern(Define.SELECTED_LED5));
+					parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED6),Define.SINGLE_LED,ledSettingData.getPattern(Define.SELECTED_LED6));
 				} else if (selectedLed == Define.SELECTED_LED7 || selectedLed == Define.SELECTED_LED8 || selectedLed == Define.SELECTED_LED9) {
 					parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED7),Define.SINGLE_LED,ledSettingData.getPattern(Define.SELECTED_LED7));
 					parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED8),Define.SINGLE_LED,ledSettingData.getPattern(Define.SELECTED_LED8));
@@ -425,11 +419,47 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
     }
 
     // LED 를 여러개 선택할 경우 UI 설정하고 데이터 초기화
-    private void checkUI(boolean isSingle, int checkedLed) {
+    private void checkUI(boolean isSingle, int enabledLedGroup, int checkedLed) {
         // 스피너의 점멸 패턴 불러오기
         setSpinnerPatternName(isSingle, 0);
         // 타이틀 바 설정
         titleBarLayout.setLedNumber(checkedLed);
+
+        // LED 그룹이 바뀌었다면
+        if (oldEnabledLedGroup != enabledLedGroup) {
+            // Single LED 가 선택되었다면
+            if (isSingle) {
+                if ((checkedLed & Define.SELECTED_LED1) !=0 || (checkedLed & Define.SELECTED_LED2)!=0 || (checkedLed & Define.SELECTED_LED3)!=0) {
+                    parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED1),Define.SINGLE_LED,0);
+                    parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED2),Define.SINGLE_LED,0);
+                    parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED3),Define.SINGLE_LED,0);
+                }
+                if ((checkedLed & Define.SELECTED_LED4) !=0 || (checkedLed & Define.SELECTED_LED5)!=0 || (checkedLed & Define.SELECTED_LED6)!=0) {
+                    parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED4),Define.SINGLE_LED,0);
+                    parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED5),Define.SINGLE_LED,0);
+                    parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED6),Define.SINGLE_LED,0);
+                }
+                if ((checkedLed & Define.SELECTED_LED7) !=0 || (checkedLed & Define.SELECTED_LED8)!=0 || (checkedLed & Define.SELECTED_LED9)!=0) {
+                    parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED7),Define.SINGLE_LED,0);
+                    parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED8),Define.SINGLE_LED,0);
+                    parseXml(LedSettingData.convertLedNum(Define.SELECTED_LED9),Define.SINGLE_LED,0);
+                }
+            }
+            // Color LED 가 선택되었다면
+            else {
+                if ((checkedLed & Define.SELECTED_COLOR_LED1) != 0) {
+                    parseXml(0,Define.COLOR_LED,0);
+                }
+                if ((checkedLed & Define.SELECTED_COLOR_LED2) != 0) {
+                    parseXml(1,Define.COLOR_LED,0);
+                }
+                if ((checkedLed & Define.SELECTED_COLOR_LED3) != 0) {
+                    parseXml(2,Define.COLOR_LED,0);
+                }
+            }
+        }
+        // 현재 설정된 LED 그룹 기억
+        oldEnabledLedGroup = enabledLedGroup;
         // 현재 설정된 LED 번호 기억
         thisSelectedLedNumber = checkedLed;
     }
@@ -502,6 +532,7 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
         SINGLE_ALWAYS_ON, COLOR_ALWAYS_ON, SINGLE, SINGLE_ARRAY
     }
     private void changeFragments(FragmentType fragmentType, int ledNum) {
+        LedSettingData.SetData setData = null;
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         switch (fragmentType) {
@@ -513,14 +544,20 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
                 break;
             case COLOR_ALWAYS_ON:
                 verticalSeekBar.setVisibility(View.GONE);
+                int color = ledSettingData.getColor(ledNum);
+                coloralwaysOn.setInitColor(color);
                 fragmentTransaction.replace(R.id.ll_fragment, coloralwaysOn);
                 break;
             case SINGLE:
                 verticalSeekBar.setVisibility(View.VISIBLE);
+                setData = ledSettingData.getSetData(ledNum);
+                verticalSeekBar.setProgress(setData.ratioBright);
+                singleFragment.setInitParam(setData);
                 fragmentTransaction.replace(R.id.ll_fragment, singleFragment);
                 break;
             case SINGLE_ARRAY:
                 verticalSeekBar.setVisibility(View.VISIBLE);
+                singleArrayFragment.setInit(10,0,0);
                 fragmentTransaction.replace(R.id.ll_fragment, singleArrayFragment);
                 break;
         }

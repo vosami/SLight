@@ -10,16 +10,40 @@
             <ScriptDuration>0</ScriptDuration>
         </ScriptData>
         <ScriptData>
-            <ScriptBright>30</ScriptBright>
-            <ScriptDuration>5</ScriptDuration>
+            <ScriptBright>80</ScriptBright>
+            <ScriptDuration>2</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>85</ScriptBright>
+            <ScriptDuration>2</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>90</ScriptBright>
+            <ScriptDuration>2</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>95</ScriptBright>
+            <ScriptDuration>2</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>100</ScriptBright>
+            <ScriptDuration>3</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>95</ScriptBright>
+            <ScriptDuration>2</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>90</ScriptBright>
+            <ScriptDuration>2</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>85</ScriptBright>
+            <ScriptDuration>2</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>80</ScriptBright>
-            <ScriptDuration>5</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
-            <ScriptBright>30</ScriptBright>
-            <ScriptDuration>5</ScriptDuration>
+            <ScriptDuration>2</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>OP_END</ScriptBright>

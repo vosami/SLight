@@ -132,4 +132,8 @@ public class VerticalSeekBarPlus extends RelativeLayout {
             onVSeekBarListener.onEvent(progress);
         }
     }
+
+    public void setProgress(int progress) {
+        sbVertical.setProgress(progress);
+    }
 }

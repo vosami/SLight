@@ -36,6 +36,8 @@ public class ColorAlwaysOn extends Fragment {
     private int initGreen;
     private int initBlue;
 
+    private boolean isActive = false;
+
 
     private OnLedFragmentListener mListener;
 
@@ -108,6 +110,19 @@ public class ColorAlwaysOn extends Fragment {
         btnEasyColor[8].setOnClickListener(clickListener);
         btnEasyColor[9].setOnClickListener(clickListener);
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        isActive = true;
+        colorPickerView.setColor(Color.rgb(initRed, initGreen, initBlue));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        isActive = false;
     }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
@@ -223,5 +238,23 @@ public class ColorAlwaysOn extends Fragment {
         colorPickerView.setColor(Color.rgb(red,green,blue));
     }
 
+    private void setColor(int color) {
+        for (int i=0;i<10;i++) {
+            btnEasyColor[i].setSelected(false);
+        }
+        colorPickerView.setColor(color|0xFF000000);
+    }
+
+    public void setInitColor(int color) {
+        Bundle args = getArguments();
+        if (args != null) {
+            args.putInt(ARG_PARAM1, (color>>16) & 0xFF);
+            args.putInt(ARG_PARAM2, (color>>8) & 0xFF);
+            args.putInt(ARG_PARAM3, (color) & 0xFF);
+        }
+        if (isActive) {
+            setColor(color);
+        }
+    }
 
 }

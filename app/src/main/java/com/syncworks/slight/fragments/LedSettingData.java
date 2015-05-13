@@ -31,6 +31,11 @@ public class LedSettingData {
             singleDatas[i] = new SetData();
             singleDatas[i].pattern = 0;
             singleDatas[i].bright = 100;
+            singleDatas[i].ratioBright = 10;
+            singleDatas[i].startDelay = 0;
+            singleDatas[i].endDelay = 0;
+            singleDatas[i].gapDelay = 0;
+            singleDatas[i].ratioDelay = 10;
         }
         for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
             colorDatas[i] = new SetData();
@@ -78,6 +83,10 @@ public class LedSettingData {
 	public int getBright(int ledNum) {
 		return getSetData(ledNum).bright;
 	}
+    // Color LED 의 AlwaysOn 에서 사용하는 색깔 정보 가져오기
+    public int getColor(int ledNum) {
+        return getSetData(ledNum).rgbData;
+    }
 
     public SetData getSetData(int ledNum) {
         if (ledNum == Define.SELECTED_LED1) {
