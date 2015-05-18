@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--항상 켜기-->
 <Script>
-    <ScriptName>* 차곡차곡1</ScriptName>
+    <ScriptName>* 차곡차곡2</ScriptName>
     <ScriptNameEn>* Always On</ScriptNameEn>
     <ScriptType>Single</ScriptType>
     <ScriptDataList>
@@ -10,132 +10,100 @@
             <ScriptDuration>0</ScriptDuration>
         </ScriptData>
         <ScriptData>
-            <ScriptBright>150</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
             <ScriptBright>0</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
-            <ScriptBright>150</ScriptBright>
-            <ScriptDuration>8</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
-            <ScriptBright>0</ScriptBright>
-            <ScriptDuration>120</ScriptDuration>
+            <ScriptDuration>32</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>150</ScriptBright>
             <ScriptDuration>7</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
-            <ScriptBright>0</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
-            <ScriptBright>150</ScriptBright>
-            <ScriptDuration>8</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
-            <ScriptBright>0</ScriptBright>
-            <ScriptDuration>112</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
-            <ScriptBright>150</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
-            <ScriptBright>0</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
-            <ScriptBright>150</ScriptBright>
-            <ScriptDuration>8</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>0</ScriptBright>
             <ScriptDuration>104</ScriptDuration>
         </ScriptData>
         <ScriptData>
-            <ScriptBright>150</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
             <ScriptBright>0</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
+            <ScriptDuration>32</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>150</ScriptBright>
-            <ScriptDuration>8</ScriptDuration>
+            <ScriptDuration>7</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>0</ScriptBright>
             <ScriptDuration>96</ScriptDuration>
         </ScriptData>
         <ScriptData>
-            <ScriptBright>150</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
             <ScriptBright>0</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
+            <ScriptDuration>32</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>150</ScriptBright>
-            <ScriptDuration>8</ScriptDuration>
+            <ScriptDuration>7</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>0</ScriptBright>
             <ScriptDuration>88</ScriptDuration>
         </ScriptData>
         <ScriptData>
-            <ScriptBright>150</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
             <ScriptBright>0</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
+            <ScriptDuration>32</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>150</ScriptBright>
-            <ScriptDuration>8</ScriptDuration>
+            <ScriptDuration>7</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>0</ScriptBright>
             <ScriptDuration>80</ScriptDuration>
         </ScriptData>
         <ScriptData>
-            <ScriptBright>150</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
             <ScriptBright>0</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
+            <ScriptDuration>32</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>150</ScriptBright>
-            <ScriptDuration>8</ScriptDuration>
+            <ScriptDuration>7</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>0</ScriptBright>
             <ScriptDuration>72</ScriptDuration>
         </ScriptData>
         <ScriptData>
-            <ScriptBright>150</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
-        </ScriptData>
-        <ScriptData>
             <ScriptBright>0</ScriptBright>
-            <ScriptDuration>7</ScriptDuration>
+            <ScriptDuration>32</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>150</ScriptBright>
-            <ScriptDuration>8</ScriptDuration>
+            <ScriptDuration>7</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>0</ScriptBright>
             <ScriptDuration>64</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>0</ScriptBright>
+            <ScriptDuration>32</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>150</ScriptBright>
+            <ScriptDuration>7</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>0</ScriptBright>
+            <ScriptDuration>56</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>0</ScriptBright>
+            <ScriptDuration>32</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>150</ScriptBright>
+            <ScriptDuration>7</ScriptDuration>
+        </ScriptData>
+        <ScriptData>
+            <ScriptBright>150</ScriptBright>
+            <ScriptDuration>48</ScriptDuration>
         </ScriptData>
         <ScriptData>
             <ScriptBright>OP_END</ScriptBright>
