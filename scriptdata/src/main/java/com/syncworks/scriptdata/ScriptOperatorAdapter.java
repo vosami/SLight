@@ -69,10 +69,10 @@ public class ScriptOperatorAdapter extends ArrayAdapter<Integer>{
 				mTitle = getContext().getResources().getString(R.string.op_pass_data_txt);
 				mDetail = getContext().getResources().getString(R.string.op_pass_data_detail);
 				break;
-			case Define.OP_TRANSITION:
+			/*case Define.OP_TRANSITION:
 				mTitle = getContext().getResources().getString(R.string.op_transition_txt);
 				mDetail = getContext().getResources().getString(R.string.op_transition_detail);
-				break;
+				break;*/
 			default:
 				mTitle = getContext().getResources().getString(R.string.op_default_txt);
 				mDetail = getContext().getResources().getString(R.string.op_default_detail);

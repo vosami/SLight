@@ -300,9 +300,9 @@ public class ScriptDataList implements List<ScriptData> {
 		int size = 0;
         for (ScriptData sd : dataList) {
             Log.d(TAG, "Data:" + sd.getVal() + "," + sd.getDuration());
-            if (sd.getVal() == Define.OP_TRANSITION) {
+            /*if (sd.getVal() == Define.OP_TRANSITION) {
                 size++;
-            }
+            }*/
             size++;
         }
 		Log.d(TAG,"Size: " + size);
@@ -417,7 +417,7 @@ public class ScriptDataList implements List<ScriptData> {
 					// 명령어(1Byte) + 기준값(4bit) + 카운트(4bit) + 초기 밝기(1Byte) +
 					// 방향(1bit) + 단계별 밝기(4bit) + 단계별 지연시간(3bit)
 					// 밝기 값을 점차 증가 혹은 감소
-					case Define.OP_TRANSITION:
+					/*case Define.OP_TRANSITION:
 						int transitionEnd = (duration>>4) & 0x000F;
                         int plus_minus = 1 + (((data2>>7) & 0x0001) * (-2));
 						// 단계별 밝기 설정
@@ -441,7 +441,7 @@ public class ScriptDataList implements List<ScriptData> {
 							// 비교 값 카운트
 							transitionCount++;
 						}
-						break;
+						break;*/
 				}
 			}
 		}

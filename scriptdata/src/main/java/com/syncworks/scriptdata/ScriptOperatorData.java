@@ -39,8 +39,8 @@ public class ScriptOperatorData {
                 break;
             case Define.OP_FOR_END:
                 break;
-            case Define.OP_TRANSITION:
-                break;
+            /*case Define.OP_TRANSITION:
+                break;*/
         }
         return retStr;
     }

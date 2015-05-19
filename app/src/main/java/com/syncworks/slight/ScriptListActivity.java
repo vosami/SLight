@@ -1,5 +1,6 @@
 package com.syncworks.slight;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -37,8 +38,11 @@ public class ScriptListActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_script_list);
-		// 테스트용도로 리스트 생성
-//		testMakeList();
+
+		scriptDataList = new ScriptDataList(0);
+		// 호출 클래스에서 값을 받아온다.
+		Intent intent = getIntent();
+
 
 		lvScript = (DragSortListView) findViewById(R.id.lv_script_list);
 		lvController = buildController(lvScript);
@@ -96,9 +100,12 @@ public class ScriptListActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	private void loadScriptData() {
+
+	}
+
 	// 테스트 용도
 	private void testMakeList() {
-		scriptDataList = new ScriptDataList(0);
 		scriptDataList.add(new ScriptData(Define.OP_START,0));
 		scriptDataList.add(new ScriptData(60,10));
         scriptDataList.add(new ScriptData(70,20));

@@ -131,8 +131,8 @@ public class ScriptAdapter extends ArrayAdapter<ScriptData> {
 					break;
 				case Define.OP_FOR_END:
 					break;
-				case Define.OP_TRANSITION:
-					break;
+//				case Define.OP_TRANSITION:
+//					break;
                 default:
                     retView = inflater.inflate(R.layout.rl_default,null);
                     break;

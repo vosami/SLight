@@ -120,22 +120,22 @@ public class ScriptXmlHandler extends DefaultHandler {
     }
     private void setScriptDataList() {
         if (scriptListType == Define.SINGLE_LED) {
-            // 4Byte 데이터라면
+            /*// 4Byte 데이터라면
             if (bright == Define.OP_TRANSITION) {
                 scriptDataLists.get(0).add(new ScriptData(bright, duration, data1, data2));
-            }
+            }*/
             // 2Byte 데이터라면
-            else {
+            /*else*/ {
                 scriptDataLists.get(0).add(new ScriptData(bright, duration));
             }
         }
         else {
-            if (bright == Define.OP_TRANSITION) {
+            /*if (bright == Define.OP_TRANSITION) {
                 scriptDataLists.get(0).add(new ScriptData(bright, duration, data1, data2));
                 scriptDataLists.get(1).add(new ScriptData(bright, duration, data1, data2));
                 scriptDataLists.get(2).add(new ScriptData(bright, duration, data1, data2));
             }
-            else if (bright >= Define.OP_CODE_MIN) {
+            else*/ if (bright >= Define.OP_CODE_MIN) {
                 scriptDataLists.get(0).add(new ScriptData(bright, duration));
                 scriptDataLists.get(1).add(new ScriptData(bright, duration));
                 scriptDataLists.get(2).add(new ScriptData(bright, duration));
@@ -199,9 +199,9 @@ public class ScriptXmlHandler extends DefaultHandler {
                 case "OP_PASS_DATA":
                     retInt = Define.OP_PASS_DATA;
                     break;
-                case "OP_TRANSITION":
+                /*case "OP_TRANSITION":
                     retInt = Define.OP_TRANSITION;
-                    break;
+                    break;*/
                 default:
                     retInt = Define.OP_NOP;
                     break;

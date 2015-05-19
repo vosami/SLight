@@ -30,13 +30,13 @@ public class HttpGetScriptTask extends AsyncTask<String, Void, String> {
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
 
         httpPost = new HttpPost("http://dspblog.co.kr/slight/get_script_list.php");
-        //±âº» ÆÄ¶ó¹ÌÅÍ¸¦ ¸¸µé°í
+        //ê¸°ë³¸ íŒŒë¼ë¯¸í„°ë¥¼ ë§Œë“¤ê³ 
         HttpParams httpParams = new BasicHttpParams();
-        //¼­¹ö¿Í ¿¬°áµÇ°í ÀÀ´äÀ» ¹Ş´Â ½Ã°£À» Á¤ÇØÁİ´Ï´Ù.
+        //ì„œë²„ì™€ ì—°ê²°ë˜ê³  ì‘ë‹µì„ ë°›ëŠ” ì‹œê°„ì„ ì •í•´ì¤ë‹ˆë‹¤.
         HttpConnectionParams.setConnectionTimeout(httpParams, 2500);
-        //¼­¹öÀÇ ¼ÒÄÏ ¿¬°á ½Ã°£À» Á¤ÇØÁİ´Ï´Ù.
+        //ì„œë²„ì˜ ì†Œì¼“ ì—°ê²° ì‹œê°„ì„ ì •í•´ì¤ë‹ˆë‹¤.
         HttpConnectionParams.setSoTimeout(httpParams, 2500);
-        // ÆÄ¶ó¹ÌÅÍ¸¦ ¼³Á¤ÇØ Áİ´Ï´Ù.
+        // íŒŒë¼ë¯¸í„°ë¥¼ ì„¤ì •í•´ ì¤ë‹ˆë‹¤.
         httpPost.setParams(httpParams);
 
         nameValuePairs.add(new BasicNameValuePair("count", params[0]));

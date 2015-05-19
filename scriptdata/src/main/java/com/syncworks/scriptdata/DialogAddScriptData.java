@@ -50,7 +50,7 @@ public class DialogAddScriptData extends Dialog{
         opList.add(Define.OP_FOR_START);
         opList.add(Define.OP_FOR_END);
         opList.add(Define.OP_PASS_DATA);
-        opList.add(Define.OP_TRANSITION);
+//        opList.add(Define.OP_TRANSITION);
         String dialogTitle = getContext().getResources().getString(R.string.dialog_script_operator_title);
         setTitle(dialogTitle);
 
@@ -91,8 +91,6 @@ public class DialogAddScriptData extends Dialog{
 				case Define.OP_PASS_DATA:
 					break;
 				case Define.OP_FOR_END:
-					break;
-				case Define.OP_TRANSITION:
 					break;
 			}
 		}

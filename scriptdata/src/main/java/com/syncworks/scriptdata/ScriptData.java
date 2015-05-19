@@ -7,7 +7,7 @@ import com.syncworks.define.Define;
  * Copyrights (C)SyncWorks All rights reserved by SyncWorks
  * Created by 승현 on 2015-03-15.
  */
-public class ScriptData {
+public class ScriptData{
 
 	private boolean _size;
 	private int _val;
