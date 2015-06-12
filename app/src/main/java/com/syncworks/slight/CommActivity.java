@@ -14,23 +14,41 @@ import com.syncworks.slight.fragment_comm.BrightFragment;
 import com.syncworks.slight.fragment_comm.EffectFragment;
 import com.syncworks.slight.fragment_comm.LedSelectFragment;
 import com.syncworks.slight.fragment_comm.OnCommFragmentListener;
+import com.syncworks.slight.widget.StepView;
 import com.syncworks.vosami.blelib.BleConsumer;
 
 
 public class CommActivity extends ActionBarActivity implements BleConsumer, OnCommFragmentListener {
 
-    private final static int MAX_STEP = 4;
-    private static int fragmentStep = 1;
+    private final static int MAX_STEP = 4;  // 4ë‹¨ê³„ê°€ ìµœê³  ë‹¨ê³„ë¡œ ì„¤ì •
+    private int curStep;                    // í˜„ì¬ ë‹¨ê³„ ì„¤ì •
 
     private BleSetFragment fragment1st;
     private LedSelectFragment fragment2nd;
     private BrightFragment fragment3rd;
     private EffectFragment fragment4th;
 
+    // ë‹¨ê³„ ì„¤ì • View
+    private StepView stepView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        curStep = 1; // 1ë‹¨ê³„ë¡œ ì„¤ì •
         setContentView(R.layout.activity_comm);
+        findView();
+        createFragment();
+    }
+
+    private void findView() {
+        stepView = (StepView) findViewById(R.id.comm_step_view);
+        StepView.OnStepViewTouchListener stepViewTouchListener = new StepView.OnStepViewTouchListener() {
+            @Override
+            public void onStepViewEvent(int clickStep) {
+
+            }
+        };
+        stepView.setOnStepViewTouchListener(stepViewTouchListener);
     }
 
     @Override
@@ -56,6 +74,22 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
     }
 
     public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.btn_comm_back:
+                curStep--;
+                if (curStep < 1) {
+                    curStep = 1;
+                }
+                changeStep(curStep);
+                break;
+            case R.id.btn_comm_next:
+                curStep++;
+                if (curStep > MAX_STEP) {
+                    curStep = 2;
+                }
+                changeStep(curStep);
+                break;
+        }
     }
 
     private void createFragment() {
@@ -73,7 +107,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         fragmentTransaction.commit();
     }
 
-    // ¾×¼Ç ¹ÙÀÇ Å¸ÀÌÆ² º¯°æ
+    // ì•¡ì…˜ ë°”ì˜ íƒ€ì´í‹€ ë³€ê²½
     private void changeActionBarText(int step) {
         String titleText;
         switch(step) {
@@ -96,7 +130,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         setTitle(titleText);
     }
 
-    // °¢ ´Ü°èº° Fragment º¯°æ
+    // ê° ë‹¨ê³„ë³„ Fragment ë³€ê²½
     private void changeFragment(int stepFragment) {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -119,23 +153,29 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         fragmentTransaction.commit();
     }
 
+    private void changeStepView(int step) {
+        stepView.setCurStep(step);
+    }
+
     private void changeStep(int step) {
-        // Çã¿ë µÇÁö ¾ÊÀº ´Ü°è¿¡ ÀÖ´Ù¸é 1·Î ÃÊ±âÈ­
+        // í—ˆìš© ë˜ì§€ ì•Šì€ ë‹¨ê³„ì— ìˆë‹¤ë©´ 1ë¡œ ì´ˆê¸°í™”
         if (step <1 && step > MAX_STEP) {
             step = 1;
         }
-        changeActionBarText(step);
-        changeFragment(fragmentStep);
+        curStep = step;             // í˜„ì¬ ë‹¨ê³„ ì €ì¥
+        changeActionBarText(step);  // íƒ€ì´í‹€ ë°” ì œëª© ë³€ê²½
+        changeFragment(step);       // Fragment ë³€ê²½
+        changeStepView(step);       // í•˜ë‹¨ ë‹¨ê³„ ì„¤ì • View ë³€ê²½
     }
 
 
-    // ºí·çÅõ½º ¼­ºñ½º ¿¬°á
+    // ë¸”ë£¨íˆ¬ìŠ¤ ì„œë¹„ìŠ¤ ì—°ê²°
     @Override
     public void onBleServiceConnect() {
 
     }
 
-    // Fragments ¿Í Åë½Å
+    // Fragments ì™€ í†µì‹ 
     @Override
     public void onFragmentInteraction(Uri uri) {
 

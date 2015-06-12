@@ -39,6 +39,7 @@
         android:layout_above="@id/ll_comm_button"
         android:background="@color/material_blue_grey_900">
         <com.syncworks.slight.widget.StepView
+            android:id="@+id/comm_step_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

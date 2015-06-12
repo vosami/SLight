@@ -160,39 +160,39 @@
         android:layout_above="@id/ll_frag_bright_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <com.syncworks.s_light.util.VerticalSeekBar
+        <com.syncworks.verticalseekbar.MyVerticalSeekBar
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
-        <com.syncworks.s_light.util.VerticalSeekBar
+        <com.syncworks.verticalseekbar.MyVerticalSeekBar
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
-        <com.syncworks.s_light.util.VerticalSeekBar
+        <com.syncworks.verticalseekbar.MyVerticalSeekBar
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
-        <com.syncworks.s_light.util.VerticalSeekBar
+        <com.syncworks.verticalseekbar.MyVerticalSeekBar
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
-        <com.syncworks.s_light.util.VerticalSeekBar
+        <com.syncworks.verticalseekbar.MyVerticalSeekBar
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
-        <com.syncworks.s_light.util.VerticalSeekBar
+        <com.syncworks.verticalseekbar.MyVerticalSeekBar
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
-        <com.syncworks.s_light.util.VerticalSeekBar
+        <com.syncworks.verticalseekbar.MyVerticalSeekBar
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
-        <com.syncworks.s_light.util.VerticalSeekBar
+        <com.syncworks.verticalseekbar.MyVerticalSeekBar
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
-        <com.syncworks.s_light.util.VerticalSeekBar
+        <com.syncworks.verticalseekbar.MyVerticalSeekBar
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"/>

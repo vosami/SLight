@@ -13,10 +13,13 @@ import android.view.View;
  * Created by vosami on 2015-06-12.
  */
 public class StepView extends View {
+
+    // 리스너 설정
+    OnStepViewTouchListener onStepViewTouchListener = null;
+
     private Paint paint;
     private int numStep = 4;
     private int curStep = 1;
-    private int touchX, touchY;
     private int oldStep = -1;
 
     public StepView(Context context) {
@@ -192,8 +195,7 @@ public class StepView extends View {
         float mHeight = getMeasuredHeight();
         float intervalWidth = (mWidth - mHeight) / (numStep-1);
         // 터치 입력 좌표값을 얻어옵니다.
-        touchX = (int) event.getX();
-        touchY = (int) event.getY();
+        int touchX = (int) event.getX();
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -205,6 +207,7 @@ public class StepView extends View {
                 int curTouch = getTouchStep(touchX);
                 if (curTouch >= 0 && curTouch <= numStep) {
                     if (oldStep == curTouch) {
+                        doStepViewEvent(curTouch);
                         Log.d("test", "Click" + curTouch);
                     }
                 }
@@ -229,4 +232,20 @@ public class StepView extends View {
         }
         return retVal;
     }
+
+    // Activity 와 통신할 수 있는 인터페이스 설정
+    public interface OnStepViewTouchListener {
+        void onStepViewEvent(int clickStep);
+    }
+    // Activity 에서 인터페이스 설정하는 함수
+    public void setOnStepViewTouchListener(OnStepViewTouchListener listener) {
+        this.onStepViewTouchListener = listener;
+    }
+    private void doStepViewEvent(int clickStep) {
+        if (onStepViewTouchListener != null) {
+            onStepViewTouchListener.onStepViewEvent(clickStep);
+        }
+    }
+
+
 }
