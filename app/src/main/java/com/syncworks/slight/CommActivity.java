@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +20,7 @@ import com.syncworks.vosami.blelib.BleConsumer;
 
 
 public class CommActivity extends ActionBarActivity implements BleConsumer, OnCommFragmentListener {
-
+    private final static String TAG = "CommActivity";
     private final static int MAX_STEP = 4;  // 4단계가 최고 단계로 설정
     private int curStep;                    // 현재 단계 설정
 
@@ -172,6 +173,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
     // 블루투스 서비스 연결
     @Override
     public void onBleServiceConnect() {
+        Log.d(TAG,"서비스 연결됨");
 
     }
 
