@@ -55,5 +55,15 @@
     <string name="tab2_script_data">칼라</string>
     <string name="tab3_script_data">저장소</string>
     <string name="title_activity_slight_setting">SLight 기타 설정</string>
+    <string name="title_activity_comm">CommActivity</string>
+
+    <!--CommActivity 에서 사용 Start-->
+    <string name="comm_main_back">뒤로</string>
+    <string name="comm_main_next">다음단계</string>
+    <string name="comm_activity_step_1">1단계 : S-Light 장치를 설정합니다.</string>
+    <string name="comm_activity_step_2">2단계 : LED 를 선택합니다.</string>
+    <string name="comm_activity_step_3">3단계 : 밝기를 선택합니다.</string>
+    <string name="comm_activity_step_4">4단계 : 점멸 효과를 선택합니다.</string>
+    <!--CommActivity 에서 사용 End-->
 
 </resources>

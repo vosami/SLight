@@ -1,0 +1,232 @@
+package com.syncworks.slight.widget;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+
+/**
+ * Created by vosami on 2015-06-12.
+ */
+public class StepView extends View {
+    private Paint paint;
+    private int numStep = 4;
+    private int curStep = 1;
+    private int touchX, touchY;
+    private int oldStep = -1;
+
+    public StepView(Context context) {
+        super(context);
+        init();
+    }
+
+    public StepView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    public StepView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    private void init() {
+        paint = new Paint();
+        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+    }
+
+    public void setMaxStep(int num) {
+        this.numStep = num;
+    }
+
+    public void setCurStep(int num) {
+        this.curStep = num;
+        this.invalidate();
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // width 진짜 크기 구하기
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = 0;
+        switch(widthMode) {
+            case MeasureSpec.UNSPECIFIED:    // mode 가 셋팅되지 않은 크기가 넘어올때
+                widthSize = widthMeasureSpec;
+                break;
+            case MeasureSpec.AT_MOST:        // wrap_content (뷰 내부의 크기에 따라 크기가 달라짐)
+                widthSize = 100;
+                break;
+            case MeasureSpec.EXACTLY:        // fill_parent, match_parent (외부에서 이미 크기가 지정되었음)
+                widthSize = MeasureSpec.getSize(widthMeasureSpec);
+                break;
+        }
+
+        // height 진짜 크기 구하기
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = 0;
+        switch(heightMode) {
+            case MeasureSpec.UNSPECIFIED:    // mode 가 셋팅되지 않은 크기가 넘어올때
+                heightSize = heightMeasureSpec;
+                break;
+            case MeasureSpec.AT_MOST:        // wrap_content (뷰 내부의 크기에 따라 크기가 달라짐)
+                heightSize = widthSize/5;
+                break;
+            case MeasureSpec.EXACTLY:        // fill_parent, match_parent (외부에서 이미 크기가 지정되었음)
+                heightSize = MeasureSpec.getSize(heightMeasureSpec);
+                break;
+        }
+
+        setMeasuredDimension(widthSize, heightSize);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        float mWidth = getMeasuredWidth();
+        float mHeight = getMeasuredHeight();
+        float mRadius = (float) (mHeight*0.4);
+        float middleHeight = (float) (mHeight * 0.5);
+        float intervalWidth = (mWidth - mHeight) / (numStep-1);
+
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawRect(0, 0, mWidth, mHeight, paint);
+        paint.setColor(Color.rgb(210, 210, 210));
+        paint.setStyle(Paint.Style.STROKE);
+        canvas.drawLine(0, 0, mWidth, 0, paint);
+        canvas.drawLine(0, mHeight - 1, mWidth, mHeight - 1, paint);
+
+        for (int i=0;i<numStep-1;i++) {
+            paint.setColor(Color.rgb(230, 230, 230));
+            paint.setStyle(Paint.Style.FILL);
+            canvas.drawRect(middleHeight + intervalWidth * i, (float) (middleHeight * 0.7),
+                    middleHeight + intervalWidth * (i + 1), (float) (middleHeight * 1.3), paint);
+            paint.setColor(Color.rgb(80, 80, 80));
+            paint.setStyle(Paint.Style.STROKE);
+            canvas.drawRect(middleHeight + intervalWidth * i,(float)(middleHeight*0.7),
+                    middleHeight + intervalWidth * (i+1),(float)(middleHeight*1.3),paint);
+            if (curStep > i+1) {
+                paint.setColor(Color.rgb(131, 197, 1));
+                paint.setStyle(Paint.Style.FILL);
+                canvas.drawRect(middleHeight + intervalWidth * i, (float) (middleHeight * 0.8),
+                        middleHeight + intervalWidth * (i + 1), (float) (middleHeight * 1.2), paint);
+                paint.setColor(Color.rgb(91,152,0));
+                paint.setStyle(Paint.Style.STROKE);
+                canvas.drawRect(middleHeight + intervalWidth * i,(float)(middleHeight*0.8),
+                        middleHeight + intervalWidth * (i+1),(float)(middleHeight*1.2),paint);
+            }
+
+        }
+
+        for (int i=0;i<numStep;i++) {
+            if (curStep > i+1) {
+                paint.setColor(Color.rgb(230, 230, 230));
+                paint.setStyle(Paint.Style.FILL);
+                canvas.drawCircle((float) (middleHeight + intervalWidth * i),
+                        (float) (middleHeight), mRadius, paint);
+                paint.setColor(Color.rgb(80, 80, 80));
+                paint.setStyle(Paint.Style.STROKE);
+                canvas.drawCircle((float) (middleHeight + intervalWidth * i),
+                        (float) (middleHeight), mRadius, paint);
+                paint.setColor(Color.rgb(131, 197, 1));
+                paint.setStyle(Paint.Style.FILL);
+                canvas.drawCircle((float) (middleHeight + intervalWidth * i),
+                        (float) (middleHeight), (float) (mRadius * 0.8), paint);
+                paint.setColor(Color.rgb(91, 152, 0));
+                paint.setStyle(Paint.Style.STROKE);
+                canvas.drawCircle((float) (middleHeight + intervalWidth * i),
+                        (float) (middleHeight), (float) (mRadius * 0.8), paint);
+                paint.setColor(Color.WHITE);
+                paint.setTextSize((float) (mHeight*0.6));
+                paint.setTextAlign(Paint.Align.CENTER);
+                canvas.drawText("✓",middleHeight + intervalWidth * i,(float)(mHeight*0.7),paint);
+
+            } else if (curStep == i+1) {
+                paint.setColor(Color.rgb(1, 139, 185));
+                paint.setStyle(Paint.Style.FILL);
+                canvas.drawCircle((float) (middleHeight + intervalWidth * i),
+                        (float) (middleHeight), mRadius, paint);
+                paint.setColor(Color.rgb(1, 120, 150));
+                paint.setStyle(Paint.Style.STROKE);
+                canvas.drawCircle((float) (middleHeight + intervalWidth * i),
+                        (float) (middleHeight), mRadius, paint);
+                paint.setColor(Color.WHITE);
+                paint.setTextSize((float) (mHeight * 0.6));
+                paint.setTextAlign(Paint.Align.CENTER);
+                canvas.drawText(Integer.toString(i+1), middleHeight + intervalWidth * i, (float) (mHeight * 0.7), paint);
+            } else {
+                paint.setColor(Color.rgb(230, 230, 230));
+                paint.setStyle(Paint.Style.FILL);
+                canvas.drawCircle((float) (middleHeight + intervalWidth * i),
+                        (float) (middleHeight), mRadius, paint);
+                paint.setColor(Color.rgb(80,80,80));
+                paint.setStyle(Paint.Style.STROKE);
+                canvas.drawCircle((float) (middleHeight + intervalWidth * i),
+                        (float) (middleHeight), mRadius, paint);
+                paint.setColor(Color.rgb(238, 238, 238));
+                paint.setStyle(Paint.Style.FILL);
+                canvas.drawCircle((float) (middleHeight + intervalWidth * i),
+                        (float) (middleHeight), (float) (mRadius * 0.8), paint);
+                paint.setColor(Color.rgb(190, 190, 190));
+                paint.setStyle(Paint.Style.STROKE);
+                canvas.drawCircle((float) (middleHeight + intervalWidth * i),
+                        (float) (middleHeight), (float) (mRadius * 0.8), paint);
+                paint.setColor(Color.rgb(210,211,216));
+                paint.setTextSize((float) (mHeight * 0.6));
+                paint.setTextAlign(Paint.Align.CENTER);
+                canvas.drawText(Integer.toString(i + 1), middleHeight + intervalWidth * i, (float) (mHeight * 0.7), paint);
+            }
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (!isEnabled()) {
+            return false;
+        }
+        float mWidth = getMeasuredWidth();
+        float mHeight = getMeasuredHeight();
+        float intervalWidth = (mWidth - mHeight) / (numStep-1);
+        // 터치 입력 좌표값을 얻어옵니다.
+        touchX = (int) event.getX();
+        touchY = (int) event.getY();
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                oldStep = getTouchStep(touchX);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            case MotionEvent.ACTION_UP:
+                int curTouch = getTouchStep(touchX);
+                if (curTouch >= 0 && curTouch <= numStep) {
+                    if (oldStep == curTouch) {
+                        Log.d("test", "Click" + curTouch);
+                    }
+                }
+                oldStep = -1;
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                break;
+        }
+
+        return true;
+    }
+
+    private int getTouchStep(int touchX) {
+        int retVal = -1;
+        float mWidth = getMeasuredWidth();
+        float mHeight = getMeasuredHeight();
+        float intervalWidth = (mWidth - mHeight) / (numStep-1);
+        for(int i=0;i<numStep;i++) {
+            if (touchX > (mHeight*0.1 + intervalWidth*i) && touchX < (mHeight*0.9 + intervalWidth*i)) {
+                retVal = i;
+            }
+        }
+        return retVal;
+    }
+}

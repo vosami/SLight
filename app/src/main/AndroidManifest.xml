@@ -21,12 +21,13 @@
             android:label="@string/smart_light_name"
             android:screenOrientation="portrait" >
 
-
-            <!--<intent-filter>
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
 
         </activity>
         <activity
@@ -68,13 +69,12 @@
         <activity
             android:name=".ScriptListActivity"
             android:label="@string/title_activity_script_list"
-            android:screenOrientation="portrait"
-            >
-            <intent-filter>
+            android:screenOrientation="portrait" >
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".TestDb"
@@ -86,14 +86,23 @@
             android:label="@string/title_activity_script_data"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Apptheme_titlebar" >
-
         </activity>
         <activity
             android:name=".SlightSettingActivity"
             android:label="@string/title_activity_slight_setting"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.Apptheme_titlebar" >
+        </activity>
+        <activity
+            android:name=".CommActivity"
+            android:label="@string/comm_activity_step_1"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Apptheme_titlebar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

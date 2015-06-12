@@ -7,8 +7,6 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.syncworks.define.Define;
-
 /**
  * Created by vosami on 2015-03-17.
  * LED 점멸 효과를 보여주는 View
@@ -71,7 +69,7 @@ public class LedView extends View {
                 heightSize = heightMeasureSpec;
                 break;
             case MeasureSpec.AT_MOST:        // wrap_content (뷰 내부의 크기에 따라 크기가 달라짐)
-                heightSize = widthSize/Define.NUMBER_OF_SINGLE_LED;
+                heightSize = 100;
                 break;
             case MeasureSpec.EXACTLY:        // fill_parent, match_parent (외부에서 이미 크기가 지정되었음)
                 heightSize = MeasureSpec.getSize(heightMeasureSpec);
