@@ -8,4 +8,12 @@ import android.net.Uri;
 public interface OnCommFragmentListener {
     // TODO: Update argument type and name
     public void onFragmentInteraction(Uri uri);
+
+    public void onModifyName();
+
+    public void onScanStart();
+
+    public void onScanStop();
+
+    public void onSetDeviceItem(String devName, String devAddr);
 }

@@ -51,6 +51,10 @@ public class StepView extends View {
         this.invalidate();
     }
 
+    public int getCurStep() {
+        return this.curStep;
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         // width 진짜 크기 구하기

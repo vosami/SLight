@@ -32,9 +32,8 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@color/Black"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/tv_current_device_name"
-            android:layout_alignBottom="@id/tv_current_device_name"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/tv_current_device_name"
             android:text="@string/lt"/>
         <TextView
             android:id="@+id/tv_current_device_address"
@@ -43,7 +42,7 @@
             android:textSize="14sp"
             android:textColor="@color/Black"
             android:layout_toEndOf="@id/tv_current_device_address_lt"
-            android:layout_alignBottom="@id/tv_current_device_address_lt"
+            android:layout_below="@id/tv_current_device_name"
             android:text="@string/cur_device_addr"/>
         <TextView
             android:id="@+id/tv_current_device_address_gt"
@@ -52,8 +51,15 @@
             android:textSize="14sp"
             android:textColor="@color/Black"
             android:layout_toEndOf="@id/tv_current_device_address"
-            android:layout_alignBottom="@id/tv_current_device_address"
+            android:layout_below="@id/tv_current_device_name"
             android:text="@string/gt"/>
+        <Button
+            android:id="@+id/btn_dev_mod_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/btn_modify_name"/>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/device_list_rl"
@@ -70,22 +76,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:textColor="@color/White"
-            android:text="@string/btn_ble_stop"
-            android:onClick="onClick"/>
-        <TextView
-            style="@style/tv_title_bold"
+            android:textColor="@color/Black"
+            android:text="@string/btn_ble_scan"
+            android:visibility="gone"/>
+        <Button
+            android:id="@+id/btn_ble_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/Black"
+            android:text="@string/btn_ble_stop"/>
+        <TextView
+            style="@style/tv_title_bold"
             android:id="@+id/tv_device_list_title"
-            android:layout_alignBottom="@id/btn_ble_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
             android:text="@string/tv_device_list_title"/>
         <ListView
-            android:id="@+id/list_device"
+            android:id="@+id/lv_list_device"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btn_ble_scan"
+            android:layout_below="@id/tv_device_list_title"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="20dp"/>
     </RelativeLayout>
 </RelativeLayout>

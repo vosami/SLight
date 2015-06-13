@@ -1,14 +1,23 @@
 package com.syncworks.slight;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.syncworks.slight.fragment_comm.BleSetFragment;
 import com.syncworks.slight.fragment_comm.BrightFragment;
@@ -16,13 +25,35 @@ import com.syncworks.slight.fragment_comm.EffectFragment;
 import com.syncworks.slight.fragment_comm.LedSelectFragment;
 import com.syncworks.slight.fragment_comm.OnCommFragmentListener;
 import com.syncworks.slight.widget.StepView;
+import com.syncworks.slightpref.SLightPref;
 import com.syncworks.vosami.blelib.BleConsumer;
+import com.syncworks.vosami.blelib.BleManager;
+import com.syncworks.vosami.blelib.BleNotifier;
+import com.syncworks.vosami.blelib.BleUtils;
+import com.syncworks.vosami.blelib.BluetoothLeService;
+import com.syncworks.vosami.blelib.scanner.SlightScanCallback;
+import com.syncworks.vosami.blelib.scanner.SlightScanner;
 
 
 public class CommActivity extends ActionBarActivity implements BleConsumer, OnCommFragmentListener {
     private final static String TAG = "CommActivity";
     private final static int MAX_STEP = 4;  // 4단계가 최고 단계로 설정
     private int curStep;                    // 현재 단계 설정
+
+    /* 장치 설정 확인*/
+    SLightPref appPref = null;
+
+    /**
+     * 블루투스 관련 정의
+     */
+    private SlightScanner slightScanner;
+
+    private BleManager bleManager;
+
+    private BluetoothDevice mBluetoothDevice;
+
+    private boolean isBleSupport = false;
+    // End
 
     private BleSetFragment fragment1st;
     private LedSelectFragment fragment2nd;
@@ -32,9 +63,39 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
     // 단계 설정 View
     private StepView stepView;
 
+    // 이름 설정 Dialog
+    private AlertDialog mDialog = null;
+    private String modifyName= null;
+    private ProgressDialog mProgressDialog;
+    // 이름 설정 진행 상태 확인
+    private boolean isDisplayDialog = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 장치 설정 초기화
+        appPref = new SLightPref(this);
+
+        BleUtils bleUtils = new BleUtils(this);
+        // 스마트폰이 Bluetooth LE 를 지원하는지 확인
+        isBleSupport = bleUtils.isBluetoothLeSupported();
+        if (isBleSupport) {
+
+            // 블루투스가 꺼져 있다면
+            if (!bleUtils.isBluetoothOn()) {
+                // 블루투스를 켤지 물어본다
+                bleUtils.askUserToEnableBluetoothIfNeeded();
+            }
+            // Bluetooth LE 지원되면 스캔 초기화
+            slightScanner = SlightScanner.createScanner(this,10000,slightScanCallback);
+            // Bluetooth LE 매니저 초기화
+            bleManager = BleManager.getBleManager(this);
+        } else {
+            // 스마트폰이 Bluetooth LE 를 지원하지 않는다면 메시지 출력
+            Toast.makeText(this, getString(R.string.ble_not_support),
+                    Toast.LENGTH_LONG).show();
+        }
+
         curStep = 1; // 1단계로 설정
         setContentView(R.layout.activity_comm);
         findView();
@@ -50,6 +111,41 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
             }
         };
         stepView.setOnStepViewTouchListener(stepViewTouchListener);
+    }
+
+    // 스캔 결과를 받아오는 인터페이스
+    private SlightScanCallback slightScanCallback = new SlightScanCallback() {
+        @Override
+        public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
+            Log.d(TAG,"Device"+device.getName());
+            fragment1st.addList(device,rssi);
+        }
+
+        @Override
+        public void onEnd() {
+            scanStop();
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        // Bluetooth LE 를 지원한다면 장치 스캔 시작
+        if (isBleSupport) {
+            scanStart();
+            // 블루투스 연결 매니저 설정
+            bleManager = BleManager.getBleManager(this);
+            bleManager.bind(this);
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        if (isBleSupport) {
+            scanStop();
+            bleManager.unbind(this);
+        }
+        super.onStop();
     }
 
     @Override
@@ -95,8 +191,8 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
 
     private void createFragment() {
         String deviceName, deviceAddr;
-        deviceName = "";
-        deviceAddr = "";
+        deviceName = appPref.getString(SLightPref.DEVICE_NAME);
+        deviceAddr = appPref.getString(SLightPref.DEVICE_ADDR);
         fragment1st = BleSetFragment.newInstance(deviceName,deviceAddr);
         fragment2nd = LedSelectFragment.newInstance("","");
         fragment3rd = BrightFragment.newInstance("","");
@@ -106,6 +202,31 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.ll_comm_fragment,fragment1st);
         fragmentTransaction.commit();
+    }
+    // Fragment 초기화
+    private void startFragment(int step) {
+        switch (step) {
+            case 1:
+                fragment1st.setTvCurrentDevice(
+                        appPref.getString(SLightPref.DEVICE_NAME),
+                        appPref.getString(SLightPref.DEVICE_ADDR));
+                if (bleManager.getBleConnectState() != BluetoothLeService.STATE_DISCONNECTED) {
+                    bleManager.bleDisconnect();
+                }
+                scanStart();
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
+    }
+
+    // Fragment 변경 전
+    private void endFragment(int step) {
+
     }
 
     // 액션 바의 타이틀 변경
@@ -132,11 +253,12 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
     }
 
     // 각 단계별 Fragment 변경
-    private void changeFragment(int stepFragment) {
+    private void changeFragment(int step) {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        switch (stepFragment) {
+        switch (step) {
             case 1:
+                startFragment(step);
                 fragmentTransaction.replace(R.id.ll_comm_fragment, fragment1st);
                 break;
             case 2:
@@ -154,6 +276,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         fragmentTransaction.commit();
     }
 
+    // 하단 단계 설정 View 변경
     private void changeStepView(int step) {
         stepView.setCurStep(step);
     }
@@ -173,8 +296,39 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
     // 블루투스 서비스 연결
     @Override
     public void onBleServiceConnect() {
-        Log.d(TAG,"서비스 연결됨");
+        Log.d(TAG, "서비스 연결됨");
+        bleManager.setBleNotifier(new BleNotifier() {
+            @Override
+            public void bleConnected() {
 
+            }
+
+            @Override
+            public void bleDisconnected() {
+                if (isDisplayDialog) {
+                    fragment1st.setTvCurrentDeviceName(modifyName);
+                    scanStart();
+                    isDisplayDialog = false;
+                }
+            }
+
+            @Override
+            public void bleServiceDiscovered() {
+
+            }
+
+            @Override
+            public void bleDataAvailable() {
+
+            }
+
+            @Override
+            public void bleDataWriteComplete() {
+                if (isDisplayDialog) {
+                    bleManager.bleDisconnect();
+                }
+            }
+        });
     }
 
     // Fragments 와 통신
@@ -182,4 +336,133 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+    @Override
+    public void onModifyName() {
+        Log.d(TAG,"Modify");
+        isDisplayDialog = true;
+        bleManager.bleConnect(fragment1st.getDevAddr());
+        mDialog = creteModifyNameDialog();
+        mDialog.show();
+    }
+
+    @Override
+    public void onScanStart() {
+        Log.d(TAG, "ScanStart");
+        scanStart();
+    }
+
+    @Override
+    public void onScanStop() {
+        Log.d(TAG, "ScanStop");
+        scanStop();
+    }
+
+    @Override
+    public void onSetDeviceItem(String devName, String devAddr) {
+        Log.d(TAG, "dev" + devName + devAddr);
+    }
+    // 블루투스 스캔 시작
+    private void scanStart() {
+        fragment1st.displayScanButton(false);
+        fragment1st.clearList();
+        if (!slightScanner.getStateScanning()) {
+            slightScanner.start();
+        }
+    }
+    // 블루투스 스캔 중지
+    private void scanStop() {
+        fragment1st.displayScanButton(true);
+        if (slightScanner.getStateScanning()) {
+            slightScanner.stop();
+        }
+    }
+
+    private AlertDialog creteModifyNameDialog() {
+        AlertDialog.Builder ab = new AlertDialog.Builder(this);
+        ab.setTitle(getResources().getString(R.string.dialog_modify_name));
+        final EditText inputName = new EditText(this);
+        ab.setView(inputName);
+        ab.setCancelable(true);
+
+        ab.setPositiveButton(getString(R.string.dialog_confirm), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                modifyName = inputName.getText().toString();
+                if (slightScanner.getStateScanning()) {
+                    slightScanner.stop();
+                }
+                setConfirm(mDialog);
+                // 장치 이름 설정 데이터 송신
+                //bleManager.writeName(modName);
+                //setDismiss(mDialog);
+            }
+        });
+
+        ab.setNegativeButton(getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                setDismiss(mDialog);
+            }
+        });
+
+        return ab.create();
+    }
+
+    /**
+     * 다이얼로그 종료
+     * @param dialog
+     */
+    private void setDismiss(Dialog dialog){
+        if(dialog != null && dialog.isShowing())
+            dialog.dismiss();
+    }
+
+    private void setConfirm(Dialog dialog) {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+        mProgressDialog = ProgressDialog.show(CommActivity.this,"","잠시만 기다려주세요.",true);
+        new Thread(taskModName).start();
+    }
+
+    private Handler handlerModName = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                bleManager.writeName(modifyName);
+            } else if (msg.what == 2) {
+                isDisplayDialog = false;
+            }
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                mProgressDialog.dismiss();
+            }
+        }
+    };
+
+    private Runnable taskModName = new Runnable() {
+        @Override
+        public void run() {
+            for (int i=0;i<5;i++) {
+                // 장치와 연결이 되었다면 종료
+                if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED){
+                    break;
+                }
+                bleManager.getBleConnectState();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+                handlerModName.sendEmptyMessage(1);
+                Log.d(TAG,"Send Complete");
+            } else {
+                handlerModName.sendEmptyMessage(2);
+                Log.d(TAG, "Not Send");
+            }
+
+        }
+    };
 }

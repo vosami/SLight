@@ -1,1 +1,1 @@
-include ':app', ':define', ':dragndroplist', ':blelib', ':GraphView-master', ':ledselectlayout', ':ledviewlayout', ':titlebarlayout', ':verticalseekbar', ':scriptdata', ':colorpickerview', ':soundmeter', ':slightpref', ':endlessadapter'
+include ':app', ':define', ':dragndroplist', ':blelib', ':GraphView-master', ':ledselectlayout', ':ledviewlayout', ':titlebarlayout', ':verticalseekbar', ':scriptdata', ':colorpickerview', ':soundmeter', ':slightpref', ':endlessadapter', ':bluetoothlelib'
