@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ToggleButton;
 
+import com.syncworks.define.Define;
 import com.syncworks.slight.R;
 
 /**
@@ -19,14 +21,15 @@ import com.syncworks.slight.R;
  * create an instance of this fragment.
  */
 public class LedSelectFragment extends Fragment {
+
+    private ToggleButton tbRGB[];
+    private ToggleButton tbSingle[];
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM1 = "LedSelectParam";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int ledSelectParam;
 
     private OnCommFragmentListener mListener;
 
@@ -35,15 +38,13 @@ public class LedSelectFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment LedSelectFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static LedSelectFragment newInstance(String param1, String param2) {
+    public static LedSelectFragment newInstance(int param1) {
         LedSelectFragment fragment = new LedSelectFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_PARAM1, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,8 +57,7 @@ public class LedSelectFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            ledSelectParam = getArguments().getInt(ARG_PARAM1);
         }
     }
 
@@ -65,15 +65,150 @@ public class LedSelectFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_led_select, container, false);
+        View view = inflater.inflate(R.layout.fragment_led_select, container, false);
+        findViews(view);
+        initToggleBtn();
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private void findViews(View v) {
+        tbRGB = new ToggleButton[Define.NUMBER_OF_COLOR_LED];
+        tbSingle = new ToggleButton[Define.NUMBER_OF_SINGLE_LED];
+        // RGB 커넥터 토글 버튼 획득
+        tbRGB[0] = (ToggleButton) v.findViewById(R.id.tb_rgb_1);
+        tbRGB[1] = (ToggleButton) v.findViewById(R.id.tb_rgb_2);
+        tbRGB[2] = (ToggleButton) v.findViewById(R.id.tb_rgb_3);
+        // 단색 커넥터 토글 버튼 획득
+        tbSingle[0] = (ToggleButton) v.findViewById(R.id.tb_single_1);
+        tbSingle[1] = (ToggleButton) v.findViewById(R.id.tb_single_2);
+        tbSingle[2] = (ToggleButton) v.findViewById(R.id.tb_single_3);
+        tbSingle[3] = (ToggleButton) v.findViewById(R.id.tb_single_4);
+        tbSingle[4] = (ToggleButton) v.findViewById(R.id.tb_single_5);
+        tbSingle[5] = (ToggleButton) v.findViewById(R.id.tb_single_6);
+        tbSingle[6] = (ToggleButton) v.findViewById(R.id.tb_single_7);
+        tbSingle[7] = (ToggleButton) v.findViewById(R.id.tb_single_8);
+        tbSingle[8] = (ToggleButton) v.findViewById(R.id.tb_single_9);
+
+        tbRGB[0].setOnClickListener(tbClickListener);
+        tbRGB[1].setOnClickListener(tbClickListener);
+        tbRGB[2].setOnClickListener(tbClickListener);
+        tbSingle[0].setOnClickListener(tbClickListener);
+        tbSingle[1].setOnClickListener(tbClickListener);
+        tbSingle[2].setOnClickListener(tbClickListener);
+        tbSingle[3].setOnClickListener(tbClickListener);
+        tbSingle[4].setOnClickListener(tbClickListener);
+        tbSingle[5].setOnClickListener(tbClickListener);
+        tbSingle[6].setOnClickListener(tbClickListener);
+        tbSingle[7].setOnClickListener(tbClickListener);
+        tbSingle[8].setOnClickListener(tbClickListener);
+    }
+
+    public void initToggleBtn() {
+        for (int i=0;i<3;i++) {
+            tbRGB[i].setChecked(false);
+        }
+        for (int i=0;i<9;i++) {
+            tbSingle[i].setChecked(false);
         }
     }
+
+    public boolean isRGB() {
+        if (tbRGB[0].isChecked() || tbRGB[1].isChecked() || tbRGB[2].isChecked()) {
+            return true;
+        }
+        return false;
+    }
+
+    public int getRGBSelect() {
+        int retVal = 0;
+        if (tbRGB[0].isChecked()) {
+            retVal |= 1;
+        }
+        if (tbRGB[1].isChecked()) {
+            retVal |= 2;
+        }
+        if (tbRGB[2].isChecked()) {
+            retVal |= 4;
+        }
+        return retVal;
+    }
+
+    public int getLedSelect() {
+        int retVal = 0;
+        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+            if (tbSingle[i].isChecked()){
+                retVal |= 1<<i;
+            }
+        }
+        return retVal;
+    }
+
+    private View.OnClickListener tbClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.tb_rgb_1:
+                    clickRGB(0);
+                    break;
+                case R.id.tb_rgb_2:
+                    clickRGB(1);
+                    break;
+                case R.id.tb_rgb_3:
+                    clickRGB(2);
+                    break;
+                case R.id.tb_single_1:
+                    clickSingle(0);
+                    break;
+                case R.id.tb_single_2:
+                    clickSingle(1);
+                    break;
+                case R.id.tb_single_3:
+                    clickSingle(2);
+                    break;
+                case R.id.tb_single_4:
+                    clickSingle(3);
+                    break;
+                case R.id.tb_single_5:
+                    clickSingle(4);
+                    break;
+                case R.id.tb_single_6:
+                    clickSingle(5);
+                    break;
+                case R.id.tb_single_7:
+                    clickSingle(6);
+                    break;
+                case R.id.tb_single_8:
+                    clickSingle(7);
+                    break;
+                case R.id.tb_single_9:
+                    clickSingle(8);
+                    break;
+            }
+        }
+    };
+
+    private void clickRGB(int rgbLed) {
+        for (int i=0;i<9;i++) {
+            if (tbSingle[i].isChecked()) {
+                mListener.onSelectLed(i,false);
+                tbSingle[i].setChecked(false);
+            }
+        }
+        mListener.onSelectRGB(rgbLed, tbRGB[rgbLed].isChecked());
+    }
+
+    private void clickSingle(int led) {
+        for (int i=0;i<3;i++) {
+            if (tbRGB[i].isChecked()) {
+                mListener.onSelectRGB(i,false);
+                tbRGB[i].setChecked(false);
+            }
+        }
+        mListener.onSelectLed(led, tbSingle[led].isChecked());
+    }
+
+
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -91,7 +226,4 @@ public class LedSelectFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
-
-
 }

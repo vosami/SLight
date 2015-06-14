@@ -11,6 +11,7 @@ import android.view.View;
 
 /**
  * Created by vosami on 2015-06-12.
+ * Step View
  */
 public class StepView extends View {
 

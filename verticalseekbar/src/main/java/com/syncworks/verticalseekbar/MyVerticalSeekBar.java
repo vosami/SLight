@@ -11,6 +11,9 @@ import android.widget.SeekBar;
  * Created by vosami on 2015-06-12.
  */
 public class MyVerticalSeekBar extends SeekBar {
+
+    private OnVerticalSeekBarListener onVerticalSeekBarListener;
+
     public MyVerticalSeekBar(Context context) {
         super(context);
     }
@@ -45,21 +48,40 @@ public class MyVerticalSeekBar extends SeekBar {
         if (!isEnabled()) {
             return false;
         }
-
+        int i=0;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
-            case MotionEvent.ACTION_UP:
-                int i=0;
                 i=getMax() - (int) (getMax() * event.getY() / getHeight());
                 setProgress(i);
                 Log.i("Progress", getProgress() + "");
                 onSizeChanged(getWidth(), getHeight(), 0, 0);
+                break;
+            case MotionEvent.ACTION_UP:
+                i=getMax() - (int) (getMax() * event.getY() / getHeight());
+                setProgress(i);
+                Log.i("Progress", getProgress() + "");
+                onSizeChanged(getWidth(), getHeight(), 0, 0);
+                doChange(getId(),getProgress());
                 break;
 
             case MotionEvent.ACTION_CANCEL:
                 break;
         }
         return true;
+    }
+
+    public interface OnVerticalSeekBarListener {
+        void onEvent(int id, int progress);
+    }
+
+    private void doChange(int id, int progress) {
+        if (onVerticalSeekBarListener != null) {
+            onVerticalSeekBarListener.onEvent(id, progress);
+        }
+    }
+
+    public void setOnVerticalSeekBarListener(OnVerticalSeekBarListener listener) {
+        onVerticalSeekBarListener = listener;
     }
 }

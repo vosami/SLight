@@ -64,11 +64,16 @@
     <string name="comm_activity_step_2">2단계 : LED 를 선택합니다.</string>
     <string name="comm_activity_step_3">3단계 : 밝기를 선택합니다.</string>
     <string name="comm_activity_step_4">4단계 : 점멸 효과를 선택합니다.</string>
+    <string name="comm_progress_dialog">잠시 기다려 주세요.</string>
         <!--BleFragment-->
         <string name="btn_modify_name">이름변경</string>
         <string name="dialog_modify_name">변경할 장치 이름을 설정하세요.</string>
         <string name="dialog_confirm">확인</string>
         <string name="dialog_cancel">취소</string>
+        <!--LedSelectFragment-->
+        <string name="title_select_rgb_led">RGB 칼라 LED 선택</string>
+        <string name="title_select_single_led">단색 LED 선택</string>
+        <string name="default_percent">50%</string>
     <!--CommActivity 에서 사용 End-->
 
 </resources>

@@ -16,4 +16,12 @@ public interface OnCommFragmentListener {
     public void onScanStop();
 
     public void onSetDeviceItem(String devName, String devAddr);
+
+    public void onSelectLed(int ledNum, boolean state);
+
+    public void onSelectRGB(int ledNum, boolean state);
+
+    public void onBrightRGB(int ledNum, int bright);
+
+    public void onBrightLed(int ledNum, int bright);
 }

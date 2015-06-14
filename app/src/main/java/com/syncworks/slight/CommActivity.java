@@ -19,11 +19,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.syncworks.define.Define;
 import com.syncworks.slight.fragment_comm.BleSetFragment;
 import com.syncworks.slight.fragment_comm.BrightFragment;
 import com.syncworks.slight.fragment_comm.EffectFragment;
 import com.syncworks.slight.fragment_comm.LedSelectFragment;
 import com.syncworks.slight.fragment_comm.OnCommFragmentListener;
+import com.syncworks.slight.util.CustomToast;
 import com.syncworks.slight.widget.StepView;
 import com.syncworks.slightpref.SLightPref;
 import com.syncworks.vosami.blelib.BleConsumer;
@@ -34,11 +36,18 @@ import com.syncworks.vosami.blelib.BluetoothLeService;
 import com.syncworks.vosami.blelib.scanner.SlightScanCallback;
 import com.syncworks.vosami.blelib.scanner.SlightScanner;
 
+import java.lang.ref.WeakReference;
+
 
 public class CommActivity extends ActionBarActivity implements BleConsumer, OnCommFragmentListener {
     private final static String TAG = "CommActivity";
     private final static int MAX_STEP = 4;  // 4단계가 최고 단계로 설정
     private int curStep;                    // 현재 단계 설정
+
+    // 상단 메뉴
+    private Menu menu = null;
+    // 연결 상태 확인
+    private boolean connectionState = false;
 
     /* 장치 설정 확인*/
     SLightPref appPref = null;
@@ -67,8 +76,13 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
     private AlertDialog mDialog = null;
     private String modifyName= null;
     private ProgressDialog mProgressDialog;
+
+    private final CommHandler commHandler = new CommHandler(this);
     // 이름 설정 진행 상태 확인
     private boolean isDisplayDialog = false;
+
+    // LED Select Fragment
+    private int selectedLed = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +169,8 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_comm, menu);
+        this.menu = menu;
+        setConnectIcon(connectionState);
         return true;
     }
 
@@ -165,12 +181,42 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_connect) {
+            if (connectionState) {
+                bleManager.bleDisconnect();
+                Log.d(TAG,"연결되었습니다.");
+            } else {
+                SLightPref appPref = new SLightPref(this);
+                String address = appPref.getString(SLightPref.DEVICE_ADDR);
+                bleManager.bleConnect(address);
+                CustomToast.middleTop(this, "연결 시도중입니다.");
+                Log.d(TAG,"연결 X");
+            }
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        Log.d(TAG, "onPrepareOptionsMenu");
+        if (connectionState) {
+            menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_connect));
+        } else {
+            menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_disconnect));
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    /**
+     * ActionBar 의 연결 상태 아이콘 설정
+     * @param stateConnect 연결상태(true:연결, false:끊김)
+     */
+    private void setConnectIcon(boolean stateConnect) {
+        connectionState = stateConnect;
+        invalidateOptionsMenu();
     }
 
     public void onClick(View view) {
@@ -179,15 +225,33 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                 curStep--;
                 if (curStep < 1) {
                     curStep = 1;
+                    // 1단계로 돌아온다면 연결을 종료합니다.
+                    if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+                        bleManager.bleDisconnect();
+                    }
                 }
                 changeStep(curStep);
                 break;
             case R.id.btn_comm_next:
                 curStep++;
+                // 1단계에서 2단계로 넘어갈 때 연결
+                if (curStep == 2) {
+                    appPref.putString(SLightPref.DEVICE_NAME,fragment1st.getDevName());
+                    appPref.putString(SLightPref.DEVICE_ADDR,fragment1st.getDevAddr());
+                    showProgressDialog(); // 대기 메시지 표시
+                    bleManager.bleConnect(fragment1st.getDevAddr());
+                }
+                // 최고 단계에 이르면 초기화
                 if (curStep > MAX_STEP) {
                     curStep = 2;
+                    selectedLed = 0;// 선택된 LED 초기화
                 }
-                changeStep(curStep);
+                if (curStep == 3) {
+                    //TODO Fragment3rd 초기화 - 모든 SeekBar를 50%로 설정
+                }
+                if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+                    changeStep(curStep);
+                }
                 break;
         }
     }
@@ -197,18 +261,18 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         deviceName = appPref.getString(SLightPref.DEVICE_NAME);
         deviceAddr = appPref.getString(SLightPref.DEVICE_ADDR);
         fragment1st = BleSetFragment.newInstance(deviceName,deviceAddr);
-        fragment2nd = LedSelectFragment.newInstance("","");
-        fragment3rd = BrightFragment.newInstance("","");
+        fragment2nd = LedSelectFragment.newInstance(selectedLed);
+        fragment3rd = BrightFragment.newInstance("", "");
         fragment4th = EffectFragment.newInstance("","");
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.ll_comm_fragment,fragment1st);
+        fragmentTransaction.add(R.id.ll_comm_fragment, fragment1st);
         fragmentTransaction.commit();
     }
     // Fragment 초기화
     private void startFragment(int step) {
-        Log.d(TAG,"startFragment" + step);
+        Log.d(TAG, "startFragment" + step);
         switch (step) {
             case 1:
                 fragment1st.setTvCurrentDevice(
@@ -217,6 +281,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                 if (bleManager.getBleConnectState() != BluetoothLeService.STATE_DISCONNECTED) {
                     bleManager.bleDisconnect();
                 }
+                fragment2nd.initToggleBtn();
                 scanStart();
                 break;
             case 2:
@@ -269,6 +334,13 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                 fragmentTransaction.replace(R.id.ll_comm_fragment, fragment2nd);
                 break;
             case 3:
+                if (fragment2nd.isRGB()) {
+                    fragment3rd.setRGB(true);
+                    fragment3rd.setParamRGB(fragment2nd.getRGBSelect());
+                } else {
+                    fragment3rd.setRGB(false);
+                    fragment3rd.setParamLED(fragment2nd.getLedSelect());
+                }
                 fragmentTransaction.replace(R.id.ll_comm_fragment, fragment3rd);
                 break;
             case 4:
@@ -304,16 +376,22 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         bleManager.setBleNotifier(new BleNotifier() {
             @Override
             public void bleConnected() {
-
+                Log.d(TAG, "connected");
+                setConnectIcon(true);
+                if (curStep != 1) {
+                    new Thread(taskConnect).start();
+                }
             }
 
             @Override
             public void bleDisconnected() {
-                Log.d(TAG,"Disconnected");
-                if (isDisplayDialog) {
-                    fragment1st.setTvCurrentDeviceName(modifyName);
-                    scanStart();
-                    isDisplayDialog = false;
+                Log.d(TAG, "Disconnected");
+                setConnectIcon(false);
+                if (curStep == 1) {
+                    commHandler.sendEmptyMessage(3);
+                } else {
+                    curStep = 1;
+                    changeStep(curStep);
                 }
             }
 
@@ -329,9 +407,10 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
 
             @Override
             public void bleDataWriteComplete() {
-                Log.d(TAG,"Data Write Complete");
+                Log.d(TAG, "Data Write Complete");
                 if (isDisplayDialog) {
                     bleManager.bleDisconnect();
+                    isDisplayDialog = false;
                 }
             }
         });
@@ -369,6 +448,44 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
     public void onSetDeviceItem(String devName, String devAddr) {
         Log.d(TAG, "dev" + devName + devAddr);
     }
+
+    @Override
+    public void onSelectLed(int ledNum, boolean state) {
+        int bright = 0;
+        if (state) {
+            bright = 96;
+        }
+        sendBrightData(ledNum, bright);
+    }
+
+    @Override
+    public void onSelectRGB(int rgbNum, boolean state) {
+        int bright = 0;
+        if (state) {
+            bright = 96;
+        }
+        sendBrightData(rgbNum*3, bright);
+        sendBrightData(rgbNum*3 + 1, bright);
+        sendBrightData(rgbNum*3 + 2, bright);
+    }
+
+    @Override
+    public void onBrightRGB(int ledNum, int bright) {
+        Log.d(TAG,"RGB-LedNum:"+ledNum + ", Bright:"+bright);
+        sendBrightData(ledNum*3, (int) (191*bright*0.01));
+        sendBrightData(ledNum*3 + 1, (int) (191*bright*0.01));
+        sendBrightData(ledNum * 3 + 2, (int) (191*bright*0.01));
+
+    }
+
+    @Override
+    public void onBrightLed(int ledNum, int bright) {
+        Log.d(TAG,"Single-LedNum:"+ledNum + ", Bright:"+bright);
+        sendBrightData(ledNum, (int) (191*bright*0.01));
+    }
+
+
+
     // 블루투스 스캔 시작
     private void scanStart() {
         Log.d(TAG,"scanStart");
@@ -400,18 +517,25 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                 if (slightScanner.getStateScanning()) {
                     slightScanner.stop();
                 }
-                setConfirm(mDialog);
+                setDismiss(mDialog);
+                showProgressDialog();
+                new Thread(taskModName).start();
             }
         });
 
         ab.setNegativeButton(getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
+                isDisplayDialog = false;
                 setDismiss(mDialog);
             }
         });
 
         return ab.create();
+    }
+
+    private void showProgressDialog() {
+        mProgressDialog = ProgressDialog.show(CommActivity.this, "", getString(R.string.comm_progress_dialog), true);
     }
 
     /**
@@ -423,27 +547,8 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
             dialog.dismiss();
     }
 
-    private void setConfirm(Dialog dialog) {
-        if (dialog != null && dialog.isShowing()) {
-            dialog.dismiss();
-        }
-        mProgressDialog = ProgressDialog.show(CommActivity.this,"","잠시만 기다려주세요.",true);
-        new Thread(taskModName).start();
-    }
 
-    public final Handler handlerModName = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 1) {
-                bleManager.writeName(modifyName);
-            } else if (msg.what == 2) {
-                isDisplayDialog = false;
-            }
-            if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                mProgressDialog.dismiss();
-            }
-        }
-    };
+
 
     private Runnable taskModName = new Runnable() {
         @Override
@@ -461,13 +566,140 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                 }
             }
             if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
-                handlerModName.sendEmptyMessage(1);
+                bleManager.writeName(modifyName);
+                commHandler.sendEmptyMessage(1);
                 Log.d(TAG,"Send Complete");
             } else {
-                handlerModName.sendEmptyMessage(2);
+                commHandler.sendEmptyMessage(2);
                 Log.d(TAG, "Not Send");
             }
 
         }
     };
+
+    private Runnable taskConnect = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for (int i=0;i<9;i++) {
+                sendBrightData(i,100);
+            }
+            sendInitCount();
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for (int i=0;i<9;i++) {
+                sendBrightData(i,0);
+            }
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for (int i=0;i<9;i++) {
+                sendBrightData(i,100);
+            }
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for (int i=0;i<9;i++) {
+                sendBrightData(i,0);
+            }
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for (int i=0;i<9;i++) {
+                sendBrightData(i,100);
+            }
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for (int i=0;i<9;i++) {
+                sendBrightData(i,0);
+            }
+            commHandler.sendEmptyMessage(4);
+        }
+    };
+
+    private static class CommHandler extends Handler {
+        private final WeakReference<CommActivity> mActivity;
+
+        public CommHandler(CommActivity activity) {
+            mActivity = new WeakReference<CommActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            CommActivity activity = mActivity.get();
+            if (activity != null) {
+                activity.handleMessage(msg);
+            }
+        }
+    }
+
+    private void handleMessage(Message msg) {
+        Log.d(TAG,"Handler "+ msg.what);
+        switch (msg.what) {
+            case 1:
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+                break;
+            case 2:
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+                isDisplayDialog = false;
+                break;
+            case 3:
+                fragment1st.setTvCurrentDeviceName(modifyName);
+                scanStart();
+                break;
+            case 4:
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+                changeStep(curStep);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void sendBrightData(int ledNum, int bright) {
+        byte[] scriptData = new byte[10];
+        scriptData[0] = Define.TX_MEMORY_WRITE;
+        scriptData[1] = (byte) ledNum;
+        scriptData[2] = 0; // 시작 번지
+        scriptData[3] = 3; // 데이터 길이
+        scriptData[4] = (byte) Define.OP_START;
+        scriptData[5] = 0;
+        scriptData[6] = (byte) bright;
+        scriptData[7] = 0;
+        scriptData[8] = (byte) Define.OP_END;
+        scriptData[9] = 0;
+        if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+            Log.d(TAG,"SendData:" + ledNum + " bright:"+bright);
+            bleManager.writeTxData(scriptData);
+        }
+    }
+
+    private void sendInitCount() {
+        byte[] scriptData = TxDatas.formatInitCount();
+        if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+            bleManager.writeTxData(scriptData);
+        }
+    }
 }

@@ -3,151 +3,343 @@
     android:layout_height="match_parent"
     tools:context="com.syncworks.s_light.fragment.BrightFragment">
     <LinearLayout
-        android:id="@+id/ll_frag_bright_array"
+        android:id="@+id/ll_frag_rgb_array"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:orientation="horizontal">
+        <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+            <TextView
+                android:id="@+id/frag_rgb_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:background="@drawable/tv_led_select"
+                android:text="RGB 1"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/frag_rgb_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:background="@drawable/tv_led_select"
+                android:text="RGB 2"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/frag_rgb_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:background="@drawable/tv_led_select"
+                android:text="RGB 3"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_frag_rgb_margin"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true">
         <TextView
-            android:id="@+id/frag_bright_1"
+            android:id="@+id/tv_rgb_percent_1"
+            android:text="@string/default_percent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_rgb_percent_2"
+            android:text="@string/default_percent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_rgb_percent_3"
+            android:text="@string/default_percent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_frag_rgb_seek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_frag_rgb_array"
+        android:layout_above="@id/ll_frag_rgb_margin"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <com.syncworks.verticalseekbar.MyVerticalSeekBar
+                android:id="@+id/rgb_seekbar_1"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="50"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <com.syncworks.verticalseekbar.MyVerticalSeekBar
+                android:id="@+id/rgb_seekbar_2"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="50"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <com.syncworks.verticalseekbar.MyVerticalSeekBar
+                android:id="@+id/rgb_seekbar_3"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="50"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_frag_bright_array"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:text="1"/>
-        <TextView
-            android:id="@+id/frag_bright_2"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/frag_bright_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:background="@drawable/tv_led_select"
+                android:text="1"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:text="2"/>
-        <TextView
-            android:id="@+id/frag_bright_3"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/frag_bright_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:background="@drawable/tv_led_select"
+                android:text="2"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:text="3"/>
-        <TextView
-            android:id="@+id/frag_bright_4"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/frag_bright_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:background="@drawable/tv_led_select"
+                android:text="3"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:text="4"/>
-        <TextView
-            android:id="@+id/frag_bright_5"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/frag_bright_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:background="@drawable/tv_led_select"
+                android:text="4"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:text="5"/>
-        <TextView
-            android:id="@+id/frag_bright_6"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/frag_bright_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:background="@drawable/tv_led_select"
+                android:text="5"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:text="6"/>
-        <TextView
-            android:id="@+id/frag_bright_7"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/frag_bright_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:background="@drawable/tv_led_select"
+                android:text="6"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:text="7"/>
-        <TextView
-            android:id="@+id/frag_bright_8"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/frag_bright_7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:background="@drawable/tv_led_select"
+                android:text="7"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-
-            android:gravity="center"
-            android:text="8"/>
-        <TextView
-            android:id="@+id/frag_bright_9"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/frag_bright_8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:background="@drawable/tv_led_select"
+                android:text="8"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:text="9"/>
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/frag_bright_9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:background="@drawable/tv_led_select"
+                android:text="9"/>
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/ll_frag_bright_margin"
+        android:visibility="invisible"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="60dp">
         <TextView
-            android:text="100%"
+            android:id="@+id/tv_bright_percent_1"
+            android:text="@string/default_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"/>
         <TextView
-            android:text="100%"
+            android:id="@+id/tv_bright_percent_2"
+            android:text="@string/default_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"/>
         <TextView
-            android:text="100%"
+            android:id="@+id/tv_bright_percent_3"
+            android:text="@string/default_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"/>
         <TextView
-            android:text="100%"
+            android:id="@+id/tv_bright_percent_4"
+            android:text="@string/default_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"/>
         <TextView
-            android:text="100%"
+            android:id="@+id/tv_bright_percent_5"
+            android:text="@string/default_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"/>
         <TextView
-            android:text="100%"
+            android:id="@+id/tv_bright_percent_6"
+            android:text="@string/default_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"/>
         <TextView
-            android:text="100%"
+            android:id="@+id/tv_bright_percent_7"
+            android:text="@string/default_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"/>
         <TextView
-            android:text="100%"
+            android:id="@+id/tv_bright_percent_8"
+            android:text="@string/default_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"/>
         <TextView
-            android:text="100%"
+            android:id="@+id/tv_bright_percent_9"
+            android:text="@string/default_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -155,46 +347,119 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/ll_frag_bright_seek"
+        android:visibility="invisible"
         android:orientation="horizontal"
         android:layout_below="@id/ll_frag_bright_array"
         android:layout_above="@id/ll_frag_bright_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <com.syncworks.verticalseekbar.MyVerticalSeekBar
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
-        <com.syncworks.verticalseekbar.MyVerticalSeekBar
+            android:layout_weight="1">
+            <com.syncworks.verticalseekbar.MyVerticalSeekBar
+                android:id="@+id/bright_seekbar_1"
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="50"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
-        <com.syncworks.verticalseekbar.MyVerticalSeekBar
+            android:layout_weight="1">
+            <com.syncworks.verticalseekbar.MyVerticalSeekBar
+                android:id="@+id/bright_seekbar_2"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="50"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
-        <com.syncworks.verticalseekbar.MyVerticalSeekBar
+            android:layout_weight="1">
+            <com.syncworks.verticalseekbar.MyVerticalSeekBar
+                android:id="@+id/bright_seekbar_3"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="50"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
-        <com.syncworks.verticalseekbar.MyVerticalSeekBar
+            android:layout_weight="1">
+            <com.syncworks.verticalseekbar.MyVerticalSeekBar
+                android:id="@+id/bright_seekbar_4"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="50"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
-        <com.syncworks.verticalseekbar.MyVerticalSeekBar
+            android:layout_weight="1">
+            <com.syncworks.verticalseekbar.MyVerticalSeekBar
+                android:id="@+id/bright_seekbar_5"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="50"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
-        <com.syncworks.verticalseekbar.MyVerticalSeekBar
+            android:layout_weight="1">
+            <com.syncworks.verticalseekbar.MyVerticalSeekBar
+                android:id="@+id/bright_seekbar_6"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="50"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
-        <com.syncworks.verticalseekbar.MyVerticalSeekBar
+            android:layout_weight="1">
+            <com.syncworks.verticalseekbar.MyVerticalSeekBar
+                android:id="@+id/bright_seekbar_7"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="50"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
-        <com.syncworks.verticalseekbar.MyVerticalSeekBar
+            android:layout_weight="1">
+            <com.syncworks.verticalseekbar.MyVerticalSeekBar
+                android:id="@+id/bright_seekbar_8"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="50"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1">
+            <com.syncworks.verticalseekbar.MyVerticalSeekBar
+                android:id="@+id/bright_seekbar_9"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="50"/>
+        </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>
