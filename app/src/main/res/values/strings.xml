@@ -22,6 +22,8 @@
 
     <!--Ble Set Activity 에서 사용-->
     <string name="ble_set_save_preference">블루투스 연결 설정 완료</string>
+    <string name="ble_connect_complete">연결되었습니다.</string>
+    <string name="ble_try_connect">연결 시도중입니다.</string>
 
     <!--LedEffect 에서 사용 Start-->
     <string name="tv_easy_bright">밝기 간편 선택</string>
@@ -65,6 +67,8 @@
     <string name="comm_activity_step_3">3단계 : 밝기를 선택합니다.</string>
     <string name="comm_activity_step_4">4단계 : 점멸 효과를 선택합니다.</string>
     <string name="comm_progress_dialog">잠시 기다려 주세요.</string>
+    <string name="comm_device_not_connect">장치와 연결할 수 없습니다.</string>
+    <string name="comm_step_not_connect">아래 다음 단계 버튼으로 진행하세요.</string>
         <!--BleFragment-->
         <string name="btn_modify_name">이름변경</string>
         <string name="dialog_modify_name">변경할 장치 이름을 설정하세요.</string>
@@ -75,15 +79,19 @@
         <string name="title_select_single_led">단색 LED 선택</string>
         <string name="default_percent">50%</string>
         <!--EffectFragment-->
+        <string name="frag_effect_select">단색 LED 효과 선택</string>
+        <string name="frag_rgb_effect_select">RGB 칼라 LED 효과 선택</string>
         <string name="radio_effect_1">항상 켜진 상태 유지</string>
         <string name="radio_effect_2">깜박이기</string>
         <string name="radio_effect_3">짧게 번쩍이기</string>
         <string name="radio_effect_4">밝아졌다가 어두워지기</string>
         <string name="radio_effect_5">횃불효과</string>
+        <string name="radio_rgb_effect_2">빨강,초록,파랑 깜박이기</string>
         <string name="tv_select_2_1">좌</string>
         <string name="tv_select_2_2">우</string>
         <string name="tv_select_3_1">느리게</string>
         <string name="tv_select_3_2">빠르게</string>
+        <string name="btn_select_color">색깔 선택</string>
     <!--CommActivity 에서 사용 End-->
 
 </resources>

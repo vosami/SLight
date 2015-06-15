@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -16,15 +17,27 @@ import android.widget.TextView;
 import com.syncworks.define.Define;
 import com.syncworks.slight.R;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class EffectFragment extends Fragment {
 
     private boolean isInit = false;
+    private LinearLayout llRgbEffect, llSingleEffect;
+    private TextView tvRgbEffect, tvSingleEffect;
+
     private LinearLayout llRGBArray, llSingleArray;
     private TextView tvRgb[] = new TextView[3];
     private TextView tvSingle[] = new TextView[9];
 
     private RadioButton rbEffect[] = new RadioButton[5];
+    private RadioButton rbRgbEffect[] = new RadioButton[2];
+    private Button btnSelectColor;
+    private Switch swRgbEffect[] = new Switch[1];
+    private TextView tvRGBEffect[] = new TextView[1];
     private Switch swEffect[] = new Switch[5];
     private TextView tvEffect[] = new TextView[5];
 
@@ -66,6 +79,11 @@ public class EffectFragment extends Fragment {
     }
 
     private void findViews(View v) {
+        llRgbEffect = (LinearLayout) v.findViewById(R.id.ll_rgb_select_effect);
+        llSingleEffect = (LinearLayout) v.findViewById(R.id.ll_select_effect);
+        tvRgbEffect = (TextView) v.findViewById(R.id.tv_title_rgb_select_effect);
+        tvSingleEffect = (TextView) v.findViewById(R.id.tv_title_select_effect);
+
         llRGBArray = (LinearLayout) v.findViewById(R.id.ll_effect_rgb_array);
         llSingleArray = (LinearLayout) v.findViewById(R.id.ll_effect_bright_array);
         tvRgb[0] = (TextView) v.findViewById(R.id.effect_rgb_1);
@@ -88,6 +106,9 @@ public class EffectFragment extends Fragment {
         rbEffect[3] = (RadioButton) v.findViewById(R.id.radio_effect_4);
         rbEffect[4] = (RadioButton) v.findViewById(R.id.radio_effect_5);
 
+        rbRgbEffect[0] = (RadioButton) v.findViewById(R.id.radio_rgb_effect_1);
+        rbRgbEffect[1] = (RadioButton) v.findViewById(R.id.radio_rgb_effect_2);
+
         swEffect[0] = null;
         swEffect[1] = (Switch) v.findViewById(R.id.sw_effect_2);
         swEffect[2] = (Switch) v.findViewById(R.id.sw_effect_3);
@@ -100,15 +121,27 @@ public class EffectFragment extends Fragment {
         tvEffect[3] = (TextView) v.findViewById(R.id.tv_effect_4);
         tvEffect[4] = null;
 
+        btnSelectColor = (Button) v.findViewById(R.id.btn_select_color);
+        swRgbEffect[0] = (Switch) v.findViewById(R.id.sw_rgb_effect_2);
+        tvRGBEffect[0] = (TextView) v.findViewById(R.id.tv_rgb_effect_2);
+
         rbEffect[0].setOnClickListener(onClickListener);
         rbEffect[1].setOnClickListener(onClickListener);
         rbEffect[2].setOnClickListener(onClickListener);
         rbEffect[3].setOnClickListener(onClickListener);
         rbEffect[4].setOnClickListener(onClickListener);
 
+        rbRgbEffect[0].setOnClickListener(onClickListener);
+        rbRgbEffect[1].setOnClickListener(onClickListener);
+        btnSelectColor.setOnClickListener(onClickListener);
+
         swEffect[1].setOnCheckedChangeListener(onCheckedChangeListener);
         swEffect[2].setOnCheckedChangeListener(onCheckedChangeListener);
         swEffect[3].setOnCheckedChangeListener(onCheckedChangeListener);
+
+        swRgbEffect[0].setOnCheckedChangeListener(onCheckedChangeListener);
+
+
 
         if (isRGB) {
             displayRgb(paramRGB);
@@ -125,15 +158,25 @@ public class EffectFragment extends Fragment {
         tvEffect[2].setText(getResources().getString(R.string.tv_select_3_1));
         tvEffect[3].setText(getResources().getString(R.string.tv_select_3_1));
         rbEffect[0].setChecked(true);
-        rbEffect[1].setChecked(true);
-        rbEffect[2].setChecked(true);
-        rbEffect[3].setChecked(true);
-        rbEffect[4].setChecked(true);
+        rbEffect[1].setChecked(false);
+        rbEffect[2].setChecked(false);
+        rbEffect[3].setChecked(false);
+        rbEffect[4].setChecked(false);
+
+        swRgbEffect[0].setChecked(false);
+        tvRGBEffect[0].setText(getString(R.string.tv_select_3_1));
+        rbRgbEffect[0].setChecked(true);
+        rbRgbEffect[1].setChecked(false);
     }
 
     private void displayRgb(int ledBit) {
         llSingleArray.setVisibility(View.GONE);
+        llSingleEffect.setVisibility(View.GONE);
+        tvSingleEffect.setVisibility(View.GONE);
         llRGBArray.setVisibility(View.VISIBLE);
+        llRgbEffect.setVisibility(View.VISIBLE);
+        tvRgbEffect.setVisibility(View.VISIBLE);
+
         for (int i=0;i< Define.NUMBER_OF_COLOR_LED;i++) {
             if (((ledBit >> i) & 0x01) == 1) {
                 tvRgb[i].setVisibility(View.VISIBLE);
@@ -145,7 +188,12 @@ public class EffectFragment extends Fragment {
 
     private void displaySingle(int ledBit) {
         llSingleArray.setVisibility(View.VISIBLE);
+        llSingleEffect.setVisibility(View.VISIBLE);
+        tvSingleEffect.setVisibility(View.VISIBLE);
         llRGBArray.setVisibility(View.GONE);
+        llRgbEffect.setVisibility(View.GONE);
+        tvRgbEffect.setVisibility(View.GONE);
+
         for (int i=0;i< Define.NUMBER_OF_SINGLE_LED;i++) {
             if (((ledBit >> i) & 0x01) == 1) {
                 tvSingle[i].setVisibility(View.VISIBLE);
@@ -196,6 +244,21 @@ public class EffectFragment extends Fragment {
                     mListener.onEffect(4,0);
                     setRadioButton(4);
                     break;
+                case R.id.radio_rgb_effect_1:
+                    mListener.onEffect(0,0);
+                    setRgbRadioButton(0);
+                    break;
+                case R.id.radio_rgb_effect_2:
+                    mListener.onEffect(1,boolToInt(swRgbEffect[0].isChecked()));
+                    setRgbRadioButton(1);
+                    break;
+                case R.id.btn_select_color:
+                    if (rbRgbEffect[0].isChecked()) {
+                        mListener.onColorDialog();
+                    } else {
+                        mListener.onNotDialog();
+                    }
+                    break;
             }
         }
     };
@@ -204,6 +267,14 @@ public class EffectFragment extends Fragment {
         for (int i=0;i<5;i++) {
             if (i != radioNum) {
                 rbEffect[i].setChecked(false);
+            }
+        }
+    }
+
+    private void setRgbRadioButton(int radioNum) {
+        for (int i=0;i<2;i++) {
+            if (i != radioNum) {
+                rbRgbEffect[i].setChecked(false);
             }
         }
     }
@@ -243,6 +314,17 @@ public class EffectFragment extends Fragment {
                         } else {
                             tvEffect[3].setText(getResources().getString(R.string.tv_select_3_1));
                             mListener.onEffect(3, boolToInt(isChecked));
+                        }
+                    }
+                    break;
+                case R.id.sw_rgb_effect_2:
+                    if (rbRgbEffect[1].isChecked()) {
+                        if (swRgbEffect[0].isChecked()) {
+                            mListener.onEffect(1,boolToInt(isChecked));
+                            tvRGBEffect[0].setText(getString(R.string.tv_select_3_2));
+                        } else {
+                            mListener.onEffect(1,boolToInt(isChecked));
+                            tvRGBEffect[0].setText(getString(R.string.tv_select_3_1));
                         }
                     }
                     break;
@@ -390,6 +472,31 @@ public class EffectFragment extends Fragment {
         retBytes[7] = 0;
 
         return retBytes;
+    }
+
+    public List<byte[]> getRgbEffect1(int color, int bright) {
+        List<byte[]> data = new ArrayList<>();
+        byte red = (byte) (((color>>16) & 0xFF) * bright * 0.01);
+        byte green = (byte) (((color>>8) & 0xFF) * bright * 0.01);
+        byte blue = (byte) (((color) & 0xFF) * bright * 0.01);
+        byte[] redData = {(byte)Define.OP_START,0,red,0,(byte)Define.OP_END,0};
+        byte[] greenData = {(byte)Define.OP_START,0,green,0,(byte)Define.OP_END,0};
+        byte[] blueData = {(byte)Define.OP_START,0,blue,0,(byte)Define.OP_END,0};
+        data.add(redData);
+        data.add(greenData);
+        data.add(blueData);
+        return data;
+    }
+
+    public List<byte[]> getRgbEffect2(int bright, int param) {
+        List<byte[]> data = new ArrayList<>();
+        byte[] redData = {(byte)Define.OP_START,0,(byte)(191*bright*0.01),(byte)(100-50*param),0,(byte)(100-50*param),0,(byte)(98-50*param),(byte)Define.OP_END,0};
+        byte[] greenData = {(byte)Define.OP_START,0,0,(byte)(100-50*param),(byte)(191*bright*0.01),(byte)(100-50*param),0,(byte)(98-50*param),(byte)Define.OP_END,0};
+        byte[] blueData = {(byte)Define.OP_START,0,0,(byte)(100-50*param),0,(byte)(100-50*param),(byte)(191*bright*0.01),(byte)(98-50*param),(byte)Define.OP_END,0};
+        data.add(redData);
+        data.add(greenData);
+        data.add(blueData);
+        return data;
     }
 
 }

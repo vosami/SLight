@@ -76,6 +76,10 @@ public class MainActivity extends ActionBarActivity {
 	public void onClick(View v) {
 		Intent intent = null;
 		switch (v.getId()) {
+			case R.id.btn_comm_set:
+				intent = new Intent(this,CommActivity.class);
+				startActivity(intent);
+				break;
 			// 블루투스 설정 버튼 클릭시
 			case R.id.btn_ble_set:
                 intent = new Intent(this, BleSetActivity.class);

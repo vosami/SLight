@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.syncworks.define.Define;
+import com.syncworks.slight.dialog.DialogColorSelect;
 import com.syncworks.slight.fragment_comm.BleSetFragment;
 import com.syncworks.slight.fragment_comm.BrightFragment;
 import com.syncworks.slight.fragment_comm.EffectFragment;
@@ -81,6 +82,9 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
     // 이름 설정 진행 상태 확인
     private boolean isDisplayDialog = false;
 
+    // 색깔 설정 변수
+    private int rgbColor = 0xFFFFFF;
+    private DialogColorSelect colorSelctDialog;
 
 
     @Override
@@ -183,13 +187,17 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         if (id == R.id.action_connect) {
             if (connectionState) {
                 bleManager.bleDisconnect();
-                Log.d(TAG,"연결되었습니다.");
+                Log.d(TAG,getString(R.string.ble_connect_complete));
             } else {
-                SLightPref appPref = new SLightPref(this);
-                String address = appPref.getString(SLightPref.DEVICE_ADDR);
-                bleManager.bleConnect(address);
-                CustomToast.middleTop(this, "연결 시도중입니다.");
-                Log.d(TAG,"연결 X");
+                if (curStep == 1) {
+                    CustomToast.middleTop(this, getString(R.string.comm_step_not_connect));
+                } else {
+                    SLightPref appPref = new SLightPref(this);
+                    String address = appPref.getString(SLightPref.DEVICE_ADDR);
+                    bleManager.bleConnect(address);
+                    CustomToast.middleTop(this, getString(R.string.ble_try_connect));
+                    Log.d(TAG, "연결 X");
+                }
             }
 
             return true;
@@ -240,6 +248,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                     appPref.putString(SLightPref.DEVICE_ADDR,fragment1st.getDevAddr());
                     showProgressDialog(); // 대기 메시지 표시
                     bleManager.bleConnect(fragment1st.getDevAddr());
+                    new Thread(taskConnect).start();
                 }
                 // 최고 단계에 이르면 초기화
                 if (curStep > MAX_STEP) {
@@ -351,6 +360,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                     fragment4th.setRGB(false);
                     fragment4th.setParamLED(fragment2nd.getLedSelect());
                 }
+                fragment4th.setInit();
                 fragmentTransaction.replace(R.id.ll_comm_fragment, fragment4th);
                 break;
             default:
@@ -385,9 +395,6 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
             public void bleConnected() {
                 Log.d(TAG, "connected");
                 setConnectIcon(true);
-                if (curStep != 1) {
-                    new Thread(taskConnect).start();
-                }
             }
 
             @Override
@@ -397,8 +404,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                 if (curStep == 1) {
                     commHandler.sendEmptyMessage(3);
                 } else {
-                    curStep = 1;
-                    changeStep(curStep);
+                    commHandler.sendEmptyMessage(6);
                 }
             }
 
@@ -429,6 +435,9 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         Log.d(TAG, "Modify");
         // 이름변경 대화창을 출력한 상태로 표시
         isDisplayDialog = true;
+        if (slightScanner.getStateScanning()) {
+            slightScanner.stop();
+        }
         bleManager.bleConnect(fragment1st.getDevAddr());
         mDialog = creteModifyNameDialog();
         mDialog.show();
@@ -468,17 +477,17 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
             bright = 96;
             fragment3rd.initRGBProgress(rgbNum);
         }
-        sendBrightData(rgbNum*3, bright);
+        sendBrightData(rgbNum * 3, bright);
         sendBrightData(rgbNum*3 + 1, bright);
-        sendBrightData(rgbNum*3 + 2, bright);
+        sendBrightData(rgbNum * 3 + 2, bright);
     }
 
     @Override
     public void onBrightRGB(int ledNum, int bright) {
         Log.d(TAG,"RGB-LedNum:"+ledNum + ", Bright:"+bright);
         sendBrightData(ledNum*3, (int) (191*bright*0.01));
-        sendBrightData(ledNum*3 + 1, (int) (191*bright*0.01));
-        sendBrightData(ledNum * 3 + 2, (int) (191*bright*0.01));
+        sendBrightData(ledNum * 3 + 1, (int) (191 * bright * 0.01));
+        sendBrightData(ledNum * 3 + 2, (int) (191 * bright * 0.01));
 
     }
 
@@ -493,7 +502,13 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         int ledBit = 0;
         int bright = 0;
         if (fragment2nd.isRGB()) {
-
+            ledBit = fragment2nd.getRGBSelect();
+            for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+                if (((ledBit >> i) & 0x01) == 1) {
+                    bright = fragment3rd.getRGBProgress(i);
+                    sendRgbEffectData(i,effect,bright,param);
+                }
+            }
         } else {
             ledBit = fragment2nd.getLedSelect();
             for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
@@ -502,8 +517,62 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                     sendSingleEffectData(i,effect,bright,param);
                 }
             }
+
+        }
+        sendInitCount();
+    }
+
+    @Override
+    public void onColorDialog() {
+        colorSelctDialog = new DialogColorSelect(this);
+        colorSelctDialog.setOnColorSelectListener(onColorSelectListener);
+        colorSelctDialog.show();
+    }
+
+    @Override
+    public void onNotDialog() {
+        Toast.makeText(this,"'항상 켜진 상태 유지'를 선택하세요.",Toast.LENGTH_LONG);
+    }
+
+    private void sendRgbEffectData(int ledNum, int effect, int bright, int param) {
+        List<byte[]> txList = null;
+        switch (effect) {
+            case 0:
+                txList = fragment4th.getRgbEffect1(rgbColor, bright);
+                break;
+            case 1:
+                txList = fragment4th.getRgbEffect2(bright, param);
+                break;
+        }
+        List<byte[]> mDataList;
+        int dataCount = 0;
+        for (int i=0;i<3;i++) {
+            assert txList != null;
+            mDataList = TxDatas.formatMemWrite(ledNum * 3 +i, txList.get(i));
+            dataCount = mDataList.size();
+            for (int j = 0; j < dataCount; j++) {
+                bleManager.writeTxData(mDataList.get(j));
+            }
         }
     }
+
+    private DialogColorSelect.OnColorSelectListener onColorSelectListener = new DialogColorSelect.OnColorSelectListener() {
+        @Override
+        public void onColorSelect(int color) {
+            Log.d(TAG,"Color" + color);
+            rgbColor = color;
+            int ledBit = fragment2nd.getRGBSelect();
+            for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+                if (((ledBit >> i) & 0x01) == 1) {
+                    int bright = fragment3rd.getRGBProgress(i);
+                    sendRgbEffectData(i,0,bright,0);
+                }
+            }
+            if (colorSelctDialog != null) {
+                colorSelctDialog.dismiss();
+            }
+        }
+    };
 
     private void sendSingleEffectData(int ledNum, int effect, int bright, int param) {
         byte[] txEffect = null;
@@ -560,9 +629,6 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
                 modifyName = inputName.getText().toString();
-                if (slightScanner.getStateScanning()) {
-                    slightScanner.stop();
-                }
                 setDismiss(mDialog);
                 showProgressDialog();
                 new Thread(taskModName).start();
@@ -604,7 +670,6 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                 if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED){
                     break;
                 }
-                bleManager.getBleConnectState();
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -626,56 +691,70 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
     private Runnable taskConnect = new Runnable() {
         @Override
         public void run() {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            for (int i=0;i<10;i++) {
+                if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+                    break;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            for (int i=0;i<9;i++) {
-                sendBrightData(i,100);
+            if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < 9; i++) {
+                    sendBrightData(i, 100);
+                }
+                sendInitCount();
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < 9; i++) {
+                    sendBrightData(i, 0);
+                }
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < 9; i++) {
+                    sendBrightData(i, 100);
+                }
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < 9; i++) {
+                    sendBrightData(i, 0);
+                }
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < 9; i++) {
+                    sendBrightData(i, 100);
+                }
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < 9; i++) {
+                    sendBrightData(i, 0);
+                }
+                commHandler.sendEmptyMessage(4);
+            } else {
+                commHandler.sendEmptyMessage(5);
             }
-            sendInitCount();
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            for (int i=0;i<9;i++) {
-                sendBrightData(i,0);
-            }
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            for (int i=0;i<9;i++) {
-                sendBrightData(i,100);
-            }
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            for (int i=0;i<9;i++) {
-                sendBrightData(i,0);
-            }
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            for (int i=0;i<9;i++) {
-                sendBrightData(i,100);
-            }
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            for (int i=0;i<9;i++) {
-                sendBrightData(i,0);
-            }
-            commHandler.sendEmptyMessage(4);
         }
     };
 
@@ -717,6 +796,16 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                 if (mProgressDialog != null && mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
+                changeStep(curStep);
+                break;
+            case 5:
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+                Toast.makeText(this,getString(R.string.comm_device_not_connect),Toast.LENGTH_LONG).show();
+                break;
+            case 6:
+                curStep = 1;
                 changeStep(curStep);
                 break;
             default:

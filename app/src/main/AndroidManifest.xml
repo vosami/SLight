@@ -21,13 +21,13 @@
             android:label="@string/smart_light_name"
             android:screenOrientation="portrait" >
 
-            <!--
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
+
 
         </activity>
         <activity
@@ -98,11 +98,11 @@
             android:label="@string/comm_activity_step_1"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Apptheme_titlebar">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
     </application>
 
