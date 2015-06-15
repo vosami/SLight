@@ -9,7 +9,7 @@ import android.content.pm.PackageManager;
 
 /**
  * Created by Kim on 2015-06-13.
- * ºí·çÅõ½º »ç¿ë °¡´É È®ÀÎ
+ * ë¸”ë£¨íˆ¬ìŠ¤ ì‚¬ìš© ê°€ëŠ¥ í™•ì¸
  */
 public class BleUtils {
     private final Activity mActivity;

@@ -262,8 +262,8 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         deviceAddr = appPref.getString(SLightPref.DEVICE_ADDR);
         fragment1st = BleSetFragment.newInstance(deviceName,deviceAddr);
         fragment2nd = LedSelectFragment.newInstance(selectedLed);
-        fragment3rd = BrightFragment.newInstance("", "");
-        fragment4th = EffectFragment.newInstance("","");
+        fragment3rd = BrightFragment.newInstance();
+        fragment4th = EffectFragment.newInstance();
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -454,6 +454,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         int bright = 0;
         if (state) {
             bright = 96;
+            fragment3rd.initSingleProgress(ledNum);
         }
         sendBrightData(ledNum, bright);
     }
@@ -463,6 +464,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         int bright = 0;
         if (state) {
             bright = 96;
+            fragment3rd.initRGBProgress(rgbNum);
         }
         sendBrightData(rgbNum*3, bright);
         sendBrightData(rgbNum*3 + 1, bright);

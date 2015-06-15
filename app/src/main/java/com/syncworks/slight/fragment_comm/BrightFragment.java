@@ -2,7 +2,6 @@ package com.syncworks.slight.fragment_comm;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +23,7 @@ import com.syncworks.verticalseekbar.MyVerticalSeekBar;
  * create an instance of this fragment.
  */
 public class BrightFragment extends Fragment {
+    private final static String TAG = BrightFragment.class.getSimpleName();
 
     LinearLayout llRgbTitle, llSingleTitle, llRgbSeek, llSingleSeek, llRgbPercent, llSinglePercent;
     TextView tvRgbPercent[], tvSinglePercent[];
@@ -33,14 +33,9 @@ public class BrightFragment extends Fragment {
     private boolean isRGB = false;
     private int paramRGB = 0;
     private int paramLED = 0;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int[] brightSingle = {50,50,50,50,50,50,50,50,50};
+    private int[] brightRgb = {50,50,50};
 
     private OnCommFragmentListener mListener;
 
@@ -48,17 +43,10 @@ public class BrightFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment BrightFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static BrightFragment newInstance(String param1, String param2) {
+    public static BrightFragment newInstance() {
         BrightFragment fragment = new BrightFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -81,10 +69,7 @@ public class BrightFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        Log.d(TAG,"onCreate");
     }
 
     @Override
@@ -92,7 +77,29 @@ public class BrightFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bright, container, false);
         findViews(view);
+        Log.d(TAG, "onCreateView");
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "onActivityCreated");
+    }
+
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initUI();
+        Log.d(TAG,"onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG,"onResume");
     }
 
     public void findViews(View v) {
@@ -184,16 +191,25 @@ public class BrightFragment extends Fragment {
         } else {
             displaySingle(paramLED);
         }
-        initUI();
+
     }
 
     public void initUI() {
         for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
-            sbRgb[i].setProgress(50);
+            sbRgb[i].setProgress(brightRgb[i]);
         }
         for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
-            sbSingle[i].setProgress(50);
+            sbSingle[i].setProgress(brightSingle[i]);
         }
+    }
+
+    public void initSingleProgress(int led) {
+        Log.d(TAG,"initSingleProgress"+ led);
+        brightSingle[led] = 50;
+    }
+
+    public void initRGBProgress(int led) {
+        brightRgb[led] = 50;
     }
 
     private void setRgbPercent(int num, int progress) {
@@ -209,7 +225,7 @@ public class BrightFragment extends Fragment {
     private void showRgb(int num, int visibility) {
         sbRgb[num].setVisibility(visibility);
         tvRgbTitle[num].setVisibility(visibility);
-        tvRgbTitle[num].setVisibility(visibility);
+        tvRgbPercent[num].setVisibility(visibility);
     }
 
     private void showSingle(int num, int visibility) {
@@ -253,7 +269,7 @@ public class BrightFragment extends Fragment {
     private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            Log.d("Test","Changed"+ progress);
+            Log.d(TAG,"Changed"+ progress);
             switch (seekBar.getId()) {
                 case R.id.rgb_seekbar_1:
                     setRgbPercent(0,progress);
@@ -265,7 +281,7 @@ public class BrightFragment extends Fragment {
                     setRgbPercent(2,progress);
                     break;
                 case R.id.bright_seekbar_1:
-                    setSinglePercent(0,progress);
+                    setSinglePercent(0, progress);
                     break;
                 case R.id.bright_seekbar_2:
                     setSinglePercent(1,progress);
@@ -311,39 +327,51 @@ public class BrightFragment extends Fragment {
             switch (id) {
                 case R.id.rgb_seekbar_1:
                     mListener.onBrightRGB(0,progress);
+                    brightRgb[0] = progress;
                     break;
                 case R.id.rgb_seekbar_2:
                     mListener.onBrightRGB(1,progress);
+                    brightRgb[1] = progress;
                     break;
                 case R.id.rgb_seekbar_3:
                     mListener.onBrightRGB(2,progress);
+                    brightRgb[2] = progress;
                     break;
                 case R.id.bright_seekbar_1:
                     mListener.onBrightLed(0, progress);
+                    brightSingle[0] = progress;
                     break;
                 case R.id.bright_seekbar_2:
                     mListener.onBrightLed(1,progress);
+                    brightSingle[1] = progress;
                     break;
                 case R.id.bright_seekbar_3:
                     mListener.onBrightLed(2,progress);
+                    brightSingle[2] = progress;
                     break;
                 case R.id.bright_seekbar_4:
                     mListener.onBrightLed(3,progress);
+                    brightSingle[3] = progress;
                     break;
                 case R.id.bright_seekbar_5:
                     mListener.onBrightLed(4,progress);
+                    brightSingle[4] = progress;
                     break;
                 case R.id.bright_seekbar_6:
                     mListener.onBrightLed(5,progress);
+                    brightSingle[5] = progress;
                     break;
                 case R.id.bright_seekbar_7:
                     mListener.onBrightLed(6,progress);
+                    brightSingle[6] = progress;
                     break;
                 case R.id.bright_seekbar_8:
                     mListener.onBrightLed(7,progress);
+                    brightSingle[7] = progress;
                     break;
                 case R.id.bright_seekbar_9:
                     mListener.onBrightLed(8,progress);
+                    brightSingle[8] = progress;
                     break;
             }
 

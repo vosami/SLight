@@ -74,6 +74,16 @@
         <string name="title_select_rgb_led">RGB 칼라 LED 선택</string>
         <string name="title_select_single_led">단색 LED 선택</string>
         <string name="default_percent">50%</string>
+        <!--EffectFragment-->
+        <string name="radio_effect_1">항상 켜진 상태 유지</string>
+        <string name="radio_effect_2">깜박이기</string>
+        <string name="radio_effect_3">짧게 번쩍이기</string>
+        <string name="radio_effect_4">밝아졌다가 어두워지기</string>
+        <string name="radio_effect_5">횃불효과</string>
+        <string name="tv_select_2_1">좌</string>
+        <string name="tv_select_2_2">우</string>
+        <string name="tv_select_3_1">느리게</string>
+        <string name="tv_select_3_2">빠르게</string>
     <!--CommActivity 에서 사용 End-->
 
 </resources>
