@@ -7,7 +7,6 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -37,6 +36,7 @@ import com.syncworks.vosami.blelib.scanner.SlightScanCallback;
 import com.syncworks.vosami.blelib.scanner.SlightScanner;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 
 public class CommActivity extends ActionBarActivity implements BleConsumer, OnCommFragmentListener {
@@ -81,8 +81,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
     // 이름 설정 진행 상태 확인
     private boolean isDisplayDialog = false;
 
-    // LED Select Fragment
-    private int selectedLed = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,10 +224,11 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                 curStep--;
                 if (curStep < 1) {
                     curStep = 1;
-                    // 1단계로 돌아온다면 연결을 종료합니다.
-                    if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
-                        bleManager.bleDisconnect();
-                    }
+                }
+                if (curStep == 1) {
+                    fragment2nd.setInit();
+                    fragment3rd.setInit();
+                    fragment4th.setInit();
                 }
                 changeStep(curStep);
                 break;
@@ -244,11 +244,11 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                 // 최고 단계에 이르면 초기화
                 if (curStep > MAX_STEP) {
                     curStep = 2;
-                    selectedLed = 0;// 선택된 LED 초기화
+                    fragment2nd.setInit();
+                    fragment3rd.setInit();
+                    fragment4th.setInit();
                 }
-                if (curStep == 3) {
-                    //TODO Fragment3rd 초기화 - 모든 SeekBar를 50%로 설정
-                }
+
                 if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
                     changeStep(curStep);
                 }
@@ -261,7 +261,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         deviceName = appPref.getString(SLightPref.DEVICE_NAME);
         deviceAddr = appPref.getString(SLightPref.DEVICE_ADDR);
         fragment1st = BleSetFragment.newInstance(deviceName,deviceAddr);
-        fragment2nd = LedSelectFragment.newInstance(selectedLed);
+        fragment2nd = LedSelectFragment.newInstance(0);
         fragment3rd = BrightFragment.newInstance();
         fragment4th = EffectFragment.newInstance();
 
@@ -344,6 +344,13 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                 fragmentTransaction.replace(R.id.ll_comm_fragment, fragment3rd);
                 break;
             case 4:
+                if (fragment2nd.isRGB()) {
+                    fragment4th.setRGB(true);
+                    fragment4th.setParamRGB(fragment2nd.getRGBSelect());
+                } else {
+                    fragment4th.setRGB(false);
+                    fragment4th.setParamLED(fragment2nd.getLedSelect());
+                }
                 fragmentTransaction.replace(R.id.ll_comm_fragment, fragment4th);
                 break;
             default:
@@ -416,11 +423,6 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         });
     }
 
-    // Fragments 와 통신
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 
     @Override
     public void onModifyName() {
@@ -482,10 +484,52 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
 
     @Override
     public void onBrightLed(int ledNum, int bright) {
-        Log.d(TAG,"Single-LedNum:"+ledNum + ", Bright:"+bright);
+        Log.d(TAG, "Single-LedNum:" + ledNum + ", Bright:" + bright);
         sendBrightData(ledNum, (int) (191*bright*0.01));
     }
 
+    @Override
+    public void onEffect(int effect, int param) {
+        int ledBit = 0;
+        int bright = 0;
+        if (fragment2nd.isRGB()) {
+
+        } else {
+            ledBit = fragment2nd.getLedSelect();
+            for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                if (((ledBit >> i)& 0x01) == 1) {
+                    bright = fragment3rd.getLedProgress(i);
+                    sendSingleEffectData(i,effect,bright,param);
+                }
+            }
+        }
+    }
+
+    private void sendSingleEffectData(int ledNum, int effect, int bright, int param) {
+        byte[] txEffect = null;
+        switch (effect) {
+            case 0:
+                txEffect = fragment4th.getEffectByte1(bright);
+                break;
+            case 1:
+                txEffect = fragment4th.getEffectByte2(bright, param);
+                break;
+            case 2:
+                txEffect = fragment4th.getEffectByte3(bright, param);
+                break;
+            case 3:
+                txEffect = fragment4th.getEffectByte4(bright, param);
+                break;
+            case 4:
+                txEffect = fragment4th.getEffectByte5(bright);
+                break;
+        }
+        List<byte[]> mDataList = TxDatas.formatMemWrite(ledNum, txEffect);
+        int dataCount = mDataList.size();
+        for (int i=0;i<dataCount;i++) {
+            bleManager.writeTxData(mDataList.get(i));
+        }
+    }
 
 
     // 블루투스 스캔 시작

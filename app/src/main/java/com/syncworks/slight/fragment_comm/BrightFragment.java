@@ -87,7 +87,14 @@ public class BrightFragment extends Fragment {
         Log.d(TAG, "onActivityCreated");
     }
 
-
+    public void setInit() {
+        for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+            initRGBProgress(i);
+        }
+        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+            initSingleProgress(i);
+        }
+    }
 
     @Override
     public void onStart() {
@@ -396,5 +403,12 @@ public class BrightFragment extends Fragment {
         mListener = null;
     }
 
+    public int getLedProgress(int ledNum) {
+        return sbSingle[ledNum].getProgress();
+    }
+
+    public int getRGBProgress(int ledNum) {
+        return sbRgb[ledNum].getProgress();
+    }
 
 }

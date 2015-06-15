@@ -3,6 +3,7 @@ package com.syncworks.slight.fragment_comm;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import com.syncworks.slight.R;
 
 public class EffectFragment extends Fragment {
 
-
+    private boolean isInit = false;
     private LinearLayout llRGBArray, llSingleArray;
     private TextView tvRgb[] = new TextView[3];
     private TextView tvSingle[] = new TextView[9];
@@ -29,7 +30,7 @@ public class EffectFragment extends Fragment {
 
     private OnCommFragmentListener mListener;
 
-    // ªÛ¥‹ LED º±≈√ ∫‰ ∆ƒ∂ÛπÃ≈Õ
+    // ÏÉÅÎã® LED ÏÑ†ÌÉù Î∑∞ ÌååÎùºÎØ∏ÌÑ∞
     private boolean isRGB = false;
     private int paramRGB = 0;
     private int paramLED = 0;
@@ -116,6 +117,20 @@ public class EffectFragment extends Fragment {
         }
     }
 
+    private void initUI() {
+        swEffect[1].setChecked(false);
+        swEffect[2].setChecked(false);
+        swEffect[3].setChecked(false);
+        tvEffect[1].setText(getResources().getString(R.string.tv_select_2_1));
+        tvEffect[2].setText(getResources().getString(R.string.tv_select_3_1));
+        tvEffect[3].setText(getResources().getString(R.string.tv_select_3_1));
+        rbEffect[0].setChecked(true);
+        rbEffect[1].setChecked(true);
+        rbEffect[2].setChecked(true);
+        rbEffect[3].setChecked(true);
+        rbEffect[4].setChecked(true);
+    }
+
     private void displayRgb(int ledBit) {
         llSingleArray.setVisibility(View.GONE);
         llRGBArray.setVisibility(View.VISIBLE);
@@ -140,6 +155,10 @@ public class EffectFragment extends Fragment {
         }
     }
 
+    public void setInit() {
+        isInit = true;
+    }
+
     public void setRGB(boolean isRGB) {
         this.isRGB = isRGB;
     }
@@ -159,41 +178,72 @@ public class EffectFragment extends Fragment {
             switch(v.getId()) {
                 case R.id.radio_effect_1:
                     mListener.onEffect(0,0);
+                    setRadioButton(0);
                     break;
                 case R.id.radio_effect_2:
                     mListener.onEffect(1,boolToInt(swEffect[1].isChecked()));
+                    setRadioButton(1);
                     break;
                 case R.id.radio_effect_3:
                     mListener.onEffect(2,boolToInt(swEffect[2].isChecked()));
+                    setRadioButton(2);
                     break;
                 case R.id.radio_effect_4:
                     mListener.onEffect(3,boolToInt(swEffect[3].isChecked()));
+                    setRadioButton(3);
                     break;
                 case R.id.radio_effect_5:
                     mListener.onEffect(4,0);
+                    setRadioButton(4);
                     break;
             }
         }
     };
 
+    private void setRadioButton(int radioNum) {
+        for (int i=0;i<5;i++) {
+            if (i != radioNum) {
+                rbEffect[i].setChecked(false);
+            }
+        }
+    }
+
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            int param = 0;
+            Log.d("onCheckedChanged","isChecked"+isChecked);
             switch (buttonView.getId()) {
                 case R.id.sw_effect_2:
                     if (rbEffect[1].isChecked()) {
-                        mListener.onEffect(1,boolToInt(isChecked));
+                        if (swEffect[1].isChecked()) {
+                            mListener.onEffect(1, boolToInt(isChecked));
+                            tvEffect[1].setText(getResources().getString(R.string.tv_select_2_2));
+                        } else {
+                            tvEffect[1].setText(getResources().getString(R.string.tv_select_2_1));
+                            mListener.onEffect(1, boolToInt(isChecked));
+                        }
                     }
                     break;
                 case R.id.sw_effect_3:
                     if (rbEffect[2].isChecked()) {
-                        mListener.onEffect(2,boolToInt(isChecked));
+                        if (swEffect[2].isChecked()) {
+                            mListener.onEffect(2, boolToInt(isChecked));
+                            tvEffect[2].setText(getResources().getString(R.string.tv_select_3_2));
+                        } else {
+                            tvEffect[2].setText(getResources().getString(R.string.tv_select_3_1));
+                            mListener.onEffect(2, boolToInt(isChecked));
+                        }
                     }
                     break;
                 case R.id.sw_effect_4:
                     if (rbEffect[3].isChecked()) {
-                        mListener.onEffect(3,boolToInt(isChecked));
+                        if (swEffect[3].isChecked()) {
+                            mListener.onEffect(3, boolToInt(isChecked));
+                            tvEffect[3].setText(getResources().getString(R.string.tv_select_3_2));
+                        } else {
+                            tvEffect[3].setText(getResources().getString(R.string.tv_select_3_1));
+                            mListener.onEffect(3, boolToInt(isChecked));
+                        }
                     }
                     break;
             }
@@ -205,6 +255,15 @@ public class EffectFragment extends Fragment {
             return 1;
         }
         return 0;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (isInit) {
+            isInit = false;
+            initUI();
+        }
     }
 
     @Override
@@ -223,7 +282,7 @@ public class EffectFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-    // «◊ªÛ ƒ—±‚
+    // Ìï≠ÏÉÅ ÏºúÍ∏∞
     public byte[] getEffectByte1(int bright) {
         byte[] retBytes = new byte[6];
         retBytes[0] = (byte) Define.OP_START;
@@ -234,7 +293,7 @@ public class EffectFragment extends Fragment {
         retBytes[5] = 0;
         return retBytes;
     }
-    // «—π¯ ±Ùπ⁄¿Ã±‚
+    // ÌïúÎ≤à ÍπúÎ∞ïÏù¥Í∏∞
     public byte[] getEffectByte2(int bright, int param) {
         byte[] retBytes = new byte[8];
         retBytes[0] = (byte) Define.OP_START;
@@ -254,7 +313,7 @@ public class EffectFragment extends Fragment {
         }
         return retBytes;
     }
-    // ¬™∞‘ π›¬¶¿Ã±‚
+    // ÏßßÍ≤å Î∞òÏßùÏù¥Í∏∞
     public byte[] getEffectByte3(int bright, int param) {
         byte[] retBytes = new byte[8];
         retBytes[0] = (byte) Define.OP_START;
@@ -269,6 +328,67 @@ public class EffectFragment extends Fragment {
         retBytes[5] = 0;
         retBytes[6] = (byte) Define.OP_END;
         retBytes[7] = 0;
+        return retBytes;
+    }
+    // Î∞ùÏïÑÏ°åÎã§Í∞Ä Ïñ¥ÎëêÏõåÏßÄÍ∏∞
+    public byte[] getEffectByte4(int bright, int param) {
+        byte[] retBytes = new byte[34];
+        retBytes[0] = (byte) Define.OP_START;
+        retBytes[1] = 0;
+        retBytes[2] = (byte) (20*bright*0.01);
+        retBytes[3] = (byte) (10 - param * 5);
+        retBytes[4] = (byte) (35*bright*0.01);
+        retBytes[5] = (byte) (10 - param * 5);
+        retBytes[6] = (byte) (50*bright*0.01);
+        retBytes[7] = (byte) (10 - param * 5);
+        retBytes[8] = (byte) (75*bright*0.01);
+        retBytes[9] = (byte) (10 - param * 5);
+        retBytes[10] = (byte) (100*bright*0.01);
+        retBytes[11] = (byte) (10 - param * 5);
+        retBytes[12] = (byte) (130*bright*0.01);
+        retBytes[13] = (byte) (10 - param * 5);
+        retBytes[14] = (byte) (160*bright*0.01);
+        retBytes[15] = (byte) (10 - param * 5);
+        retBytes[16] = (byte) (191*bright*0.01);
+        retBytes[17] = (byte) (10 - param * 5);
+        retBytes[18] = (byte) (160*bright*0.01);
+        retBytes[19] = (byte) (10 - param * 5);
+        retBytes[20] = (byte) (130*bright*0.01);
+        retBytes[21] = (byte) (10 - param * 5);
+        retBytes[22] = (byte) (100*bright*0.01);
+        retBytes[23] = (byte) (10 - param * 5);
+        retBytes[24] = (byte) (75*bright*0.01);
+        retBytes[25] = (byte) (10 - param * 5);
+        retBytes[26] = (byte) (50*bright*0.01);
+        retBytes[27] = (byte) (10 - param * 5);
+        retBytes[28] = (byte) (35*bright*0.01);
+        retBytes[29] = (byte) (10 - param * 5);
+        retBytes[30] = (byte) (20*bright*0.01);
+        retBytes[31] = (byte) (10 - param * 5);
+        retBytes[32] = 0;
+        retBytes[33] = (byte) (10 - param * 5);
+        retBytes[32] = (byte) Define.OP_END;
+        retBytes[33] = 0;
+
+        return retBytes;
+    }
+
+    public byte[] getEffectByte5(int bright) {
+        byte[] retBytes = new byte[8];
+        retBytes[0] = (byte) Define.OP_START;
+        retBytes[1] = 0;
+        retBytes[2] = (byte) Define.OP_RANDOM_VAL;
+        int ref = bright / 3;
+        if (ref > 31) {
+            ref = 31;
+        }
+        ref = (ref << 3) & 0xF8;
+        retBytes[3] = (byte) (ref | 0x06);
+        retBytes[4] = (byte) Define.OP_NOP;
+        retBytes[5] = 2;
+        retBytes[6] = (byte) Define.OP_END;
+        retBytes[7] = 0;
+
         return retBytes;
     }
 

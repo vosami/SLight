@@ -2,7 +2,6 @@ package com.syncworks.slight.fragment_comm;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +20,8 @@ import com.syncworks.slight.R;
  * create an instance of this fragment.
  */
 public class LedSelectFragment extends Fragment {
+
+    private boolean isInit = false;
 
     private ToggleButton tbRGB[];
     private ToggleButton tbSingle[];
@@ -207,8 +208,18 @@ public class LedSelectFragment extends Fragment {
         mListener.onSelectLed(led, tbSingle[led].isChecked());
     }
 
+    public void setInit() {
+        isInit = true;
+    }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (isInit) {
+            initToggleBtn();
+            isInit = false;
+        }
+    }
 
     @Override
     public void onAttach(Activity activity) {

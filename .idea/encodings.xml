@@ -4,6 +4,7 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/syncworks/slight/CommActivity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/syncworks/slight/SlightSettingActivity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/syncworks/slight/fragment_comm/BleSetFragment.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/syncworks/slight/fragment_comm/EffectFragment.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/syncworks/slight/fragment_comm/LedSelectFragment.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/syncworks/slight/widget/StepView.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/blelib/src/main/java/com/syncworks/vosami/blelib/BleUtils.java" charset="UTF-8" />
