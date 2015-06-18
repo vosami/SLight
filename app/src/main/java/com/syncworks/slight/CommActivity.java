@@ -231,7 +231,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
             case R.id.btn_comm_back:
                 curStep--;
                 if (curStep < 1) {
-                    curStep = 1;
+                    this.finish();
                 }
                 if (curStep == 1) {
                     fragment2nd.setInit();
@@ -753,6 +753,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                 }
                 commHandler.sendEmptyMessage(4);
             } else {
+                curStep = 1;
                 commHandler.sendEmptyMessage(5);
             }
         }
