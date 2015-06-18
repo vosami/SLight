@@ -17,6 +17,7 @@
         android:screenOrientation="portrait"
         android:theme="@style/AppTheme" >
         <activity
+            android:icon="@drawable/ic_slight"
             android:name=".MainActivity"
             android:label="@string/smart_light_name"
             android:screenOrientation="portrait" >
