@@ -61,27 +61,12 @@
             android:layout_alignParentTop="true"
             android:text="@string/btn_modify_name"/>
     </RelativeLayout>
-    <LinearLayout
-        android:id="@+id/ll_frag_ble_description"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/Black"
-            android:padding="5dp"
-            android:text="@string/frag_ble_description"/>
-    </LinearLayout>
     <RelativeLayout
         android:id="@+id/device_list_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/rl_current_device"
-        android:layout_above="@id/ll_frag_ble_description"
+        android:layout_alignParentEnd="true"
         android:padding="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"

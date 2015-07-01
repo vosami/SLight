@@ -11,5 +11,6 @@
     <file url="file://$PROJECT_DIR$/blelib/src/main/java/com/syncworks/vosami/blelib/BleUtils.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/bluetoothlelib/src/main/java/com/syncworks/bluetoothlelib/BluetoothLeService.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/endlessadapter/src/main/java/com/syncworks/endlessadapter/HttpGetScriptTask.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/supertooltip/src/main/java/com/syncworks/supertooltip/ToolTipPointerView.java" charset="UTF-8" />
   </component>
 </project>

@@ -15,7 +15,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.syncworks.define.Define;
@@ -84,8 +86,10 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
 
     // 색깔 설정 변수
     private int rgbColor = 0xFFFFFF;
-    private DialogColorSelect colorSelctDialog;
+    private DialogColorSelect colorSelectDialog;
 
+    // UI
+    private Button btnNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -478,7 +482,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
             fragment3rd.initRGBProgress(rgbNum);
         }
         sendBrightData(rgbNum * 3, bright);
-        sendBrightData(rgbNum*3 + 1, bright);
+        sendBrightData(rgbNum * 3 + 1, bright);
         sendBrightData(rgbNum * 3 + 2, bright);
     }
 
@@ -524,14 +528,14 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
 
     @Override
     public void onColorDialog() {
-        colorSelctDialog = new DialogColorSelect(this);
-        colorSelctDialog.setOnColorSelectListener(onColorSelectListener);
-        colorSelctDialog.show();
+        colorSelectDialog = new DialogColorSelect(this);
+        colorSelectDialog.setOnColorSelectListener(onColorSelectListener);
+        colorSelectDialog.show();
     }
 
     @Override
     public void onNotDialog() {
-        Toast.makeText(this,"'항상 켜진 상태 유지'를 선택하세요.",Toast.LENGTH_LONG);
+        Toast.makeText(this, "'항상 켜진 상태 유지'를 선택하세요.", Toast.LENGTH_LONG);
     }
 
     private void sendRgbEffectData(int ledNum, int effect, int bright, int param) {
@@ -568,8 +572,8 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                     sendRgbEffectData(i,0,bright,0);
                 }
             }
-            if (colorSelctDialog != null) {
-                colorSelctDialog.dismiss();
+            if (colorSelectDialog != null) {
+                colorSelectDialog.dismiss();
             }
         }
     };
@@ -803,6 +807,7 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
                 if (mProgressDialog != null && mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
+                curStep = 1;
                 Toast.makeText(this,getString(R.string.comm_device_not_connect),Toast.LENGTH_LONG).show();
                 break;
             case 6:
@@ -837,5 +842,17 @@ public class CommActivity extends ActionBarActivity implements BleConsumer, OnCo
         if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
             bleManager.writeTxData(scriptData);
         }
+    }
+
+    public View createToolTipView(String text, int textColor, int bgColor) {
+        float density = getResources().getDisplayMetrics().density;
+        int padding = (int) (8 * density);
+
+        TextView contentView = new TextView(CommActivity.this);
+        contentView.setPadding(padding, padding, padding, padding);
+        contentView.setText(text);
+        contentView.setTextColor(textColor);
+        contentView.setBackgroundColor(bgColor);
+        return contentView;
     }
 }

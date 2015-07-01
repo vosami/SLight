@@ -62,7 +62,7 @@
     <!--CommActivity 에서 사용 Start-->
     <string name="comm_main_back">뒤로</string>
     <string name="comm_main_next">다음단계</string>
-    <string name="comm_activity_step_1">1단계 : 블루투스를 선택합니다.</string>
+    <string name="comm_activity_step_1">1단계 : S-Light 장치를 설정합니다.</string>
     <string name="comm_activity_step_2">2단계 : LED 를 선택합니다.</string>
     <string name="comm_activity_step_3">3단계 : 밝기를 선택합니다.</string>
     <string name="comm_activity_step_4">4단계 : 점멸 효과를 선택합니다.</string>
@@ -70,7 +70,6 @@
     <string name="comm_device_not_connect">장치와 연결할 수 없습니다.</string>
     <string name="comm_step_not_connect">아래 다음 단계 버튼으로 진행하세요.</string>
         <!--BleFragment-->
-        <string name="frag_ble_description">검색된 장치 목록에서 장치를 설정하세요.</string>
         <string name="btn_modify_name">이름변경</string>
         <string name="dialog_modify_name">변경할 장치 이름을 설정하세요.</string>
         <string name="dialog_confirm">확인</string>
@@ -79,9 +78,7 @@
         <string name="title_select_rgb_led">RGB 칼라 LED 선택</string>
         <string name="title_select_single_led">단색 LED 선택</string>
         <string name="default_percent">50%</string>
-        <string name="frag_led_rgb_description">단색 LED 또는 RGB LED를 선택하세요.</string>
         <!--EffectFragment-->
-        <string name="frag_effect_description">선택한 LED의 효과를 선택하세요.</string>
         <string name="frag_effect_select">단색 LED 효과 선택</string>
         <string name="frag_rgb_effect_select">RGB 칼라 LED 효과 선택</string>
         <string name="radio_effect_1">항상 켜진 상태 유지</string>
@@ -95,8 +92,6 @@
         <string name="tv_select_3_1">느리게</string>
         <string name="tv_select_3_2">빠르게</string>
         <string name="btn_select_color">색깔 선택</string>
-        <!--LedSelectFragment-->
-        <string name="frag_led_select_description">선택한 LED의 밝기를 설정하세요.</string>
     <!--CommActivity 에서 사용 End-->
 
 </resources>

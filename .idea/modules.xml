@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/SLight.iml" filepath="$PROJECT_DIR$/SLight.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/blelib/blelib.iml" filepath="$PROJECT_DIR$/blelib/blelib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bluetoothlelib/bluetoothlelib.iml" filepath="$PROJECT_DIR$/bluetoothlelib/bluetoothlelib.iml" />
       <module fileurl="file://$PROJECT_DIR$/colorpickerview/colorpickerview.iml" filepath="$PROJECT_DIR$/colorpickerview/colorpickerview.iml" />
       <module fileurl="file://$PROJECT_DIR$/define/define.iml" filepath="$PROJECT_DIR$/define/define.iml" />
       <module fileurl="file://$PROJECT_DIR$/dragndroplist/dragndroplist.iml" filepath="$PROJECT_DIR$/dragndroplist/dragndroplist.iml" />
@@ -17,6 +16,7 @@
       <module fileurl="file://$PROJECT_DIR$/slightpref/slightpref.iml" filepath="$PROJECT_DIR$/slightpref/slightpref.iml" />
       <module fileurl="file://$PROJECT_DIR$/soundmeter/soundmeter.iml" filepath="$PROJECT_DIR$/soundmeter/soundmeter.iml" />
       <module fileurl="file://$PROJECT_DIR$/titlebarlayout/titlebarlayout.iml" filepath="$PROJECT_DIR$/titlebarlayout/titlebarlayout.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tooltiplib/tooltiplib.iml" filepath="$PROJECT_DIR$/tooltiplib/tooltiplib.iml" />
       <module fileurl="file://$PROJECT_DIR$/verticalseekbar/verticalseekbar.iml" filepath="$PROJECT_DIR$/verticalseekbar/verticalseekbar.iml" />
     </modules>
   </component>

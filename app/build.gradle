@@ -20,19 +20,19 @@ android {
 }
 
 dependencies {
-	compile fileTree(dir: 'libs', include: ['*.jar'])
+	compile fileTree(include: ['*.jar'], dir: 'libs')
 	compile 'com.android.support:appcompat-v7:21.0.3'
-	compile project (':define')
-	compile project (':ledselectlayout')
-    compile project (':ledviewlayout')
-    compile project (':titlebarlayout')
-    compile project (':verticalseekbar')
-	compile project (':blelib')
-	compile project (':GraphView-master')
-	compile project (':dragndroplist')
-    compile project (':scriptdata')
-    compile project (':colorpickerview')
-	compile project (':soundmeter')
-    compile project (':slightpref')
-	compile project (':endlessadapter')
+	compile project(':define')
+	compile project(':ledselectlayout')
+	compile project(':ledviewlayout')
+	compile project(':titlebarlayout')
+	compile project(':verticalseekbar')
+	compile project(':blelib')
+	compile project(':GraphView-master')
+	compile project(':dragndroplist')
+	compile project(':scriptdata')
+	compile project(':colorpickerview')
+	compile project(':soundmeter')
+	compile project(':slightpref')
+	compile project(':endlessadapter')
 }

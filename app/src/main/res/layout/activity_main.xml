@@ -29,7 +29,7 @@
         android:textStyle="bold"
         android:background="@drawable/btn_line_box"
         android:textColor="@color/main_button_text_color"
-        android:drawableStart="@drawable/ic_action_bluetooth"
+        android:drawableStart="@drawable/ic_menu_attachment"
         android:text="@string/btn_comm_set"
         android:onClick="onClick"/>
     <Button

@@ -60,7 +60,7 @@
 
     <!--BleSet 에서 사용 Start-->
     <string name="ble_not_support">스마트라이트와 연결할 수 없는 기기입니다.</string>
-    <string name="tv_cur_device_title">현재 설정된 장치</string>
+    <string name="tv_cur_device_title">연결할 장치</string>
     <string name="cur_device_name">LED Control</string>
     <string name="tv_cur_unknown_device">Unknown</string>
     <string name="cur_device_addr">XX:XX:XX:XX:XX:XX</string>
