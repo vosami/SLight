@@ -9,20 +9,30 @@ public class LedData {
     private int _val;
     private int _duration;
 
-    // ±âº» »ý¼ºÀÚ
+    // ê¸°ë³¸ ìƒì„±ìž
     public LedData() {
         _val = 0;
         _duration = 0;
     }
 
-    // ±âº» ¹à±â ¼³Á¤ »ý¼ºÀÚ
+    // ê¸°ë³¸ ë°ê¸° ì„¤ì • ìƒì„±ìž
     public LedData(int val, int duration) {
-        // val °ªÀÌ 0~191 ÀÏ °æ¿ì ±âº» ¹à±â ¼³Á¤
+        setBright(val, duration);
+    }
+    // ëª…ë ¹ì–´ ì„¤ì • ìƒì„±ìž
+    public LedData(int instruct, Object... args) {
+        if (instruct > OP_CODE_MIN && instruct <= 0xFF) {
+            setInstruct(instruct,args);
+        }
+    }
+    // ë°ê¸° ì„¤ì •
+    public void setBright(int val, int duration) {
+        // val ê°’ì´ 0~191 ì¼ ê²½ìš° ê¸°ë³¸ ë°ê¸° ì„¤ì •
         if (val < OP_CODE_MIN && val >= 0) {
             _val = val;
             _duration = duration;
         }
-        // val °ªÀÌ instruct ¹üÀ§ÀÏ ¶§ ¸í·É¾î ¼³Á¤
+        // val ê°’ì´ instruct ë²”ìœ„ì¼ ë•Œ ëª…ë ¹ì–´ ì„¤ì •
         else if (val > OP_CODE_MIN && val <= 0xFF) {
             setInstruct(val,duration);
         } else {
@@ -30,19 +40,87 @@ public class LedData {
             _duration = 0;
         }
     }
-    // ¸í·É¾î ¼³Á¤ »ý¼ºÀÚ
-    public LedData(int instruct, Object... args) {
-        if (instruct > OP_CODE_MIN && instruct <= 0xFF) {
-            setInstruct(instruct,args);
+    // ëª…ë ¹ì–´ ì„¤ì •
+    public void setInstruct(int instruct, Object... args) {
+        int middleVal = 0;
+        int gapVal = 0;
+        int data = 0;
+        int operation = 0;
+        int var = 0;
+        switch (instruct) {
+            case OP_START:
+            case OP_END:
+            case OP_FETCH:
+                if (args.length == 1) {
+                    _val = instruct;
+                    _duration = Integer.valueOf((String) args[0]);
+                }
+                break;
+            case OP_RANDOM_VAL:
+            case OP_RANDOM_DELAY:
+                if (args.length == 2) {
+                    _val = instruct;
+                    // ê¸°ì¤€ ê°’ì€ 6ì˜ ë°°ìˆ˜ 0~186
+                    middleVal = Integer.valueOf((String) args[0]);
+                    // ê°„ê²© ê°’ì€ ì‰¬í”„íŠ¸ 0~7 (1~128)
+                    gapVal = Integer.valueOf((String) args[1]) & 0x07;
+                    middleVal = (middleVal / 6) & 0xF8;
+                    _duration = middleVal | gapVal;
+                }
+                break;
+            case OP_NOP:
+            case OP_LONG_DELAY:
+                if (args.length == 1) {
+                    _val = instruct;
+                    _duration = Integer.valueOf((String) args[0]);
+                }
+                break;
+            case OP_VAR_VAL:
+                if (args.length == 1) {
+                    _val = instruct;
+                    _duration = (Integer.valueOf((String) args[0]) << 6) & 0xC0;
+                }
+                break;
+            case OP_SOUND_VAL:
+            case OP_PUT_VAR_A:
+            case OP_PUT_VAR_B:
+            case OP_PUT_VAR_C:
+                if (args.length == 1) {
+                    _val = instruct;
+                    _duration = Integer.valueOf((String) args[0]);
+                }
+                break;
+            case OP_CALC_VAR_A:
+            case OP_CALC_VAR_B:
+            case OP_CALC_VAR_C:
+                if (args.length == 3) {
+                    _val = instruct;
+                    data = Integer.valueOf((String) args[0]) & 0x03;
+                    operation = Integer.valueOf((String) args[1]) & 0x03;
+                    var = Integer.valueOf((String) args[2]) & 0x0F;
+                    _duration = (data << 6) | (operation << 4) | var;
+                }
+                break;
+            case OP_PUT_MSP:
+                if (args.length == 1) {
+                    _val = instruct;
+                    _duration = Integer.valueOf((String) args[0]);
+                }
+                break;
+            default:
+                _val = 0;
+                _duration = 0;
+                break;
+
         }
     }
 
-    public void setInstruct(int instruct, Object... args) {
-        switch (instruct) {
-            case OP_START:
-                break;
-            case OP_END:
-                break;
-        }
+    // ë°ê¸° ì •ë³´ ê°€ì ¸ì˜¤ê¸°
+    public int getVal() {
+        return _val;
+    }
+    // ì§€ì—° ì •ë³´ ê°€ì ¸ì˜¤ê¸°
+    public int getDuration() {
+        return _duration;
     }
 }

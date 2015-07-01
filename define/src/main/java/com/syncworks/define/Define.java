@@ -37,6 +37,17 @@ public class Define {
     public final static int SELECTED_COLOR_LED3 =     		0x41C0;
 
 
+    /**
+     * 랜덤 값의 간격 값
+     */
+    public final static int RANDOM_GAP_1 =                  0x00;
+    public final static int RANDOM_GAP_2 =                  0x01;
+    public final static int RANDOM_GAP_4 =                  0x02;
+    public final static int RANDOM_GAP_8 =                  0x03;
+    public final static int RANDOM_GAP_16 =                 0x04;
+    public final static int RANDOM_GAP_32 =                 0x05;
+    public final static int RANDOM_GAP_64 =                 0x06;
+    public final static int RANDOM_GAP_128 =                0x07;
 	/**
 	 * 명령어 리스트
 	 */
@@ -62,31 +73,32 @@ public class Define {
     public final static int OP_VAR_VAL =                    0xC9;
     public final static int OP_SOUND_VAL =                  0xCA;
     // 변수 A 초기화
-    //public final static int OP_INIT_DATA_A =                0xD0;
+    public final static int OP_PUT_VAR_A =                  0xD0;
     // 변수 B 초기화
-    //public final static int OP_INIT_DATA_B =                0xD1;
+    public final static int OP_PUT_VAR_B =                  0xD1;
     // 변수 C 초기화
-    //public final static int OP_INIT_DATA_C =                0xD2;
-    // 변수 연산 - 명령어(1Byte) + 연산(2bit,+,-,*,/) + 상수(6bit)
+    public final static int OP_PUT_VAR_C =                  0xD2;
+    // 변수 연산 - 명령어(1Byte) + 데이터(2bit,A,B,C,for i)연산(2bit,+,-,*,/) + 상수(4bit)
     public final static int OP_CALC_VAR_A =                 0xD5;
     public final static int OP_CALC_VAR_B =                 0xD6;
     public final static int OP_CALC_VAR_C =                 0xD7;
-    // 변수 대입 - 명령어(1Byte) + 연산(2bit,+,-,*,/) + 변수(2bit,a,b,c,i) + 상수(4bit)
-    public final static int OP_PUT_VAR_A =                  0xDA;
-    public final static int OP_PUT_VAR_B =                  0xDB;
-    public final static int OP_PUT_VAR_C =                  0xDC;
+    //
+    public final static int OP_PUT_MSP =                    0xE0;
+    public final static int OP_GET_MSP =                    0xE1;
+    public final static int OP_PUT_SENSOR =                 0xE2;
+    public final static int OP_GET_SENSOR =                 0xE3;
+
 	// 반복문 시작 - 명령어(1Byte) + 반복횟수(8bit)
 	public final static int OP_FOR_START = 					0xF0;
 	// 반복문 종료 - 명령어(1Byte) + Reserved(8bit)
 	public final static int OP_FOR_END = 					0xF1;
     // 조건문 - 명령어(1Byte) + 변수1(2bit, a,b,c) + 비교문(2bit, =,>,<) + 변수2(2bit, a,b,c,
     public final static int OP_IF =                         0xF2;
+    public final static int OP_ELSE =                       0xF3;
+    public final static int OP_END_IF =                     0xF4;
 	// 점프(위험하므로 사용 안함) - 명령어(1Byte) + 점프 위치(1Byte)
-	public final static int OP_JUMPTO = 					0xF4;
-	// 다른 LED 로 데이터 전달
-	public final static int OP_PASS_DATA = 					0xF5;
-	// 페이드(4Byte) - 명령어(1Byte)
-	//public final static int OP_TRANSITION = 				0xF6;
+	public final static int OP_JUMPTO = 					0xF5;
+
 	/**
 	 * 지연 명령어
 	 */
@@ -102,10 +114,10 @@ public class Define {
     /**
      * VAR DATA 명령어
      */
-    public final static int DATA_FOR_I =                0x03;
-    public final static int DATA_A =                    0x02;
+    public final static int DATA_A =                    0x00;
     public final static int DATA_B =                    0x01;
-    public final static int DATA_C =                    0x00;
+    public final static int DATA_C =                    0x02;
+    public final static int DATA_FOR_I =                0x03;
 
 
 	public final static boolean SINGLE_SCRIPT = true;
