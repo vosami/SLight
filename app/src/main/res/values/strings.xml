@@ -7,7 +7,9 @@
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
+    <!--액션바의 블루투스 연결 타이틀-->
     <string name="action_connect">연결</string>
+    <string name="action_help">도움말</string>
 
     <string name="str_pattern_select">점멸 패턴을 선택하세요.</string>
     <string name="logo_description">Smart Light Logo</string>
@@ -60,7 +62,7 @@
     <string name="title_activity_comm">CommActivity</string>
 
     <!--CommActivity 에서 사용 Start-->
-    <string name="comm_main_back">뒤로</string>
+    <!--<string name="comm_main_back">뒤로</string>
     <string name="comm_main_next">다음단계</string>
     <string name="comm_activity_step_1">1단계 : S-Light 장치를 설정합니다.</string>
     <string name="comm_activity_step_2">2단계 : LED 를 선택합니다.</string>
@@ -69,16 +71,16 @@
     <string name="comm_progress_dialog">잠시 기다려 주세요.</string>
     <string name="comm_device_not_connect">장치와 연결할 수 없습니다.</string>
     <string name="comm_step_not_connect">아래 다음 단계 버튼으로 진행하세요.</string>
-        <!--BleFragment-->
+        &lt;!&ndash;BleFragment&ndash;&gt;
         <string name="btn_modify_name">이름변경</string>
         <string name="dialog_modify_name">변경할 장치 이름을 설정하세요.</string>
         <string name="dialog_confirm">확인</string>
         <string name="dialog_cancel">취소</string>
-        <!--LedSelectFragment-->
+        &lt;!&ndash;LedSelectFragment&ndash;&gt;
         <string name="title_select_rgb_led">RGB 칼라 LED 선택</string>
         <string name="title_select_single_led">단색 LED 선택</string>
         <string name="default_percent">50%</string>
-        <!--EffectFragment-->
+        &lt;!&ndash;EffectFragment&ndash;&gt;
         <string name="frag_effect_select">단색 LED 효과 선택</string>
         <string name="frag_rgb_effect_select">RGB 칼라 LED 효과 선택</string>
         <string name="radio_effect_1">항상 켜진 상태 유지</string>
@@ -92,6 +94,13 @@
         <string name="tv_select_3_1">느리게</string>
         <string name="tv_select_3_2">빠르게</string>
         <string name="btn_select_color">색깔 선택</string>
+    <string name="title_activity_easy">EasyActivity</string>-->
     <!--CommActivity 에서 사용 End-->
 
+    <!--EasyActivity 에서 사용 Start-->
+    <string name="easy_activity_step_1">1단계 : S-Light 장치를 설정합니다.</string>
+    <string name="easy_activity_step_2">2단계 : LED 를 선택합니다.</string>
+    <string name="easy_activity_step_3">3단계 : 밝기를 선택합니다.</string>
+    <string name="easy_activity_step_4">4단계 : 점멸 효과를 선택합니다.</string>
+    <!--EasyActivity 에서 사용 End-->
 </resources>

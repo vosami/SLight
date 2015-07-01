@@ -57,6 +57,13 @@
     <!--공통 사용-->
     <string name="lt">(</string>
     <string name="gt">)</string>
+    <string name="str_effect">효과</string>
+    <string name="str_back">뒤로</string>
+    <string name="str_next">다음단계</string>
+    <string name="str_complete">완료</string>
+    <string name="str_confirm">확인</string>
+    <string name="str_cancel">취소</string>
+
 
     <!--BleSet 에서 사용 Start-->
     <string name="ble_not_support">스마트라이트와 연결할 수 없는 기기입니다.</string>

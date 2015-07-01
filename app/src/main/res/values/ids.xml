@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="led_1"/>
+    <item type="id" name="led_2"/>
+    <item type="id" name="led_3"/>
+    <item type="id" name="led_4"/>
+    <item type="id" name="led_5"/>
+    <item type="id" name="led_6"/>
+    <item type="id" name="led_7"/>
+    <item type="id" name="led_8"/>
+    <item type="id" name="led_9"/>
+    <item type="id" name="rgb_1"/>
+    <item type="id" name="rgb_2"/>
+    <item type="id" name="rgb_3"/>
+
+    <item type="id" name="led_1_seekbar"/>
+    <item type="id" name="led_2_seekbar"/>
+    <item type="id" name="led_3_seekbar"/>
+    <item type="id" name="led_4_seekbar"/>
+    <item type="id" name="led_5_seekbar"/>
+    <item type="id" name="led_6_seekbar"/>
+    <item type="id" name="led_7_seekbar"/>
+    <item type="id" name="led_8_seekbar"/>
+    <item type="id" name="led_9_seekbar"/>
+
+    <item type="id" name="btn_cancel"/>
+    <item type="id" name="btn_confirm"/>
+
+    <!--액션바의 블루투스 연결 메뉴-->
+    <item type="id" name="action_connect"/>
+    <!--액션바의 도움말 메뉴-->
+    <item type="id" name="action_help"/>
+</resources>

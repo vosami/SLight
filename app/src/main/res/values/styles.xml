@@ -4,6 +4,12 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="EasyActivityTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimaryDark">@color/DarkGoldenrod</item>
+        <item name="colorPrimary">@color/Gold</item>
+    </style>
+
     <style name="Theme.Apptheme_titlebar" parent="@style/Theme.AppCompat.Light">
         <item name="actionBarItemBackground">@drawable/selectable_background_apptheme_titlebar</item>
         <item name="popupMenuStyle">@style/PopupMenu.Apptheme_titlebar</item>
@@ -79,5 +85,19 @@
         <item name="android:layout_marginLeft">2dp</item>
         <item name="android:layout_marginRight">2dp</item>
         <item name="android:textOn">✓</item>
+    </style>
+
+
+    <!--버튼 흰색 텍스트 , 글자 그림자-->
+    <style name="ButtonText">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
     </style>
 </resources>

@@ -5,23 +5,24 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 /**
  * Created by vosami on 2015-06-12.
  * Step View
+ * Easy Activity 의 단계 표시
  */
 public class StepView extends View {
 
     // 리스너 설정
     OnStepViewTouchListener onStepViewTouchListener = null;
 
-    private Paint paint;
-    private int numStep = 4;
+    private final static int MAX_STEP = 5;
     private int curStep = 1;
     private int oldStep = -1;
+
+    private Paint paint = null;
 
     public StepView(Context context) {
         super(context);
@@ -33,8 +34,8 @@ public class StepView extends View {
         init();
     }
 
-    public StepView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public StepView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
         init();
     }
 
@@ -43,52 +44,13 @@ public class StepView extends View {
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
     }
 
-    public void setMaxStep(int num) {
-        this.numStep = num;
-    }
-
-    public void setCurStep(int num) {
+    public void setStep(int num) {
         this.curStep = num;
         this.invalidate();
     }
 
-    public int getCurStep() {
+    public int getStep() {
         return this.curStep;
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        // width 진짜 크기 구하기
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthSize = 0;
-        switch(widthMode) {
-            case MeasureSpec.UNSPECIFIED:    // mode 가 셋팅되지 않은 크기가 넘어올때
-                widthSize = widthMeasureSpec;
-                break;
-            case MeasureSpec.AT_MOST:        // wrap_content (뷰 내부의 크기에 따라 크기가 달라짐)
-                widthSize = 100;
-                break;
-            case MeasureSpec.EXACTLY:        // fill_parent, match_parent (외부에서 이미 크기가 지정되었음)
-                widthSize = MeasureSpec.getSize(widthMeasureSpec);
-                break;
-        }
-
-        // height 진짜 크기 구하기
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heightSize = 0;
-        switch(heightMode) {
-            case MeasureSpec.UNSPECIFIED:    // mode 가 셋팅되지 않은 크기가 넘어올때
-                heightSize = heightMeasureSpec;
-                break;
-            case MeasureSpec.AT_MOST:        // wrap_content (뷰 내부의 크기에 따라 크기가 달라짐)
-                heightSize = widthSize/5;
-                break;
-            case MeasureSpec.EXACTLY:        // fill_parent, match_parent (외부에서 이미 크기가 지정되었음)
-                heightSize = MeasureSpec.getSize(heightMeasureSpec);
-                break;
-        }
-
-        setMeasuredDimension(widthSize, heightSize);
     }
 
     @Override
@@ -98,7 +60,7 @@ public class StepView extends View {
         float mHeight = getMeasuredHeight();
         float mRadius = (float) (mHeight*0.4);
         float middleHeight = (float) (mHeight * 0.5);
-        float intervalWidth = (mWidth - mHeight) / (numStep-1);
+        float intervalWidth = (mWidth - mHeight) / (MAX_STEP-1);
 
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
@@ -108,7 +70,7 @@ public class StepView extends View {
         canvas.drawLine(0, 0, mWidth, 0, paint);
         canvas.drawLine(0, mHeight - 1, mWidth, mHeight - 1, paint);
 
-        for (int i=0;i<numStep-1;i++) {
+        for (int i=0;i<MAX_STEP-1;i++) {
             paint.setColor(Color.rgb(230, 230, 230));
             paint.setStyle(Paint.Style.FILL);
             canvas.drawRect(middleHeight + intervalWidth * i, (float) (middleHeight * 0.7),
@@ -130,7 +92,7 @@ public class StepView extends View {
 
         }
 
-        for (int i=0;i<numStep;i++) {
+        for (int i=0;i<MAX_STEP;i++) {
             if (curStep > i+1) {
                 paint.setColor(Color.rgb(230, 230, 230));
                 paint.setStyle(Paint.Style.FILL);
@@ -151,7 +113,7 @@ public class StepView extends View {
                 paint.setColor(Color.WHITE);
                 paint.setTextSize((float) (mHeight*0.6));
                 paint.setTextAlign(Paint.Align.CENTER);
-                canvas.drawText("✓",middleHeight + intervalWidth * i,(float)(mHeight*0.7),paint);
+                canvas.drawText("?",middleHeight + intervalWidth * i,(float)(mHeight*0.7),paint);
 
             } else if (curStep == i+1) {
                 paint.setColor(Color.rgb(1, 139, 185));
@@ -196,10 +158,6 @@ public class StepView extends View {
         if (!isEnabled()) {
             return false;
         }
-        float mWidth = getMeasuredWidth();
-        float mHeight = getMeasuredHeight();
-        float intervalWidth = (mWidth - mHeight) / (numStep-1);
-        // 터치 입력 좌표값을 얻어옵니다.
         int touchX = (int) event.getX();
 
         switch (event.getAction()) {
@@ -210,10 +168,9 @@ public class StepView extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 int curTouch = getTouchStep(touchX);
-                if (curTouch >= 0 && curTouch <= numStep) {
+                if (curTouch >= 0 && curTouch <= MAX_STEP) {
                     if (oldStep == curTouch) {
-                        doStepViewEvent(curTouch);
-                        Log.d("test", "Click" + curTouch);
+                        doStepViewEvent(curTouch+1);
                     }
                 }
                 oldStep = -1;
@@ -229,8 +186,8 @@ public class StepView extends View {
         int retVal = -1;
         float mWidth = getMeasuredWidth();
         float mHeight = getMeasuredHeight();
-        float intervalWidth = (mWidth - mHeight) / (numStep-1);
-        for(int i=0;i<numStep;i++) {
+        float intervalWidth = (mWidth - mHeight) / (MAX_STEP-1);
+        for(int i=0;i<MAX_STEP;i++) {
             if (touchX > (mHeight*0.1 + intervalWidth*i) && touchX < (mHeight*0.9 + intervalWidth*i)) {
                 retVal = i;
             }
@@ -251,6 +208,4 @@ public class StepView extends View {
             onStepViewTouchListener.onStepViewEvent(clickStep);
         }
     }
-
-
 }

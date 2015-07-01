@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.syncworks.slight.EasyActivity">
+    <item android:id="@id/action_connect"
+        android:icon="@drawable/ic_bluetooth_off"
+        android:title="@string/action_connect"
+        app:showAsAction="ifRoom"/>
+    <item android:id="@id/action_help"
+        android:icon="@drawable/ic_question"
+        android:title="@string/action_help"
+        app:showAsAction="ifRoom"/>
+</menu>

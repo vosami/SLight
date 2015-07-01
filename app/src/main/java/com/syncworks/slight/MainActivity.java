@@ -77,7 +77,7 @@ public class MainActivity extends ActionBarActivity {
 		Intent intent = null;
 		switch (v.getId()) {
 			case R.id.btn_comm_set:
-				intent = new Intent(this,CommActivity.class);
+				intent = new Intent(this,EasyActivity.class);
 				startActivity(intent);
 				break;
 			// 블루투스 설정 버튼 클릭시
