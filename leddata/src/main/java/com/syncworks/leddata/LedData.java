@@ -1,11 +1,13 @@
 package com.syncworks.leddata;
 
+import java.io.Serializable;
+
 import static com.syncworks.define.Define.*;
 
 /**
  * Created by vosami on 2015-07-01.
  */
-public class LedData {
+public class LedData implements Serializable{
     private int _val;
     private int _duration;
 
@@ -115,6 +117,64 @@ public class LedData {
         }
     }
 
+    // 밝기를 퍼센트 단위로 조절
+    public void modBrightPercent(int percent) {
+        int val1, val2;
+        if (percent >100 || percent < 0) {
+            return;
+        }
+        // 기본 밝기 값이면 percent 단위 조절
+        if (_val < OP_CODE_MIN) {
+            _val = _val * percent / 100;
+        }
+        // 랜덤 밝기 명령어이면 기준값 조절
+        else if (_val == OP_RANDOM_VAL) {
+            val1 = (_duration) & 0xF8;
+            val2 = (_duration & 0x07);
+            val1 = (val1 * percent / 100) & 0xF8;
+            _duration = val1 | val2;
+        }
+        // 소리 조절 값이면 비율 조절
+        else if (_val == OP_SOUND_VAL) {
+            _duration = _duration * percent / 100;
+        }
+    }
+    // 지연을 퍼센트 단위로 조절
+    public void modDurationPercent(int percent) {
+        int val1, val2;
+        if (percent >300 || percent < 0) {
+            return;
+        }
+        if (_val < OP_CODE_MIN) {
+            setDurationRatio(percent);
+        } else if (_val == OP_START || _val == OP_END || _val == OP_NOP || _val == OP_LONG_DELAY) {
+            setDurationRatio(percent);
+        } else if (_val == OP_RANDOM_DELAY) {
+            val1 = (_duration) & 0xF8;
+            val2 = (_duration & 0x07);
+            val1 = (val1 * percent / 100) & 0xF8;
+            _duration = val1 | val2;
+        }
+    }
+
+    private void setDurationRatio(int percent) {
+        if (_duration != 0xFF) {
+            _duration = _duration * percent / 100;
+            if (_duration > 0xF0) {
+                _duration = 0xF0;
+            }
+        }
+    }
+
+    // val 변경
+    public void modBright(int val) {
+        _val = val;
+    }
+    // duration 변경
+    public void modDuration(int duration) {
+        _duration = duration;
+    }
+
     // 밝기 정보 가져오기
     public int getVal() {
         return _val;
@@ -122,5 +182,13 @@ public class LedData {
     // 지연 정보 가져오기
     public int getDuration() {
         return _duration;
+    }
+    // 명령어인지 확인
+    public boolean isInstruct() {
+        if (_val < OP_CODE_MIN) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

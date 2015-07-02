@@ -99,6 +99,8 @@ public class Define {
 	// 점프(위험하므로 사용 안함) - 명령어(1Byte) + 점프 위치(1Byte)
 	public final static int OP_JUMPTO = 					0xF5;
 
+    public final static int OP_PASS_DATA =                  0xF6;
+
 	/**
 	 * 지연 명령어
 	 */
