@@ -6,6 +6,7 @@ import static com.syncworks.define.Define.*;
 
 /**
  * Created by vosami on 2015-07-01.
+ * Led Data 클래스
  */
 public class LedData implements Serializable{
     private int _val;
@@ -16,7 +17,6 @@ public class LedData implements Serializable{
         _val = 0;
         _duration = 0;
     }
-
     // 기본 밝기 설정 생성자
     public LedData(int val, int duration) {
         setBright(val, duration);
@@ -27,6 +27,7 @@ public class LedData implements Serializable{
             setInstruct(instruct,args);
         }
     }
+
     // 밝기 설정
     public void setBright(int val, int duration) {
         // val 값이 0~191 일 경우 기본 밝기 설정
@@ -44,11 +45,10 @@ public class LedData implements Serializable{
     }
     // 명령어 설정
     public void setInstruct(int instruct, Object... args) {
-        int middleVal = 0;
-        int gapVal = 0;
-        int data = 0;
-        int operation = 0;
-        int var = 0;
+        // 임시 변수 생성
+        int param1 = 0;
+        int param2 = 0;
+        int param3 = 0;
         switch (instruct) {
             case OP_START:
             case OP_END:
@@ -63,11 +63,11 @@ public class LedData implements Serializable{
                 if (args.length == 2) {
                     _val = instruct;
                     // 기준 값은 6의 배수 0~186
-                    middleVal = Integer.valueOf((String) args[0]);
+                    param1 = Integer.valueOf((String) args[0]);
                     // 간격 값은 쉬프트 0~7 (1~128)
-                    gapVal = Integer.valueOf((String) args[1]) & 0x07;
-                    middleVal = (middleVal / 6) & 0xF8;
-                    _duration = middleVal | gapVal;
+                    param2 = Integer.valueOf((String) args[1]) & 0x07;
+                    param1 = (param1 / 6) & 0xF8;
+                    _duration = param1 | param2;
                 }
                 break;
             case OP_NOP:
@@ -97,13 +97,55 @@ public class LedData implements Serializable{
             case OP_CALC_VAR_C:
                 if (args.length == 3) {
                     _val = instruct;
-                    data = Integer.valueOf((String) args[0]) & 0x03;
-                    operation = Integer.valueOf((String) args[1]) & 0x03;
-                    var = Integer.valueOf((String) args[2]) & 0x0F;
-                    _duration = (data << 6) | (operation << 4) | var;
+                    param1 = Integer.valueOf((String) args[0]) & 0x03;
+                    param2 = Integer.valueOf((String) args[1]) & 0x03;
+                    param3 = Integer.valueOf((String) args[2]) & 0x0F;
+                    _duration = (param1 << 6) | (param2 << 4) | param3;
                 }
                 break;
             case OP_PUT_MSP:
+                if (args.length == 1) {
+                    _val = instruct;
+                    _duration = Integer.valueOf((String) args[0]);
+                }
+                break;
+            case OP_GET_MSP:
+                if (args.length == 2) {
+                    _val = instruct;
+                    param1 = Integer.valueOf((String) args[0]) & 0x03;
+                    param3 = Integer.valueOf((String) args[1]) & 0x3F;
+                    _duration = (param1<<6) | param3;
+                }
+                break;
+            // 센서 데이터 읽기 (DATA_A,B,C(2bit),
+            case OP_GET_SENSOR:
+                if (args.length == 3) {
+                    _val = instruct;
+                    param1 = Integer.valueOf((String) args[0]) & 0x03;
+                    param2 = Integer.valueOf((String) args[1]) & 0x03;
+                    param3 = Integer.valueOf((String) args[2]) & 0x0F;
+                    _duration = (param1 << 6) | (param2 << 4) | param3;
+                }
+                break;
+            case OP_FOR_START:
+            case OP_FOR_END:
+                if (args.length == 1) {
+                    _val = instruct;
+                    _duration = Integer.valueOf((String) args[0]);
+                }
+                break;
+            case OP_IF:
+                if (args.length == 3) {
+                    _val = instruct;
+                    param1 = Integer.valueOf((String) args[0]) & 0x03;
+                    param2 = Integer.valueOf((String) args[1]) & 0x03;
+                    param3 = Integer.valueOf((String) args[2]) & 0x0F;
+                    _duration = (param1 << 6) | (param2 << 4) | param3;
+                }
+                break;
+            case OP_ELSE:
+            case OP_END_IF:
+            case OP_JUMPTO:
                 if (args.length == 1) {
                     _val = instruct;
                     _duration = Integer.valueOf((String) args[0]);

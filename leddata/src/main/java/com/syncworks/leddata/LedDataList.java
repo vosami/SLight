@@ -16,37 +16,24 @@ import static com.syncworks.define.Define.*;
  * LED 데이타 리스트
  */
 public class LedDataList implements List<LedData>, Serializable {
-    // LED 번호
-    private int ledNumber = 0;
+
     // 스크립트 데이터
     private List<LedData> ledDatas;
-
-    private int percentBright = 100;
-    private int percentDuration = 100;
 
 
     // 기본 생성자 - LED 번호가 0으로 설정
     public LedDataList() {
-        ledNumber = 0;
-        ledDatas = new ArrayList<>();
-        init();
-    }
-    // LED 번호 생성자 - LED 번호를 설정
-    public LedDataList(int ledNum) {
-        this.ledNumber = ledNum;
         ledDatas = new ArrayList<>();
         init();
     }
     // LED 번호와 데이터 리스트 생성자
-    public LedDataList(int ledNum, List<LedData> dataList) {
-        ledNumber = ledNum;
+    public LedDataList(List<LedData> dataList) {
         ledDatas = dataList;
         init();
     }
     // 기본 변수 초기화
     private void init() {
-        percentBright = 100;
-        percentDuration = 100;
+
     }
 
     @Override
@@ -208,31 +195,5 @@ public class LedDataList implements List<LedData>, Serializable {
             byteArray[2*i +1] = (byte) subData.getDuration();
         }
         return byteArray;
-    }
-
-    public void setBrightPercent(int percent) {
-        if (percent<0 || percent > 100) {
-            return;
-        }
-        int size = ledDatas.size();
-        percentBright = percent;
-        for (int i=0;i<size;i++) {
-            ledDatas.get(i).modBrightPercent(percent);
-        }
-    }
-
-    public void setDurationPercent(int percent) {
-        if (percent<0 || percent > 300) {
-            return;
-        }
-        int size = ledDatas.size();
-        percentDuration = percent;
-        for (int i=0;i<size;i++) {
-            ledDatas.get(i).modDurationPercent(percent);
-        }
-    }
-
-    public void setLedNumber(int ledNum) {
-        ledNumber = ledNum;
     }
 }

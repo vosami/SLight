@@ -1,5 +1,7 @@
 package com.syncworks.leddata;
 
+import java.io.Serializable;
+
 import static com.syncworks.define.Define.*;
 
 
@@ -7,25 +9,35 @@ import static com.syncworks.define.Define.*;
  * Created by vosami on 2015-07-02.
  * 9개의 LED 그룹
  */
-public class LedDataGroup {
-    //
+public class LedDataGroup implements Serializable{
+    // 저장소를 설정했는가를 확인
+    private boolean isPlace = false;
     private int curIndex[] = new int[NUMBER_OF_SINGLE_LED];
     private int curDuration[] = new int[NUMBER_OF_SINGLE_LED];
     private int indexOfStartPosition[] = new int[NUMBER_OF_SINGLE_LED];
     private int indexOfForPosition[] = new int[NUMBER_OF_SINGLE_LED];
     private int ledForRef[] = new int[NUMBER_OF_SINGLE_LED];
     private int ledForCount[] = new int[NUMBER_OF_SINGLE_LED];
+    private boolean ledIfRef[] = new boolean[NUMBER_OF_SINGLE_LED];
     private int ledBright[] = new int[NUMBER_OF_SINGLE_LED];
+    private int ratioBright[] = new int[NUMBER_OF_SINGLE_LED];
+    private int ratioDuration[] = new int[NUMBER_OF_SINGLE_LED];
+    // 실행 스크립트
     private LedDataList[] exeDataList = new LedDataList[NUMBER_OF_SINGLE_LED];
+    // 저장소 스크립트 리스트
     private LedDataList[] ledDataLists;
     private static int dataA, dataB, dataC;
-    private static int ratioBright, ratioDuration;
     private static int ledSoundVal;
 
     public LedDataGroup() {
-        ledDataLists = new LedDataList[NUMBER_OF_SINGLE_LED];
-        for (int i=0;i<NUMBER_OF_SINGLE_LED;i++) {
-            ledDataLists[i] = new LedDataList(i);
+        isPlace = false;
+        ledClear();
+    }
+    public LedDataGroup(int placeLength) {
+        isPlace = true;
+        ledDataLists = new LedDataList[placeLength];
+        for (int i=0;i<placeLength;i++) {
+            ledDataLists[i] = new LedDataList();
         }
         ledClear();
     }
@@ -86,7 +98,7 @@ public class LedDataGroup {
                         break;
                     case OP_NOP:
                         // 지연 설정
-                        setCurDuration(ledNum,duration);
+                        setLongDuration(ledNum, duration, 3);
                         // 인덱스 증가
                         indexIncrease(ledNum);
                         break;
@@ -122,10 +134,48 @@ public class LedDataGroup {
                         indexIncrease(ledNum);
                         break;
                     case OP_CALC_VAR_A:
+                        dataA = getCalcVar(ledNum,duration);
+                        // 인덱스 증가
+                        indexIncrease(ledNum);
                         break;
                     case OP_CALC_VAR_B:
+                        dataB = getCalcVar(ledNum,duration);
+                        // 인덱스 증가
+                        indexIncrease(ledNum);
                         break;
                     case OP_CALC_VAR_C:
+                        dataC = getCalcVar(ledNum,duration);
+                        // 인덱스 증가
+                        indexIncrease(ledNum);
+                        break;
+                    case OP_PUT_MSP:
+                        // 인덱스 증가
+                        indexIncrease(ledNum);
+                        break;
+                    case OP_GET_MSP:
+                        // 인덱스 증가
+                        indexIncrease(ledNum);
+                        break;
+                    case OP_GET_SENSOR:
+                        // 인덱스 증가
+                        indexIncrease(ledNum);
+                        break;
+                    case OP_FOR_START:
+                        setIndexOfForPosition(ledNum,getCurIndex(ledNum));
+
+                        break;
+                    case OP_FOR_END:
+
+                        break;
+                    case OP_IF:
+                        break;
+                    case OP_ELSE:
+                        break;
+                    case OP_END_IF:
+                        // 인덱스 증가
+                        indexIncrease(ledNum);
+                        break;
+                    case OP_JUMPTO:
                         break;
                 }
             }
@@ -144,7 +194,7 @@ public class LedDataGroup {
         if (duration == 0xFF) {
             curDuration[ledNum] = DELAY_INFINITE;
         } else {
-            curDuration[ledNum] = duration * ratioDuration / 100;
+            curDuration[ledNum] = duration * ratioDuration[ledNum] / 100;
         }
     }
     // 지속 시간 설정
@@ -155,7 +205,7 @@ public class LedDataGroup {
         if (duration == 0xFF) {
             curDuration[ledNum] = DELAY_INFINITE;
         } else {
-            curDuration[ledNum] = (duration<<shift) * ratioDuration / 100;
+            curDuration[ledNum] = (duration<<shift) * ratioDuration[ledNum] / 100;
         }
     }
     // 현재 LedData 명령 확인
@@ -175,29 +225,30 @@ public class LedDataGroup {
         // 0~63 으로 제한
         curIndex[ledNum] &= 0x3F;
     }
+    private void setIndexOfForPosition(int ledNum, int index) {
+        indexOfForPosition[ledNum] = index;
+    }
     // 현재 밝기 설정
     private void setCurBright(int ledNum, int bright) {
         if (bright < 0 || bright > OP_CODE_MIN) {
             return;
         }
-        ledBright[ledNum] = bright * ratioBright / 100;
+        ledBright[ledNum] = bright * ratioBright[ledNum] / 100;
     }
 
-
-
     // 밝기 비율 설정
-    private void setRatioBright(int ratio) {
+    private void setRatioBright(int ledNum, int ratio) {
         if (ratio < 0 || ratio > 100) {
             return;
         }
-        ratioBright = ratio;
+        ratioBright[ledNum] = ratio;
     }
     // 지연 비율 설정
-    private void setRatioDuration(int ratio) {
+    private void setRatioDuration(int ledNum, int ratio) {
         if (ratio < 0 || ratio > 300) {
             return;
         }
-        ratioDuration = ratio;
+        ratioDuration[ledNum] = ratio;
     }
     // 실행 LED 의 카운트를 초기화한다.
     private void ledInitCountVar(int ledNum) {
@@ -208,6 +259,9 @@ public class LedDataGroup {
         ledForCount[ledNum] = 0;
         ledForRef[ledNum] = 0;
         ledBright[ledNum] = 0;
+        ledIfRef[ledNum] = false;
+        ratioBright[ledNum] = 100;
+        ratioDuration[ledNum] = 100;
     }
     // LED 의 밝기를 모두 0으로 만들고 카운트 관련 변수를 모두 초기화한다.
     private void ledClear() {
@@ -216,8 +270,6 @@ public class LedDataGroup {
         dataB = 0;
         dataC = 0;
         ledSoundVal = 0;
-        ratioBright = 100;
-        ratioDuration = 100;
         for (int i=0;i<NUMBER_OF_SINGLE_LED;i++) {
             ledInitCountVar(i);
         }
@@ -270,6 +322,57 @@ public class LedDataGroup {
         } else if (retVal >= OP_CODE_MIN) {
             retVal = OP_CODE_MIN - 1;
         }
+        return retVal;
+    }
+    // 변수 연산
+    private int getCalcVar(int ledNum, int data) {
+        int retVal = 0;
+        int param0, param1, param2;
+        int data1 = 0 ,data2 = 0;
+        param0 = (data>>6) & 0x03;
+        param1 = (data>>4) & 0x03;
+        param2 = (data) & 0x0F;
+
+        switch (param0) {
+            case DATA_A:
+                data1 = dataA;
+                break;
+            case DATA_B:
+                data1 = dataB;
+                break;
+            case DATA_C:
+                data1 = dataC;
+                break;
+            case DATA_FOR_I:
+                data1 = ledForCount[ledNum];
+                break;
+        }
+
+        if (param2 == (0x0F - dataA)) {
+            data2 = dataA;
+        } else if (param2 == (0x0F-dataB)) {
+            data2 = dataB;
+        } else if (param2 == (0x0F-dataC)) {
+            data2 = dataC;
+        } else {
+            data2 = param2;
+        }
+
+        switch (param1) {
+            case DATA_PLUS:
+                retVal = data1 + data2;
+                break;
+            case DATA_MINUS:
+                retVal = data1 - data2;
+                break;
+            case DATA_MULT:
+                retVal = data1 * data2;
+                break;
+            case DATA_DIV:
+                retVal = data1 / data2;
+                break;
+        }
+
         return retVal;
     }
 

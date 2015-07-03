@@ -120,6 +120,16 @@ public class Define {
     public final static int DATA_B =                    0x01;
     public final static int DATA_C =                    0x02;
     public final static int DATA_FOR_I =                0x03;
+    // 연산자
+    public final static int DATA_PLUS =                 0x00;
+    public final static int DATA_MINUS =                0x01;
+    public final static int DATA_MULT =                 0x02;
+    public final static int DATA_DIV =                  0x03;
+    // 비교 연산자
+    public final static int DATA_EQUAL =                0x00;
+    public final static int DATA_LARGE =                0x01;
+    public final static int DATA_SMALL =                0x02;
+    public final static int DATA_NOT_EQUAL =            0x03;
 
 
 	public final static boolean SINGLE_SCRIPT = true;
