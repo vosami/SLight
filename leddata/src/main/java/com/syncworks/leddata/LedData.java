@@ -1,6 +1,7 @@
 package com.syncworks.leddata;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 import static com.syncworks.define.Define.*;
 
@@ -8,7 +9,7 @@ import static com.syncworks.define.Define.*;
  * Created by vosami on 2015-07-01.
  * Led Data 클래스
  */
-public class LedData implements Serializable{
+public class LedData implements Serializable,Comparator<LedData> {
     private int _val;
     private int _duration;
 
@@ -232,5 +233,19 @@ public class LedData implements Serializable{
         } else {
             return true;
         }
+    }
+
+    @Override
+    public int compare(LedData x, LedData y) {
+        if (x.getVal() == y.getVal()) {
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        String retStr = "Led Data Val:" + _val + ", Duration:" + _duration;
+        return retStr;
     }
 }

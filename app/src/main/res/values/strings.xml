@@ -7,6 +7,10 @@
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
+    <!--공통-->
+    <string name="ble_scan">검색</string>
+    <string name="ble_stop">중지</string>
+
     <!--액션바의 블루투스 연결 타이틀-->
     <string name="action_connect">연결</string>
     <string name="action_help">도움말</string>
@@ -102,5 +106,11 @@
     <string name="easy_activity_step_2">2단계 : LED 를 선택합니다.</string>
     <string name="easy_activity_step_3">3단계 : 밝기를 선택합니다.</string>
     <string name="easy_activity_step_4">4단계 : 점멸 효과를 선택합니다.</string>
+
+    <string name="ble_selected_device">현재 설정된 장치</string>
+    <string name="ble_scan_result_list">검색된 장치 목록</string>
+    <string name="ble_default_device_name">Unknown</string>
+    <string name="ble_default_device_address">00:00:00:00:00:00</string>
+    <string name="ble_change_name">이름변경</string>
     <!--EasyActivity 에서 사용 End-->
 </resources>

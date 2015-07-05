@@ -22,72 +22,79 @@ public class LedOptions implements Serializable{
     private int idOfPattern = 0;                                // 적용 패턴 값
 
     public LedOptions() {
+        init();
     }
-
+    // 옵션 설정 초기화
+    public void init() {
+        ratioBright = 100;
+        ratioDuration = 100;
+        delayStart = 0;
+        delayEnd = 0;
+        delayMiddle = 0;
+        isApplyDelayStart = false;
+        isApplyDelayEnd = false;
+        isApplyDelayMiddle = false;
+        idOfPattern = 0;
+    }
+    // 밝기 비율 설정
     public void setRatioBright(int ratio) {
         if (ratio >=0 && ratio<=MAX_BRIGHT_RATIO) {
             this.ratioBright = ratio;
         }
     }
-
+    // 지연 비율 설정
     public void setRatioDuration(int ratio) {
         if (ratio >= 0 && ratio <= MAX_DURATION_RATIO) {
             this.ratioDuration = ratio;
         }
     }
-
+    // 시작 지연 설정
     public void setDelayStart(int delay) {
         if (delay >= 0 && delay <= MAX_DELAY) {
             this.delayStart = delay;
         }
     }
-
+    // 종료 지연 설정
     public void setDelayEnd(int delay) {
         if (delay >= 0 && delay <= MAX_DELAY) {
             this.delayEnd = delay;
         }
     }
-
+    // 중간 지연 설정
     public void setDelayMiddle(int delay) {
         if (delay >= 0 && delay <= MAX_DELAY) {
             this.delayMiddle = delay;
         }
     }
-
-    public void applyDelayStart(boolean bool, int delay) {
-        if (!isApplyDelayStart && bool) {
-            setDelayStart(delay);
-        }
+    // 시작 지연 설정
+    public void applyDelayStart(boolean bool) {
+        isApplyDelayStart = bool;
     }
-
-    public void applyDelayEnd(boolean bool, int delay) {
-        if (!isApplyDelayEnd && bool) {
-            setDelayEnd(delay);
-        }
+    // 종료 지연 설정
+    public void applyDelayEnd(boolean bool) {
+        isApplyDelayEnd = bool;
     }
-
-    public void applyDelayMiddle(boolean bool, int delay) {
-        if (!isApplyDelayMiddle && bool) {
-            setDelayMiddle(delay);
-        }
+    // 중간 지연 설정
+    public void applyDelayMiddle(boolean bool) {
+        isApplyDelayMiddle = bool;
     }
-
+    // 밝기 비율 읽기
     public int getRatioBright() {
         return this.ratioBright;
     }
-
+    // 지연 비율 읽기
     public int getRatioDuration() {
         return this.ratioDuration;
     }
-
+    // 시작 지연 읽기
     public int getDelayStart() {
         if (isApplyDelayStart) {
-            return this.delayEnd;
+            return this.delayStart;
         } else {
             return 0;
         }
     }
-
+    // 종료 지연 읽기
     public int getDelayEnd() {
         if (isApplyDelayEnd) {
             return this.delayEnd;
@@ -95,7 +102,7 @@ public class LedOptions implements Serializable{
             return 0;
         }
     }
-
+    // 중간 지연 읽기
     public int getDelayMiddle() {
         if (isApplyDelayMiddle) {
             return this.delayMiddle;
@@ -103,7 +110,7 @@ public class LedOptions implements Serializable{
             return 0;
         }
     }
-
+    //
     public boolean isApplyDelayStart() {
         return isApplyDelayStart;
     }
