@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 
 import com.syncworks.slight.R;
+import com.syncworks.slightpref.SLightPref;
 import com.syncworks.vosami.blelib.BluetoothDeviceAdapter;
 
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ import java.util.List;
  */
 public class BleSetFragment extends Fragment {
 
+    // 스마트라이트 설정
+    private SLightPref appPref;
 
     // 현재 설정된 장치의 이름과 주소 변수
     private String selDevName;
@@ -68,6 +71,9 @@ public class BleSetFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        appPref = new SLightPref(getActivity());
+        selDevAddr = appPref.getString(SLightPref.DEVICE_ADDR);
+        selDevName = appPref.getString(SLightPref.DEVICE_NAME);
         View view = inflater.inflate(R.layout.fragment_ble_set, container, false);
         tvCurrentDeviceName = (TextView) view.findViewById(R.id.tv_current_device_name);
         tvCurrentDeviceAddress = (TextView) view.findViewById(R.id.tv_current_device_address);
@@ -111,6 +117,7 @@ public class BleSetFragment extends Fragment {
             String mDevAddr = ((BluetoothDevice)parent.getAdapter().getItem(position)).getAddress();
             setTvCurrentDevice(mDevName, mDevAddr);
             if (mListener != null) {
+                setTvCurrentDevice(mDevName,mDevAddr);
                 mListener.onSetDeviceItem(mDevName, mDevAddr);
             }
         }
@@ -122,11 +129,46 @@ public class BleSetFragment extends Fragment {
         tvCurrentDeviceAddress.setText(addr);
         selDevName = name;
         selDevAddr = addr;
+        appPref.putString(SLightPref.DEVICE_NAME,selDevName);
+        appPref.putString(SLightPref.DEVICE_ADDR,selDevAddr);
     }
 
-    public void setTvCurrentDeviceName(String name) {
-        tvCurrentDeviceName.setText(name);
-        selDevName = name;
+    // 블루투스 검색 리스트의 데이터를 초기화\
+    public void clearList() {
+        deviceListAdapter.clear();
+    }
+    // 블루투스 검색 리스트에 검색된 장치 추가
+    public void addList(BluetoothDevice device, int rssi) {
+        if (device != null) {
+            if (mDevice.indexOf(device) == -1) {
+                mDevice.add(device);
+                deviceListAdapter.addRssi(rssi);
+                deviceListAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    // 버튼 출력 설정
+    public void displayScanButton(boolean isVisibleScan) {
+        // 스캔 버튼이 보이도록 설정
+        if (isVisibleScan) {
+            btnBleScan.setVisibility(View.VISIBLE);
+            btnBleStop.setVisibility(View.GONE);
+        }
+        // 중지 버튼이 보이도록 설정
+        else {
+            btnBleScan.setVisibility(View.GONE);
+            btnBleStop.setVisibility(View.VISIBLE);
+        }
+    }
+
+    // 선택된 장치의 Address 정보 획득
+    public String getDevAddr() {
+        return selDevAddr;
+    }
+    // 선택된 장치의 Name 정보 획득
+    public String getDevName() {
+        return selDevName;
     }
 
     @Override

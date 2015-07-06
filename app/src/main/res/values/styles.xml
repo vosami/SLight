@@ -88,6 +88,27 @@
     </style>
 
 
+    <style name="ledBtn">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/led_button_single</item>
+        <item name="android:layout_marginStart">2dp</item>
+        <item name="android:layout_marginEnd">2dp</item>
+    </style>
+    <style name="rgbBtn">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/led_button_single</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:layout_marginEnd">5dp</item>
+    </style>
+
     <!--버튼 흰색 텍스트 , 글자 그림자-->
     <style name="ButtonText">
         <item name="android:textColor">#ffffff</item>
@@ -99,5 +120,30 @@
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">2</item>
+    </style>
+
+    <style name="default_seekbar">
+        <item name="android:thumb">@drawable/seek_default_thumb</item>
+        <item name="android:progressDrawable">@drawable/seek_default</item>
+        <item name="android:max">191</item>
+        <item name="android:progress">95</item>
+    </style>
+    <style name="red_seekbar">
+        <item name="android:thumb">@drawable/seek_red_thumb</item>
+        <item name="android:progressDrawable">@drawable/seek_red</item>
+        <item name="android:max">191</item>
+        <item name="android:progress">95</item>
+    </style>
+    <style name="green_seekbar">
+        <item name="android:thumb">@drawable/seek_green_thumb</item>
+        <item name="android:progressDrawable">@drawable/seek_green</item>
+        <item name="android:max">191</item>
+        <item name="android:progress">95</item>
+    </style>
+    <style name="blue_seekbar">
+        <item name="android:thumb">@drawable/seek_blue_thumb</item>
+        <item name="android:progressDrawable">@drawable/seek_blue</item>
+        <item name="android:max">191</item>
+        <item name="android:progress">95</item>
     </style>
 </resources>

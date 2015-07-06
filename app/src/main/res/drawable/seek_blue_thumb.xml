@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item>
+                <shape
+                    android:shape="rectangle">
+                    <size
+                        android:width="30dp"
+                        android:height="30dp" />
+                    <corners
+                        android:radius="5dip"/>
+                    <stroke
+                        android:width="1dip"
+                        android:color="#111111" />
+                    <gradient
+                        android:startColor="#AAAAAA"
+                        android:endColor="#555555"
+                        android:gradientRadius="20"
+                        android:type="radial" />
+                </shape>
+            </item>
+            <item
+                android:top="4dp"
+                android:bottom="4dp"
+                android:left="10dp"
+                android:right="18dp">
+                <shape
+                    android:shape="rectangle">
+                    <size
+                        android:width= "2dp"
+                        android:height="20dp"/>
+                    <solid
+                        android:color="#0099CC"/>
+                </shape>
+            </item>
+            <item
+                android:top="4dp"
+                android:bottom="4dp"
+                android:left="14dp"
+                android:right="14dp">
+                <shape
+                    android:shape="rectangle">
+                    <size
+                        android:width= "2dp"
+                        android:height="20dp"/>
+                    <solid
+                        android:color="#0099CC"/>
+                </shape>
+            </item>
+            <item
+                android:top="4dp"
+                android:bottom="4dp"
+                android:left="18dp"
+                android:right="10dp">
+                <shape
+                    android:shape="rectangle">
+                    <size
+                        android:width= "2dp"
+                        android:height="20dp"/>
+                    <solid
+                        android:color="#0099CC"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+</selector>

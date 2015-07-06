@@ -102,15 +102,28 @@
     <!--CommActivity 에서 사용 End-->
 
     <!--EasyActivity 에서 사용 Start-->
-    <string name="easy_activity_step_1">1단계 : S-Light 장치를 설정합니다.</string>
-    <string name="easy_activity_step_2">2단계 : LED 를 선택합니다.</string>
-    <string name="easy_activity_step_3">3단계 : 밝기를 선택합니다.</string>
-    <string name="easy_activity_step_4">4단계 : 점멸 효과를 선택합니다.</string>
+    <string-array name="easy_activity_step">
+        <item>0단계 : S-Light 설치</item>
+        <item>1단계 : 블루투스 설정</item>
+        <item>2단계 : LED 선택</item>
+        <item>3단계 : 밝기 설정</item>
+        <item>4단계 : 효과 설정</item>
+        <item>5단계 : 기타 설정</item>
+    </string-array>
+    <string name="easy_activity_step_1">1단계 : 블루투스 설정</string>
 
     <string name="ble_selected_device">현재 설정된 장치</string>
     <string name="ble_scan_result_list">검색된 장치 목록</string>
     <string name="ble_default_device_name">Unknown</string>
     <string name="ble_default_device_address">00:00:00:00:00:00</string>
     <string name="ble_change_name">이름변경</string>
+
+    <string name="easy_progress_dialog">잠시 기다려 주세요.</string>
+
+    <string name="easy_btn_scm100">커넥터 타입&#10;(SCM-100)</string>
+    <string name="easy_btn_spm100">에나멜선 타입&#10;(SPM-100)</string>
+    <string name="easy_install_title_scm100">커넥터 타입 스마트라이트 설치 방법</string>
+    <string name="easy_install_notify">스마트라이트의 정식 LED 모듈과 전원 케이블만 사용해야 합니다.&#10;전기가 통하는 금속이나 물과 닿지 않게 주의하십시오.</string>
+    <string name="easy_install_desc_scm100_1">1. LED 모듈을 원하는 곳에 장착한 후 스마트 라이트를 준비합니다.</string>
     <!--EasyActivity 에서 사용 End-->
 </resources>

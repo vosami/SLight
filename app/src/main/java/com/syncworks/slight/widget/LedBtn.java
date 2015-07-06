@@ -11,8 +11,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
-import com.syncworks.slightapp.R;
-import com.syncworks.slightapp.util.Logger;
+import com.syncworks.define.Logger;
+import com.syncworks.slight.R;
+
 
 
 /**

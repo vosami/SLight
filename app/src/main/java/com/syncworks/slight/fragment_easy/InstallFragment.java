@@ -10,8 +10,16 @@ import android.view.ViewGroup;
 
 import com.syncworks.slight.R;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link InstallFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link InstallFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class InstallFragment extends Fragment {
 
-public class BrightFragment extends Fragment {
 
     private OnEasyFragmentListener mListener;
 
@@ -19,14 +27,14 @@ public class BrightFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment BrightFragment.
+     * @return A new instance of fragment InstallFragment.
      */
-    public static BrightFragment newInstance() {
-        BrightFragment fragment = new BrightFragment();
+    public static InstallFragment newInstance() {
+        InstallFragment fragment = new InstallFragment();
         return fragment;
     }
 
-    public BrightFragment() {
+    public InstallFragment() {
         // Required empty public constructor
     }
 
@@ -39,13 +47,13 @@ public class BrightFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bright, container, false);
+        return inflater.inflate(R.layout.fragment_install, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onBrightLed(1,1);
+            //mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -65,6 +73,5 @@ public class BrightFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
 
 }
