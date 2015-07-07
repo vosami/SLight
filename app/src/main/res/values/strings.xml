@@ -10,6 +10,7 @@
     <!--공통-->
     <string name="ble_scan">검색</string>
     <string name="ble_stop">중지</string>
+    <string name="str_close">닫기</string>
 
     <!--액션바의 블루투스 연결 타이틀-->
     <string name="action_connect">연결</string>
@@ -146,5 +147,7 @@
     <string name="easy_install_desc_spm100_4">4. 전원 케이블(LUP)을 위쪽 커넥터에 연결한 후 USB 전원을 연결합니다.</string>
     <string name="easy_install_youtube_scm100">커넥터 타입 설치 \n 동영상 보기</string>
     <string name="easy_install_youtube_spm100">에나멜선 타입 설치 \n 동영상 보기</string>
+
+    <string name="dialog_image_view">이미지</string>
     <!--EasyActivity 에서 사용 End-->
 </resources>
