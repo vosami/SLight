@@ -23,6 +23,9 @@
     <item type="id" name="led_8_seekbar"/>
     <item type="id" name="led_9_seekbar"/>
 
+    <item type="id" name="btn_scm100"/>
+    <item type="id" name="btn_spm100"/>
+
     <item type="id" name="btn_cancel"/>
     <item type="id" name="btn_confirm"/>
 

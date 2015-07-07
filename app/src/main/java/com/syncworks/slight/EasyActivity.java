@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.syncworks.define.Logger;
 import com.syncworks.slight.fragment_easy.BleSetFragment;
 import com.syncworks.slight.fragment_easy.BrightFragment;
+import com.syncworks.slight.fragment_easy.InstallFragment;
 import com.syncworks.slight.fragment_easy.LedSelectFragment;
 import com.syncworks.slight.fragment_easy.OnEasyFragmentListener;
 import com.syncworks.slight.widget.StepView;
@@ -53,7 +54,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         // 블루투스 LE를 지원한다면 스캔 시작
         if (isBleSupported) {
             Logger.d(this, "onResume");
-            scanStart();
+            //scanStart();
             // 블루투스 연결 매니저 설정
             bleManager.bind(this);
         }
@@ -121,12 +122,14 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
      * Fragment 관련 설정 시작
      *********************************************************************************************/
 
+    private InstallFragment fragment0th;
     private BleSetFragment fragment1st;
     private LedSelectFragment fragment2nd;
     private BrightFragment fragment3rd;
 //    private EffectFragment fragment4th;
 
     private void createFragment() {
+        fragment0th = InstallFragment.newInstance();
         fragment1st = BleSetFragment.newInstance();
         fragment2nd = LedSelectFragment.newInstance();
         fragment3rd = BrightFragment.newInstance();
@@ -134,7 +137,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.easy_ll_fragment, fragment1st);
+        fragmentTransaction.add(R.id.easy_ll_fragment, fragment0th);
         fragmentTransaction.commit();
     }
 
@@ -329,7 +332,9 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     }
     // 블루투스 스캔 중지
     private void scanStop() {
-        fragment1st.displayScanButton(true);
+        if (fragment1st.isDetached()) {
+            fragment1st.displayScanButton(true);
+        }
         if (slightScanner.getStateScanning()) {
             slightScanner.stop();
         }

@@ -7,76 +7,360 @@
         android:id="@+id/ll_frag_install_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
         android:orientation="horizontal"
         android:layout_alignParentTop="true">
-        <Button
+        <ToggleButton
+            android:id="@id/btn_scm100"
             style="@style/ButtonText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/btn_blue"
-            android:text="@string/easy_btn_scm100"/>
-        <Button
+            android:textOn ="@string/easy_btn_scm100"
+            android:textOff="@string/easy_btn_scm100"
+            android:background="@drawable/tb_blue"/>
+        <ToggleButton
+            android:id="@id/btn_spm100"
             style="@style/ButtonText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/btn_red"
-            android:text="@string/easy_btn_spm100"/>
+            android:enabled="false"
+            android:textOn="@string/easy_btn_spm100"
+            android:textOff="@string/easy_btn_spm100"
+            android:checked="true"
+            android:background="@drawable/tb_red"/>
     </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/ll_frag_install_click"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:orientation="horizontal">
+        <CheckBox
+            android:id="@+id/chk_not_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:text="@string/easy_install_chkbox_not_to_show"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/chk_not_display"
+            android:layout_alignParentEnd="true"
+            android:gravity="end"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:textColor="@color/Blue"
+            android:text="@string/easy_install_click_picture"/>
+    </RelativeLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_frag_install_btn"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/ll_frag_install_click"
         android:padding="5dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginEnd="2dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/background_view_rounded_single">
+        <!--SPM100 Start-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:singleLine="true"
-                android:paddingBottom="10dp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/easy_install_title_scm100"/>
             <LinearLayout
+                android:id="@+id/ll_easy_spm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
-                <ImageView
-                    android:layout_width="75dp"
-                    android:layout_height="75dp" />
+                android:orientation="vertical">
                 <TextView
-                    android:paddingStart="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/easy_install_notify"/>
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:paddingBottom="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/Black"
+                    android:text="@string/easy_install_title_spm100"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="20dp">
+                    <ImageButton
+                        android:layout_width="75dp"
+                        android:layout_height="69dp"
+                        android:contentDescription="@string/easy_install_cd_warn"
+                        android:background="@drawable/ic_warn"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:paddingStart="15dp"
+                            android:paddingEnd="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/easy_install_notify1"/>
+                        <TextView
+                            android:paddingStart="15dp"
+                            android:paddingEnd="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/easy_install_notify2"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/LightGrey"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
+                    <ImageButton
+                        android:id="@+id/desc_btn_spm_1"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:contentDescription="@string/easy_install_cd_spm_desc1"
+                        android:background="@drawable/desc_spm100_1"/>
+                    <TextView
+                        android:paddingStart="10dp"
+                        android:paddingEnd="0dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/easy_install_desc_spm100_1"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/LightGrey"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="5dp">
+                    <ImageButton
+                        android:id="@+id/desc_btn_spm_2"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:contentDescription="@string/easy_install_cd_spm_desc2"
+                        android:background="@drawable/desc_spm100_2"/>
+                    <TextView
+                        android:paddingStart="10dp"
+                        android:paddingEnd="0dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/easy_install_desc_spm100_2"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/LightGrey"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="5dp">
+                    <ImageButton
+                        android:id="@+id/desc_btn_spm_3"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:contentDescription="@string/easy_install_cd_spm_desc3"
+                        android:background="@drawable/desc_spm100_3"/>
+                    <TextView
+                        android:paddingStart="10dp"
+                        android:paddingEnd="0dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/easy_install_desc_spm100_3"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/LightGrey"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="5dp">
+                    <ImageButton
+                        android:id="@+id/desc_btn_spm_4"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:contentDescription="@string/easy_install_cd_spm_desc4"
+                        android:background="@drawable/desc_spm100_4"/>
+                    <TextView
+                        android:paddingStart="10dp"
+                        android:paddingEnd="0dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/easy_install_desc_spm100_4"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/LightGrey"/>
+                <Button
+                    android:id="@+id/youtube_btn_spm"
+                    style="@style/ButtonText"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_purple"
+                    android:text="@string/easy_install_youtube_spm100"/>
             </LinearLayout>
+            <!--SPM100 End-->
+            <!--SCM100 Start-->
             <LinearLayout
+                android:id="@+id/ll_easy_scm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
-                <ImageView
-                    android:layout_width="75dp"
-                    android:layout_height="75dp" />
+                android:visibility="gone"
+                android:orientation="vertical">
                 <TextView
-                    android:paddingStart="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/easy_install_notify"/>
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:paddingBottom="10dp"
+                    android:textColor="@color/Black"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/easy_install_title_scm100"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="20dp">
+                    <ImageButton
+                        android:layout_width="75dp"
+                        android:layout_height="69dp"
+                        android:contentDescription="@string/easy_install_cd_warn"
+                        android:background="@drawable/ic_warn"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:paddingStart="15dp"
+                            android:paddingEnd="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/easy_install_notify1"/>
+                        <TextView
+                            android:paddingStart="15dp"
+                            android:paddingEnd="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/easy_install_notify2"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/LightGrey"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
+                    <ImageButton
+                        android:id="@+id/desc_btn_scm_1"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:contentDescription="@string/easy_install_cd_scm_desc2"
+                        android:background="@drawable/desc_scm100_1"/>
+                    <TextView
+                        android:paddingStart="10dp"
+                        android:paddingEnd="0dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/easy_install_desc_scm100_1"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/LightGrey"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
+                    <ImageButton
+                        android:id="@+id/desc_btn_scm_2"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:contentDescription="@string/easy_install_cd_scm_desc2"
+                        android:background="@drawable/desc_scm100_2"/>
+                    <TextView
+                        android:paddingStart="10dp"
+                        android:paddingEnd="0dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/easy_install_desc_scm100_2"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/LightGrey"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
+                    <ImageButton
+                        android:id="@+id/desc_btn_scm_3"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:contentDescription="@string/easy_install_cd_scm_desc2"
+                        android:background="@drawable/desc_scm100_3"/>
+                    <TextView
+                        android:paddingStart="10dp"
+                        android:paddingEnd="0dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/easy_install_desc_scm100_3"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/LightGrey"/>
+                <Button
+                    android:id="@+id/youtube_btn_scm"
+                    style="@style/ButtonText"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_purple"
+                    android:text="@string/easy_install_youtube_scm100"/>
             </LinearLayout>
+            <!--SCM100 End-->
         </LinearLayout>
     </ScrollView>
 

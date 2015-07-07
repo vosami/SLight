@@ -1,5 +1,9 @@
 package com.syncworks.define;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+
 /**
  * Created with Android Studio
  * Copyrights (C)SyncWorks All rights reserved by SyncWorks
@@ -170,4 +174,6 @@ public class Define {
 	public final static boolean DIR_FILES = false;
 	public final static String FILE_DEFAULT = "scriptdata0.xml";
 	public final static String FILE_COLOR_DEFAULT = "scriptcolordata0.xml";
+
+
 }
