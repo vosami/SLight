@@ -25,4 +25,7 @@ public interface OnEasyFragmentListener {
     public void onColorDialog();
 
     public void onNotDialog();
+
+    public void onFrag1Start();
+    public void onFrag1End();
 }

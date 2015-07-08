@@ -1,9 +1,5 @@
 package com.syncworks.define;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.net.Uri;
-
 /**
  * Created with Android Studio
  * Copyrights (C)SyncWorks All rights reserved by SyncWorks
@@ -142,6 +138,8 @@ public class Define {
 	/**
 	 * 송신 명령어
 	 */
+    // 이름 정보 기록
+    public final static byte TX_NAME_CHANGE =                       0x30;
     // EEPROM 에 데이터 기록(0:명령어, 1~2:주소, 3:길이, 4~19:기록데이터)
     public final static byte TX_EEPROM_WRITE = 0x40;
     // EEPROM 의 데이터 읽음(0:명령어, 1~2:주소, 3:길이)
@@ -158,6 +156,9 @@ public class Define {
 	public final static byte TX_MEMORY_WRITE = 0x60;
     // 점멸 패턴 읽어오기 (0:명령어, 1:제어할 LED 번호, 2:시작 번지, 3:길이)
     public final static byte TX_MEMORY_READ = 0x61;
+    public final static byte TX_SOUND_VAL = 0x62;
+    public final static byte TX_MEMORY_WRITE_ACK = 0x63;
+    public final static byte TX_MEMORY_PATTERN_ALL = 0x64;
     // 현재 시간 재설정 (0:명령어, 1~4:현재시간)
     public final static byte TX_TIME_RELOAD = 0x70;
     // 현재 시간 읽어오기 (0:명령어, 1~3:Reserved)

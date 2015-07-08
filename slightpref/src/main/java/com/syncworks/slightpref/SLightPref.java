@@ -23,6 +23,7 @@ public class SLightPref {
             "key_led5","key_led6","key_led7","key_led8","key_led9"};
     public final static String[] DEVICE_COLOR_LED_NAME = {"key_color_led1","key_color_led2","key_color_led3"};
 
+    public final static String FRAG_INSTALL_NOT_SHOW = "key_install_not_show";
     private static Context context;
 
     private SharedPreferences pref = null;
@@ -62,6 +63,8 @@ public class SLightPref {
         putString(DEVICE_COLOR_LED_NAME[0],r.getString(R.string.cled1_txt));
         putString(DEVICE_COLOR_LED_NAME[1],r.getString(R.string.cled2_txt));
         putString(DEVICE_COLOR_LED_NAME[2],r.getString(R.string.cled3_txt));
+        putBoolean(FRAG_INSTALL_NOT_SHOW, false);
+
     }
 
     public void putString(String key, String val) {

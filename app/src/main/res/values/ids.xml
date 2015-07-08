@@ -31,6 +31,7 @@
 
     <!--액션바의 블루투스 연결 메뉴-->
     <item type="id" name="action_connect"/>
+    <item type="id" name="action_disconnect"/>
     <!--액션바의 도움말 메뉴-->
     <item type="id" name="action_help"/>
 

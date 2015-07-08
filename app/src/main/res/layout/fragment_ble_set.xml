@@ -20,6 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
+            android:paddingTop="15dp"
             android:text="@string/ble_selected_device"/>
         <TextView
             android:id="@+id/tv_current_device_name"
@@ -57,10 +58,17 @@
             android:layout_below="@id/tv_current_device_name"
             android:text="@string/gt"/>
         <Button
-            android:id="@+id/btn_dev_mod_name"
+            android:id="@+id/btn_dev_test_connect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/ble_test_connect"/>
+        <Button
+            android:id="@+id/btn_dev_mod_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/btn_dev_test_connect"
             android:layout_alignParentTop="true"
             android:text="@string/ble_change_name"/>
     </RelativeLayout>

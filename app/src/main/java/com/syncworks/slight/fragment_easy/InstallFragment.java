@@ -1,7 +1,6 @@
 package com.syncworks.slight.fragment_easy;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
@@ -16,15 +15,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
 import com.syncworks.slight.R;
-import com.syncworks.slight.dialog.DialogImageView;
+import com.syncworks.slightpref.SLightPref;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +31,8 @@ import com.syncworks.slight.dialog.DialogImageView;
  * create an instance of this fragment.
  */
 public class InstallFragment extends Fragment {
+
+    SLightPref appPref = null;
 
     // 이미지 리소스
     private final static int IMAGE_SCM1 = R.drawable.desc_scm100_1_t;
@@ -76,6 +75,7 @@ public class InstallFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        appPref = new SLightPref(getActivity());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_install,container,false);
         tbScm = (ToggleButton) view.findViewById(R.id.btn_scm100);
@@ -93,10 +93,11 @@ public class InstallFragment extends Fragment {
         btnYoutubeScm = (Button) view.findViewById(R.id.youtube_btn_scm);
         btnYoutubeSpm = (Button) view.findViewById(R.id.youtube_btn_spm);
 
+        // 리스너 설정
         tbScm.setOnClickListener(tbListener);
         tbSpm.setOnClickListener(tbListener);
 
-
+        cbNotShow.setOnClickListener(onClickListener);
         ibScm1.setOnClickListener(onClickListener);
         ibScm2.setOnClickListener(onClickListener);
         ibScm3.setOnClickListener(onClickListener);
@@ -106,6 +107,9 @@ public class InstallFragment extends Fragment {
         ibSpm4.setOnClickListener(onClickListener);
         btnYoutubeScm.setOnClickListener(onClickListener);
         btnYoutubeSpm.setOnClickListener(onClickListener);
+
+        // 초기화
+        cbNotShow.setChecked(appPref.getBoolean(SLightPref.FRAG_INSTALL_NOT_SHOW));
         return view;
     }
 
@@ -136,6 +140,9 @@ public class InstallFragment extends Fragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+                case R.id.chk_not_display:
+                    appPref.putBoolean(SLightPref.FRAG_INSTALL_NOT_SHOW,cbNotShow.isChecked());
+                    break;
                 case R.id.desc_btn_scm_1:
                     showImage(IMAGE_SCM1);
                     break;
@@ -167,12 +174,6 @@ public class InstallFragment extends Fragment {
         }
     };
 
-    private CheckBox.OnCheckedChangeListener checkedChangeListener = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-        }
-    };
 
     @Override
     public void onAttach(Activity activity) {
@@ -203,20 +204,10 @@ public class InstallFragment extends Fragment {
             startActivity(intent);
         }
     }
+    // 설명 이미지를 크게 보여준다.
     public void showImage(int drawableID) {
-        final DialogImageView dialog = new DialogImageView(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setImgView(getResources().getDrawable(drawableID));
-        dialog.setOnCloseListener(new DialogImageView.OnCloseListener() {
-            @Override
-            public void onBtnClose() {
-                dialog.dismiss();
-            }
-        });
 
-        dialog.show();
-
-        /*Dialog builder = new Dialog(getActivity());
+        final Dialog builder = new Dialog(getActivity());
         builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
         builder.getWindow().setBackgroundDrawable(
                 new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -226,27 +217,25 @@ public class InstallFragment extends Fragment {
                 //nothing;
             }
         });
-
+        LinearLayout llDialog = new LinearLayout(getActivity());
+        llDialog.setOrientation(LinearLayout.VERTICAL);
         ImageView imageView = new ImageView(getActivity());
         imageView.setImageDrawable(getResources().getDrawable(drawableID));
-        builder.addContentView(imageView, new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        builder.show();*/
-    }
-    private void showImage2(int drawableID)
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Hello World");
-        builder.setIcon(drawableID);
-        builder.setCancelable(false);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
+        Button btnClose = new Button(getActivity());
+        btnClose.setText(getString(R.string.str_close));
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                builder.dismiss();
             }
         });
-        AlertDialog alert = builder.create();
-        alert.show();
+        llDialog.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        llDialog.addView(imageView);
+        llDialog.addView(btnClose);
+
+        builder.addContentView(llDialog, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        builder.show();
     }
 
 }

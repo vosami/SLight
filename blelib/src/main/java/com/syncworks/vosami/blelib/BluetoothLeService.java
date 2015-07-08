@@ -258,7 +258,7 @@ public class BluetoothLeService extends Service {
             return false;
         }
         // Previously connected device.  Try to reconnect.
-        if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
+        /*if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
                 && mBluetoothGatt != null) {
             Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
             if (mBluetoothGatt.connect()) {
@@ -267,7 +267,7 @@ public class BluetoothLeService extends Service {
             } else {
                 return false;
             }
-        }
+        }*/
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         if (device == null) {
             Log.w(TAG, "Device not found.  Unable to connect.");
@@ -423,16 +423,6 @@ public class BluetoothLeService extends Service {
     public void writeTxList(byte[] mData) {
         if (mConnectionState == STATE_CONNECTED &&
                 charLecTx != null) {
-            /*byte[] mData1 = {0,1,2,3,4,5};
-            byte[] mData2 = {1,1,2,3,4,5};
-            byte[] mData3 = {2,1,2,3,4,5};
-            byte[] mData4 = {3,1,2,3,4,5};
-
-            txDataList.add(mData1);
-            txDataList.add(mData2);
-            txDataList.add(mData3);
-            txDataList.add(mData4);
-            txDataList.add(mData);*/
 
             txDataList.add(mData);
             if (txDataList.size() == 1) {

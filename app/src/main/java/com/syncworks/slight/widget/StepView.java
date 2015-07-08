@@ -19,7 +19,7 @@ public class StepView extends View {
     OnStepViewTouchListener onStepViewTouchListener = null;
 
     private final static int MAX_STEP = 5;
-    private int curStep = 1;
+    private int curStep = 0;
     private int oldStep = -1;
 
     private Paint paint = null;
@@ -45,8 +45,13 @@ public class StepView extends View {
     }
 
     public void setStep(int num) {
-        this.curStep = num;
-        this.invalidate();
+        if (num >=0 && num <= 5) {
+            this.curStep = num;
+            this.invalidate();
+        } else {
+            this.curStep = 1;
+            this.invalidate();
+        }
     }
 
     public int getStep() {

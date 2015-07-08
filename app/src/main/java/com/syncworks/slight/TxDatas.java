@@ -44,22 +44,22 @@ public class TxDatas {
 	}
 
 	public static byte[] formatInitCount() {
-		byte[] txScriptData = {Define.TX_INIT_COUNT,0,0,0};
-		return txScriptData;
+		return new byte[]{Define.TX_INIT_COUNT,0,0,0};
+	}
+
+	public static byte[] formatBrightAll(int bright) {
+		return new byte[]{Define.TX_MEMORY_PATTERN_ALL,0,0,3,(byte)Define.OP_START,0,(byte)bright,0,(byte)Define.OP_END,0};
 	}
 
 	public static byte[] formatTimeRead() {
-		byte[] txScriptData = {Define.TX_TIME_READ,0,0,0};
-		return txScriptData;
+		return new byte[]{Define.TX_TIME_READ,0,0,0};
 	}
 
 	public static byte[] formatAlarmWrite(int enumAlarm, int enumDay, int hour, int min, int hold) {
-		byte[] txScriptData = {Define.TX_ALARM_WRITE,(byte)enumAlarm,(byte)enumDay,(byte)hour, (byte)min, (byte)hold};
-		return txScriptData;
+		return new byte[]{Define.TX_ALARM_WRITE,(byte)enumAlarm,(byte)enumDay,(byte)hour, (byte)min, (byte)hold};
 	}
 
     public static byte[] formatMemToRom() {
-        byte[] txScriptData = {Define.TX_MEM_TO_ROM, 0, 0, 0};
-        return txScriptData;
+		return new byte[]{Define.TX_MEM_TO_ROM, 0, 0, 0};
     }
 }

@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
+import com.syncworks.define.Logger;
 import com.syncworks.slight.R;
 import com.syncworks.slightpref.SLightPref;
 import com.syncworks.vosami.blelib.BluetoothDeviceAdapter;
@@ -94,6 +94,36 @@ public class BleSetFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Logger.d(this,"onStart");
+        if (mListener != null) {
+            mListener.onFrag1Start();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Logger.d(this, "onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Logger.d(this, "onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Logger.d(this, "onStop");
+        if (mListener != null) {
+            mListener.onFrag1End();
+        }
+    }
+
     private Button.OnClickListener btnClickListener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -141,8 +171,8 @@ public class BleSetFragment extends Fragment {
     public void addList(BluetoothDevice device, int rssi) {
         if (device != null) {
             if (mDevice.indexOf(device) == -1) {
-                mDevice.add(device);
                 deviceListAdapter.addRssi(rssi);
+                mDevice.add(device);
                 deviceListAdapter.notifyDataSetChanged();
             }
         }

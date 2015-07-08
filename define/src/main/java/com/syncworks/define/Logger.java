@@ -49,7 +49,9 @@ public final class Logger {
         // If no varargs are supplied, treat it as a request to log the string without formatting.
         String retVal = message;
         for (int i=0;i<args.length;i++) {
-            retVal = retVal + " "+ (i+1) + ":" + args[i].toString();
+            if (args[i] != null) {
+                retVal = retVal + " " + (i + 1) + ":" + args[i].toString();
+            }
         }
         return retVal;
     }
