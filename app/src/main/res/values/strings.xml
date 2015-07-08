@@ -19,6 +19,7 @@
     <string name="str_pattern_select">점멸 패턴을 선택하세요.</string>
     <string name="logo_description">Smart Light Logo</string>
     <string name="block_description">Block image</string>
+    <string name="pattern_description">Pattern</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -98,6 +98,12 @@
             android:layout_alignParentEnd="true"
             android:textColor="@color/Black"
             android:text="@string/ble_stop"/>
+        <ProgressBar
+            android:id="@+id/progress_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@id/btn_ble_stop"/>
         <TextView
             style="@style/tv_title_bold"
             android:id="@+id/tv_device_list_title"

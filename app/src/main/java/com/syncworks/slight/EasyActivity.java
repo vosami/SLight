@@ -414,7 +414,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         else {
             toggleView(false);
             changeActionBarText(0);
-            fragmentTransaction.add(R.id.easy_ll_fragment, fragment0th);
+            //fragmentTransaction.add(R.id.easy_ll_fragment, fragment0th);
+            fragmentTransaction.add(R.id.easy_ll_fragment, fragment2nd);
         }
 
         fragmentTransaction.commit();

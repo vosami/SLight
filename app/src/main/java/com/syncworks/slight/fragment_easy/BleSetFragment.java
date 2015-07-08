@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.syncworks.define.Logger;
@@ -39,6 +40,7 @@ public class BleSetFragment extends Fragment {
 
     TextView tvCurrentDeviceName, tvCurrentDeviceAddress;
     Button btnBleScan, btnBleStop, btnModName;
+    ProgressBar pbScan;
     ListView deviceList;
 
     // 블루투스 장치 리스트
@@ -79,6 +81,7 @@ public class BleSetFragment extends Fragment {
         tvCurrentDeviceAddress = (TextView) view.findViewById(R.id.tv_current_device_address);
         btnBleScan = (Button) view.findViewById(R.id.btn_ble_scan);
         btnBleStop = (Button) view.findViewById(R.id.btn_ble_stop);
+        pbScan = (ProgressBar) view.findViewById(R.id.progress_scan);
         btnModName = (Button) view.findViewById(R.id.btn_dev_mod_name);
         deviceList = (ListView) view.findViewById(R.id.lv_list_device);
         setTvCurrentDevice(selDevName, selDevAddr);
@@ -184,11 +187,13 @@ public class BleSetFragment extends Fragment {
         if (isVisibleScan) {
             btnBleScan.setVisibility(View.VISIBLE);
             btnBleStop.setVisibility(View.GONE);
+            pbScan.setVisibility(View.GONE);
         }
         // 중지 버튼이 보이도록 설정
         else {
             btnBleScan.setVisibility(View.GONE);
             btnBleStop.setVisibility(View.VISIBLE);
+            pbScan.setVisibility(View.VISIBLE);
         }
     }
 

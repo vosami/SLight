@@ -3,7 +3,7 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.syncworks.s_light.fragment.LedSelectFragment">
+    tools:context="com.syncworks.slight.fragment_easy.LedSelectFragment">
     <LinearLayout
         android:id="@+id/ll_rgb_select"
         android:layout_width="match_parent"
@@ -11,19 +11,19 @@
         android:paddingTop="30dp"
         android:background="@color/White"
         android:orientation="horizontal">
-        <com.syncworks.slightapp.widget.LedBtn
+        <com.syncworks.slight.widget.LedBtn
             android:id="@id/rgb_1"
             style="@style/rgbBtn"
             custom:btn_state_enabled="false"
             custom:text_on="✓"
             custom:text_off="RGB 1"/>
-        <com.syncworks.slightapp.widget.LedBtn
+        <com.syncworks.slight.widget.LedBtn
             android:id="@id/rgb_2"
             style="@style/rgbBtn"
             custom:btn_state_enabled="false"
             custom:text_on="✓"
             custom:text_off="RGB 2"/>
-        <com.syncworks.slightapp.widget.LedBtn
+        <com.syncworks.slight.widget.LedBtn
             android:id="@id/rgb_3"
             style="@style/rgbBtn"
             custom:btn_state_enabled="false"
@@ -36,60 +36,121 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_rgb_select"
         android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:paddingBottom="5dp"
         android:background="@color/White"
         android:orientation="horizontal">
-        <com.syncworks.slightapp.widget.LedBtn
+        <com.syncworks.slight.widget.LedBtn
             android:id="@id/led_1"
             style="@style/ledBtn"
-            custom:btn_state_bright="true"
             custom:text_on="✓"
             custom:text_off="1"/>
-        <com.syncworks.slightapp.widget.LedBtn
+        <com.syncworks.slight.widget.LedBtn
             android:id="@id/led_2"
             style="@style/ledBtn"
             custom:text_on="✓"
             custom:text_off="2"/>
-        <com.syncworks.slightapp.widget.LedBtn
+        <com.syncworks.slight.widget.LedBtn
             android:id="@id/led_3"
             style="@style/ledBtn"
             custom:text_on="✓"
             custom:text_off="3"/>
-        <com.syncworks.slightapp.widget.LedBtn
+        <com.syncworks.slight.widget.LedBtn
             android:id="@id/led_4"
             style="@style/ledBtn"
             custom:text_on="✓"
             custom:text_off="4"/>
-        <com.syncworks.slightapp.widget.LedBtn
+        <com.syncworks.slight.widget.LedBtn
             android:id="@id/led_5"
             style="@style/ledBtn"
             custom:text_on="✓"
             custom:text_off="5"/>
-        <com.syncworks.slightapp.widget.LedBtn
+        <com.syncworks.slight.widget.LedBtn
             android:id="@id/led_6"
             style="@style/ledBtn"
             custom:text_on="✓"
             custom:text_off="6"/>
-        <com.syncworks.slightapp.widget.LedBtn
+        <com.syncworks.slight.widget.LedBtn
             android:id="@id/led_7"
             style="@style/ledBtn"
             custom:text_on="✓"
             custom:text_off="7"/>
-        <com.syncworks.slightapp.widget.LedBtn
+        <com.syncworks.slight.widget.LedBtn
             android:id="@id/led_8"
             style="@style/ledBtn"
             custom:text_on="✓"
             custom:text_off="8"/>
-        <com.syncworks.slightapp.widget.LedBtn
+        <com.syncworks.slight.widget.LedBtn
             android:id="@id/led_9"
             style="@style/ledBtn"
             custom:text_on="✓"
             custom:text_off="9"/>
     </LinearLayout>
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/ll_led_pattern"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_led_select"
+        android:background="@color/White"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_pattern_always"
+            android:layout_weight="1"
+            android:contentDescription="@string/pattern_description"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_pattern_flash"
+            android:layout_weight="1"
+            android:contentDescription="@string/pattern_description"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_pattern_pulse"
+            android:layout_weight="1"
+            android:contentDescription="@string/pattern_description"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_pattern_always"
+            android:layout_weight="1"
+            android:contentDescription="@string/pattern_description"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_pattern_always"
+            android:layout_weight="1"
+            android:contentDescription="@string/pattern_description"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_pattern_always"
+            android:layout_weight="1"
+            android:contentDescription="@string/pattern_description"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_pattern_always"
+            android:layout_weight="1"
+            android:contentDescription="@string/pattern_description"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_pattern_always"
+            android:layout_weight="1"
+            android:contentDescription="@string/pattern_description"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_pattern_always"
+            android:layout_weight="1"
+            android:contentDescription="@string/pattern_description"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_led_pattern"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
