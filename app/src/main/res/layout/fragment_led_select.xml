@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_rgb_select"
         android:background="@color/White"
+        android:baselineAligned="false"
         android:orientation="horizontal">
         <RelativeLayout
             android:layout_width="0dp"
@@ -138,6 +139,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_led_select"
         android:background="@color/White"
+        android:baselineAligned="false"
         android:orientation="horizontal">
         <RelativeLayout
             android:layout_width="0dp"

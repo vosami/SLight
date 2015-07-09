@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.syncworks.define.Define;
@@ -97,16 +98,218 @@ public class BrightFragment extends Fragment {
         rlRgb[0] = (RelativeLayout) view.findViewById(R.id.rl_rgb_1);
         rlRgb[1] = (RelativeLayout) view.findViewById(R.id.rl_rgb_2);
         rlRgb[2] = (RelativeLayout) view.findViewById(R.id.rl_rgb_3);
+        tvLed[0] = (TextView) view.findViewById(R.id.led_1_percent);
+        tvLed[1] = (TextView) view.findViewById(R.id.led_2_percent);
+        tvLed[2] = (TextView) view.findViewById(R.id.led_3_percent);
+        tvLed[3] = (TextView) view.findViewById(R.id.led_4_percent);
+        tvLed[4] = (TextView) view.findViewById(R.id.led_5_percent);
+        tvLed[5] = (TextView) view.findViewById(R.id.led_6_percent);
+        tvLed[6] = (TextView) view.findViewById(R.id.led_7_percent);
+        tvLed[7] = (TextView) view.findViewById(R.id.led_8_percent);
+        tvLed[8] = (TextView) view.findViewById(R.id.led_9_percent);
+        tvRgb[0] = (TextView) view.findViewById(R.id.rgb1_red_percent);
+        tvRgb[1] = (TextView) view.findViewById(R.id.rgb1_green_percent);
+        tvRgb[2] = (TextView) view.findViewById(R.id.rgb1_blue_percent);
+        tvRgb[3] = (TextView) view.findViewById(R.id.rgb2_red_percent);
+        tvRgb[4] = (TextView) view.findViewById(R.id.rgb2_green_percent);
+        tvRgb[5] = (TextView) view.findViewById(R.id.rgb2_blue_percent);
+        tvRgb[6] = (TextView) view.findViewById(R.id.rgb3_red_percent);
+        tvRgb[7] = (TextView) view.findViewById(R.id.rgb3_green_percent);
+        tvRgb[8] = (TextView) view.findViewById(R.id.rgb3_blue_percent);
+        btnColorSelect[0] = (Button) view.findViewById(R.id.btn_rgb_select_1);
+        btnColorSelect[1] = (Button) view.findViewById(R.id.btn_rgb_select_2);
+        btnColorSelect[2] = (Button) view.findViewById(R.id.btn_rgb_select_3);
 
+        seekLed[0].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekLed[1].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekLed[2].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekLed[3].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekLed[4].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekLed[5].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekLed[6].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekLed[7].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekLed[8].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekRgb[0].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekRgb[1].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekRgb[2].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekRgb[3].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekRgb[4].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekRgb[5].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekRgb[6].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekRgb[7].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekRgb[8].setOnSeekBarChangeListener(seekBarChangeListener);
+
+        btnLed[0].setOnClickListener(onClickListener);
+        btnLed[1].setOnClickListener(onClickListener);
+        btnLed[2].setOnClickListener(onClickListener);
+        btnLed[3].setOnClickListener(onClickListener);
+        btnLed[4].setOnClickListener(onClickListener);
+        btnLed[5].setOnClickListener(onClickListener);
+        btnLed[6].setOnClickListener(onClickListener);
+        btnLed[7].setOnClickListener(onClickListener);
+        btnLed[8].setOnClickListener(onClickListener);
+        btnRgb[0].setOnClickListener(onClickListener);
+        btnRgb[1].setOnClickListener(onClickListener);
+        btnRgb[2].setOnClickListener(onClickListener);
+        btnColorSelect[0].setOnClickListener(onClickListener);
+        btnColorSelect[1].setOnClickListener(onClickListener);
+        btnColorSelect[2].setOnClickListener(onClickListener);
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onBrightLed(1,1);
-        }
+    private void setRgbPercent(int num, int progress) {
+        int convertProgress = Math.round((float)progress * (float)100 / (float)191);
+        String strPercent = Integer.toString(convertProgress) + "%";
+        tvRgb[num].setText(strPercent);
     }
+
+    private void setSinglePercent(int num, int progress) {
+        int convertProgress = Math.round((float)progress * (float)100 / (float)191);
+        String strPercent = Integer.toString(convertProgress) + "%";
+        tvLed[num].setText(strPercent);
+    }
+
+    private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            switch (seekBar.getId()) {
+                case R.id.led_1_seekbar:
+                    setSinglePercent(0,progress);
+                    break;
+                case R.id.led_2_seekbar:
+                    setSinglePercent(1,progress);
+                    break;
+                case R.id.led_3_seekbar:
+                    setSinglePercent(2,progress);
+                    break;
+                case R.id.led_4_seekbar:
+                    setSinglePercent(3,progress);
+                    break;
+                case R.id.led_5_seekbar:
+                    setSinglePercent(4,progress);
+                    break;
+                case R.id.led_6_seekbar:
+                    setSinglePercent(5,progress);
+                    break;
+                case R.id.led_7_seekbar:
+                    setSinglePercent(6,progress);
+                    break;
+                case R.id.led_8_seekbar:
+                    setSinglePercent(7,progress);
+                    break;
+                case R.id.led_9_seekbar:
+                    setSinglePercent(8,progress);
+                    break;
+                case R.id.rgb1_red_seekbar:
+                    setRgbPercent(0,progress);
+                    break;
+                case R.id.rgb1_green_seekbar:
+                    setRgbPercent(1,progress);
+                    break;
+                case R.id.rgb1_blue_seekbar:
+                    setRgbPercent(2,progress);
+                    break;
+                case R.id.rgb2_red_seekbar:
+                    setRgbPercent(3,progress);
+                    break;
+                case R.id.rgb2_green_seekbar:
+                    setRgbPercent(4,progress);
+                    break;
+                case R.id.rgb2_blue_seekbar:
+                    setRgbPercent(5,progress);
+                    break;
+                case R.id.rgb3_red_seekbar:
+                    setRgbPercent(6,progress);
+                    break;
+                case R.id.rgb3_green_seekbar:
+                    setRgbPercent(7,progress);
+                    break;
+                case R.id.rgb3_blue_seekbar:
+                    setRgbPercent(8,progress);
+                    break;
+            }
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            switch (seekBar.getId()) {
+                case R.id.led_1_seekbar:
+                    break;
+                case R.id.led_2_seekbar:
+                    break;
+                case R.id.led_3_seekbar:
+                    break;
+                case R.id.led_4_seekbar:
+                    break;
+                case R.id.led_5_seekbar:
+                    break;
+                case R.id.led_6_seekbar:
+                    break;
+                case R.id.led_7_seekbar:
+                    break;
+                case R.id.led_8_seekbar:
+                    break;
+                case R.id.led_9_seekbar:
+                    break;
+                case R.id.rgb1_red_seekbar:
+                    break;
+                case R.id.rgb1_green_seekbar:
+                    break;
+                case R.id.rgb1_blue_seekbar:
+                    break;
+                case R.id.rgb2_red_seekbar:
+                    break;
+                case R.id.rgb2_green_seekbar:
+                    break;
+                case R.id.rgb2_blue_seekbar:
+                    break;
+                case R.id.rgb3_red_seekbar:
+                    break;
+                case R.id.rgb3_green_seekbar:
+                    break;
+                case R.id.rgb3_blue_seekbar:
+                    break;
+            }
+        }
+    };
+
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.led_1:
+                    break;
+                case R.id.led_2:
+                    break;
+                case R.id.led_3:
+                    break;
+                case R.id.led_4:
+                    break;
+                case R.id.led_5:
+                    break;
+                case R.id.led_6:
+                    break;
+                case R.id.led_7:
+                    break;
+                case R.id.led_8:
+                    break;
+                case R.id.led_9:
+                    break;
+                case R.id.btn_rgb_select_1:
+                    break;
+                case R.id.btn_rgb_select_2:
+                    break;
+                case R.id.btn_rgb_select_3:
+                    break;
+
+            }
+        }
+    };
 
     @Override
     public void onAttach(Activity activity) {
