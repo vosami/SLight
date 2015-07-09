@@ -517,7 +517,7 @@ public class LedEffectActivity extends ActionBarActivity implements OnLedFragmen
             }
 
             @Override
-            public void bleDataAvailable() {
+            public void bleDataAvailable(String uuid, byte[] data) {
                 Log.i(TAG,"bleDataAvailable");
             }
 

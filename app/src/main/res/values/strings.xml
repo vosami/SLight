@@ -7,10 +7,24 @@
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
+    <string name="led1_str">1</string>
+    <string name="led2_str">2</string>
+    <string name="led3_str">3</string>
+    <string name="led4_str">4</string>
+    <string name="led5_str">5</string>
+    <string name="led6_str">6</string>
+    <string name="led7_str">7</string>
+    <string name="led8_str">8</string>
+    <string name="led9_str">9</string>
+    <string name="rgb1_str">RGB 1</string>
+    <string name="rgb2_str">RGB 2</string>
+    <string name="rgb3_str">RGB 3</string>
+
     <!--공통-->
     <string name="ble_scan">검색</string>
     <string name="ble_stop">중지</string>
     <string name="str_close">닫기</string>
+    <string name="default_percent">50%</string>
 
     <!--액션바의 블루투스 연결 타이틀-->
     <string name="action_connect">연결</string>
@@ -124,6 +138,9 @@
     <string name="easy_mod_name_dialog">스마트라이트 이름 설정</string>
     <string name="easy_progress_dialog">잠시 기다려 주세요.</string>
     <string name="easy_ble_not_connect">연결할 수 없습니다.</string>
+    <string name="easy_mod_name_error">이름 변경 중 에러 발생</string>
+    <string name="easy_mod_name_success">이름 변경 완료</string>
+    <string name="easy_name_length_filter">12byte(한글6자) 까지 입력할 수 있습니다.</string>
 
     <string name="easy_btn_scm100">커넥터 타입 \n(SCM-100)</string>
     <string name="easy_btn_spm100">에나멜선 타입 \n(SPM-100)</string>
@@ -153,5 +170,11 @@
     <string name="easy_install_youtube_spm100">에나멜선 타입 설치 \n 동영상 보기</string>
 
     <string name="dialog_image_view">이미지</string>
+
+    <string name="easy_led_select_load_file">불러온 파일:</string>
+    <string name="easy_led_select_default_pattern">없음</string>
+    <string name="easy_led_select_btn_load_file">불러오기</string>
+    <string name="easy_led_select_btn_save_file">저장하기</string>
+    <string name="easy_led_select_btn_color_select">색깔선택</string>
     <!--EasyActivity 에서 사용 End-->
 </resources>

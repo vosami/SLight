@@ -10,4 +10,6 @@
 
     <dimen name="dialog_horizontal_margin">10dp</dimen>
     <dimen name="dialog_vertical_margin">10dp</dimen>
+
+    <dimen name="led_pattern_width">30dp</dimen>
 </resources>

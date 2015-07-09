@@ -23,7 +23,7 @@ public interface BleNotifier {
     /**
      * 데이터 수신 완료
      */
-    public void bleDataAvailable();
+    public void bleDataAvailable(String uuid, byte[] data);
 
     /**
      * 데이터 송신 완료

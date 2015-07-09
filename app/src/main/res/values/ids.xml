@@ -13,6 +13,19 @@
     <item type="id" name="rgb_2"/>
     <item type="id" name="rgb_3"/>
 
+    <item type="id" name="led_1_pattern"/>
+    <item type="id" name="led_2_pattern"/>
+    <item type="id" name="led_3_pattern"/>
+    <item type="id" name="led_4_pattern"/>
+    <item type="id" name="led_5_pattern"/>
+    <item type="id" name="led_6_pattern"/>
+    <item type="id" name="led_7_pattern"/>
+    <item type="id" name="led_8_pattern"/>
+    <item type="id" name="led_9_pattern"/>
+    <item type="id" name="rgb_1_pattern"/>
+    <item type="id" name="rgb_2_pattern"/>
+    <item type="id" name="rgb_3_pattern"/>
+
     <item type="id" name="led_1_seekbar"/>
     <item type="id" name="led_2_seekbar"/>
     <item type="id" name="led_3_seekbar"/>
@@ -22,6 +35,34 @@
     <item type="id" name="led_7_seekbar"/>
     <item type="id" name="led_8_seekbar"/>
     <item type="id" name="led_9_seekbar"/>
+    <item type="id" name="rgb1_red_seekbar"/>
+    <item type="id" name="rgb1_green_seekbar"/>
+    <item type="id" name="rgb1_blue_seekbar"/>
+    <item type="id" name="rgb2_red_seekbar"/>
+    <item type="id" name="rgb2_green_seekbar"/>
+    <item type="id" name="rgb2_blue_seekbar"/>
+    <item type="id" name="rgb3_red_seekbar"/>
+    <item type="id" name="rgb3_green_seekbar"/>
+    <item type="id" name="rgb3_blue_seekbar"/>
+
+    <item type="id" name="led_1_percent"/>
+    <item type="id" name="led_2_percent"/>
+    <item type="id" name="led_3_percent"/>
+    <item type="id" name="led_4_percent"/>
+    <item type="id" name="led_5_percent"/>
+    <item type="id" name="led_6_percent"/>
+    <item type="id" name="led_7_percent"/>
+    <item type="id" name="led_8_percent"/>
+    <item type="id" name="led_9_percent"/>
+    <item type="id" name="rgb1_red_percent"/>
+    <item type="id" name="rgb1_green_percent"/>
+    <item type="id" name="rgb1_blue_percent"/>
+    <item type="id" name="rgb2_red_percent"/>
+    <item type="id" name="rgb2_green_percent"/>
+    <item type="id" name="rgb2_blue_percent"/>
+    <item type="id" name="rgb3_red_percent"/>
+    <item type="id" name="rgb3_green_percent"/>
+    <item type="id" name="rgb3_blue_percent"/>
 
     <item type="id" name="btn_scm100"/>
     <item type="id" name="btn_spm100"/>

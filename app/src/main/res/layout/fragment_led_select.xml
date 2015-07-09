@@ -31,11 +31,58 @@
             custom:text_off="RGB 3"/>
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/ll_led_select"
+        android:id="@+id/ll_rgb_pattern"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_rgb_select"
-        android:paddingTop="20dp"
+        android:background="@color/White"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@id/rgb_1_pattern"
+                android:visibility="invisible"
+                android:layout_width="@dimen/led_pattern_width"
+                android:layout_height="@dimen/led_pattern_width"
+                android:layout_centerHorizontal="true"
+                android:contentDescription="@string/pattern_description"
+                android:background="@drawable/ic_pattern_always"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@id/rgb_2_pattern"
+                android:visibility="invisible"
+                android:layout_width="@dimen/led_pattern_width"
+                android:layout_height="@dimen/led_pattern_width"
+                android:layout_centerHorizontal="true"
+                android:contentDescription="@string/pattern_description"
+                android:background="@drawable/ic_pattern_always"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@id/rgb_3_pattern"
+                android:visibility="invisible"
+                android:layout_width="@dimen/led_pattern_width"
+                android:layout_height="@dimen/led_pattern_width"
+                android:layout_centerHorizontal="true"
+                android:contentDescription="@string/pattern_description"
+                android:background="@drawable/ic_pattern_always"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_led_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_rgb_pattern"
+        android:paddingTop="10dp"
         android:paddingBottom="5dp"
         android:background="@color/White"
         android:orientation="horizontal">
@@ -92,80 +139,173 @@
         android:layout_below="@id/ll_led_select"
         android:background="@color/White"
         android:orientation="horizontal">
-        <ImageView
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_pattern_always"
-            android:layout_weight="1"
-            android:contentDescription="@string/pattern_description"/>
-        <ImageView
+            android:layout_weight="1">
+            <ImageView
+                android:id="@id/led_1_pattern"
+                android:visibility="invisible"
+                android:layout_width="@dimen/led_pattern_width"
+                android:layout_height="@dimen/led_pattern_width"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_pattern_always"
+                android:contentDescription="@string/pattern_description"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_pattern_flash"
-            android:layout_weight="1"
-            android:contentDescription="@string/pattern_description"/>
-        <ImageView
+            android:layout_weight="1">
+            <ImageView
+                android:id="@id/led_2_pattern"
+                android:visibility="invisible"
+                android:layout_width="@dimen/led_pattern_width"
+                android:layout_height="@dimen/led_pattern_width"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_pattern_always"
+                android:contentDescription="@string/pattern_description"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_pattern_pulse"
-            android:layout_weight="1"
-            android:contentDescription="@string/pattern_description"/>
-        <ImageView
+            android:layout_weight="1">
+            <ImageView
+                android:id="@id/led_3_pattern"
+                android:visibility="invisible"
+                android:layout_width="@dimen/led_pattern_width"
+                android:layout_height="@dimen/led_pattern_width"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_pattern_always"
+                android:contentDescription="@string/pattern_description"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_pattern_always"
-            android:layout_weight="1"
-            android:contentDescription="@string/pattern_description"/>
-        <ImageView
+            android:layout_weight="1">
+            <ImageView
+                android:id="@id/led_4_pattern"
+                android:visibility="invisible"
+                android:layout_width="@dimen/led_pattern_width"
+                android:layout_height="@dimen/led_pattern_width"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_pattern_always"
+                android:contentDescription="@string/pattern_description"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_pattern_always"
-            android:layout_weight="1"
-            android:contentDescription="@string/pattern_description"/>
-        <ImageView
+            android:layout_weight="1">
+            <ImageView
+                android:id="@id/led_5_pattern"
+                android:visibility="invisible"
+                android:layout_width="@dimen/led_pattern_width"
+                android:layout_height="@dimen/led_pattern_width"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_pattern_always"
+                android:contentDescription="@string/pattern_description"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_pattern_always"
-            android:layout_weight="1"
-            android:contentDescription="@string/pattern_description"/>
-        <ImageView
+            android:layout_weight="1">
+            <ImageView
+                android:id="@id/led_6_pattern"
+                android:visibility="invisible"
+                android:layout_width="@dimen/led_pattern_width"
+                android:layout_height="@dimen/led_pattern_width"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_pattern_always"
+                android:contentDescription="@string/pattern_description"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_pattern_always"
-            android:layout_weight="1"
-            android:contentDescription="@string/pattern_description"/>
-        <ImageView
+            android:layout_weight="1">
+            <ImageView
+                android:id="@id/led_7_pattern"
+                android:visibility="invisible"
+                android:layout_width="@dimen/led_pattern_width"
+                android:layout_height="@dimen/led_pattern_width"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_pattern_always"
+                android:contentDescription="@string/pattern_description"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_pattern_always"
-            android:layout_weight="1"
-            android:contentDescription="@string/pattern_description"/>
-        <ImageView
+            android:layout_weight="1">
+            <ImageView
+                android:id="@id/led_8_pattern"
+                android:visibility="invisible"
+                android:layout_width="@dimen/led_pattern_width"
+                android:layout_height="@dimen/led_pattern_width"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_pattern_always"
+                android:contentDescription="@string/pattern_description"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_pattern_always"
-            android:layout_weight="1"
-            android:contentDescription="@string/pattern_description"/>
+            android:layout_weight="1">
+            <ImageView
+                android:id="@id/led_9_pattern"
+                android:visibility="invisible"
+                android:layout_width="@dimen/led_pattern_width"
+                android:layout_height="@dimen/led_pattern_width"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_pattern_always"
+                android:contentDescription="@string/pattern_description"/>
+        </RelativeLayout>
     </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll_led_pattern"
+        android:layout_height="110dp"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:padding="5dp"
         android:background="@drawable/background_view_rounded_single">
-
+        <TextView
+            android:id="@+id/tv_title_change_pattern"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:text="@string/easy_led_select_load_file"/>
+        <TextView
+            android:id="@+id/tv_pattern"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@id/tv_title_change_pattern"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:paddingEnd="0dp"
+            android:paddingStart="10dp"
+            android:text="@string/easy_led_select_default_pattern"/>
         <Button
+            android:id="@+id/btn_load_pattern"
             style="@style/ButtonText"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_blue"
-            android:text="불러오기"/>
+            android:text="@string/easy_led_select_btn_load_file"/>
+        <Button
+            android:id="@+id/btn_save_pattern"
+            style="@style/ButtonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@id/btn_load_pattern"
+            android:enabled="false"
+            android:background="@drawable/btn_purple_add_disabled"
+            android:text="@string/easy_led_select_btn_save_file"/>
     </RelativeLayout>
 
 </RelativeLayout>

@@ -118,7 +118,7 @@ public class StepView extends View {
                 paint.setColor(Color.WHITE);
                 paint.setTextSize((float) (mHeight*0.6));
                 paint.setTextAlign(Paint.Align.CENTER);
-                canvas.drawText("?",middleHeight + intervalWidth * i,(float)(mHeight*0.7),paint);
+                canvas.drawText("✓",middleHeight + intervalWidth * i,(float)(mHeight*0.7),paint);
 
             } else if (curStep == i+1) {
                 paint.setColor(Color.rgb(1, 139, 185));

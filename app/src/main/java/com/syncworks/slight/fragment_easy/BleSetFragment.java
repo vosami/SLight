@@ -166,6 +166,15 @@ public class BleSetFragment extends Fragment {
         appPref.putString(SLightPref.DEVICE_ADDR,selDevAddr);
     }
 
+    public void setTvCurrentDeviceName(String name) {
+        String addr = appPref.getString(SLightPref.DEVICE_ADDR);
+        tvCurrentDeviceName.setText(name);
+        tvCurrentDeviceAddress.setText(addr);
+        selDevName = name;
+        selDevAddr = addr;
+        appPref.putString(SLightPref.DEVICE_NAME,selDevName);
+    }
+
     // 블루투스 검색 리스트의 데이터를 초기화\
     public void clearList() {
         deviceListAdapter.clear();

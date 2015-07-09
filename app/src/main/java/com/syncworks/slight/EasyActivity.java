@@ -5,17 +5,21 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.IntDef;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.InputFilter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.syncworks.define.Define;
@@ -25,6 +29,9 @@ import com.syncworks.slight.fragment_easy.BrightFragment;
 import com.syncworks.slight.fragment_easy.InstallFragment;
 import com.syncworks.slight.fragment_easy.LedSelectFragment;
 import com.syncworks.slight.fragment_easy.OnEasyFragmentListener;
+import com.syncworks.slight.util.ByteLengthFilter;
+import com.syncworks.slight.util.ErrorToast;
+import com.syncworks.slight.util.SuccessToast;
 import com.syncworks.slight.widget.StepView;
 import com.syncworks.slightpref.SLightPref;
 import com.syncworks.vosami.blelib.BleConsumer;
@@ -32,9 +39,11 @@ import com.syncworks.vosami.blelib.BleManager;
 import com.syncworks.vosami.blelib.BleNotifier;
 import com.syncworks.vosami.blelib.BleUtils;
 import com.syncworks.vosami.blelib.BluetoothLeService;
+import com.syncworks.vosami.blelib.LecGattAttributes;
 import com.syncworks.vosami.blelib.scanner.SlightScanCallback;
 import com.syncworks.vosami.blelib.scanner.SlightScanner;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
@@ -145,6 +154,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 Logger.d(this,"btn_next");
                 int curStep = stepView.getStep();
                 if (curStep == 1) {
+                    // 대기 창 띄움
                     showProgressDialog();
                     new Thread(taskConnect).start();
                 } else {
@@ -166,6 +176,10 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     private final static int HANDLE_FRAG_CONNECTED = 1;
     private final static int HANDLE_NOT_CONNECTED = 2;
 
+    private final static int HANDLE_MOD_NAME_CONNECT = 5;
+    private final static int HANDLE_MOD_NAME=6;
+    private final static int HANDLE_MOD_NAME_ERROR = 7;
+
     private final static int HANDLE_ICON_INVALIDATE = 99;
 
     private void txCounterInit() {
@@ -177,7 +191,6 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     }
 
 
-
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({TOAST_NOT_CONNECT,TOAST_TEST})
     public @interface EasyToast {}
@@ -186,7 +199,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     private void displayToast(@EasyToast int id) {
         if (id == TOAST_NOT_CONNECT) {
-            Toast.makeText(this,getString(R.string.easy_ble_not_connect),Toast.LENGTH_LONG).show();
+//            Toast.makeText(this,getString(R.string.easy_ble_not_connect),Toast.LENGTH_LONG).show();
+            showErrorToast(getString(R.string.easy_ble_not_connect));
         }
     }
 
@@ -208,13 +222,33 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                     case HANDLE_FRAG_CONNECTED:
                         // 진행 상태 대화창을 닫음
                         activity.dismissProgressDialog();
-                        //activity.changeStep(2);
+                        activity.changeStep(2);
                         break;
                     case HANDLE_NOT_CONNECTED:
                         // 진행 상태 대화창을 닫음
                         activity.dismissProgressDialog();
                         // 연결 안됨 표시
                         activity.displayToast(TOAST_NOT_CONNECT);
+                        break;
+                    case HANDLE_MOD_NAME_CONNECT:
+                        // 진행 상태 대화창을 닫음
+                        activity.dismissProgressDialog();
+                        // 이름 변경 대화창 오픈
+                        activity.showModNameDialog();
+                        break;
+                    case HANDLE_MOD_NAME:
+                        activity.bleManager.bleDisconnect();
+                        activity.fragment1st.setTvCurrentDevice(activity.modName, activity.appPref.getString(SLightPref.DEVICE_ADDR));
+                        // 진행 상태 대화창을 닫음
+                        activity.dismissProgressDialog();
+                        activity.scanStart();
+                        activity.showSuccessToast(activity.getString(R.string.easy_mod_name_success));
+                        break;
+                    case HANDLE_MOD_NAME_ERROR:
+                        activity.bleManager.bleDisconnect();
+                        activity.dismissProgressDialog();
+                        activity.showErrorToast(activity.getString(R.string.easy_mod_name_error));
+                        activity.scanStart();
                         break;
                     case HANDLE_ICON_INVALIDATE:
                         activity.setConnectIcon();
@@ -300,6 +334,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         }
     };
 
+    // 장치 이름 변경 연결
     private Runnable taskModifyNameConnect = new Runnable() {
         @Override
         public void run() {
@@ -325,9 +360,56 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             }
             connectState = bleManager.getBleConnectState();
             if (connectState == BluetoothLeService.STATE_CONNECTED) {
-
+                uiHandler.sendEmptyMessage(HANDLE_MOD_NAME_CONNECT);
             } else {
+                uiHandler.sendEmptyMessage(HANDLE_NOT_CONNECTED);
+            }
+        }
+    };
+    // 장치 이름 변경 태스크에서 호출되었는지 확인
+    private boolean isCalledModifyName = false;
+    private void setIsCalledModifyName() {
+        isCalledModifyName = true;
+    }
+    private boolean getIsCalledModifyName() {
+        if (isCalledModifyName) {
+            isCalledModifyName = false;
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+    // 장치 이름 변경
+    private Runnable taskModifyName = new Runnable() {
+        @Override
+        public void run() {
+            if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+                bleManager.writeName(modName);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // 장치 이름 변경 태스크에서 호출되었음을 설정
+                setIsCalledModifyName();
+                bleManager.getName();
+                for (int i=0;i<5;i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (!isCalledModifyName) {
+                        break;
+                    }
+                }
+                if (getIsCalledModifyName()) {
+                    uiHandler.sendEmptyMessage(HANDLE_MOD_NAME_ERROR);
+                }
+            } else {
+                // 연결 종료 이름 변경 할 수 없음
+                showErrorToast(getString(R.string.easy_ble_not_connect));
             }
         }
     };
@@ -358,16 +440,76 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     /** 이름 변경 Dialog 시작
      */
+    // 이름 변경 변수 전달
+    private String modName = null;
+    private AlertDialog modNameDialog = null;
+    private void showModNameDialog() {
+        modNameDialog = modifyNameDialog();
+        modNameDialog.show();
+    }
     private AlertDialog modifyNameDialog() {
         AlertDialog.Builder ab = new AlertDialog.Builder(this);
         ab.setTitle(getString(R.string.easy_mod_name_dialog));
         final EditText inputName = new EditText(this);
-        ab.setView(inputName);
+        String name = appPref.getString(SLightPref.DEVICE_NAME);
+        name = name.replace(name.substring(name.length()-1), "");
+        inputName.setText(name);
+        inputName.setSingleLine();
+        inputName.requestFocus();
+        InputFilter[] filterArray = new InputFilter[]{new ByteLengthFilter(13,"KSC5601")};
+        //filterArray[0] = new InputFilter.LengthFilter(14);
+        inputName.setFilters(filterArray);
+        LinearLayout llName = new LinearLayout(this);
+        llName.setOrientation(LinearLayout.VERTICAL);
+        llName.addView(inputName);
+        //ab.setView(inputName);
+        TextView tvLengthFilter = new TextView(this);
+        tvLengthFilter.setText(getString(R.string.easy_name_length_filter));
+        tvLengthFilter.setPadding(5,5,5,5);
+        llName.addView(tvLengthFilter);
+
+        ab.setView(llName);
+        ab.setCancelable(true);
+        ab.setPositiveButton(getString(R.string.str_confirm), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                modName = inputName.getText().toString();
+                modNameDialog.dismiss();
+                showProgressDialog();
+                new Thread(taskModifyName).start();
+            }
+        });
+
+        ab.setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                modNameDialog.dismiss();
+                if (bleManager.getBleConnectState() != BluetoothLeService.STATE_DISCONNECTED) {
+                    bleManager.bleDisconnect();
+                }
+            }
+        });
 
         return ab.create();
     }
 
     /** 이름 변경 Dialog 종료
+     */
+
+    /** 토스트 시작
+     */
+    private void showErrorToast(String txt) {
+
+        ErrorToast errorToast = new ErrorToast(this);
+        errorToast.showToast(txt, Toast.LENGTH_LONG);
+    }
+
+    private void showSuccessToast(String txt) {
+        SuccessToast successToast = new SuccessToast(this);
+        successToast.showToast(txt,Toast.LENGTH_SHORT);
+    }
+
+    /** 토스트 종료
      */
 
 
@@ -414,8 +556,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         else {
             toggleView(false);
             changeActionBarText(0);
-            //fragmentTransaction.add(R.id.easy_ll_fragment, fragment0th);
-            fragmentTransaction.add(R.id.easy_ll_fragment, fragment2nd);
+            fragmentTransaction.add(R.id.easy_ll_fragment, fragment0th);
+//            fragmentTransaction.add(R.id.easy_ll_fragment, fragment2nd);
         }
 
         fragmentTransaction.commit();
@@ -507,6 +649,12 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     @Override
     public void onModifyName() {
+        showProgressDialog();
+        // 스캔 중이라면 중지
+        if (slightScanner.getStateScanning()) {
+            scanStop();
+        }
+        // 연결 쓰레드 시작
         new Thread(taskModifyNameConnect).start();
     }
 
@@ -517,7 +665,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     @Override
     public void onScanStop() {
-
+        scanStop();
     }
 
     @Override
@@ -593,8 +741,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             bleManager = BleManager.getBleManager(this);
         } else {
             // 스마트폰이 Bluetooth LE 를 지원하지 않는다면 메시지 출력
-            Toast.makeText(this, getString(R.string.ble_not_support),
-                    Toast.LENGTH_LONG).show();
+            showErrorToast(getString(R.string.ble_not_support));
+//            Toast.makeText(this, getString(R.string.ble_not_support), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -655,7 +803,34 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             }
 
             @Override
-            public void bleDataAvailable() {
+            public void bleDataAvailable(String uuid, byte[] data) {
+                Logger.d(this,"bleDataAvailable");
+                if (uuid.equals(LecGattAttributes.LEC_DEV_NAME_UUID)) {
+                    if (getIsCalledModifyName()) {
+
+                        String rxName = null;
+                        try {
+                            rxName = new String(data,"UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        if (rxName != null) {
+                            if (rxName.contains(modName)) {
+                                // 이름 설정
+                                modName = rxName;
+                                // 이름 변경 실행 핸들러 동작
+                                uiHandler.sendEmptyMessage(HANDLE_MOD_NAME);
+                            } else {
+                                // 에러 발생 핸들러 동작
+                                uiHandler.sendEmptyMessage(HANDLE_MOD_NAME_ERROR);
+                            }
+                        } else {
+                            // 에러 발생 핸들러 동작
+                            uiHandler.sendEmptyMessage(HANDLE_MOD_NAME_ERROR);
+                        }
+
+                    }
+                }
 
             }
 

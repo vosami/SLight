@@ -258,4 +258,12 @@ public class BleManager {
         }
     }
 
+    public void getName() {
+        if (bluetoothLeService != null) {
+            bluetoothLeService.getDeviceName();
+        }
+    }
+
+
+
 }

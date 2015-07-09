@@ -89,7 +89,7 @@ public class TimerSetActivity extends ActionBarActivity implements BleConsumer{
             }
 
             @Override
-            public void bleDataAvailable() {
+            public void bleDataAvailable(String uuid, byte[] data) {
 
             }
 

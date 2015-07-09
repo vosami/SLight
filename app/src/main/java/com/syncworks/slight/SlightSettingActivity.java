@@ -149,7 +149,7 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
             }
 
             @Override
-            public void bleDataAvailable() {
+            public void bleDataAvailable(String uuid, byte[] data) {
                 Log.i(TAG, "bleDataAvailable");
             }
 

@@ -123,7 +123,9 @@ public class BluetoothLeService extends Service {
             Log.d(TAG, "Data read");
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 if (bleNotifier !=null) {
-                    bleNotifier.bleDataAvailable();
+                    String uuid = characteristic.getUuid().toString();
+                    byte[] data = characteristic.getValue();
+                    bleNotifier.bleDataAvailable(uuid, data);
                 }
 //                broadcastUpdate(ACTION_DATA_AVAILABLE,characteristic);
             }
@@ -140,7 +142,9 @@ public class BluetoothLeService extends Service {
 
 
             if (bleNotifier !=null) {
-                bleNotifier.bleDataAvailable();
+                String uuid = characteristic.getUuid().toString();
+                byte[] data = characteristic.getValue();
+                bleNotifier.bleDataAvailable(uuid,data);
             }
         }
 
@@ -374,7 +378,7 @@ public class BluetoothLeService extends Service {
 
 		setCharacteristicNotification(charLecRx, true);
 		readCharacteristic(charLecRx);
-        Log.d(TAG,"getGattService : " + "Success");
+        Log.d(TAG, "getGattService : " + "Success");
     }
     public boolean isAcquireNameService() {
         if (charLecDevName != null) {
@@ -398,6 +402,9 @@ public class BluetoothLeService extends Service {
             charLecDevName.setValue(txBytes);
             mBluetoothGatt.writeCharacteristic(charLecDevName);
         }
+    }
+    public void getDeviceName() {
+        mBluetoothGatt.readCharacteristic(charLecDevName);
     }
     // 장치의 송신 출력을 설정합니다.
     // 0~1 비트는 송신 출력, 7비트는 Advertise 모드 (1:GAP_ADTYPE_FLAGS_GENERAL, 0:GAP_ADTYPE_FLAGS_LIMITED)
