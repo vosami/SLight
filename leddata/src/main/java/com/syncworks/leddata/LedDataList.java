@@ -19,7 +19,6 @@ public class LedDataList implements List<LedData>, Serializable {
 
     // 스크립트 데이터
     private List<LedData> ledDatas;
-    private int brightProgress;
 
 
     // 기본 생성자 - LED 번호가 0으로 설정
@@ -34,11 +33,70 @@ public class LedDataList implements List<LedData>, Serializable {
     }
     // 기본 변수 초기화
     public void init() {
-        brightProgress = 95;
         ledDatas.clear();
         add(new LedData(OP_START,0));
         add(new LedData(191,0));
         add(new LedData(OP_END, 0));
+    }
+
+    public void setEffect(int effect, boolean isDelayLong, boolean isRandom, int startTime) {
+        switch (effect) {
+            case 0:
+                init();
+                ledDatas.set(0,new LedData(OP_START,startTime));
+                break;
+            case 1:
+                ledDatas.clear();
+                add(new LedData(OP_START, 0));
+                add(new LedData(191,50));
+                add(new LedData(0,48));
+                if (isRandom) {
+                    add(new LedData(OP_RANDOM_DELAY,3));
+                }
+                add(new LedData(OP_END,0));
+                break;
+            case 2:
+                ledDatas.clear();
+                add(new LedData(OP_START, 0));
+                add(new LedData(0,100));
+                add(new LedData(191,0));
+                if (isRandom) {
+                    add(new LedData(OP_RANDOM_DELAY,3));
+                }
+                add(new LedData(OP_END,0));
+                break;
+            case 3:
+                ledDatas.clear();
+                add(new LedData(OP_START, 0));
+                add(new LedData(0,5));
+                add(new LedData(20,5));
+                add(new LedData(35,5));
+                add(new LedData(50,5));
+                add(new LedData(75,5));
+                add(new LedData(100,5));
+                add(new LedData(130,5));
+                add(new LedData(160,5));
+                add(new LedData(191,5));
+                add(new LedData(160,5));
+                add(new LedData(130,5));
+                add(new LedData(100,5));
+                add(new LedData(75,5));
+                add(new LedData(50,5));
+                add(new LedData(35,5));
+                add(new LedData(20,5));
+                add(new LedData(0,5));
+                if (isRandom) {
+                    add(new LedData(OP_RANDOM_DELAY,3));
+                }
+                add(new LedData(OP_END,0));
+                break;
+            case 4:
+                ledDatas.clear();
+                add(new LedData(OP_START, 0));
+                add(new LedData(OP_RANDOM_VAL,252));
+                add(new LedData(OP_END,0));
+                break;
+        }
     }
 
     @Override

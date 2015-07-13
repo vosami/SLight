@@ -12,17 +12,23 @@
     <ImageView
         android:id="@+id/iv_logo"
         android:contentDescription="@string/logo_description"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="5dp"
         android:layout_width="@dimen/activity_main_button_width"
         android:layout_height="wrap_content"
         android:src="@drawable/logo_smartlight"
         android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_logo"
+        android:layout_alignEnd="@id/iv_logo"
+        android:text="@string/slight_version"/>
     <Button
         android:id="@+id/btn_comm_set"
         android:layout_width="@dimen/activity_main_button_width"
         android:layout_height="@dimen/activity_main_button_height"
-        android:layout_marginTop="@dimen/activity_main_vertical_margin"
+        android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/iv_logo"
         android:textSize="@dimen/activity_main_button_txt_size"
@@ -34,6 +40,7 @@
         android:onClick="onClick"/>
     <Button
         android:id="@+id/btn_ble_set"
+        android:visibility="gone"
         android:layout_width="@dimen/activity_main_button_width"
         android:layout_height="@dimen/activity_main_button_height"
         android:layout_marginTop="@dimen/activity_main_vertical_margin"
@@ -48,6 +55,7 @@
         android:onClick="onClick"/>
     <Button
         android:id="@+id/btn_led_effect"
+        android:visibility="gone"
         android:background="@drawable/btn_line_box"
         android:layout_width="@dimen/activity_main_button_width"
         android:layout_height="@dimen/activity_main_button_height"
@@ -99,6 +107,7 @@
     <Button
         android:id="@+id/btn_slight_setting"
         android:background="@drawable/btn_line_box"
+        android:visibility="gone"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

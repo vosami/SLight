@@ -1,11 +1,14 @@
 package com.syncworks.slight.fragment_easy;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -15,9 +18,13 @@ import com.syncworks.define.Define;
 import com.syncworks.leddata.LedSelect;
 import com.syncworks.slight.R;
 import com.syncworks.slight.widget.CustomVerticalSeekBar;
+import com.syncworks.slightpref.SLightPref;
 
 
 public class BrightFragment extends Fragment {
+
+    // 스마트라이트 설정
+    private SLightPref appPref;
 
     LedSelect ledSelect = null;
 
@@ -60,6 +67,7 @@ public class BrightFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        appPref = new SLightPref(getActivity());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bright,container,false);
         btnLed[0] = (Button) view.findViewById(R.id.led_1);
@@ -180,7 +188,10 @@ public class BrightFragment extends Fragment {
         btnColorSelect[2].setOnClickListener(onClickListener);
 
 
-
+        if (!appPref.getBoolean(SLightPref.EASY_ACTIVITY[2])) {
+            appPref.putBoolean(SLightPref.EASY_ACTIVITY[2],true);
+            showOverLay();
+        }
         return view;
     }
 
@@ -332,62 +343,7 @@ public class BrightFragment extends Fragment {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            switch (seekBar.getId()) {
-                case R.id.led_1_seekbar:
-                    onTracking(0,seekBar.getProgress());
-                    break;
-                case R.id.led_2_seekbar:
-                    onTracking(1,seekBar.getProgress());
-                    break;
-                case R.id.led_3_seekbar:
-                    onTracking(2,seekBar.getProgress());
-                    break;
-                case R.id.led_4_seekbar:
-                    onTracking(3,seekBar.getProgress());
-                    break;
-                case R.id.led_5_seekbar:
-                    onTracking(4,seekBar.getProgress());
-                    break;
-                case R.id.led_6_seekbar:
-                    onTracking(5,seekBar.getProgress());
-                    break;
-                case R.id.led_7_seekbar:
-                    onTracking(6,seekBar.getProgress());
-                    break;
-                case R.id.led_8_seekbar:
-                    onTracking(7,seekBar.getProgress());
-                    break;
-                case R.id.led_9_seekbar:
-                    onTracking(8,seekBar.getProgress());
-                    break;
-                case R.id.rgb1_red_seekbar:
-                    onTracking(0,seekBar.getProgress());
-                    break;
-                case R.id.rgb1_green_seekbar:
-                    onTracking(1,seekBar.getProgress());
-                    break;
-                case R.id.rgb1_blue_seekbar:
-                    onTracking(2,seekBar.getProgress());
-                    break;
-                case R.id.rgb2_red_seekbar:
-                    onTracking(3,seekBar.getProgress());
-                    break;
-                case R.id.rgb2_green_seekbar:
-                    onTracking(4,seekBar.getProgress());
-                    break;
-                case R.id.rgb2_blue_seekbar:
-                    onTracking(5,seekBar.getProgress());
-                    break;
-                case R.id.rgb3_red_seekbar:
-                    onTracking(6,seekBar.getProgress());
-                    break;
-                case R.id.rgb3_green_seekbar:
-                    onTracking(7,seekBar.getProgress());
-                    break;
-                case R.id.rgb3_blue_seekbar:
-                    onTracking(8,seekBar.getProgress());
-                    break;
-            }
+
         }
     };
 
@@ -525,4 +481,21 @@ public class BrightFragment extends Fragment {
         }
     }
 
+
+    public void showOverLay() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.dialog_help_ble_set);
+        dialog.setCanceledOnTouchOutside(true);
+        //for dismissing anywhere you touch
+        View masterView = dialog.findViewById(R.id.overlay_help);
+        masterView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
 }

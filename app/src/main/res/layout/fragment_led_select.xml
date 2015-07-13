@@ -259,6 +259,11 @@
                 android:contentDescription="@string/pattern_description"/>
         </RelativeLayout>
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/DarkGray"
+        android:layout_below="@id/ll_led_pattern"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="110dp"
@@ -307,6 +312,7 @@
             android:layout_toStartOf="@id/btn_load_pattern"
             android:enabled="false"
             android:background="@drawable/btn_purple_add_disabled"
+            android:textColor="@color/LightGrey"
             android:text="@string/easy_led_select_btn_save_file"/>
     </RelativeLayout>
 

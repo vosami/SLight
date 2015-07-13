@@ -23,11 +23,11 @@
             android:icon="@drawable/ic_slight"
             android:label="@string/smart_light_name"
             android:screenOrientation="portrait" >
-            <!--<intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
         <activity
             android:name=".BleSetActivity"
@@ -92,11 +92,11 @@
             android:label="@string/easy_activity_step_0"
             android:theme="@style/EasyActivityTheme"
             android:screenOrientation="portrait">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
     </application>
 

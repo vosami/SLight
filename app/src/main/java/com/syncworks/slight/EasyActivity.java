@@ -24,9 +24,13 @@ import android.widget.Toast;
 
 import com.syncworks.define.Define;
 import com.syncworks.define.Logger;
+import com.syncworks.leddata.LedDataList;
 import com.syncworks.leddata.LedDataSeries;
+import com.syncworks.leddata.LedOptions;
+import com.syncworks.leddata.LedSelect;
 import com.syncworks.slight.fragment_easy.BleSetFragment;
 import com.syncworks.slight.fragment_easy.BrightFragment;
+import com.syncworks.slight.fragment_easy.EffectFragment;
 import com.syncworks.slight.fragment_easy.InstallFragment;
 import com.syncworks.slight.fragment_easy.LedSelectFragment;
 import com.syncworks.slight.fragment_easy.OnEasyFragmentListener;
@@ -119,6 +123,22 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             bleManager.bleConnect(appPref.getString(SLightPref.DEVICE_ADDR));
         } else if (id == R.id.action_help) {
             Logger.d(this,"action_help");
+            switch (stepView.getStep()) {
+                case 1:
+                    fragment1st.showOverLay();
+                    break;
+                case 2:
+                    fragment2nd.showOverLay();
+                    break;
+                case 3:
+                    fragment3rd.showOverLay();
+                    break;
+                case 4:
+                    fragment4th.showOverLay();
+                    break;
+            }
+        } else if (id == android.R.id.home) {
+            this.finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -150,19 +170,26 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     }
 
     public void onClick(View v) {
+        int curStep = stepView.getStep();
         switch (v.getId()) {
             case R.id.easy_btn_back:
                 Logger.d(this,"btn_back");
-                changeStep(stepView.getStep()- 1);
+                if (curStep == 2) {
+                    showBackDialog();
+                } else {
+                    changeStep(stepView.getStep() - 1);
+                }
                 break;
             case R.id.easy_btn_next:
                 Logger.d(this,"btn_next");
-                int curStep = stepView.getStep();
                 if (curStep == 1) {
                     scanStop();
                     // 대기 창 띄움
                     showProgressDialog();
                     new Thread(taskConnect).start();
+                } else if (curStep == 4) {
+
+                    changeStep(2);
                 } else {
                     changeStep(stepView.getStep() + 1);
                 }
@@ -444,6 +471,33 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     /** 진행상태 확인 Dialog 관련 종료
      **/
 
+    private AlertDialog backDialog = null;
+    private void showBackDialog() {
+        backDialog = backDialog();
+        backDialog.show();
+    }
+
+    private AlertDialog backDialog() {
+        AlertDialog.Builder ab = new AlertDialog.Builder(this);
+        ab.setTitle(getString(R.string.easy_back_notify));
+        ab.setCancelable(true);
+        ab.setPositiveButton(getString(R.string.str_confirm), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                changeStep(stepView.getStep()- 1);
+                backDialog.dismiss();
+            }
+        });
+
+        ab.setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                backDialog.dismiss();
+            }
+        });
+        return ab.create();
+    }
+
     /** 이름 변경 Dialog 시작
      */
     // 이름 변경 변수 전달
@@ -531,7 +585,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     private BleSetFragment fragment1st;
     private LedSelectFragment fragment2nd;
     private BrightFragment fragment3rd;
-//    private EffectFragment fragment4th;
+    private EffectFragment fragment4th;
 
     private void toggleView(boolean isVisible) {
         if (isVisible) {
@@ -548,10 +602,11 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         fragment1st = BleSetFragment.newInstance();
         fragment2nd = LedSelectFragment.newInstance();
         fragment3rd = BrightFragment.newInstance();
-//        fragment4th = EffectFragment.newInstance();
+        fragment4th = EffectFragment.newInstance();
 
         fragment2nd.setLedSelect(this.ledDataSeries.ledSelect);
         fragment3rd.setLedSelect(this.ledDataSeries.ledSelect);
+        fragment4th.setLedSelect(this.ledDataSeries.ledSelect);
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -640,8 +695,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                     fragment4th.setRGB(false);
                     fragment4th.setParamLED(fragment2nd.getLedSelect());
                 }
-                fragment4th.setInit();
-                fragmentTransaction.replace(R.id.easy_ll_fragment, fragment4th);*/
+                fragment4th.setInit();*/
+                fragmentTransaction.replace(R.id.easy_ll_fragment, fragment4th);
                 break;
             default:
                 break;
@@ -693,9 +748,11 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             ledDataSeries.ledExeDatas[ledNum].init();
             ledDataSeries.ledOptions[ledNum].init();
             txPattern(ledNum, ledDataSeries.ledExeDatas[ledNum].toByteArray(ledDataSeries.ledOptions[ledNum]));
+            txData(TxDatas.formatInitCount());
         } else {
             //ledDataSeries.ledSelect.setLed(ledNum, LedSelect.SelectType.DEFAULT);
             txPattern(ledNum, offPattern);
+            txData(TxDatas.formatInitCount());
         }
     }
 
@@ -725,6 +782,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             txPattern(redLedNum, offPattern);
             txPattern(greenLedNum, offPattern);
             txPattern(blueLedNum, offPattern);
+            txData(TxDatas.formatInitCount());
         }
     }
 
@@ -737,11 +795,48 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     public void onBrightLed(int ledNum, int bright) {
         ledDataSeries.ledOptions[ledNum].setRatioBright(bright*100/(Define.OP_CODE_MIN-1));
         txPattern(ledNum, ledDataSeries.ledExeDatas[ledNum].toByteArray(ledDataSeries.ledOptions[ledNum]));
+        txData(TxDatas.formatInitCount());
     }
 
     @Override
-    public void onEffect(int effect, int param) {
+    public void onEffect(int effect, boolean isDelayLong, boolean isRandom, int startTime) {
+        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+            if (ledDataSeries.ledSelect.getLed(i) == LedSelect.SelectType.SELECTED) {
+                ledDataSeries.ledOptions[i].setDelayStart(startTime);
+                if (isDelayLong) {
+                    ledDataSeries.ledOptions[i].setRatioDuration(100);
+                } else {
+                    ledDataSeries.ledOptions[i].setRatioDuration(200);
+                }
+                ledDataSeries.ledExeDatas[i].setEffect(effect, isDelayLong, isRandom, startTime);
+                txPattern(i, ledDataSeries.ledExeDatas[i].toByteArray(ledDataSeries.ledOptions[i]));
+                txData(TxDatas.formatInitCount());
+            }
+        }
+        for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+            if (ledDataSeries.ledSelect.getRgb(i) == LedSelect.SelectType.SELECTED) {
+                ledDataSeries.ledOptions[i*3].setDelayStart(startTime);
+                ledDataSeries.ledOptions[i*3 + 1].setDelayStart(startTime);
+                ledDataSeries.ledOptions[i*3 + 2].setDelayStart(startTime);
+                if (isDelayLong) {
+                    ledDataSeries.ledOptions[i*3].setRatioDuration(100);
+                    ledDataSeries.ledOptions[i*3 + 1].setRatioDuration(100);
+                    ledDataSeries.ledOptions[i*3 + 2].setRatioDuration(100);
+                } else {
+                    ledDataSeries.ledOptions[i*3].setRatioDuration(200);
+                    ledDataSeries.ledOptions[i*3 + 1].setRatioDuration(200);
+                    ledDataSeries.ledOptions[i*3 + 2].setRatioDuration(200);
+                }
+                ledDataSeries.ledExeDatas[i*3].setEffect(effect, isDelayLong, isRandom, startTime);
+                ledDataSeries.ledExeDatas[i*3 + 1].setEffect(effect, isDelayLong, isRandom, startTime);
+                ledDataSeries.ledExeDatas[i*3 + 2].setEffect(effect, isDelayLong, isRandom, startTime);
 
+                txPattern(i * 3, ledDataSeries.ledExeDatas[i * 3].toByteArray(ledDataSeries.ledOptions[i * 3]));
+                txPattern(i*3 + 1,ledDataSeries.ledExeDatas[i*3 + 1].toByteArray(ledDataSeries.ledOptions[i*3 + 1]));
+                txPattern(i*3 + 2,ledDataSeries.ledExeDatas[i*3 + 2].toByteArray(ledDataSeries.ledOptions[i*3 + 2]));
+                txData(TxDatas.formatInitCount());
+            }
+        }
     }
 
     @Override

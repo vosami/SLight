@@ -7,6 +7,8 @@
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
+    <string name="slight_version">SLight v150714</string>
+
     <string name="led1_str">1</string>
     <string name="led2_str">2</string>
     <string name="led3_str">3</string>
@@ -171,10 +173,24 @@
 
     <string name="dialog_image_view">이미지</string>
 
+    <string name="easy_back_notify">1단계로 가면 연결이 끊깁니다.</string>
+
     <string name="easy_led_select_load_file">불러온 파일:</string>
     <string name="easy_led_select_default_pattern">없음</string>
     <string name="easy_led_select_btn_load_file">불러오기</string>
     <string name="easy_led_select_btn_save_file">저장하기</string>
     <string name="easy_led_select_btn_color_select">색깔선택</string>
+
+    <string name="easy_effect_select">LED 효과 선택</string>
+    <string name="easy_effect_pattern_always">항상켜기</string>
+    <string name="easy_effect_pattern_pulse">깜박이기</string>
+    <string name="easy_effect_pattern_flash">번쩍이기</string>
+    <string name="easy_effect_pattern_updown">오르내리</string>
+    <string name="easy_effect_pattern_torch">횃불효과</string>
+
+    <string name="easy_effect_title_save">스마트라이트에 저장</string>
+    <string name="easy_effect_btn_start_time">시작 시간 설정</string>
+
+
     <!--EasyActivity 에서 사용 End-->
 </resources>

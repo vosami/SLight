@@ -1,12 +1,15 @@
 package com.syncworks.slight.fragment_easy;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.bluetooth.BluetoothDevice;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -94,6 +97,10 @@ public class BleSetFragment extends Fragment {
         btnModName.setOnClickListener(btnClickListener);
         btnBleScan.setOnClickListener(btnClickListener);
         btnBleStop.setOnClickListener(btnClickListener);
+        if (!appPref.getBoolean(SLightPref.EASY_ACTIVITY[0])) {
+            appPref.putBoolean(SLightPref.EASY_ACTIVITY[0],true);
+            showOverLay();
+        }
         return view;
     }
 
@@ -230,6 +237,23 @@ public class BleSetFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void showOverLay() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.dialog_help_ble_set);
+        dialog.setCanceledOnTouchOutside(true);
+        //for dismissing anywhere you touch
+        View masterView = dialog.findViewById(R.id.overlay_help);
+        masterView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
 }

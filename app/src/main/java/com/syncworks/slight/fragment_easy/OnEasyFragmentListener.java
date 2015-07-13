@@ -20,7 +20,7 @@ public interface OnEasyFragmentListener {
 
     public void onBrightLed(int ledNum, int bright);
 
-    public void onEffect(int effect, int param);
+    public void onEffect(int effect, boolean isDelayLong, boolean isRandom, int startTime);
 
     public void onColorDialog();
 

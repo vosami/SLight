@@ -16,6 +16,7 @@ import com.syncworks.leddata.LedSelect;
 import com.syncworks.slight.R;
 import com.syncworks.slight.dialog.DialogChangePattern;
 import com.syncworks.slight.widget.LedBtn;
+import com.syncworks.slightpref.SLightPref;
 
 import static com.syncworks.define.Define.NUMBER_OF_COLOR_LED;
 import static com.syncworks.define.Define.NUMBER_OF_SINGLE_LED;
@@ -30,6 +31,9 @@ import static com.syncworks.define.Define.NUMBER_OF_SINGLE_LED;
  * create an instance of this fragment.
  */
 public class LedSelectFragment extends Fragment {
+
+    // 스마트라이트 설정
+    private SLightPref appPref;
 
     private LedSelect ledSelect = null;
 
@@ -57,7 +61,7 @@ public class LedSelectFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_led_select,container,false);
-
+        appPref = new SLightPref(getActivity());
         btnRGB[0] = (LedBtn) view.findViewById(R.id.rgb_1);
         btnRGB[1] = (LedBtn) view.findViewById(R.id.rgb_2);
         btnRGB[2] = (LedBtn) view.findViewById(R.id.rgb_3);
@@ -84,8 +88,10 @@ public class LedSelectFragment extends Fragment {
         btnSingle[6].setOnLedBtnListener(ledBtnListener);
         btnSingle[7].setOnLedBtnListener(ledBtnListener);
         btnSingle[8].setOnLedBtnListener(ledBtnListener);
-
-        showOverLay();
+        if (!appPref.getBoolean(SLightPref.EASY_ACTIVITY[1])) {
+            appPref.putBoolean(SLightPref.EASY_ACTIVITY[1],true);
+            showOverLay();
+        }
         return view;
     }
 
@@ -302,7 +308,7 @@ public class LedSelectFragment extends Fragment {
         mListener = null;
     }
 
-    private void showOverLay() {
+    public void showOverLay() {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));

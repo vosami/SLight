@@ -165,10 +165,10 @@ public class InstallFragment extends Fragment {
                     showImage(IMAGE_SPM4);
                     break;
                 case R.id.youtube_btn_scm:
-                    watchYoutubeVideo("WqSx4s1G2N8");
+                    watchYoutubeVideo("A9TjfEEja7Y");
                     break;
                 case R.id.youtube_btn_spm:
-                    watchYoutubeVideo("WqSx4s1G2N8");
+                    watchYoutubeVideo("kSaBZsgi5Ww");
                     break;
             }
         }

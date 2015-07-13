@@ -61,7 +61,11 @@ public class LedData implements Serializable,Comparator<LedData> {
                 break;
             case OP_RANDOM_VAL:
             case OP_RANDOM_DELAY:
-                if (args.length == 2) {
+                if (args.length == 1) {
+                    _val = instruct;
+                    _duration = (int) args[0];
+                }
+                else if (args.length == 2) {
                     _val = instruct;
                     // 기준 값은 6의 배수 0~186
                     param1 = Integer.valueOf((String) args[0]);
@@ -75,13 +79,13 @@ public class LedData implements Serializable,Comparator<LedData> {
             case OP_LONG_DELAY:
                 if (args.length == 1) {
                     _val = instruct;
-                    _duration = Integer.valueOf((String) args[0]);
+                    _duration = (int) args[0];;
                 }
                 break;
             case OP_VAR_VAL:
                 if (args.length == 1) {
                     _val = instruct;
-                    _duration = (Integer.valueOf((String) args[0]) << 6) & 0xC0;
+                    _duration = (((int) args[0]) << 6) & 0xC0;
                 }
                 break;
             case OP_SOUND_VAL:
@@ -90,7 +94,7 @@ public class LedData implements Serializable,Comparator<LedData> {
             case OP_PUT_VAR_C:
                 if (args.length == 1) {
                     _val = instruct;
-                    _duration = Integer.valueOf((String) args[0]);
+                    _duration = (int) args[0];;
                 }
                 break;
             case OP_CALC_VAR_A:
@@ -107,7 +111,7 @@ public class LedData implements Serializable,Comparator<LedData> {
             case OP_PUT_MSP:
                 if (args.length == 1) {
                     _val = instruct;
-                    _duration = Integer.valueOf((String) args[0]);
+                    _duration = (int) args[0];;
                 }
                 break;
             case OP_GET_MSP:
@@ -132,7 +136,7 @@ public class LedData implements Serializable,Comparator<LedData> {
             case OP_FOR_END:
                 if (args.length == 1) {
                     _val = instruct;
-                    _duration = Integer.valueOf((String) args[0]);
+                    _duration = (int) args[0];;
                 }
                 break;
             case OP_IF:
@@ -149,7 +153,7 @@ public class LedData implements Serializable,Comparator<LedData> {
             case OP_JUMPTO:
                 if (args.length == 1) {
                     _val = instruct;
-                    _duration = Integer.valueOf((String) args[0]);
+                    _duration = (int) args[0];
                 }
                 break;
             default:
