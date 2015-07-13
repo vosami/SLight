@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.syncworks.define.Define;
 import com.syncworks.define.Logger;
+import com.syncworks.leddata.LedDataSeries;
 import com.syncworks.slight.fragment_easy.BleSetFragment;
 import com.syncworks.slight.fragment_easy.BrightFragment;
 import com.syncworks.slight.fragment_easy.InstallFragment;
@@ -57,6 +58,9 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     StepView stepView;
     Button btnPrev, btnNext;
 
+    // LED 선택, 패턴 데이터
+    private LedDataSeries ledDataSeries;
+
 
     private boolean isBleSupported = false;
 
@@ -64,6 +68,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         appPref = new SLightPref(this);
+        ledDataSeries = new LedDataSeries();
         setContentView(R.layout.activity_easy);
         bleCheck();
         ActionBar actionBar = getSupportActionBar();
@@ -154,6 +159,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 Logger.d(this,"btn_next");
                 int curStep = stepView.getStep();
                 if (curStep == 1) {
+                    scanStop();
                     // 대기 창 띄움
                     showProgressDialog();
                     new Thread(taskConnect).start();
@@ -183,11 +189,11 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     private final static int HANDLE_ICON_INVALIDATE = 99;
 
     private void txCounterInit() {
-        bleManager.writeTxData(TxDatas.formatInitCount());
+        txData(TxDatas.formatInitCount());
     }
 
     private void txBrightAll(int bright) {
-        bleManager.writeTxData(TxDatas.formatBrightAll(bright));
+        txData(TxDatas.formatBrightAll(bright));
     }
 
 
@@ -544,6 +550,9 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         fragment3rd = BrightFragment.newInstance();
 //        fragment4th = EffectFragment.newInstance();
 
+        fragment2nd.setLedSelect(this.ledDataSeries.ledSelect);
+        fragment3rd.setLedSelect(this.ledDataSeries.ledSelect);
+
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         // 0단계를 보지 않겠다고 설정되어 있다면
@@ -604,6 +613,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 break;
             case 1:
                 startFragment(step);
+                // LED 선택 초기화
+                ledDataSeries.ledSelect.init();
                 // 뒤로 버튼, 스텝뷰 보이게 설정
                 toggleView(true);
                 fragmentTransaction.replace(R.id.easy_ll_fragment, fragment1st);
@@ -647,6 +658,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
      * Fragment 관련 설정 종료
      *********************************************************************************************/
 
+    private final static byte[] offPattern = {(byte)Define.OP_START,0,0,0,(byte)Define.OP_END};
+
     @Override
     public void onModifyName() {
         showProgressDialog();
@@ -675,12 +688,44 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     @Override
     public void onSelectLed(int ledNum, boolean state) {
-
+        if (state) {
+            //ledDataSeries.ledSelect.setLed(ledNum, LedSelect.SelectType.SELECTED);
+            ledDataSeries.ledExeDatas[ledNum].init();
+            ledDataSeries.ledOptions[ledNum].init();
+            txPattern(ledNum, ledDataSeries.ledExeDatas[ledNum].toByteArray(ledDataSeries.ledOptions[ledNum]));
+        } else {
+            //ledDataSeries.ledSelect.setLed(ledNum, LedSelect.SelectType.DEFAULT);
+            txPattern(ledNum, offPattern);
+        }
     }
 
     @Override
     public void onSelectRGB(int ledNum, boolean state) {
+        int redLedNum = ledNum * 3;
+        int greenLedNum = ledNum * 3 + 1;
+        int blueLedNum = ledNum * 3 + 2;
+        if (state) {
+            //ledDataSeries.ledSelect.setRgb(ledNum, LedSelect.SelectType.SELECTED);
+            // 3개 LED 를 모두 초기화
+            ledDataSeries.ledExeDatas[redLedNum].init();
+            ledDataSeries.ledExeDatas[greenLedNum].init();
+            ledDataSeries.ledExeDatas[blueLedNum].init();
+            // 옵션 초기화
+            ledDataSeries.ledOptions[redLedNum].init();
+            ledDataSeries.ledOptions[greenLedNum].init();
+            ledDataSeries.ledOptions[blueLedNum].init();
+            // 3개 LED 밝기 데이터 전달
+            txPattern(redLedNum, ledDataSeries.ledExeDatas[redLedNum].toByteArray(ledDataSeries.ledOptions[ledNum]));
+            txPattern(greenLedNum, ledDataSeries.ledExeDatas[greenLedNum].toByteArray(ledDataSeries.ledOptions[ledNum]));
+            txPattern(blueLedNum, ledDataSeries.ledExeDatas[blueLedNum].toByteArray(ledDataSeries.ledOptions[ledNum]));
 
+        } else {
+            //ledDataSeries.ledSelect.setRgb(ledNum, LedSelect.SelectType.DEFAULT);
+            // 3개 LED 밝기 데이터 전달
+            txPattern(redLedNum, offPattern);
+            txPattern(greenLedNum, offPattern);
+            txPattern(blueLedNum, offPattern);
+        }
     }
 
     @Override
@@ -690,7 +735,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     @Override
     public void onBrightLed(int ledNum, int bright) {
-
+        ledDataSeries.ledOptions[ledNum].setRatioBright(bright*100/(Define.OP_CODE_MIN-1));
+        txPattern(ledNum, ledDataSeries.ledExeDatas[ledNum].toByteArray(ledDataSeries.ledOptions[ledNum]));
     }
 
     @Override
@@ -787,13 +833,13 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         bleManager.setBleNotifier(new BleNotifier() {
             @Override
             public void bleConnected() {
-                Logger.d(this,"Connected");
+                Logger.d(this, "Connected");
                 uiHandler.sendEmptyMessage(HANDLE_ICON_INVALIDATE);
             }
 
             @Override
             public void bleDisconnected() {
-                Logger.d(this,"Disconnected");
+                Logger.d(this, "Disconnected");
                 uiHandler.sendEmptyMessage(HANDLE_ICON_INVALIDATE);
             }
 
@@ -804,13 +850,13 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
             @Override
             public void bleDataAvailable(String uuid, byte[] data) {
-                Logger.d(this,"bleDataAvailable");
+                Logger.d(this, "bleDataAvailable");
                 if (uuid.equals(LecGattAttributes.LEC_DEV_NAME_UUID)) {
                     if (getIsCalledModifyName()) {
 
                         String rxName = null;
                         try {
-                            rxName = new String(data,"UTF-8");
+                            rxName = new String(data, "UTF-8");
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
@@ -839,6 +885,24 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
             }
         });
+    }
+    // 패턴 데이터 송신 함수
+    private void txPattern(int ledNum, byte[] array) {
+        int size = array.length;
+        byte[] data = new byte[size + 4];
+        data[0] = Define.TX_MEMORY_WRITE;
+        data[1] = (byte) ledNum;
+        data[2] = (byte) 0;
+        data[3] = (byte) (size/2);
+        for (int i=0;i<size;i++) {
+            data[4+i] = array[i];
+        }
+        txData(data);
+    }
+
+    // 데이터 송신 함수
+    private void txData(byte[] array) {
+        bleManager.writeTxData(array);
     }
     /**
      * 블루투스 관련 설정 종료

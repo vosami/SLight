@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-import static com.syncworks.define.Define.*;
-
-
+import com.syncworks.define.Define;
+import com.syncworks.leddata.LedSelect;
 import com.syncworks.slight.R;
 import com.syncworks.slight.dialog.DialogChangePattern;
 import com.syncworks.slight.widget.LedBtn;
+
+import static com.syncworks.define.Define.NUMBER_OF_COLOR_LED;
+import static com.syncworks.define.Define.NUMBER_OF_SINGLE_LED;
 
 
 /**
@@ -28,6 +30,8 @@ import com.syncworks.slight.widget.LedBtn;
  * create an instance of this fragment.
  */
 public class LedSelectFragment extends Fragment {
+
+    private LedSelect ledSelect = null;
 
     private LedBtn btnRGB[] = new LedBtn[NUMBER_OF_COLOR_LED];
     private LedBtn btnSingle[] = new LedBtn[NUMBER_OF_SINGLE_LED];
@@ -43,6 +47,10 @@ public class LedSelectFragment extends Fragment {
 
     public LedSelectFragment() {
 
+    }
+
+    public void setLedSelect(LedSelect ls) {
+        this.ledSelect = ls;
     }
 
     @Nullable
@@ -81,23 +89,68 @@ public class LedSelectFragment extends Fragment {
         return view;
     }
 
+    private void displayBtn() {
+        for (int i=0;i< Define.NUMBER_OF_COLOR_LED;i++) {
+            if (ledSelect.getRgb(i) == LedSelect.SelectType.SELECTED) {
+                btnRGB[i].setBtnBright(false);
+                btnRGB[i].setBtnChecked(true);
+                btnRGB[i].setBtnEnabled(true);
+            } else if (ledSelect.getRgb(i) == LedSelect.SelectType.DISABLED) {
+                btnRGB[i].setBtnBright(false);
+                btnRGB[i].setBtnChecked(false);
+                btnRGB[i].setBtnEnabled(false);
+            } else if (ledSelect.getRgb(i) == LedSelect.SelectType.COMPLETED) {
+                btnRGB[i].setBtnBright(true);
+                btnRGB[i].setBtnChecked(false);
+                btnRGB[i].setBtnEnabled(true);
+            } else {
+                btnRGB[i].setBtnBright(false);
+                btnRGB[i].setBtnChecked(false);
+                btnRGB[i].setBtnEnabled(true);
+            }
+        }
+
+        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+            if (ledSelect.getLed(i) == LedSelect.SelectType.SELECTED) {
+                btnSingle[i].setBtnBright(false);
+                btnSingle[i].setBtnChecked(true);
+                btnSingle[i].setBtnEnabled(true);
+            } else if (ledSelect.getLed(i) == LedSelect.SelectType.DISABLED) {
+                btnSingle[i].setBtnBright(false);
+                btnSingle[i].setBtnChecked(false);
+                btnSingle[i].setBtnEnabled(false);
+            } else if (ledSelect.getLed(i) == LedSelect.SelectType.COMPLETED) {
+                btnSingle[i].setBtnBright(true);
+                btnSingle[i].setBtnChecked(false);
+                btnSingle[i].setBtnEnabled(true);
+            } else {
+                btnSingle[i].setBtnBright(false);
+                btnSingle[i].setBtnChecked(false);
+                btnSingle[i].setBtnEnabled(true);
+            }
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (ledSelect != null) {
+            displayBtn();
+        }
+    }
+
     private LedBtn.OnLedBtnListener ledBtnListener = new LedBtn.OnLedBtnListener() {
         @Override
         public void onClick(View buttonView) {
-
-        }
-
-        @Override
-        public void onNotify(View buttonView) {
             switch (buttonView.getId()) {
                 case R.id.rgb_1:
-                    clickRGB(0);
+                    clickRgb(1);
                     break;
                 case R.id.rgb_2:
-                    clickRGB(1);
+                    clickRgb(1);
                     break;
                 case R.id.rgb_3:
-                    clickRGB(2);
+                    clickRgb(2);
                     break;
                 case R.id.led_1:
                     clickSingle(0);
@@ -128,9 +181,51 @@ public class LedSelectFragment extends Fragment {
                     break;
             }
         }
+
+        @Override
+        public void onNotify(View buttonView) {
+            switch (buttonView.getId()) {
+                case R.id.rgb_1:
+                    notifyRGB(0);
+                    break;
+                case R.id.rgb_2:
+                    notifyRGB(1);
+                    break;
+                case R.id.rgb_3:
+                    notifyRGB(2);
+                    break;
+                case R.id.led_1:
+                    notifySingle(0);
+                    break;
+                case R.id.led_2:
+                    notifySingle(1);
+                    break;
+                case R.id.led_3:
+                    notifySingle(2);
+                    break;
+                case R.id.led_4:
+                    notifySingle(3);
+                    break;
+                case R.id.led_5:
+                    notifySingle(4);
+                    break;
+                case R.id.led_6:
+                    notifySingle(5);
+                    break;
+                case R.id.led_7:
+                    notifySingle(6);
+                    break;
+                case R.id.led_8:
+                    notifySingle(7);
+                    break;
+                case R.id.led_9:
+                    notifySingle(8);
+                    break;
+            }
+        }
     };
 
-    private void clickRGB(int ledNum) {
+    private void notifyRGB(int ledNum) {
         if (btnRGB[ledNum].getBtnBright()) {
             // TODO 대화창 표시
             return;
@@ -139,18 +234,21 @@ public class LedSelectFragment extends Fragment {
         for (int i=0;i<3;i++) {
             if (btnSingle[ledNum*3 + i].getBtnBright()) {
                 // TODO 대화창 표시
-
                 return;
             }
         }
         for (int i=0;i<3;i++) {
+            // 단색 LED 버튼 체크 해제, Disabled
             btnSingle[ledNum*3 + i].setBtnEnabled(false);
+            ledSelect.setLed(ledNum*3 + i, LedSelect.SelectType.DISABLED);
         }
+        // 선택된 RGB 버튼 체크 설정, Enabled
+        ledSelect.setRgb(ledNum, LedSelect.SelectType.SELECTED);
         btnRGB[ledNum].setBtnEnabled(true);
         btnRGB[ledNum].setBtnChecked(true);
-
+        mListener.onSelectRGB(ledNum, btnRGB[ledNum].getBtnChecked());
     }
-    private void clickSingle(int ledNum) {
+    private void notifySingle(int ledNum) {
         if (btnSingle[ledNum].getBtnBright()) {
             // TODO 대화창 표시
 
@@ -160,14 +258,32 @@ public class LedSelectFragment extends Fragment {
             // TODO 대화창 표시
             return;
         }
+        // RGB 버튼 체크 해제, Disabled
         btnRGB[ledNum/3].setBtnEnabled(false);
+        ledSelect.setRgb(ledNum/3, LedSelect.SelectType.DISABLED);
         for(int i=0;i<3;i++) {
-            btnSingle[(ledNum/3)*3 + i].setBtnEnabled(true);
+            int cLedNum = (ledNum/3)*3 + i;
+            ledSelect.setLed(cLedNum, LedSelect.SelectType.DEFAULT);
+            btnSingle[cLedNum].setBtnEnabled(true);
+            // 다른 LED 는 초기화
+            if (cLedNum != ledNum) {
+                mListener.onSelectLed(cLedNum,btnSingle[cLedNum].getBtnChecked());
+            }
         }
+        ledSelect.setLed(ledNum, LedSelect.SelectType.SELECTED);
         btnSingle[ledNum].setBtnChecked(true);
+        mListener.onSelectLed(ledNum, btnSingle[ledNum].getBtnChecked());
     }
 
+    private void clickRgb(int ledNum) {
+        ledSelect.setRgb(ledNum, btnRGB[ledNum].getBtnChecked());
+        mListener.onSelectRGB(ledNum, btnRGB[ledNum].getBtnChecked());
+    }
 
+    private void clickSingle(int ledNum) {
+        ledSelect.setLed(ledNum, btnSingle[ledNum].getBtnChecked());
+        mListener.onSelectLed(ledNum,btnSingle[ledNum].getBtnChecked());
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -187,7 +303,6 @@ public class LedSelectFragment extends Fragment {
     }
 
     private void showOverLay() {
-
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));

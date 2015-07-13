@@ -8,9 +8,9 @@ import static com.syncworks.define.Define.*;
  * LED 데이터 시리즈
  */
 public class LedDataSeries implements Serializable {
-    private LedDataList[] ledExeDatas = new LedDataList[NUMBER_OF_SINGLE_LED];
-    private LedOptions[] ledOptions = new LedOptions[NUMBER_OF_SINGLE_LED];
-    private LedSelect ledSelect;
+    public LedDataList[] ledExeDatas = new LedDataList[NUMBER_OF_SINGLE_LED];
+    public LedOptions[] ledOptions = new LedOptions[NUMBER_OF_SINGLE_LED];
+    public LedSelect ledSelect;
 
     public LedDataSeries() {
         init();

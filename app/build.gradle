@@ -35,4 +35,5 @@ dependencies {
 	compile project(':soundmeter')
 	compile project(':slightpref')
 	compile project(':endlessadapter')
+	compile project(':leddata')
 }

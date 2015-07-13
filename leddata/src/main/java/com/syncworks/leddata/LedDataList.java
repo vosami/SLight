@@ -19,6 +19,7 @@ public class LedDataList implements List<LedData>, Serializable {
 
     // 스크립트 데이터
     private List<LedData> ledDatas;
+    private int brightProgress;
 
 
     // 기본 생성자 - LED 번호가 0으로 설정
@@ -32,8 +33,12 @@ public class LedDataList implements List<LedData>, Serializable {
         init();
     }
     // 기본 변수 초기화
-    private void init() {
-
+    public void init() {
+        brightProgress = 95;
+        ledDatas.clear();
+        add(new LedData(OP_START,0));
+        add(new LedData(191,0));
+        add(new LedData(OP_END, 0));
     }
 
     @Override
@@ -193,6 +198,55 @@ public class LedDataList implements List<LedData>, Serializable {
             subData = ledDatas.get(i);
             byteArray[2*i] = (byte)subData.getVal();
             byteArray[2*i +1] = (byte) subData.getDuration();
+        }
+        return byteArray;
+    }
+
+    public byte[] toByteArray(LedOptions lo) {
+        int size = ledDatas.size();
+        int byteLength = size*2;
+        LedData subData;
+        int temp1, temp2;
+        byte[] byteArray = new byte[byteLength];
+        for (int i=0;i<size;i++) {
+            subData = ledDatas.get(i);
+            int val = subData.getVal();
+            int delay = subData.getDuration();
+            if (val < OP_CODE_MIN) {
+                val = val * lo.getRatioBright() / 100;
+                delay = delay * lo.getRatioDuration() / 100;
+                if (delay > 254) {
+                    delay = 254;
+                }
+            } else {
+                switch (val) {
+                    case OP_START:
+                        delay = lo.getDelayStart();
+                        break;
+                    case OP_END:
+                        delay = lo.getDelayEnd();
+                        break;
+                    case OP_RANDOM_VAL:
+                    case OP_RANDOM_DELAY:
+                        temp1 = (delay >> 3) & 0x1F;
+                        temp2 = delay & 0x07;
+                        temp1 = temp1 * lo.getRatioBright() / 100;
+                        delay = ((temp1 << 3) & 0xF8) | (temp2);
+                        break;
+                    case OP_NOP:
+                    case OP_LONG_DELAY:
+                        delay = delay * lo.getRatioDuration() / 100;
+                        if (delay > 254) {
+                            delay = 254;
+                        }
+                        break;
+                    case OP_SOUND_VAL:
+                        delay = 20 - lo.getRatioBright()/20;
+                        break;
+                }
+            }
+            byteArray[2*i] = (byte)val;
+            byteArray[2*i +1] = (byte)delay;
         }
         return byteArray;
     }

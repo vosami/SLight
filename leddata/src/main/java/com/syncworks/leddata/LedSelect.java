@@ -26,9 +26,9 @@ public class LedSelect implements Serializable{
         init();
     }
 
-    private void init() {
+    public void init() {
         for (int i=0;i<NUMBER_OF_COLOR_LED;i++) {
-            rgb[i] = SelectType.DEFAULT;
+            rgb[i] = SelectType.DISABLED;
         }
         for (int i=0;i<NUMBER_OF_SINGLE_LED;i++) {
             led[i] = SelectType.DEFAULT;
@@ -37,11 +37,29 @@ public class LedSelect implements Serializable{
     // RGB LED 의 선택 사항 설정
     public void setRgb(int ledNum, SelectType type) {
         rgb[ledNum] = type;
+
+    }
+    // RGB LED 의 선택 사항 설정
+    public void setRgb(int ledNum, boolean type) {
+        if (type) {
+            rgb[ledNum] = SelectType.SELECTED;
+        } else {
+            rgb[ledNum] = SelectType.DEFAULT;
+        }
     }
     // 단색 LED 의 선택 사항 설정
     public void setLed(int ledNum, SelectType type) {
         led[ledNum] = type;
     }
+
+    public void setLed(int ledNum, boolean type) {
+        if (type) {
+            led[ledNum] = SelectType.SELECTED;
+        } else {
+            led[ledNum] = SelectType.DEFAULT;
+        }
+    }
+
 
     public SelectType getRgb(int ledNum) {
         return rgb[ledNum];

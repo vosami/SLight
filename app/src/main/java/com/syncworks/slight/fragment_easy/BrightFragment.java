@@ -2,7 +2,6 @@ package com.syncworks.slight.fragment_easy;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +12,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.syncworks.define.Define;
+import com.syncworks.leddata.LedSelect;
 import com.syncworks.slight.R;
 import com.syncworks.slight.widget.CustomVerticalSeekBar;
 
 
 public class BrightFragment extends Fragment {
+
+    LedSelect ledSelect = null;
 
     Button btnLed[] = new Button[Define.NUMBER_OF_SINGLE_LED];
     Button btnRgb[] = new Button[Define.NUMBER_OF_COLOR_LED];
@@ -44,6 +46,10 @@ public class BrightFragment extends Fragment {
 
     public BrightFragment() {
         // Required empty public constructor
+    }
+
+    public void setLedSelect(LedSelect ls) {
+        ledSelect = ls;
     }
 
     @Override
@@ -138,6 +144,24 @@ public class BrightFragment extends Fragment {
         seekRgb[6].setOnSeekBarChangeListener(seekBarChangeListener);
         seekRgb[7].setOnSeekBarChangeListener(seekBarChangeListener);
         seekRgb[8].setOnSeekBarChangeListener(seekBarChangeListener);
+        seekLed[0].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekLed[1].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekLed[2].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekLed[3].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekLed[4].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekLed[5].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekLed[6].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekLed[7].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekLed[8].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekRgb[0].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekRgb[1].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekRgb[2].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekRgb[3].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekRgb[4].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekRgb[5].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekRgb[6].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekRgb[7].setOnVerticalSeekBarListener(seekBarTouchListener);
+        seekRgb[8].setOnVerticalSeekBarListener(seekBarTouchListener);
 
         btnLed[0].setOnClickListener(onClickListener);
         btnLed[1].setOnClickListener(onClickListener);
@@ -154,7 +178,16 @@ public class BrightFragment extends Fragment {
         btnColorSelect[0].setOnClickListener(onClickListener);
         btnColorSelect[1].setOnClickListener(onClickListener);
         btnColorSelect[2].setOnClickListener(onClickListener);
+
+
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        displaySet();
+        super.onResume();
     }
 
     private void setRgbPercent(int num, int progress) {
@@ -168,6 +201,68 @@ public class BrightFragment extends Fragment {
         String strPercent = Integer.toString(convertProgress) + "%";
         tvLed[num].setText(strPercent);
     }
+
+    private CustomVerticalSeekBar.OnVerticalSeekBarListener seekBarTouchListener = new CustomVerticalSeekBar.OnVerticalSeekBarListener() {
+        @Override
+        public void onEvent(int id, int progress) {
+            switch (id) {
+                case R.id.led_1_seekbar:
+                    onTracking(0,progress);
+                    break;
+                case R.id.led_2_seekbar:
+                    onTracking(1,progress);
+                    break;
+                case R.id.led_3_seekbar:
+                    onTracking(2,progress);
+                    break;
+                case R.id.led_4_seekbar:
+                    onTracking(3,progress);
+                    break;
+                case R.id.led_5_seekbar:
+                    onTracking(4,progress);
+                    break;
+                case R.id.led_6_seekbar:
+                    onTracking(5,progress);
+                    break;
+                case R.id.led_7_seekbar:
+                    onTracking(6,progress);
+                    break;
+                case R.id.led_8_seekbar:
+                    onTracking(7,progress);
+                    break;
+                case R.id.led_9_seekbar:
+                    onTracking(8,progress);
+                    break;
+                case R.id.rgb1_red_seekbar:
+                    onTracking(0,progress);
+                    break;
+                case R.id.rgb1_green_seekbar:
+                    onTracking(1,progress);
+                    break;
+                case R.id.rgb1_blue_seekbar:
+                    onTracking(2,progress);
+                    break;
+                case R.id.rgb2_red_seekbar:
+                    onTracking(3,progress);
+                    break;
+                case R.id.rgb2_green_seekbar:
+                    onTracking(4,progress);
+                    break;
+                case R.id.rgb2_blue_seekbar:
+                    onTracking(5,progress);
+                    break;
+                case R.id.rgb3_red_seekbar:
+                    onTracking(6,progress);
+                    break;
+                case R.id.rgb3_green_seekbar:
+                    onTracking(7,progress);
+                    break;
+                case R.id.rgb3_blue_seekbar:
+                    onTracking(8,progress);
+                    break;
+            }
+        }
+    };
 
     private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
@@ -239,40 +334,58 @@ public class BrightFragment extends Fragment {
         public void onStopTrackingTouch(SeekBar seekBar) {
             switch (seekBar.getId()) {
                 case R.id.led_1_seekbar:
+                    onTracking(0,seekBar.getProgress());
                     break;
                 case R.id.led_2_seekbar:
+                    onTracking(1,seekBar.getProgress());
                     break;
                 case R.id.led_3_seekbar:
+                    onTracking(2,seekBar.getProgress());
                     break;
                 case R.id.led_4_seekbar:
+                    onTracking(3,seekBar.getProgress());
                     break;
                 case R.id.led_5_seekbar:
+                    onTracking(4,seekBar.getProgress());
                     break;
                 case R.id.led_6_seekbar:
+                    onTracking(5,seekBar.getProgress());
                     break;
                 case R.id.led_7_seekbar:
+                    onTracking(6,seekBar.getProgress());
                     break;
                 case R.id.led_8_seekbar:
+                    onTracking(7,seekBar.getProgress());
                     break;
                 case R.id.led_9_seekbar:
+                    onTracking(8,seekBar.getProgress());
                     break;
                 case R.id.rgb1_red_seekbar:
+                    onTracking(0,seekBar.getProgress());
                     break;
                 case R.id.rgb1_green_seekbar:
+                    onTracking(1,seekBar.getProgress());
                     break;
                 case R.id.rgb1_blue_seekbar:
+                    onTracking(2,seekBar.getProgress());
                     break;
                 case R.id.rgb2_red_seekbar:
+                    onTracking(3,seekBar.getProgress());
                     break;
                 case R.id.rgb2_green_seekbar:
+                    onTracking(4,seekBar.getProgress());
                     break;
                 case R.id.rgb2_blue_seekbar:
+                    onTracking(5,seekBar.getProgress());
                     break;
                 case R.id.rgb3_red_seekbar:
+                    onTracking(6,seekBar.getProgress());
                     break;
                 case R.id.rgb3_green_seekbar:
+                    onTracking(7,seekBar.getProgress());
                     break;
                 case R.id.rgb3_blue_seekbar:
+                    onTracking(8,seekBar.getProgress());
                     break;
             }
         }
@@ -283,33 +396,111 @@ public class BrightFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.led_1:
+                    seekLed[0].setProgress(seekLed[0].getMax());
+                    onTracking(0, seekLed[0].getProgress());
                     break;
                 case R.id.led_2:
+                    seekLed[1].setProgress(seekLed[1].getMax());
+                    onTracking(1, seekLed[1].getProgress());
                     break;
                 case R.id.led_3:
+                    seekLed[2].setProgress(seekLed[2].getMax());
+                    onTracking(2, seekLed[2].getProgress());
                     break;
                 case R.id.led_4:
+                    seekLed[3].setProgress(seekLed[3].getMax());
+                    onTracking(3, seekLed[3].getProgress());
                     break;
                 case R.id.led_5:
+                    seekLed[4].setProgress(seekLed[4].getMax());
+                    onTracking(4, seekLed[4].getProgress());
                     break;
                 case R.id.led_6:
+                    seekLed[5].setProgress(seekLed[5].getMax());
+                    onTracking(5, seekLed[5].getProgress());
                     break;
                 case R.id.led_7:
+                    seekLed[6].setProgress(seekLed[6].getMax());
+                    onTracking(6, seekLed[6].getProgress());
                     break;
                 case R.id.led_8:
+                    seekLed[7].setProgress(seekLed[7].getMax());
+                    onTracking(7, seekLed[7].getProgress());
                     break;
                 case R.id.led_9:
+                    seekLed[8].setProgress(seekLed[8].getMax());
+                    onTracking(8, seekLed[8].getProgress());
                     break;
                 case R.id.btn_rgb_select_1:
+                    seekRgb[0].setProgress(seekRgb[0].getMax());
+                    seekRgb[1].setProgress(seekRgb[1].getMax());
+                    seekRgb[2].setProgress(seekRgb[2].getMax());
+                    onTracking(0, seekRgb[0].getProgress());
+                    onTracking(1, seekRgb[1].getProgress());
+                    onTracking(2, seekRgb[2].getProgress());
                     break;
                 case R.id.btn_rgb_select_2:
+                    seekRgb[3].setProgress(seekRgb[3].getMax());
+                    seekRgb[4].setProgress(seekRgb[4].getMax());
+                    seekRgb[5].setProgress(seekRgb[5].getMax());
+                    onTracking(3, seekRgb[3].getProgress());
+                    onTracking(4, seekRgb[4].getProgress());
+                    onTracking(5, seekRgb[5].getProgress());
                     break;
                 case R.id.btn_rgb_select_3:
+                    seekRgb[6].setProgress(seekRgb[6].getMax());
+                    seekRgb[7].setProgress(seekRgb[7].getMax());
+                    seekRgb[8].setProgress(seekRgb[8].getMax());
+                    onTracking(6, seekRgb[6].getProgress());
+                    onTracking(7, seekRgb[7].getProgress());
+                    onTracking(8, seekRgb[8].getProgress());
                     break;
-
             }
         }
     };
+
+    private void showRgb(int i) {
+        btnLed[i*3].setVisibility(View.GONE);
+        btnLed[i*3 +1].setVisibility(View.GONE);
+        btnLed[i*3 +2].setVisibility(View.GONE);
+        btnRgb[i].setVisibility(View.VISIBLE);
+
+        rlLed[i*3].setVisibility(View.GONE);
+        rlLed[i*3 +1].setVisibility(View.GONE);
+        rlLed[i*3 +2].setVisibility(View.GONE);
+        rlRgb[i].setVisibility(View.VISIBLE);
+    }
+
+    private void showLed(int i) {
+        int cLedNum = (i*3) / 3;
+        btnRgb[i/3].setVisibility(View.GONE);
+        rlRgb[i/3].setVisibility(View.GONE);
+        for (int k=0;k<3;k++) {
+            if (i == cLedNum + k) {
+                rlLed[cLedNum].setVisibility(View.VISIBLE);
+                btnLed[cLedNum].setVisibility(View.VISIBLE);
+            } else if (btnLed[cLedNum].getVisibility() == View.GONE){
+                rlLed[cLedNum].setVisibility(View.INVISIBLE);
+                btnLed[cLedNum].setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    private void displaySet() {
+        if (ledSelect != null) {
+            for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+                if (ledSelect.getRgb(i) == LedSelect.SelectType.SELECTED) {
+                    showRgb(i);
+                }
+            }
+
+            for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                if (ledSelect.getLed(i) == LedSelect.SelectType.SELECTED) {
+                    showLed(i);
+                }
+            }
+        }
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -328,5 +519,10 @@ public class BrightFragment extends Fragment {
         mListener = null;
     }
 
+    private void onTracking(int ledNum, int bright) {
+        if (mListener != null) {
+            mListener.onBrightLed(ledNum, bright);
+        }
+    }
 
 }

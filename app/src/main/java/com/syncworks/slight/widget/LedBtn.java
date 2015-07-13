@@ -131,7 +131,6 @@ public class LedBtn extends Button {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int touchy = (int) event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 break;

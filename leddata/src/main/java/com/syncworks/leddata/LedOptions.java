@@ -26,7 +26,7 @@ public class LedOptions implements Serializable{
     }
     // 옵션 설정 초기화
     public void init() {
-        ratioBright = 100;
+        ratioBright = 50;
         ratioDuration = 100;
         delayStart = 0;
         delayEnd = 0;

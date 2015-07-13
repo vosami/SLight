@@ -56,7 +56,7 @@ public class LedData implements Serializable,Comparator<LedData> {
             case OP_FETCH:
                 if (args.length == 1) {
                     _val = instruct;
-                    _duration = Integer.valueOf((String) args[0]);
+                    _duration = (int) args[0];//Integer.valueOf((String) args[0]);
                 }
                 break;
             case OP_RANDOM_VAL:
