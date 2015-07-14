@@ -21,8 +21,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/iv_logo"
-        android:layout_alignEnd="@id/iv_logo"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:text="@string/slight_version"/>
     <Button
         android:id="@+id/btn_comm_set"

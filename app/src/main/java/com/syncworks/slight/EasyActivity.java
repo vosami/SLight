@@ -24,9 +24,7 @@ import android.widget.Toast;
 
 import com.syncworks.define.Define;
 import com.syncworks.define.Logger;
-import com.syncworks.leddata.LedDataList;
 import com.syncworks.leddata.LedDataSeries;
-import com.syncworks.leddata.LedOptions;
 import com.syncworks.leddata.LedSelect;
 import com.syncworks.slight.fragment_easy.BleSetFragment;
 import com.syncworks.slight.fragment_easy.BrightFragment;
@@ -169,6 +167,21 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         stepView.setOnStepViewTouchListener(stepViewTouchListener);
     }
 
+    // 4단계에서 2단계로 넘어갈 때 선택되었던 LED 를 초기화하여 완료 상태로 설정
+    private void ledComplete() {
+        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+            if (ledDataSeries.ledSelect.getLed(i) == LedSelect.SelectType.SELECTED) {
+                ledDataSeries.ledSelect.setLed(i, LedSelect.SelectType.COMPLETED);
+            }
+        }
+        for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+            if (ledDataSeries.ledSelect.getRgb(i) == LedSelect.SelectType.SELECTED) {
+                ledDataSeries.ledSelect.setRgb(i, LedSelect.SelectType.COMPLETED);
+            }
+        }
+
+    }
+
     public void onClick(View v) {
         int curStep = stepView.getStep();
         switch (v.getId()) {
@@ -188,7 +201,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                     showProgressDialog();
                     new Thread(taskConnect).start();
                 } else if (curStep == 4) {
-
+                    // 완료 하면 버튼 초기화
+                    ledComplete();
                     changeStep(2);
                 } else {
                     changeStep(stepView.getStep() + 1);
@@ -605,6 +619,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         fragment4th = EffectFragment.newInstance();
 
         fragment2nd.setLedSelect(this.ledDataSeries.ledSelect);
+        fragment2nd.setLedOptions(this.ledDataSeries.ledOptions);
         fragment3rd.setLedSelect(this.ledDataSeries.ledSelect);
         fragment4th.setLedSelect(this.ledDataSeries.ledSelect);
 

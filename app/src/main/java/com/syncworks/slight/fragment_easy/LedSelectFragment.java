@@ -1,8 +1,10 @@
 package com.syncworks.slight.fragment_easy;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,8 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.TextView;
 
 import com.syncworks.define.Define;
+import com.syncworks.leddata.LedOptions;
 import com.syncworks.leddata.LedSelect;
 import com.syncworks.slight.R;
 import com.syncworks.slight.dialog.DialogChangePattern;
@@ -35,7 +39,10 @@ public class LedSelectFragment extends Fragment {
     // 스마트라이트 설정
     private SLightPref appPref;
 
+    // LED 선택 변수
     private LedSelect ledSelect = null;
+    // LED 옵션 변수
+    private LedOptions ledOptions[] = null;
 
     private LedBtn btnRGB[] = new LedBtn[NUMBER_OF_COLOR_LED];
     private LedBtn btnSingle[] = new LedBtn[NUMBER_OF_SINGLE_LED];
@@ -57,6 +64,9 @@ public class LedSelectFragment extends Fragment {
         this.ledSelect = ls;
     }
 
+    public void setLedOptions(LedOptions[] lo) {
+        this.ledOptions = lo;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,6 +119,11 @@ public class LedSelectFragment extends Fragment {
                 btnRGB[i].setBtnBright(true);
                 btnRGB[i].setBtnChecked(false);
                 btnRGB[i].setBtnEnabled(true);
+                if (ledOptions != null) {
+                    btnRGB[i].setBright(ledOptions[i * 3].getRatioBright()*191/100,
+                            ledOptions[i * 3 + 1].getRatioBright()*191/100,
+                            ledOptions[i * 3 + 2].getRatioBright()*191/100);
+                }
             } else {
                 btnRGB[i].setBtnBright(false);
                 btnRGB[i].setBtnChecked(false);
@@ -129,6 +144,9 @@ public class LedSelectFragment extends Fragment {
                 btnSingle[i].setBtnBright(true);
                 btnSingle[i].setBtnChecked(false);
                 btnSingle[i].setBtnEnabled(true);
+                if (ledOptions != null) {
+                    btnSingle[i].setBright(ledOptions[i].getRatioBright()*191/100);
+                }
             } else {
                 btnSingle[i].setBtnBright(false);
                 btnSingle[i].setBtnChecked(false);
@@ -140,7 +158,7 @@ public class LedSelectFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (ledSelect != null) {
+        if (ledSelect != null && ledOptions != null) {
             displayBtn();
         }
     }
@@ -234,12 +252,14 @@ public class LedSelectFragment extends Fragment {
     private void notifyRGB(int ledNum) {
         if (btnRGB[ledNum].getBtnBright()) {
             // TODO 대화창 표시
+            showNotifyDialog(true,ledNum);
             return;
         }
         // 현재 선택한 RGB 버튼을 체크할 때
         for (int i=0;i<3;i++) {
             if (btnSingle[ledNum*3 + i].getBtnBright()) {
                 // TODO 대화창 표시
+                showNotifyDialog(false,ledNum);
                 return;
             }
         }
@@ -257,7 +277,6 @@ public class LedSelectFragment extends Fragment {
     private void notifySingle(int ledNum) {
         if (btnSingle[ledNum].getBtnBright()) {
             // TODO 대화창 표시
-
             return;
         }
         if (btnRGB[ledNum/3].getBtnBright()) {
@@ -288,7 +307,7 @@ public class LedSelectFragment extends Fragment {
 
     private void clickSingle(int ledNum) {
         ledSelect.setLed(ledNum, btnSingle[ledNum].getBtnChecked());
-        mListener.onSelectLed(ledNum,btnSingle[ledNum].getBtnChecked());
+        mListener.onSelectLed(ledNum, btnSingle[ledNum].getBtnChecked());
     }
 
     @Override
@@ -323,5 +342,40 @@ public class LedSelectFragment extends Fragment {
             }
         });
         dialog.show();
+    }
+
+    private AlertDialog notifyDialog = null;
+    private void showNotifyDialog(boolean isRgb, int ledNum) {
+        notifyDialog = createNotifyDialog(isRgb, ledNum);
+        notifyDialog.show();
+    }
+
+    private AlertDialog createNotifyDialog(boolean isRgb, int ledNum) {
+        AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
+        String ledType;
+        if (isRgb) {
+            ledType = getString(R.string.led_type_rgb);
+        } else {
+            ledType = getString(R.string.led_type_rgb);
+        }
+        String title = ledType  + Integer.toString(ledNum) +" "+  getString(R.string.str_select);
+        ab.setTitle(title);
+        TextView tvCancelNotify = new TextView(getActivity());
+        tvCancelNotify.setText(getString(R.string.easy_led_select_tv_cancel_notify));
+        ab.setView(tvCancelNotify);
+        ab.setCancelable(true);
+        ab.setPositiveButton(getString(R.string.str_confirm), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                notifyDialog.dismiss();
+            }
+        });
+        ab.setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                notifyDialog.dismiss();
+            }
+        });
+        return ab.create();
     }
 }

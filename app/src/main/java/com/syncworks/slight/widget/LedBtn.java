@@ -49,6 +49,9 @@ public class LedBtn extends Button {
     private Paint fillPaint = new Paint();
     private Paint circlePaint = new Paint();
     private Paint percentPaint = new Paint();
+    private Paint redPercentPaint = new Paint();
+    private Paint greenPercentPaint = new Paint();
+    private Paint bluePercentPaint = new Paint();
     private Paint textPaint = new Paint();
 
     private float centerX = 0;
@@ -102,6 +105,15 @@ public class LedBtn extends Button {
         percentPaint.setStyle(Paint.Style.FILL);
         percentPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         percentPaint.setColor(Color.rgb(255, 211, 0));
+        redPercentPaint.setStyle(Paint.Style.FILL);
+        redPercentPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        redPercentPaint.setColor(Color.rgb(243,98,98));
+        greenPercentPaint.setStyle(Paint.Style.FILL);
+        greenPercentPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        greenPercentPaint.setColor(Color.rgb(0, 192, 9));
+        bluePercentPaint.setStyle(Paint.Style.FILL);
+        bluePercentPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        bluePercentPaint.setColor(Color.rgb(0,58,204));
 
         textPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         textPaint.setTextAlign(Paint.Align.CENTER);
@@ -243,9 +255,6 @@ public class LedBtn extends Button {
                 } else {
                     radius = (float) (mWidth * 0.5);
                 }
-
-
-
                 canvas.drawCircle(centerX, centerY, radius, fillPaint);
                 canvas.drawCircle(centerX, centerY, radius, strokePaint);
                 canvas.drawCircle(centerX, centerY, (float) (radius * 0.9), circlePaint);
@@ -258,8 +267,19 @@ public class LedBtn extends Button {
                 if (mWidth/3 > mHeight) {
                     radius = (float) (mHeight * 0.5);
                 } else {
-                    radius = (float) (mWidth * 0.5);
+                    radius = (float) (mWidth/3.2 * 0.5);
                 }
+                canvas.drawCircle(centerX, centerY, radius, fillPaint);
+                canvas.drawCircle(centerX, centerY, radius, strokePaint);
+                canvas.drawCircle(centerX, centerY, (float) (radius * 0.9), circlePaint);
+                canvas.drawCircle((float)(centerX-(2.1*radius)), centerY, radius, fillPaint);
+                canvas.drawCircle((float)(centerX-(2.1*radius)), centerY, radius, strokePaint);
+                canvas.drawCircle((float) (centerX - (2.1 * radius)), centerY, (float) (radius * 0.9), circlePaint);
+                canvas.drawCircle((float)(centerX+(2.1*radius)), centerY, radius, fillPaint);
+                canvas.drawCircle((float)(centerX+(2.1*radius)), centerY, radius, strokePaint);
+                canvas.drawCircle((float)(centerX+(2.1*radius)), centerY, (float) (radius * 0.9), circlePaint);
+                //drawPercent(canvas);
+                drawRgbPercent(canvas);
             }
         }
     }
@@ -278,8 +298,42 @@ public class LedBtn extends Button {
     }
 
     private void drawRgbPercent(Canvas canvas) {
+        float percentRadius = (float) (radius * 0.9);
+        RectF mPercent = new RectF((float)(centerX -(2.1*radius) - percentRadius), centerY-percentRadius,
+                (float)(centerX -(2.1*radius)+ percentRadius), centerY + percentRadius);
+        canvas.drawArc(mPercent, 270, 360 * bright1 / MAX_BRIGHT, true, redPercentPaint);
+        canvas.drawArc(mPercent, 270, 360 * bright1 / MAX_BRIGHT, true, strokePaint);
+        canvas.drawCircle((float) (centerX - (2.1 * radius)), centerY, (float) (radius * 0.6), fillPaint);
+        mPercent = new RectF((centerX  - percentRadius), centerY-percentRadius,
+                (centerX + percentRadius), centerY + percentRadius);
+        canvas.drawArc(mPercent, 270, 360 * bright1 / MAX_BRIGHT, true, greenPercentPaint);
+        canvas.drawArc(mPercent, 270, 360 * bright1 / MAX_BRIGHT, true, strokePaint);
+        canvas.drawCircle(centerX, centerY, (float) (radius * 0.6), fillPaint);
+        mPercent = new RectF((float)(centerX +(2.1*radius) - percentRadius), centerY-percentRadius,
+                (float)(centerX +(2.1*radius)+ percentRadius), centerY + percentRadius);
+        canvas.drawArc(mPercent, 270, 360 * bright1 / MAX_BRIGHT, true, bluePercentPaint);
+        canvas.drawArc(mPercent, 270, 360 * bright1 / MAX_BRIGHT, true, strokePaint);
+        canvas.drawCircle((float) (centerX + (2.1 * radius)), centerY, (float) (radius * 0.6), fillPaint);
+
+        float textSize = (float) (radius*0.5);
+        int percent = Math.round((float) bright1 * 100 / MAX_BRIGHT);
+        textPaint.setTextSize(textSize);
+        canvas.drawText(Integer.toString(percent) + "%", (float) (centerX - (2.1 * radius)), centerY + (float) (textSize * 0.3), textPaint);
+        percent = Math.round((float) bright2 * 100 / MAX_BRIGHT);
+        canvas.drawText(Integer.toString(percent) + "%", centerX, centerY + (float) (textSize * 0.3), textPaint);
+        percent = Math.round((float) bright3 * 100 / MAX_BRIGHT);
+        canvas.drawText(Integer.toString(percent) + "%", (float) (centerX + (2.1 * radius)), centerY + (float) (textSize * 0.3), textPaint);
+    }
+    // 단색 LED 밝기 설정
+    public void setBright(int bright) {
+        this.bright1 = bright;
+    }
+    // RGB LED 밝기 설정
+    public void setBright(int bright1, int bright2, int bright3) {
+        this.bright1 = bright1;
+        this.bright2 = bright2;
+        this.bright3 = bright3;
 
     }
-
 
 }

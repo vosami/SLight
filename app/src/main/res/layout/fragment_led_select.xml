@@ -14,18 +14,22 @@
         <com.syncworks.slight.widget.LedBtn
             android:id="@id/rgb_1"
             style="@style/rgbBtn"
+            custom:type="rgb"
+            custom:btn_state_bright="true"
             custom:btn_state_enabled="false"
             custom:text_on="✓"
             custom:text_off="RGB 1"/>
         <com.syncworks.slight.widget.LedBtn
             android:id="@id/rgb_2"
             style="@style/rgbBtn"
+            custom:type="rgb"
             custom:btn_state_enabled="false"
             custom:text_on="✓"
             custom:text_off="RGB 2"/>
         <com.syncworks.slight.widget.LedBtn
             android:id="@id/rgb_3"
             style="@style/rgbBtn"
+            custom:type="rgb"
             custom:btn_state_enabled="false"
             custom:text_on="✓"
             custom:text_off="RGB 3"/>

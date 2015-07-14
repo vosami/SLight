@@ -9,6 +9,9 @@
 
     <string name="slight_version">SLight v150714</string>
 
+    <string name="led_type_rgb">RGB LED</string>
+    <string name="led_type_single">단색 LED</string>
+
     <string name="led1_str">1</string>
     <string name="led2_str">2</string>
     <string name="led3_str">3</string>
@@ -26,6 +29,7 @@
     <string name="ble_scan">검색</string>
     <string name="ble_stop">중지</string>
     <string name="str_close">닫기</string>
+    <string name="str_select">선택</string>
     <string name="default_percent">50%</string>
 
     <!--액션바의 블루투스 연결 타이틀-->
@@ -180,6 +184,7 @@
     <string name="easy_led_select_btn_load_file">불러오기</string>
     <string name="easy_led_select_btn_save_file">저장하기</string>
     <string name="easy_led_select_btn_color_select">색깔선택</string>
+    <string name="easy_led_select_tv_cancel_notify">이전 적용된 효과가 취소됩니다.</string>
 
     <string name="easy_effect_select">LED 효과 선택</string>
     <string name="easy_effect_pattern_always">항상켜기</string>
