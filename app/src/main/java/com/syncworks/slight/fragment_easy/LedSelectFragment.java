@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.syncworks.define.Define;
@@ -43,9 +44,13 @@ public class LedSelectFragment extends Fragment {
     private LedSelect ledSelect = null;
     // LED 옵션 변수
     private LedOptions ledOptions[] = null;
+    private int rgbPattern[] = new int[NUMBER_OF_COLOR_LED];
+    private int ledPattern[] = new int[NUMBER_OF_SINGLE_LED];
 
     private LedBtn btnRGB[] = new LedBtn[NUMBER_OF_COLOR_LED];
     private LedBtn btnSingle[] = new LedBtn[NUMBER_OF_SINGLE_LED];
+    private ImageView ivRGB[] = new ImageView[NUMBER_OF_COLOR_LED];
+    private ImageView ivSingle[] = new ImageView[NUMBER_OF_SINGLE_LED];
 
     private OnEasyFragmentListener mListener = null;
 
@@ -57,7 +62,21 @@ public class LedSelectFragment extends Fragment {
     }
 
     public LedSelectFragment() {
+        // 효과 패턴 초기화
+        for (int i=0;i<NUMBER_OF_COLOR_LED;i++) {
+            rgbPattern[i] = 0;
+        }
+        for (int i=0;i<NUMBER_OF_SINGLE_LED;i++) {
+            ledPattern[i] = 0;
+        }
+    }
 
+    public void setPattern(boolean isRgb,int ledNum, int pattern) {
+        if (isRgb) {
+            rgbPattern[ledNum] = pattern;
+        } else {
+            ledPattern[ledNum] = pattern;
+        }
     }
 
     public void setLedSelect(LedSelect ls) {
@@ -85,6 +104,18 @@ public class LedSelectFragment extends Fragment {
         btnSingle[6] = (LedBtn) view.findViewById(R.id.led_7);
         btnSingle[7] = (LedBtn) view.findViewById(R.id.led_8);
         btnSingle[8] = (LedBtn) view.findViewById(R.id.led_9);
+        ivRGB[0] = (ImageView) view.findViewById(R.id.rgb_1_pattern);
+        ivRGB[1] = (ImageView) view.findViewById(R.id.rgb_2_pattern);
+        ivRGB[2] = (ImageView) view.findViewById(R.id.rgb_3_pattern);
+        ivSingle[0] = (ImageView) view.findViewById(R.id.led_1_pattern);
+        ivSingle[1] = (ImageView) view.findViewById(R.id.led_2_pattern);
+        ivSingle[2] = (ImageView) view.findViewById(R.id.led_3_pattern);
+        ivSingle[3] = (ImageView) view.findViewById(R.id.led_4_pattern);
+        ivSingle[4] = (ImageView) view.findViewById(R.id.led_5_pattern);
+        ivSingle[5] = (ImageView) view.findViewById(R.id.led_6_pattern);
+        ivSingle[6] = (ImageView) view.findViewById(R.id.led_7_pattern);
+        ivSingle[7] = (ImageView) view.findViewById(R.id.led_8_pattern);
+        ivSingle[8] = (ImageView) view.findViewById(R.id.led_9_pattern);
 
         btnRGB[0].setOnLedBtnListener(ledBtnListener);
         btnRGB[1].setOnLedBtnListener(ledBtnListener);
@@ -105,29 +136,44 @@ public class LedSelectFragment extends Fragment {
         return view;
     }
 
+    private final static int PATTERN[] = {
+            R.drawable.ic_pattern_always,
+            R.drawable.ic_pattern_pulse,
+            R.drawable.ic_pattern_flash,
+            R.drawable.ic_pattern_up_down,
+            R.drawable.ic_pattern_torch
+    };
+
     private void displayBtn() {
         for (int i=0;i< Define.NUMBER_OF_COLOR_LED;i++) {
             if (ledSelect.getRgb(i) == LedSelect.SelectType.SELECTED) {
                 btnRGB[i].setBtnBright(false);
                 btnRGB[i].setBtnChecked(true);
                 btnRGB[i].setBtnEnabled(true);
+                ivRGB[i].setVisibility(View.INVISIBLE);
             } else if (ledSelect.getRgb(i) == LedSelect.SelectType.DISABLED) {
                 btnRGB[i].setBtnBright(false);
                 btnRGB[i].setBtnChecked(false);
                 btnRGB[i].setBtnEnabled(false);
+                ivRGB[i].setVisibility(View.INVISIBLE);
             } else if (ledSelect.getRgb(i) == LedSelect.SelectType.COMPLETED) {
+                // 버튼 완료 표시
                 btnRGB[i].setBtnBright(true);
                 btnRGB[i].setBtnChecked(false);
                 btnRGB[i].setBtnEnabled(true);
+                // RGB 색깔 옵션 설정
                 if (ledOptions != null) {
                     btnRGB[i].setBright(ledOptions[i * 3].getRatioBright()*191/100,
                             ledOptions[i * 3 + 1].getRatioBright()*191/100,
                             ledOptions[i * 3 + 2].getRatioBright()*191/100);
                 }
+                ivRGB[i].setBackground(getResources().getDrawable(PATTERN[rgbPattern[i]]));
+                ivRGB[i].setVisibility(View.VISIBLE);
             } else {
                 btnRGB[i].setBtnBright(false);
                 btnRGB[i].setBtnChecked(false);
                 btnRGB[i].setBtnEnabled(true);
+                ivRGB[i].setVisibility(View.INVISIBLE);
             }
         }
 
@@ -136,10 +182,12 @@ public class LedSelectFragment extends Fragment {
                 btnSingle[i].setBtnBright(false);
                 btnSingle[i].setBtnChecked(true);
                 btnSingle[i].setBtnEnabled(true);
+                ivSingle[i].setVisibility(View.INVISIBLE);
             } else if (ledSelect.getLed(i) == LedSelect.SelectType.DISABLED) {
                 btnSingle[i].setBtnBright(false);
                 btnSingle[i].setBtnChecked(false);
                 btnSingle[i].setBtnEnabled(false);
+                ivSingle[i].setVisibility(View.INVISIBLE);
             } else if (ledSelect.getLed(i) == LedSelect.SelectType.COMPLETED) {
                 btnSingle[i].setBtnBright(true);
                 btnSingle[i].setBtnChecked(false);
@@ -147,10 +195,13 @@ public class LedSelectFragment extends Fragment {
                 if (ledOptions != null) {
                     btnSingle[i].setBright(ledOptions[i].getRatioBright()*191/100);
                 }
+                ivSingle[i].setBackground(getResources().getDrawable(PATTERN[ledPattern[i]]));
+                ivSingle[i].setVisibility(View.VISIBLE);
             } else {
                 btnSingle[i].setBtnBright(false);
                 btnSingle[i].setBtnChecked(false);
                 btnSingle[i].setBtnEnabled(true);
+                ivSingle[i].setVisibility(View.INVISIBLE);
             }
         }
     }

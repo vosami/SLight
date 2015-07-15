@@ -128,15 +128,6 @@
         android:layout_margin="10dp"
         android:orientation="vertical"
         android:background="@drawable/background_view_rounded_single">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:textSize="18sp"
-            android:textColor="@color/Black"
-            android:text="@string/easy_effect_select"/>
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

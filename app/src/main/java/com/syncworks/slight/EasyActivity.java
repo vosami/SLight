@@ -32,6 +32,7 @@ import com.syncworks.slight.fragment_easy.EffectFragment;
 import com.syncworks.slight.fragment_easy.InstallFragment;
 import com.syncworks.slight.fragment_easy.LedSelectFragment;
 import com.syncworks.slight.fragment_easy.OnEasyFragmentListener;
+import com.syncworks.slight.fragment_easy.SaveFragment;
 import com.syncworks.slight.util.ByteLengthFilter;
 import com.syncworks.slight.util.ErrorToast;
 import com.syncworks.slight.util.SuccessToast;
@@ -58,7 +59,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     private final static int MAX_STEP = 5;  // 5단계가 최고 단계로 설정
     StepView stepView;
-    Button btnPrev, btnNext;
+    Button btnPrev, btnNext, btnStep5, btnFinish;
 
     // LED 선택, 패턴 데이터
     private LedDataSeries ledDataSeries;
@@ -158,10 +159,13 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         stepView = (StepView) findViewById(R.id.easy_step_view);
         btnPrev = (Button) findViewById(R.id.easy_btn_back);
         btnNext = (Button) findViewById(R.id.easy_btn_next);
+        btnStep5 = (Button) findViewById(R.id.easy_btn_step5);
+        btnFinish = (Button) findViewById(R.id.easy_btn_finish);
         StepView.OnStepViewTouchListener stepViewTouchListener = new StepView.OnStepViewTouchListener() {
             @Override
             public void onStepViewEvent(int clickStep) {
                 Logger.v(this, "OnStepView", clickStep);
+                changeStep(clickStep);
             }
         };
         stepView.setOnStepViewTouchListener(stepViewTouchListener);
@@ -179,8 +183,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 ledDataSeries.ledSelect.setRgb(i, LedSelect.SelectType.COMPLETED);
             }
         }
-
     }
+
 
     public void onClick(View v) {
         int curStep = stepView.getStep();
@@ -203,10 +207,24 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 } else if (curStep == 4) {
                     // 완료 하면 버튼 초기화
                     ledComplete();
+                    // 효과 선택 초기화
+                    fragment4th.initEffectNum();
+                    changeStep(2);
+                } else if (curStep == 5) {
                     changeStep(2);
                 } else {
                     changeStep(stepView.getStep() + 1);
                 }
+                break;
+            case R.id.easy_btn_step5:
+                // 선택된 LED 완료 표시
+                ledComplete();
+                // 효과 선택 초기화
+                fragment4th.initEffectNum();
+                changeStep(5);
+                break;
+            case R.id.easy_btn_finish:
+                this.finish();
                 break;
         }
     }
@@ -600,14 +618,53 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     private LedSelectFragment fragment2nd;
     private BrightFragment fragment3rd;
     private EffectFragment fragment4th;
+    private SaveFragment fragment5th;
 
-    private void toggleView(boolean isVisible) {
-        if (isVisible) {
-            stepView.setVisibility(View.VISIBLE);
-            btnPrev.setVisibility(View.VISIBLE);
-        } else {
-            stepView.setVisibility(View.GONE);
-            btnPrev.setVisibility(View.GONE);
+    // 다음단계 버튼 텍스트 변경
+    private void setBtnText(int step) {
+        switch (step) {
+            case 0:
+                btnNext.setText(getString(R.string.str_next));
+                stepView.setVisibility(View.GONE);
+                btnPrev.setVisibility(View.GONE);
+                btnStep5.setVisibility(View.GONE);
+                btnFinish.setVisibility(View.GONE);
+                break;
+            case 1:
+                btnNext.setText(getString(R.string.str_next));
+                stepView.setVisibility(View.VISIBLE);
+                btnPrev.setVisibility(View.VISIBLE);
+                btnStep5.setVisibility(View.GONE);
+                btnFinish.setVisibility(View.GONE);
+                break;
+            case 2:
+                btnNext.setText(getString(R.string.str_next));
+                stepView.setVisibility(View.VISIBLE);
+                btnPrev.setVisibility(View.VISIBLE);
+                btnStep5.setVisibility(View.GONE);
+                btnFinish.setVisibility(View.GONE);
+                break;
+            case 3:
+                btnNext.setText(getString(R.string.str_next));
+                stepView.setVisibility(View.VISIBLE);
+                btnPrev.setVisibility(View.VISIBLE);
+                btnStep5.setVisibility(View.GONE);
+                btnFinish.setVisibility(View.GONE);
+                break;
+            case 4:
+                btnNext.setText(getString(R.string.easy_step_complete));
+                stepView.setVisibility(View.VISIBLE);
+                btnPrev.setVisibility(View.VISIBLE);
+                btnStep5.setVisibility(View.VISIBLE);
+                btnFinish.setVisibility(View.GONE);
+                break;
+            case 5:
+                btnNext.setText(getString(R.string.easy_step_complete));
+                stepView.setVisibility(View.VISIBLE);
+                btnPrev.setVisibility(View.GONE);
+                btnStep5.setVisibility(View.GONE);
+                btnFinish.setVisibility(View.VISIBLE);
+                break;
         }
     }
 
@@ -617,6 +674,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         fragment2nd = LedSelectFragment.newInstance();
         fragment3rd = BrightFragment.newInstance();
         fragment4th = EffectFragment.newInstance();
+        fragment5th = SaveFragment.newInstance();
 
         fragment2nd.setLedSelect(this.ledDataSeries.ledSelect);
         fragment2nd.setLedOptions(this.ledDataSeries.ledOptions);
@@ -627,13 +685,13 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         // 0단계를 보지 않겠다고 설정되어 있다면
         if (appPref.getBoolean(SLightPref.FRAG_INSTALL_NOT_SHOW)) {
-            toggleView(true);
+            setBtnText(1);
             changeActionBarText(1);
             fragmentTransaction.add(R.id.easy_ll_fragment, fragment1st);
         }
         // 0단계를 보겠다고 설정되어 있다면
         else {
-            toggleView(false);
+            setBtnText(0);
             changeActionBarText(0);
             fragmentTransaction.add(R.id.easy_ll_fragment, fragment0th);
 //            fragmentTransaction.add(R.id.easy_ll_fragment, fragment2nd);
@@ -677,41 +735,25 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         switch (step) {
             case 0:
-                // 뒤로 버튼, 스텝뷰 안보이게 설정
-                toggleView(false);
                 fragmentTransaction.replace(R.id.easy_ll_fragment, fragment0th);
                 break;
             case 1:
                 startFragment(step);
                 // LED 선택 초기화
                 ledDataSeries.ledSelect.init();
-                // 뒤로 버튼, 스텝뷰 보이게 설정
-                toggleView(true);
                 fragmentTransaction.replace(R.id.easy_ll_fragment, fragment1st);
                 break;
             case 2:
                 fragmentTransaction.replace(R.id.easy_ll_fragment, fragment2nd);
                 break;
             case 3:
-                /*if (fragment2nd.isRGB()) {
-                    fragment3rd.setRGB(true);
-                    fragment3rd.setParamRGB(fragment2nd.getRGBSelect());
-                } else {
-                    fragment3rd.setRGB(false);
-                    fragment3rd.setParamLED(fragment2nd.getLedSelect());
-                }*/
                 fragmentTransaction.replace(R.id.easy_ll_fragment, fragment3rd);
                 break;
             case 4:
-                /*if (fragment2nd.isRGB()) {
-                    fragment4th.setRGB(true);
-                    fragment4th.setParamRGB(fragment2nd.getRGBSelect());
-                } else {
-                    fragment4th.setRGB(false);
-                    fragment4th.setParamLED(fragment2nd.getLedSelect());
-                }
-                fragment4th.setInit();*/
                 fragmentTransaction.replace(R.id.easy_ll_fragment, fragment4th);
+                break;
+            case 5:
+                fragmentTransaction.replace(R.id.easy_ll_fragment, fragment5th);
                 break;
             default:
                 break;
@@ -720,6 +762,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     }
 
     private void changeStep(int step) {
+        setBtnText(step);       // 다음단계 버튼 텍스트 변경
         changeActionBarText(step);  // 타이틀 바 제목 변경 , 스텝 변경
         changeFragment(step);       // Fragment 변경
     }
@@ -815,6 +858,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     @Override
     public void onEffect(int effect, boolean isDelayLong, boolean isRandom, int startTime) {
+
         for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
             if (ledDataSeries.ledSelect.getLed(i) == LedSelect.SelectType.SELECTED) {
                 ledDataSeries.ledOptions[i].setDelayStart(startTime);
@@ -824,6 +868,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                     ledDataSeries.ledOptions[i].setRatioDuration(200);
                 }
                 ledDataSeries.ledExeDatas[i].setEffect(effect, isDelayLong, isRandom, startTime);
+                // LED 선택 프래그먼트에 효과 값 전달
+                fragment2nd.setPattern(false, i, effect);
                 txPattern(i, ledDataSeries.ledExeDatas[i].toByteArray(ledDataSeries.ledOptions[i]));
                 txData(TxDatas.formatInitCount());
             }
@@ -846,6 +892,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 ledDataSeries.ledExeDatas[i*3 + 1].setEffect(effect, isDelayLong, isRandom, startTime);
                 ledDataSeries.ledExeDatas[i*3 + 2].setEffect(effect, isDelayLong, isRandom, startTime);
 
+                // LED 선택 프래그먼트에 효과 값 전달
+                fragment2nd.setPattern(true, i, effect);
                 txPattern(i * 3, ledDataSeries.ledExeDatas[i * 3].toByteArray(ledDataSeries.ledOptions[i * 3]));
                 txPattern(i*3 + 1,ledDataSeries.ledExeDatas[i*3 + 1].toByteArray(ledDataSeries.ledOptions[i*3 + 1]));
                 txPattern(i*3 + 2,ledDataSeries.ledExeDatas[i*3 + 2].toByteArray(ledDataSeries.ledOptions[i*3 + 2]));
@@ -861,6 +909,21 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     @Override
     public void onNotDialog() {
+
+    }
+
+    @Override
+    public void onSleepLedCheck(boolean isCheckLed) {
+
+    }
+
+    @Override
+    public void onSleep(boolean isSleep) {
+
+    }
+
+    @Override
+    public void onRandomPlay(int playTime) {
 
     }
 

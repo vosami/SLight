@@ -60,7 +60,7 @@ import android.view.View;
 public class ColorPickerView extends View{
 
 	public interface OnColorChangedListener{
-		public void onColorChanged(int newColor);		
+		public void onColorChanged(int newColor);
 	}
 		
 	private final static int	PANEL_SAT_VAL = 0;

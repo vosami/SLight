@@ -27,6 +27,8 @@ public class EffectFragment extends Fragment {
     private LedSelect ledSelect;
     private OnEasyFragmentListener mListener;
 
+    private int effectNum = 0;
+
     private Button btnRgb[] = new Button[Define.NUMBER_OF_COLOR_LED];
     private Button btnLed[] = new Button[Define.NUMBER_OF_SINGLE_LED];
 
@@ -77,14 +79,9 @@ public class EffectFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
-        Logger.d(this,"EffectFragment create");
+        Logger.d(this, "EffectFragment create");
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        displaySet();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -143,6 +140,18 @@ public class EffectFragment extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        displaySet();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
     // 패턴 선택 리스너
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -208,6 +217,7 @@ public class EffectFragment extends Fragment {
 
     // 라디오 버튼 클릭
     private void rbClick(int pattern) {
+        effectNum = pattern;
         for (int i=0;i<5;i++) {
             if (i == pattern) {
                 rbPattern[i].setChecked(true);
@@ -236,6 +246,9 @@ public class EffectFragment extends Fragment {
             }
         }
     }
+    public void initEffectNum() {
+        effectNum = 0;
+    }
 
     private void displaySet() {
         if (ledSelect != null) {
@@ -250,6 +263,8 @@ public class EffectFragment extends Fragment {
                     showLed(i);
                 }
             }
+            // 라디오 버튼 초기화
+            rbClick(effectNum);
         }
     }
 

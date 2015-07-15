@@ -29,7 +29,6 @@ public class ColorPickerDialog extends AlertDialog implements
 
 	private ColorPickerView mColorPicker;
 
-	private ColorPanelView mOldColor;
 	private ColorPanelView mNewColor;
 
 	private ColorPickerView.OnColorChangedListener mListener;
@@ -73,13 +72,10 @@ public class ColorPickerDialog extends AlertDialog implements
 				
 		mColorPicker = (ColorPickerView) layout
 				.findViewById(R.id.color_picker_view);
-		mOldColor = (ColorPanelView) layout.findViewById(R.id.color_panel_old);
 		mNewColor = (ColorPanelView) layout.findViewById(R.id.color_panel_new);
 
+
 		if(!isLandscapeLayout) {
-			((LinearLayout) mOldColor.getParent()).setPadding(Math
-					.round(mColorPicker.getDrawingOffset()), 0, Math
-					.round(mColorPicker.getDrawingOffset()), 0);
 			
 		}
 		else {
@@ -89,7 +85,6 @@ public class ColorPickerDialog extends AlertDialog implements
 
 		mColorPicker.setOnColorChangedListener(this);
 
-		mOldColor.setColor(color);
 		mColorPicker.setColor(color, true);
 
 	}
@@ -100,7 +95,6 @@ public class ColorPickerDialog extends AlertDialog implements
 
 		if (mListener != null) {
 			mListener.onColorChanged(color);
-			
 		}
 
 	}

@@ -3,6 +3,7 @@ package com.syncworks.slight.fragment_easy;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,8 +16,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.syncworks.define.Define;
+import com.syncworks.define.Logger;
 import com.syncworks.leddata.LedSelect;
 import com.syncworks.slight.R;
+import com.syncworks.slight.dialog.DialogColorSelect;
 import com.syncworks.slight.widget.CustomVerticalSeekBar;
 import com.syncworks.slightpref.SLightPref;
 
@@ -27,6 +30,7 @@ public class BrightFragment extends Fragment {
     private SLightPref appPref;
 
     LedSelect ledSelect = null;
+    DialogColorSelect cpDialog = null;
 
     Button btnLed[] = new Button[Define.NUMBER_OF_SINGLE_LED];
     Button btnRgb[] = new Button[Define.NUMBER_OF_COLOR_LED];
@@ -387,7 +391,7 @@ public class BrightFragment extends Fragment {
                     seekLed[8].setProgress(seekLed[8].getMax());
                     onTracking(8, seekLed[8].getProgress());
                     break;
-                case R.id.btn_rgb_select_1:
+                case R.id.rgb_1:
                     seekRgb[0].setProgress(seekRgb[0].getMax());
                     seekRgb[1].setProgress(seekRgb[1].getMax());
                     seekRgb[2].setProgress(seekRgb[2].getMax());
@@ -395,7 +399,7 @@ public class BrightFragment extends Fragment {
                     onTracking(1, seekRgb[1].getProgress());
                     onTracking(2, seekRgb[2].getProgress());
                     break;
-                case R.id.btn_rgb_select_2:
+                case R.id.rgb_2:
                     seekRgb[3].setProgress(seekRgb[3].getMax());
                     seekRgb[4].setProgress(seekRgb[4].getMax());
                     seekRgb[5].setProgress(seekRgb[5].getMax());
@@ -403,7 +407,7 @@ public class BrightFragment extends Fragment {
                     onTracking(4, seekRgb[4].getProgress());
                     onTracking(5, seekRgb[5].getProgress());
                     break;
-                case R.id.btn_rgb_select_3:
+                case R.id.rgb_3:
                     seekRgb[6].setProgress(seekRgb[6].getMax());
                     seekRgb[7].setProgress(seekRgb[7].getMax());
                     seekRgb[8].setProgress(seekRgb[8].getMax());
@@ -411,7 +415,49 @@ public class BrightFragment extends Fragment {
                     onTracking(7, seekRgb[7].getProgress());
                     onTracking(8, seekRgb[8].getProgress());
                     break;
+                case R.id.btn_rgb_select_1:
+                    cpDialog = new DialogColorSelect(getActivity(),0);
+                    cpDialog.setColor(getColor(0));
+                    cpDialog.setOnColorSelectListener(onColorSelectListener);
+                    cpDialog.show();
+                    break;
+                case R.id.btn_rgb_select_2:
+                    cpDialog = new DialogColorSelect(getActivity(),1);
+                    cpDialog.setColor(getColor(1));
+                    cpDialog.setOnColorSelectListener(onColorSelectListener);
+                    cpDialog.show();
+                    break;
+                case R.id.btn_rgb_select_3:
+                    cpDialog = new DialogColorSelect(getActivity(),2);
+                    cpDialog.setColor(getColor(2));
+                    cpDialog.setOnColorSelectListener(onColorSelectListener);
+                    cpDialog.show();
+                    break;
             }
+        }
+    };
+
+    private int getColor(int c) {
+        int color = Color.rgb(
+                seekRgb[c*3].getProgress()*255/seekRgb[c*3].getMax(),
+                seekRgb[c*3+1].getProgress()*255/seekRgb[c*3].getMax(),
+                seekRgb[c*3+2].getProgress()*255/seekRgb[c*3].getMax());
+        return color;
+    }
+
+    private DialogColorSelect.OnColorSelectListener onColorSelectListener = new DialogColorSelect.OnColorSelectListener() {
+        @Override
+        public void onColorSelect(int color) {
+            int ledNum = cpDialog.getSelLedNum();
+            Logger.d(this, "Color", Color.red(color), Color.green(color), Color.blue(color));
+            seekRgb[ledNum*3].setProgress(Color.red(color)*191/255);
+            seekRgb[ledNum*3+1].setProgress(Color.green(color)*191/255);
+            seekRgb[ledNum*3+2].setProgress(Color.blue(color)*191/255);
+        }
+
+        @Override
+        public void onConfirm() {
+            cpDialog.dismiss();
         }
     };
 

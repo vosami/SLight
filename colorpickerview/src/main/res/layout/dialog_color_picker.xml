@@ -39,30 +39,11 @@
 	android:layout_alignRight="@id/color_picker_view">
 	
 		<com.syncworks.colorpickerview.ColorPanelView
-			android:id="@id/color_panel_old"
-			android:layout_width="0px"
-			android:layout_height="fill_parent"
-			android:layout_weight="0.5"
-		/>
-	
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="fill_parent"	
-			android:text="→"
-			android:textSize="20sp"
-			android:gravity="center"
-			android:textColor="#ffffff"
-			android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp"
-		/>
-	
-		<com.syncworks.colorpickerview.ColorPanelView
 			android:id="@id/color_panel_new"
 			android:layout_width="0px"
 			android:layout_height="fill_parent"
-			android:layout_weight="0.5"
+			android:layout_weight="1"
 		/>
-	
 	</LinearLayout>
 	
 </RelativeLayout>
