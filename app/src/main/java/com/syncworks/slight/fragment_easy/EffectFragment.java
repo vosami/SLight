@@ -48,7 +48,6 @@ public class EffectFragment extends Fragment {
      *
      * @return A new instance of fragment EffectFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static EffectFragment newInstance() {
         return new EffectFragment();
     }

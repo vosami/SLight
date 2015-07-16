@@ -152,6 +152,10 @@ public class Define {
     public final static byte TX_I2C_WRITE = 0x50;
     // I2C Write (0:명령어, 1:Device Address, 2:속도, 3~4:주소, 5:길이)
     public final static byte TX_I2C_READ = 0x51;
+    // LEC_Header 파라미터 읽기
+    public final static byte TX_PARAM_READ = 0x57;
+    // LEC_Header 파라미터 쓰기
+    public final static byte TX_PARAM_WRITE = 0x58;
     // 점멸 패턴 기록 (0:명령어, 1:제어할 LED 번호, 2:시작 번지, 3:길이, 4~19:기록데이터)
 	public final static byte TX_MEMORY_WRITE = 0x60;
     // 점멸 패턴 읽어오기 (0:명령어, 1:제어할 LED 번호, 2:시작 번지, 3:길이)

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.syncworks.define.Define;
 import com.syncworks.define.Logger;
+import com.syncworks.leddata.LedOptions;
 import com.syncworks.leddata.LedSelect;
 import com.syncworks.slight.R;
 import com.syncworks.slight.dialog.DialogColorSelect;
@@ -30,6 +31,7 @@ public class BrightFragment extends Fragment {
     private SLightPref appPref;
 
     LedSelect ledSelect = null;
+    LedOptions ledOptions[] = null;
     DialogColorSelect cpDialog = null;
 
     Button btnLed[] = new Button[Define.NUMBER_OF_SINGLE_LED];
@@ -47,20 +49,20 @@ public class BrightFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment BrightFragment.
      */
     public static BrightFragment newInstance() {
-        BrightFragment fragment = new BrightFragment();
-        return fragment;
+        return new BrightFragment();
     }
 
     public BrightFragment() {
-        // Required empty public constructor
     }
 
     public void setLedSelect(LedSelect ls) {
         ledSelect = ls;
+    }
+
+    public void setLedOptions(LedOptions[] lo) {
+        ledOptions = lo;
     }
 
     @Override
@@ -438,11 +440,10 @@ public class BrightFragment extends Fragment {
     };
 
     private int getColor(int c) {
-        int color = Color.rgb(
+        return Color.rgb(
                 seekRgb[c*3].getProgress()*255/seekRgb[c*3].getMax(),
                 seekRgb[c*3+1].getProgress()*255/seekRgb[c*3].getMax(),
                 seekRgb[c*3+2].getProgress()*255/seekRgb[c*3].getMax());
-        return color;
     }
 
     private DialogColorSelect.OnColorSelectListener onColorSelectListener = new DialogColorSelect.OnColorSelectListener() {
@@ -450,9 +451,12 @@ public class BrightFragment extends Fragment {
         public void onColorSelect(int color) {
             int ledNum = cpDialog.getSelLedNum();
             Logger.d(this, "Color", Color.red(color), Color.green(color), Color.blue(color));
-            seekRgb[ledNum*3].setProgress(Color.red(color)*191/255);
-            seekRgb[ledNum*3+1].setProgress(Color.green(color)*191/255);
+            seekRgb[ledNum*3].setProgress(Color.red(color) * 191 / 255);
+            seekRgb[ledNum*3+1].setProgress(Color.green(color) * 191 / 255);
             seekRgb[ledNum*3+2].setProgress(Color.blue(color)*191/255);
+            onTracking(ledNum * 3, seekRgb[ledNum*3].getProgress());
+            onTracking(ledNum*3+1, seekRgb[ledNum*3+1].getProgress());
+            onTracking(ledNum*3+2, seekRgb[ledNum*3+2].getProgress());
         }
 
         @Override
@@ -471,6 +475,10 @@ public class BrightFragment extends Fragment {
         rlLed[i*3 +1].setVisibility(View.GONE);
         rlLed[i*3 +2].setVisibility(View.GONE);
         rlRgb[i].setVisibility(View.VISIBLE);
+
+        seekRgb[i*3].setProgress(ledOptions[i * 3].getRatioBright() * 191 / 100);
+        seekRgb[i*3+1].setProgress(ledOptions[i*3+1].getRatioBright()*191/100);
+        seekRgb[i*3+2].setProgress(ledOptions[i*3+2].getRatioBright()*191/100);
     }
 
     private void showLed(int i) {
@@ -481,6 +489,7 @@ public class BrightFragment extends Fragment {
             if (i == cLedNum + k) {
                 rlLed[cLedNum].setVisibility(View.VISIBLE);
                 btnLed[cLedNum].setVisibility(View.VISIBLE);
+                seekLed[cLedNum].setProgress(ledOptions[cLedNum].getRatioBright()*191/100);
             } else if (btnLed[cLedNum].getVisibility() == View.GONE){
                 rlLed[cLedNum].setVisibility(View.INVISIBLE);
                 btnLed[cLedNum].setVisibility(View.INVISIBLE);

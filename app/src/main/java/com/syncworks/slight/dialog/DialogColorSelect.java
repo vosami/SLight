@@ -86,35 +86,35 @@ public class DialogColorSelect extends Dialog {
             switch (v.getId()) {
                 case R.id.btn_color_white:
                     colorPickerView.setColor(getContext().getResources().getColor(R.color.White));
-                    doColorSelect(R.color.White);
+                    doColorSelect(getContext().getResources().getColor(R.color.White));
                     break;
                 case R.id.btn_color_red:
                     colorPickerView.setColor(getContext().getResources().getColor(R.color.easy_color_0_red));
-                    doColorSelect(R.color.easy_color_0_red);
+                    doColorSelect(getContext().getResources().getColor(R.color.easy_color_0_red));
                     break;
                 case R.id.btn_color_orange:
                     colorPickerView.setColor(getContext().getResources().getColor(R.color.easy_color_1_orange));
-                    doColorSelect(R.color.easy_color_1_orange);
+                    doColorSelect(getContext().getResources().getColor(R.color.easy_color_1_orange));
                     break;
                 case R.id.btn_color_yellow:
                     colorPickerView.setColor(getContext().getResources().getColor(R.color.easy_color_2_yellow));
-                    doColorSelect(R.color.easy_color_2_yellow);
+                    doColorSelect(getContext().getResources().getColor(R.color.easy_color_2_yellow));
                     break;
                 case R.id.btn_color_green:
                     colorPickerView.setColor(getContext().getResources().getColor(R.color.easy_color_3_green));
-                    doColorSelect(R.color.easy_color_3_green);
+                    doColorSelect(getContext().getResources().getColor(R.color.easy_color_3_green));
                     break;
                 case R.id.btn_color_blue:
                     colorPickerView.setColor(getContext().getResources().getColor(R.color.easy_color_4_blue));
-                    doColorSelect(R.color.easy_color_4_blue);
+                    doColorSelect(getContext().getResources().getColor(R.color.easy_color_4_blue));
                     break;
                 case R.id.btn_color_purple:
                     colorPickerView.setColor(getContext().getResources().getColor(R.color.easy_color_6_purple));
-                    doColorSelect(R.color.easy_color_6_purple);
+                    doColorSelect(getContext().getResources().getColor(R.color.easy_color_6_purple));
                     break;
                 case R.id.btn_color_pink:
                     colorPickerView.setColor(getContext().getResources().getColor(R.color.easy_color_9_pink));
-                    doColorSelect(R.color.easy_color_9_pink);
+                    doColorSelect(getContext().getResources().getColor(R.color.easy_color_9_pink));
                     break;
                 case R.id.btn_confirm:
                     doConfirm();

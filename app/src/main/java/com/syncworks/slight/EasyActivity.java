@@ -35,6 +35,7 @@ import com.syncworks.slight.fragment_easy.OnEasyFragmentListener;
 import com.syncworks.slight.fragment_easy.SaveFragment;
 import com.syncworks.slight.util.ByteLengthFilter;
 import com.syncworks.slight.util.ErrorToast;
+import com.syncworks.slight.util.LecHeaderParam;
 import com.syncworks.slight.util.SuccessToast;
 import com.syncworks.slight.widget.StepView;
 import com.syncworks.slightpref.SLightPref;
@@ -51,6 +52,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 
 public class EasyActivity extends ActionBarActivity implements OnEasyFragmentListener,BleConsumer {
@@ -60,6 +62,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     private final static int MAX_STEP = 5;  // 5단계가 최고 단계로 설정
     StepView stepView;
     Button btnPrev, btnNext, btnStep5, btnFinish;
+    private LecHeaderParam lecHeader  = null;
+    //private byte[] lecHeader = new byte[64];
 
     // LED 선택, 패턴 데이터
     private LedDataSeries ledDataSeries;
@@ -71,6 +75,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         appPref = new SLightPref(this);
+        lecHeader = new LecHeaderParam();
         ledDataSeries = new LedDataSeries();
         setContentView(R.layout.activity_easy);
         bleCheck();
@@ -217,11 +222,12 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 }
                 break;
             case R.id.easy_btn_step5:
-                // 선택된 LED 완료 표시
+                new Thread(taskReadOption).start();
+                /*// 선택된 LED 완료 표시
                 ledComplete();
                 // 효과 선택 초기화
                 fragment4th.initEffectNum();
-                changeStep(5);
+                changeStep(5);*/
                 break;
             case R.id.easy_btn_finish:
                 this.finish();
@@ -244,6 +250,9 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     private final static int HANDLE_MOD_NAME_CONNECT = 5;
     private final static int HANDLE_MOD_NAME=6;
     private final static int HANDLE_MOD_NAME_ERROR = 7;
+
+    private final static int HANDLE_CHANGE_STEP_5 = 10;
+    private final static int HANDLE_CHANGE_STEP_5_ERROR = 11;
 
     private final static int HANDLE_ICON_INVALIDATE = 99;
 
@@ -314,6 +323,13 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                         activity.dismissProgressDialog();
                         activity.showErrorToast(activity.getString(R.string.easy_mod_name_error));
                         activity.scanStart();
+                        break;
+                    case HANDLE_CHANGE_STEP_5:
+                        activity.changeStep(5);
+                        Logger.d(this, "ChangeStep5", activity.lecHeader.getOffTime());
+                        Logger.d(this,"ChangeStep5",activity.lecHeader.isSleepLedBlink());
+                        break;
+                    case HANDLE_CHANGE_STEP_5_ERROR:
                         break;
                     case HANDLE_ICON_INVALIDATE:
                         activity.setConnectIcon();
@@ -480,6 +496,89 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     };
 
 
+    private boolean isCalledReadParam = false;
+    private void setIsCalledReadParam() {
+        isCalledReadParam = true;
+    }
+    private boolean getIsCalledReadParam() {
+        if (isCalledReadParam) {
+            isCalledReadParam = false;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // 스마트라이트 옵션 읽어오기
+    private Runnable taskReadOption = new Runnable() {
+        @Override
+        public void run() {
+            if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+                // 파라미터 읽어오기 시작
+                setIsCalledReadParam();
+                txData(TxDatas.formatParamRead(16, 16));
+                // 2초간 파라미터를 읽었는지 확인
+                for (int i=0;i<20;i++) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (!isCalledReadParam) {
+                        break;
+                    }
+                }
+                if (isCalledReadParam) {
+                    // 읽어올 수 없음
+                    uiHandler.sendEmptyMessage(HANDLE_CHANGE_STEP_5_ERROR);
+                } else {
+                    // 파라미터 읽기 완료
+                    setIsCalledReadParam();
+                    txData(TxDatas.formatParamRead(16,32));
+                    // 2초간 파라미터를 읽었는지 확인
+                    for (int i=0;i<20;i++) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (!isCalledReadParam) {
+                            break;
+                        }
+                    }
+                    if (isCalledReadParam) {
+                        // 읽어올 수 없음
+                        uiHandler.sendEmptyMessage(HANDLE_CHANGE_STEP_5_ERROR);
+                    } else {
+                        // 파라미터 읽기 완료
+                        setIsCalledReadParam();
+                        txData(TxDatas.formatParamRead(16,48));
+                        // 2초간 파라미터를 읽었는지 확인
+                        for (int i=0;i<20;i++) {
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            if (!isCalledReadParam) {
+                                break;
+                            }
+                        }
+                        if (isCalledReadParam) {
+                            // 읽어올 수 없음
+                            uiHandler.sendEmptyMessage(HANDLE_CHANGE_STEP_5_ERROR);
+                        } else {
+                            // 파라미터 읽기 완료
+                            uiHandler.sendEmptyMessage(HANDLE_CHANGE_STEP_5);
+                        }
+                    }
+                }
+
+
+
+            }
+        }
+    };
 
     /**********************************************************************************************
      * 쓰레드 관련 설정 종료
@@ -679,6 +778,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         fragment2nd.setLedSelect(this.ledDataSeries.ledSelect);
         fragment2nd.setLedOptions(this.ledDataSeries.ledOptions);
         fragment3rd.setLedSelect(this.ledDataSeries.ledSelect);
+        fragment3rd.setLedOptions(this.ledDataSeries.ledOptions);
         fragment4th.setLedSelect(this.ledDataSeries.ledSelect);
 
         FragmentManager fragmentManager = getFragmentManager();
@@ -694,7 +794,6 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             setBtnText(0);
             changeActionBarText(0);
             fragmentTransaction.add(R.id.easy_ll_fragment, fragment0th);
-//            fragmentTransaction.add(R.id.easy_ll_fragment, fragment2nd);
         }
 
         fragmentTransaction.commit();
@@ -727,7 +826,6 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             stepView.setStep(step);
         }
     }
-
 
     // 각 단계별 Fragment 변경
     private void changeFragment(int step) {
@@ -771,7 +869,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
      * Fragment 관련 설정 종료
      *********************************************************************************************/
 
-    private final static byte[] offPattern = {(byte)Define.OP_START,0,0,0,(byte)Define.OP_END};
+    private final static byte[] offPattern = {(byte)Define.OP_START,0,0,0,(byte)Define.OP_END,0};
 
     @Override
     public void onModifyName() {
@@ -801,6 +899,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     @Override
     public void onSelectLed(int ledNum, boolean state) {
+        Logger.d(this,"onSelectLed",state);
         if (state) {
             //ledDataSeries.ledSelect.setLed(ledNum, LedSelect.SelectType.SELECTED);
             ledDataSeries.ledExeDatas[ledNum].init();
@@ -819,6 +918,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         int redLedNum = ledNum * 3;
         int greenLedNum = ledNum * 3 + 1;
         int blueLedNum = ledNum * 3 + 2;
+        Logger.d(this,"onSelectRGB",state);
         if (state) {
             //ledDataSeries.ledSelect.setRgb(ledNum, LedSelect.SelectType.SELECTED);
             // 3개 LED 를 모두 초기화
@@ -852,7 +952,13 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     @Override
     public void onBrightLed(int ledNum, int bright) {
         ledDataSeries.ledOptions[ledNum].setRatioBright(bright*100/(Define.OP_CODE_MIN-1));
-        txPattern(ledNum, ledDataSeries.ledExeDatas[ledNum].toByteArray(ledDataSeries.ledOptions[ledNum]));
+        List<byte[]> mDataList = TxDatas.formatMemWrite(ledNum,
+                ledDataSeries.ledExeDatas[ledNum].toByteArray(ledDataSeries.ledOptions[ledNum]));
+        int dataCount = mDataList.size();
+        for (int i=0;i<dataCount;i++) {
+            txData(mDataList.get(i));
+        }
+        //txPattern(ledNum, ledDataSeries.ledExeDatas[ledNum].toByteArray(ledDataSeries.ledOptions[ledNum]));
         txData(TxDatas.formatInitCount());
     }
 
@@ -870,7 +976,13 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 ledDataSeries.ledExeDatas[i].setEffect(effect, isDelayLong, isRandom, startTime);
                 // LED 선택 프래그먼트에 효과 값 전달
                 fragment2nd.setPattern(false, i, effect);
-                txPattern(i, ledDataSeries.ledExeDatas[i].toByteArray(ledDataSeries.ledOptions[i]));
+                List<byte[]> mDataList = TxDatas.formatMemWrite(i,
+                        ledDataSeries.ledExeDatas[i].toByteArray(ledDataSeries.ledOptions[i]));
+                int dataCount = mDataList.size();
+                for (int j=0;j<dataCount;j++) {
+                    txData(mDataList.get(j));
+                }
+                //txPattern(i, ledDataSeries.ledExeDatas[i].toByteArray(ledDataSeries.ledOptions[i]));
                 txData(TxDatas.formatInitCount());
             }
         }
@@ -894,9 +1006,27 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
                 // LED 선택 프래그먼트에 효과 값 전달
                 fragment2nd.setPattern(true, i, effect);
-                txPattern(i * 3, ledDataSeries.ledExeDatas[i * 3].toByteArray(ledDataSeries.ledOptions[i * 3]));
-                txPattern(i*3 + 1,ledDataSeries.ledExeDatas[i*3 + 1].toByteArray(ledDataSeries.ledOptions[i*3 + 1]));
-                txPattern(i*3 + 2,ledDataSeries.ledExeDatas[i*3 + 2].toByteArray(ledDataSeries.ledOptions[i*3 + 2]));
+                List<byte[]> mDataList = TxDatas.formatMemWrite(i*3,
+                        ledDataSeries.ledExeDatas[i*3].toByteArray(ledDataSeries.ledOptions[i*3]));
+                int dataCount = mDataList.size();
+                for (int j=0;j<dataCount;j++) {
+                    txData(mDataList.get(j));
+                }
+                List<byte[]> mDataList2 = TxDatas.formatMemWrite(i*3+1,
+                        ledDataSeries.ledExeDatas[i*3+1].toByteArray(ledDataSeries.ledOptions[i*3+1]));
+                int dataCount2 = mDataList2.size();
+                for (int j=0;j<dataCount2;j++) {
+                    txData(mDataList2.get(j));
+                }
+                List<byte[]> mDataList3 = TxDatas.formatMemWrite(i*3+2,
+                        ledDataSeries.ledExeDatas[i*3+2].toByteArray(ledDataSeries.ledOptions[i*3+2]));
+                int dataCount3 = mDataList3.size();
+                for (int j=0;j<dataCount3;j++) {
+                    txData(mDataList3.get(j));
+                }
+//                txPattern(i * 3, ledDataSeries.ledExeDatas[i * 3].toByteArray(ledDataSeries.ledOptions[i * 3]));
+//                txPattern(i*3 + 1,ledDataSeries.ledExeDatas[i*3 + 1].toByteArray(ledDataSeries.ledOptions[i*3 + 1]));
+//                txPattern(i*3 + 2,ledDataSeries.ledExeDatas[i*3 + 2].toByteArray(ledDataSeries.ledOptions[i*3 + 2]));
                 txData(TxDatas.formatInitCount());
             }
         }
@@ -1026,7 +1156,6 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 Logger.d(this, "bleDataAvailable");
                 if (uuid.equals(LecGattAttributes.LEC_DEV_NAME_UUID)) {
                     if (getIsCalledModifyName()) {
-
                         String rxName = null;
                         try {
                             rxName = new String(data, "UTF-8");
@@ -1049,7 +1178,15 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                         }
 
                     }
+                } else if (uuid.equals(LecGattAttributes.LEC_RX_UUID)) {
+                    switch (data[0]) {
+                        case Define.TX_PARAM_READ:
+                            lecHeader.setLecByte(data, 4, data[2],data[1]);
+                            getIsCalledReadParam();
+                            break;
+                    }
                 }
+
 
             }
 

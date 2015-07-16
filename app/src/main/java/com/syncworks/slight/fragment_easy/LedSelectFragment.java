@@ -310,7 +310,7 @@ public class LedSelectFragment extends Fragment {
         for (int i=0;i<3;i++) {
             if (btnSingle[ledNum*3 + i].getBtnBright()) {
                 // TODO 대화창 표시
-                showNotifyDialog(false,ledNum);
+                showNotifyDialog(true,ledNum);
                 return;
             }
         }
@@ -328,10 +328,12 @@ public class LedSelectFragment extends Fragment {
     private void notifySingle(int ledNum) {
         if (btnSingle[ledNum].getBtnBright()) {
             // TODO 대화창 표시
+            showNotifyDialog(false,ledNum);
             return;
         }
         if (btnRGB[ledNum/3].getBtnBright()) {
             // TODO 대화창 표시
+            showNotifyDialog(false,ledNum);
             return;
         }
         // RGB 버튼 체크 해제, Disabled
@@ -359,6 +361,51 @@ public class LedSelectFragment extends Fragment {
     private void clickSingle(int ledNum) {
         ledSelect.setLed(ledNum, btnSingle[ledNum].getBtnChecked());
         mListener.onSelectLed(ledNum, btnSingle[ledNum].getBtnChecked());
+    }
+
+    private void clickRgbWithClear(int ledNum) {
+        ledSelect.setLed(ledNum * 3, LedSelect.SelectType.DISABLED);
+        ledSelect.setLed(ledNum*3+1, LedSelect.SelectType.DISABLED);
+        ledSelect.setLed(ledNum*3+2, LedSelect.SelectType.DISABLED);
+        ledSelect.setRgb(ledNum, LedSelect.SelectType.SELECTED);
+        ledOptions[ledNum*3].init();
+        ledOptions[ledNum*3+1].init();
+        ledOptions[ledNum*3+2].init();
+        displayBtn();
+        mListener.onSelectRGB(ledNum, btnRGB[ledNum].getBtnChecked());
+    }
+
+    private void clickSingleWithClear(int ledNum) {
+        int led1Num = ledNum/3*3;
+        int led2Num = led1Num+1;
+        int led3Num = led1Num+2;
+        if (btnSingle[led1Num].getBtnState() == LedSelect.SelectType.DISABLED) {
+            btnSingle[led1Num].setBtnState(LedSelect.SelectType.DEFAULT);
+        }
+        if (btnSingle[led2Num].getBtnState() == LedSelect.SelectType.DISABLED) {
+            btnSingle[led2Num].setBtnState(LedSelect.SelectType.DEFAULT);
+        }
+        if (btnSingle[led3Num].getBtnState() == LedSelect.SelectType.DISABLED) {
+            btnSingle[led2Num].setBtnState(LedSelect.SelectType.DEFAULT);
+        }
+        btnSingle[ledNum].setBtnState(LedSelect.SelectType.SELECTED);
+
+        ledSelect.setRgb(ledNum / 3, LedSelect.SelectType.DISABLED);
+        if (ledSelect.getLed(led1Num) == LedSelect.SelectType.DISABLED) {
+            ledSelect.setLed(led1Num, LedSelect.SelectType.DEFAULT);
+        }
+        if (ledSelect.getLed(led2Num) == LedSelect.SelectType.DISABLED) {
+            ledSelect.setLed(led2Num, LedSelect.SelectType.DEFAULT);
+        }
+        if (ledSelect.getLed(led3Num) == LedSelect.SelectType.DISABLED) {
+            ledSelect.setLed(led3Num, LedSelect.SelectType.DEFAULT);
+        }
+        ledSelect.setLed(ledNum, LedSelect.SelectType.SELECTED);
+        ledOptions[ledNum].init();
+        displayBtn();
+        mListener.onSelectLed(led1Num, btnSingle[led1Num].getBtnChecked());
+        mListener.onSelectLed(led2Num, btnSingle[led2Num].getBtnChecked());
+        mListener.onSelectLed(led3Num, btnSingle[led3Num].getBtnChecked());
     }
 
     @Override
@@ -395,10 +442,28 @@ public class LedSelectFragment extends Fragment {
         dialog.show();
     }
 
-    private AlertDialog notifyDialog = null;
     private void showNotifyDialog(boolean isRgb, int ledNum) {
-        notifyDialog = createNotifyDialog(isRgb, ledNum);
-        notifyDialog.show();
+        changePatternDialog = new DialogChangePattern(getActivity(), isRgb, ledNum);
+        changePatternDialog.setOnChangePatternListener(new DialogChangePattern.ChangePatternListener() {
+            @Override
+            public void onConfirm(boolean type, int ledNum) {
+                // RGB LED 를 클릭했을 경우
+                if (type) {
+                    clickRgbWithClear(ledNum);
+                } else {
+                    clickSingleWithClear(ledNum);
+                }
+                changePatternDialog.dismiss();
+            }
+
+            @Override
+            public void onCancel() {
+                changePatternDialog.dismiss();
+            }
+        });
+        changePatternDialog.show();
+//        notifyDialog = createNotifyDialog(isRgb, ledNum);
+//        notifyDialog.show();
     }
 
     private AlertDialog createNotifyDialog(boolean isRgb, int ledNum) {
@@ -418,13 +483,13 @@ public class LedSelectFragment extends Fragment {
         ab.setPositiveButton(getString(R.string.str_confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                notifyDialog.dismiss();
+
             }
         });
         ab.setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                notifyDialog.dismiss();
+
             }
         });
         return ab.create();

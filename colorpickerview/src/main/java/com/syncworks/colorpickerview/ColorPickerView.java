@@ -661,14 +661,16 @@ public class ColorPickerView extends View{
 			break;			
 		case MotionEvent.ACTION_UP:			
 			mStartTouchPoint = null;
-			update = moveTrackersIfNeeded(event);			
+			update = moveTrackersIfNeeded(event);
+			// 변경 완료 후 클릭이 올라올 때 데이터 보냄
+			mListener.onColorChanged(Color.HSVToColor(mAlpha, new float[]{mHue, mSat, mVal}));
 			break;	
 		}
 		
 		if(update){			
-			if(mListener != null){
+			/*if(mListener != null){
 				mListener.onColorChanged(Color.HSVToColor(mAlpha, new float[]{mHue, mSat, mVal}));
-			}
+			}*/
 			invalidate();
 			return true;
 		}

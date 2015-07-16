@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.syncworks.define.Logger;
+import com.syncworks.leddata.LedSelect;
 import com.syncworks.slight.R;
 
 
@@ -306,13 +307,13 @@ public class LedBtn extends Button {
         canvas.drawCircle((float) (centerX - (2.1 * radius)), centerY, (float) (radius * 0.6), fillPaint);
         mPercent = new RectF((centerX  - percentRadius), centerY-percentRadius,
                 (centerX + percentRadius), centerY + percentRadius);
-        canvas.drawArc(mPercent, 270, 360 * bright1 / MAX_BRIGHT, true, greenPercentPaint);
-        canvas.drawArc(mPercent, 270, 360 * bright1 / MAX_BRIGHT, true, strokePaint);
+        canvas.drawArc(mPercent, 270, 360 * bright2 / MAX_BRIGHT, true, greenPercentPaint);
+        canvas.drawArc(mPercent, 270, 360 * bright2 / MAX_BRIGHT, true, strokePaint);
         canvas.drawCircle(centerX, centerY, (float) (radius * 0.6), fillPaint);
         mPercent = new RectF((float)(centerX +(2.1*radius) - percentRadius), centerY-percentRadius,
                 (float)(centerX +(2.1*radius)+ percentRadius), centerY + percentRadius);
-        canvas.drawArc(mPercent, 270, 360 * bright1 / MAX_BRIGHT, true, bluePercentPaint);
-        canvas.drawArc(mPercent, 270, 360 * bright1 / MAX_BRIGHT, true, strokePaint);
+        canvas.drawArc(mPercent, 270, 360 * bright3 / MAX_BRIGHT, true, bluePercentPaint);
+        canvas.drawArc(mPercent, 270, 360 * bright3 / MAX_BRIGHT, true, strokePaint);
         canvas.drawCircle((float) (centerX + (2.1 * radius)), centerY, (float) (radius * 0.6), fillPaint);
 
         float textSize = (float) (radius*0.5);
@@ -334,6 +335,47 @@ public class LedBtn extends Button {
         this.bright2 = bright2;
         this.bright3 = bright3;
 
+    }
+
+    public void setBtnState(LedSelect.SelectType state) {
+        switch (state) {
+            // DEFAULT
+            case DEFAULT:
+                setBtnBright(false);
+                setBtnChecked(false);
+                setBtnEnabled(true);
+                break;
+            // SELECTED
+            case SELECTED:
+                setBtnBright(false);
+                setBtnChecked(true);
+                setBtnEnabled(true);
+                break;
+            // COMPLETED
+            case COMPLETED:
+                setBtnBright(true);
+                setBtnChecked(false);
+                setBtnEnabled(true);
+                break;
+            // DISABLED
+            case DISABLED:
+                setBtnBright(false);
+                setBtnChecked(false);
+                setBtnEnabled(false);
+                break;
+        }
+    }
+
+    public LedSelect.SelectType getBtnState() {
+        if (getBtnBright()) {
+            return LedSelect.SelectType.COMPLETED;
+        } else if (getBtnChecked()) {
+            return LedSelect.SelectType.SELECTED;
+        } else if (getBtnEnabled()) {
+            return LedSelect.SelectType.DEFAULT;
+        } else {
+            return LedSelect.SelectType.DISABLED;
+        }
     }
 
 }

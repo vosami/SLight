@@ -188,6 +188,7 @@
     <string name="easy_led_select_btn_load_file">불러오기</string>
     <string name="easy_led_select_btn_save_file">저장하기</string>
     <string name="easy_led_select_btn_color_select">색깔선택</string>
+    <string name="easy_led_select_tv_title_notify">LED 선택 변경 확인</string>
     <string name="easy_led_select_tv_cancel_notify">이전 적용된 효과가 취소됩니다.</string>
 
     <string name="easy_effect_select">LED 효과 선택</string>

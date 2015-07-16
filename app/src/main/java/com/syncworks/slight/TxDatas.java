@@ -62,4 +62,23 @@ public class TxDatas {
     public static byte[] formatMemToRom() {
 		return new byte[]{Define.TX_MEM_TO_ROM, 0, 0, 0};
     }
+
+	public static byte[] formatParamRead(int length, int start) {
+		// 명령어(1byte) + 길이(1byte), 시작위치(1byte)
+		return new byte[]{Define.TX_PARAM_READ,(byte)length,(byte)start,0};
+	}
+
+	/**
+	 * 바이트 to 헥스 변환
+	 */
+	public static final char[] hexArray = "0123456789ABCDEF".toCharArray();
+	public static String bytesToHex(byte[] bytes) {
+		char[] hexChars = new char[bytes.length * 2];
+		for ( int j = 0; j < bytes.length; j++ ) {
+			int v = bytes[j] & 0xFF;
+			hexChars[j * 2] = hexArray[v >>> 4];
+			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+		}
+		return new String(hexChars);
+	}
 }
