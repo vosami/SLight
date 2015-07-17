@@ -42,7 +42,7 @@ public class BleSetFragment extends Fragment {
     private String selDevAddr;
 
     TextView tvCurrentDeviceName, tvCurrentDeviceAddress;
-    Button btnBleScan, btnBleStop, btnModName;
+    Button btnBleScan, btnBleStop, btnModName,btnTestConnect;
     ProgressBar pbScan;
     ListView deviceList;
 
@@ -84,6 +84,7 @@ public class BleSetFragment extends Fragment {
         tvCurrentDeviceAddress = (TextView) view.findViewById(R.id.tv_current_device_address);
         btnBleScan = (Button) view.findViewById(R.id.btn_ble_scan);
         btnBleStop = (Button) view.findViewById(R.id.btn_ble_stop);
+        btnTestConnect = (Button) view.findViewById(R.id.btn_dev_test_connect);
         pbScan = (ProgressBar) view.findViewById(R.id.progress_scan);
         btnModName = (Button) view.findViewById(R.id.btn_dev_mod_name);
         deviceList = (ListView) view.findViewById(R.id.lv_list_device);
@@ -97,6 +98,7 @@ public class BleSetFragment extends Fragment {
         btnModName.setOnClickListener(btnClickListener);
         btnBleScan.setOnClickListener(btnClickListener);
         btnBleStop.setOnClickListener(btnClickListener);
+        btnTestConnect.setOnClickListener(btnClickListener);
         if (!appPref.getBoolean(SLightPref.EASY_ACTIVITY[0])) {
             appPref.putBoolean(SLightPref.EASY_ACTIVITY[0],true);
             showOverLay();
@@ -145,6 +147,8 @@ public class BleSetFragment extends Fragment {
                     mListener.onScanStart();
                 } else if (id == R.id.btn_ble_stop) {
                     mListener.onScanStop();
+                } else if (id == R.id.btn_dev_test_connect) {
+                    mListener.onTestConnect();
                 }
             }
         }

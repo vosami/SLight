@@ -27,17 +27,21 @@ public class SoundMeter {
 		}
 	}
 
-	public double getAmplitude() {
+	public int getAmplitude() {
 		short[] buffer = new short[minSize];
 		ar.read(buffer, 0, minSize);
-		int max = 0;
+		int sum = 0;
+		int abs = 0;
 		for (short s : buffer)
 		{
-			if (Math.abs(s) > max)
+			abs = Math.abs(s);
+			/*if (abs > max)
 			{
 				max = Math.abs(s);
-			}
+			}*/
+			sum = sum + abs;
 		}
-		return max;
+		sum = sum / 6400;
+		return sum;
 	}
 }

@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.syncworks.slightpref.SLightPref;
 
@@ -18,11 +19,25 @@ public class MainActivity extends ActionBarActivity {
 
 	private Dialog mDialog = null;
 
+	private ImageView ivVisible;
+	private Button btnBleSet, btnLedEffect;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		btnBleSet = (Button) findViewById(R.id.btn_ble_set);
+		btnLedEffect = (Button) findViewById(R.id.btn_led_effect);
+		ivVisible = (ImageView) findViewById(R.id.iv_long_click);
+		ivVisible.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				btnBleSet.setVisibility(View.VISIBLE);
+				btnLedEffect.setVisibility(View.VISIBLE);
+				return false;
+			}
 
+			});
         // 로그 메시지
         Log.d(TAG,"onCreate");
 	}

@@ -42,8 +42,11 @@ public class LedDataList implements List<LedData>, Serializable {
     public void setEffect(int effect, boolean isDelayLong, boolean isRandom, int startTime) {
         switch (effect) {
             case 0:
-                init();
-                ledDatas.set(0,new LedData(OP_START,startTime));
+                ledDatas.clear();
+                add(new LedData(0,startTime));
+                add(new LedData(OP_START,0));
+                add(new LedData(191, 0));
+                add(new LedData(OP_END, 0));
                 break;
             case 1:
                 ledDatas.clear();
@@ -94,6 +97,12 @@ public class LedDataList implements List<LedData>, Serializable {
                 ledDatas.clear();
                 add(new LedData(OP_START, 0));
                 add(new LedData(OP_RANDOM_VAL,252));
+                add(new LedData(OP_END,0));
+                break;
+            case 5:
+                ledDatas.clear();
+                add(new LedData(OP_START, 0));
+                add(new LedData(OP_SOUND_VAL, 0));
                 add(new LedData(OP_END,0));
                 break;
         }
@@ -299,7 +308,7 @@ public class LedDataList implements List<LedData>, Serializable {
                         }
                         break;
                     case OP_SOUND_VAL:
-                        delay = 20 - lo.getRatioBright()/20;
+                        delay = 10 - lo.getRatioBright()/10;
                         break;
                 }
             }

@@ -1,26 +1,31 @@
 package com.syncworks.slight;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Toast;
 
+import com.syncworks.define.Define;
 import com.syncworks.slight.util.CustomToast;
 import com.syncworks.slightpref.SLightPref;
 import com.syncworks.vosami.blelib.BleConsumer;
 import com.syncworks.vosami.blelib.BleManager;
 import com.syncworks.vosami.blelib.BleNotifier;
 import com.syncworks.vosami.blelib.BluetoothLeService;
+import com.syncworks.vosami.blelib.LecGattAttributes;
+
+import java.lang.ref.WeakReference;
 
 
 public class SlightSettingActivity extends ActionBarActivity implements BleConsumer {
     private final static String TAG = SlightSettingActivity.class.getSimpleName();
-
-
 
     // 액션 바 메뉴
     private Menu menu = null;
@@ -29,21 +34,15 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
     // 연결 상태 확인
     private boolean connectionState = false;
 
-    // View 등록
-    private Button btnDeviceName;
-    private EditText etDeviceName;
-    private Button btnCloseTime;
-    private EditText etCloseTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_slight_setting);
-
-        btnDeviceName = (Button) findViewById(R.id.bt_set_device_name);
-        etDeviceName = (EditText) findViewById(R.id.et_set_device_name);
-        btnCloseTime = (Button) findViewById(R.id.bt_set_close_time);
-        etCloseTime = (EditText) findViewById(R.id.et_set_close_time);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -88,6 +87,8 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
             }
 
             return true;
+        } else if (id== R.id.home) {
+            this.finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -96,9 +97,9 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (connectionState) {
-            menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_connect));
+            menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_bluetooth_on));
         } else {
-            menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_disconnect));
+            menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_bluetooth_off));
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -151,6 +152,17 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
             @Override
             public void bleDataAvailable(String uuid, byte[] data) {
                 Log.i(TAG, "bleDataAvailable");
+                if (uuid.equals(LecGattAttributes.LEC_RX_UUID)) {
+                    switch (data[0]) {
+                        case Define.TX_ACK:
+                            switch (data[1]) {
+                                case Define.TX_INIT_SET:
+                                    uiHandler.sendEmptyMessage(HANDLE_INIT_EEPROM);
+                                    break;
+                            }
+                            break;
+                    }
+                }
             }
 
             @Override
@@ -162,21 +174,43 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
 
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_set_device_name:
-                String deviceName = etDeviceName.getText().toString();
-                if (deviceName.length() > 0) {
-                    if (connectionState) {
-                        bleManager.writeName(deviceName);
-                        CustomToast.middleBottom(this, "SLight 이름을 재설정하였습니다.");
-                    } else {
-                        CustomToast.middleBottom(this, "SLight 와 연결할 수 없습니다.");
-                    }
-                } else {
-                    CustomToast.middleBottom(this, "장치 이름을 입력하세요.");
+            case R.id.btn_init_rom:
+                if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+                    txData(TxDatas.formatInitEEPROM());
                 }
                 break;
-            case R.id.bt_set_close_time:
-                break;
+        }
+    }
+
+    private void txData(byte[] array) {
+        bleManager.writeTxData(array);
+    }
+    private void showDefaultToast(String txt) {
+        Toast toast = Toast.makeText(this,txt,Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER,0,0);
+        toast.show();
+    }
+
+
+    private final static int HANDLE_INIT_EEPROM = 10;
+
+    // UI 제어 핸들러
+    private UIHandler uiHandler = new UIHandler(this);
+    private static class UIHandler extends Handler {
+        private WeakReference<SlightSettingActivity> mActivity = null;
+        UIHandler(SlightSettingActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+        @Override
+        public void handleMessage(Message msg) {
+            SlightSettingActivity activity = mActivity.get();
+            if (activity != null) {
+                switch (msg.what) {
+                    case HANDLE_INIT_EEPROM:
+                        activity.showDefaultToast("내부 저장소가 초기화되었습니다.");
+                        break;
+                }
+            }
         }
     }
 }

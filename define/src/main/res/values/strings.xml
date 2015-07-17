@@ -6,6 +6,7 @@
 
     <string name="txt_main_title">Smart-Light 설정 앱</string>
     <string name="btn_led_effect">LED 효과 설정</string>
+    <string name="btn_led_effect2">고급 설정</string>
     <string name="btn_easy_set">쉽게 설정하기</string>
     <string name="btn_ble_set">블루투스 설정</string>
     <string name="btn_timer_set">알람 설정</string>
@@ -65,6 +66,7 @@
     <string name="str_confirm">확인</string>
     <string name="str_cancel">취소</string>
     <string name="str_finish">종료</string>
+    <string name="str_home">첫화면</string>
 
 
     <!--BleSet 에서 사용 Start-->

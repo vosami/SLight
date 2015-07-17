@@ -9,6 +9,10 @@
         <item name="colorPrimaryDark">@color/DarkGoldenrod</item>
         <item name="colorPrimary">@color/Gold</item>
     </style>
+    <style name="AlarmActivityTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimaryDark">@color/DarkBlue</item>
+        <item name="colorPrimary">@color/LightSkyBlue</item>
+    </style>
 
     <style name="Theme.Apptheme_titlebar" parent="@style/Theme.AppCompat.Light">
         <item name="actionBarItemBackground">@drawable/selectable_background_apptheme_titlebar</item>

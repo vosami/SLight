@@ -7,25 +7,14 @@
     <TextView
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="140dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:textSize="18sp"
         android:textColor="@color/White"
-        android:text="1. 검색된 장치 목록에서 연결 대상을 선택합니다."/>
-    <TextView
-        android:layout_alignParentBottom="true"
-        android:paddingBottom="140dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:textSize="18sp"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/White"
-        android:text="2. 설정된 장치를 확인합니다. 이름변경이나 연결 테스트도 할 수 있습니다."/>
+        android:text="1. LED 효과를 선택하고 우측 옵션을 이용하여 적용할 효과를 선택합니다."/>
     <TextView
         android:layout_alignParentBottom="true"
         android:paddingStart="10dp"
@@ -35,6 +24,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/White"
-        android:text="3. '다음 단계' 버튼을 누르면 LED 를 선택할 수 있습니다. \n이전 버튼을 누르면 설치 매뉴얼을 확인할 수 있습니다."/>
+        android:text="3. 다른 LED의 효과를 적용하려면 '다른 LED선택'버튼을 누르고, 저장하려면 '5단계'버튼을 누릅니다."/>
 
 </RelativeLayout>

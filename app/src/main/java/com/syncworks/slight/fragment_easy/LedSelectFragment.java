@@ -135,12 +135,13 @@ public class LedSelectFragment extends Fragment {
         }
         return view;
     }
-
+// 수정해야 함
     private final static int PATTERN[] = {
             R.drawable.ic_pattern_always,
             R.drawable.ic_pattern_pulse,
             R.drawable.ic_pattern_flash,
             R.drawable.ic_pattern_up_down,
+            R.drawable.ic_pattern_torch,
             R.drawable.ic_pattern_torch
     };
 

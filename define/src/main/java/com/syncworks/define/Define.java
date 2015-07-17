@@ -148,6 +148,8 @@ public class Define {
     public final static byte TX_INIT_COUNT = 0x42;
     // RAM 의 점멸 패턴을 EEPROM 에 기록
     public final static byte TX_MEM_TO_ROM = 0x43;
+    public final static byte TX_MEM_TO_ROM_EACH = 0x44;
+    public final static byte TX_MEM_TO_ROM_PLACE = 0x45;
     // I2C Write (0:명령어, 1:Device Address, 2:속도, 3~4:주소, 5:길이, 6~19:기록 데이터)
     public final static byte TX_I2C_WRITE = 0x50;
     // I2C Write (0:명령어, 1:Device Address, 2:속도, 3~4:주소, 5:길이)
@@ -156,6 +158,8 @@ public class Define {
     public final static byte TX_PARAM_READ = 0x57;
     // LEC_Header 파라미터 쓰기
     public final static byte TX_PARAM_WRITE = 0x58;
+    // Acknowledge
+    public final static byte TX_ACK = 0x5A;
     // 점멸 패턴 기록 (0:명령어, 1:제어할 LED 번호, 2:시작 번지, 3:길이, 4~19:기록데이터)
 	public final static byte TX_MEMORY_WRITE = 0x60;
     // 점멸 패턴 읽어오기 (0:명령어, 1:제어할 LED 번호, 2:시작 번지, 3:길이)
@@ -163,6 +167,7 @@ public class Define {
     public final static byte TX_SOUND_VAL = 0x62;
     public final static byte TX_MEMORY_WRITE_ACK = 0x63;
     public final static byte TX_MEMORY_PATTERN_ALL = 0x64;
+    public final static byte TX_MEMORY_FETCH_DATA = 0x65;
     // 현재 시간 재설정 (0:명령어, 1~4:현재시간)
     public final static byte TX_TIME_RELOAD = 0x70;
     // 현재 시간 읽어오기 (0:명령어, 1~3:Reserved)
@@ -171,6 +176,8 @@ public class Define {
     public final static byte TX_ALARM_WRITE = (byte) 0x72;
     // EEPROM 초기화 (0:명령어, 1~3:Reserved)
     public final static byte TX_INIT_SET = (byte) 0x80;
+    // 스마트라이트 재우기
+    public final static byte TX_WAKE_UP = (byte) 0x90;
 
 	/**
 	 * 디렉토리 관련

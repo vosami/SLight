@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_black"
-                android:text="@string/str_finish"
+                android:text="@string/str_home"
                 android:onClick="onClick"/>
         </LinearLayout>
         <com.syncworks.slight.widget.StepView

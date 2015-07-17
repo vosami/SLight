@@ -386,6 +386,10 @@ public class BluetoothLeService extends Service {
         }
         return false;
     }
+    public void getDeviceVersion() {
+        mBluetoothGatt.readCharacteristic(charLecDevVer);
+    }
+
     // 장치 이름을 새로 설정합니다.
     public void writeDeviceName(String mDevName) {
         // 연결상태이며, Profile 캐릭터를 확인했으며, 데이터 길이가 20보다 작으면 데이터 송신

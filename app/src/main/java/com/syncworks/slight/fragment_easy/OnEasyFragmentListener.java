@@ -6,6 +6,8 @@ package com.syncworks.slight.fragment_easy;
 public interface OnEasyFragmentListener {
     public void onModifyName();
 
+    public void onTestConnect();
+
     public void onScanStart();
 
     public void onScanStop();
@@ -30,8 +32,14 @@ public interface OnEasyFragmentListener {
     public void onSleepLedCheck(boolean isCheckLed);
     // 참(true)일 경우 휴면 상태 유지, 거짓(false) 일 경우 깨우기
     public void onSleep(boolean isSleep);
+    // 동작 시간 설정
+    public void onSleepTime(int minute);
     // 랜덤 플레이 설정
     public void onRandomPlay(int playTime);
+    // Fetch Data
+    public void onFetchData(int dataNum);
+    // Save Data
+    public void onSaveData(int dataNum);
     /**SaveFragment 종료*/
     public void onFrag1Start();
     public void onFrag1End();

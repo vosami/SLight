@@ -68,6 +68,53 @@ public class TxDatas {
 		return new byte[]{Define.TX_PARAM_READ,(byte)length,(byte)start,0};
 	}
 
+	public static byte[] formatSleep(boolean isSleep) {
+		byte wakeUpParam = 0;
+		if (isSleep) {
+			wakeUpParam = 1;
+		}
+		return new byte[]{Define.TX_WAKE_UP,wakeUpParam,0,0};
+	}
+
+	public static byte[] formatSleepBlinkCheck(boolean isBlink) {
+		byte blinkParam = 0;
+		if (isBlink) {
+			blinkParam = 1;
+		}
+		return new byte[]{Define.TX_PARAM_WRITE,58,1,blinkParam};
+	}
+	// 동작 시간 설정
+	public static byte[] formatSleepTime(int time) {
+		byte hByte, lByte;
+		hByte = (byte) ((time >> 8) & 0xFF);
+		lByte = (byte) (time & 0xFF);
+		return new byte[]{Define.TX_PARAM_WRITE,32,2,lByte,hByte};
+	}
+
+	// 랜덤 플레이
+	public static byte[] formatRandomPlay(int playTime) {
+		return new byte[]{Define.TX_PARAM_WRITE,59,1,(byte)playTime,0};
+	}
+
+	// EEPROM 에 있는 데이터 실행
+	public static byte[] formatFetchData(int dataNum) {
+		return new byte[]{Define.TX_MEMORY_FETCH_DATA,(byte)dataNum,0,0};
+	}
+
+	// EEPROM 에 데이터 저장
+	public static byte[] formatSaveData(int ledNum, int dataNum) {
+		return new byte[]{Define.TX_MEM_TO_ROM_EACH,(byte)ledNum,(byte)dataNum,0};
+	}
+	// EEPROM 초기화
+	public static byte[] formatInitEEPROM() {
+		return new byte[]{Define.TX_INIT_SET,0,0,0};
+	}
+
+	// 사운드 값 전송
+	public static byte[] formatTxSound(int sound) {
+		return new byte[]{Define.TX_SOUND_VAL,(byte)sound};
+	}
+
 	/**
 	 * 바이트 to 헥스 변환
 	 */

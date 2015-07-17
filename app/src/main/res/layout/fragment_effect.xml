@@ -281,6 +281,28 @@
                     android:layout_toEndOf="@id/iv_pattern_5"
                     android:text="@string/easy_effect_pattern_torch"/>
             </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F0F0F0"
+                android:layout_marginStart="1dp"
+                android:layout_marginEnd="1dp"
+                android:padding="5dp">
+                <ImageView
+                    android:id="@+id/iv_pattern_6"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/pattern_description"
+                    android:background="@drawable/ic_pattern_torch"/>
+                <RadioButton
+                    android:id="@+id/rb_pattern_6"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_toEndOf="@id/iv_pattern_6"
+                    android:text="@string/easy_effect_pattern_sound"/>
+            </RelativeLayout>
         </RadioGroup>
     </LinearLayout>
 </RelativeLayout>

@@ -264,6 +264,12 @@ public class BleManager {
         }
     }
 
+    public void getDevVersion() {
+        if (bluetoothLeService != null) {
+            bluetoothLeService.getDeviceVersion();
+        }
+    }
+
 
 
 }

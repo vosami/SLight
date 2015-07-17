@@ -269,6 +269,7 @@
         android:background="@color/DarkGray"
         android:layout_below="@id/ll_led_pattern"/>
     <RelativeLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:layout_alignParentBottom="true"

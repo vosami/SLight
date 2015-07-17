@@ -1,13 +1,13 @@
 <resources>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="smart_light_name">Smart Light</string>
+    <string name="smart_light_name">SmartLight</string>
     <string name="title_activity_ble_set">BleSetActivity</string>
     <string name="title_activity_timer_set">TimerSetActivity</string>
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
-    <string name="slight_version">SLight v150714</string>
+    <string name="slight_version">SLight v150717</string>
     <string name="slight_home">www.LedLife.co.kr</string>
 
     <string name="led_type_rgb">RGB LED</string>
@@ -65,6 +65,7 @@
     <string name="btn_80_percent">80%</string>
     <string name="btn_100_percent">100%</string>
     <!--LedEffect 에서 사용 End-->
+    <string name="str_infinite">계속</string>
     <string name="str_minute">분</string>
     <string name="str_ratio">배</string>
     <string name="str_ratio_min">0배</string>
@@ -86,7 +87,7 @@
     <string name="tab1_script_data">단색</string>
     <string name="tab2_script_data">칼라</string>
     <string name="tab3_script_data">저장소</string>
-    <string name="title_activity_slight_setting">SLight 기타 설정</string>
+    <string name="title_activity_slight_setting">알람 설정</string>
     <string name="title_activity_comm">CommActivity</string>
 
     <!--CommActivity 에서 사용 Start-->
@@ -150,7 +151,7 @@
     <string name="easy_mod_name_success">이름 변경 완료</string>
     <string name="easy_name_length_filter">12byte(한글6자) 까지 입력할 수 있습니다.</string>
     <string name="easy_step_5">5단계</string>
-    <string name="easy_step_complete">다른 LED 선택</string>
+    <string name="easy_step_complete">완료,다른 LED 선택</string>
 
     <string name="easy_btn_scm100">커넥터 타입 \n(SCM-100)</string>
     <string name="easy_btn_spm100">에나멜선 타입 \n(SPM-100)</string>
@@ -197,25 +198,39 @@
     <string name="easy_effect_pattern_flash">번쩍이기</string>
     <string name="easy_effect_pattern_updown">오르내리</string>
     <string name="easy_effect_pattern_torch">횃불효과</string>
+    <string name="easy_effect_pattern_sound">소리효과</string>
+    <string name="easy_effect_select_start_time">시작 시간 설정</string>
 
     <string name="easy_effect_title_save">스마트라이트에 저장</string>
     <string name="easy_effect_btn_start_time">시작 시간 설정</string>
 
-    <string name="easy_save_title_sleep">동작 시간 설정</string>
-    <string name="easy_save_cb_sleep">스마트라이트 휴면중 LED 동작 체크</string>
+    <string name="easy_save_title_sleep">에너지 절약 설정</string>
+    <string name="easy_save_cb_sleep">에너지 절약 동작 중 LED 체크(25초마다 차례대로)</string>
     <string name="easy_save_btn_sleep">잠자기</string>
     <string name="easy_save_btn_wakeup">깨우기</string>
-    <string name="easy_save_title_random">랜덤 플레이</string>
-    <string name="easy_save_cb_random">랜덤 플레이 체크</string>
-    <string name="easy_save_title_save">스마트라이트에 저장</string>
-    <string name="easy_save_btn_exec_a">패턴A 실행</string>
-    <string name="easy_save_btn_exec_b">패턴B 실행</string>
-    <string name="easy_save_btn_exec_c">패턴C 실행</string>
+    <string name="easy_save_title_random">실행</string>
+    <string name="easy_save_cb_random">무작위 실행</string>
+    <string name="easy_save_title_save">저장</string>
+    <string name="easy_save_btn_exec_a">A 실행</string>
+    <string name="easy_save_btn_exec_b">B 실행</string>
+    <string name="easy_save_btn_exec_c">C 실행</string>
+    <string name="easy_save_btn_save_a">A 저장</string>
+    <string name="easy_save_btn_save_b">B 저장</string>
+    <string name="easy_save_btn_save_c">C 저장</string>
+    <string name="easy_save_step_5_error">옵션 설정에 문제가 발생했습니다. \n잠시 후에 다시 시도하세요.</string>
+
+
+    <string name="easy_ack">전송 완료</string>
+    <string name="easy_save_complete">저장 완료</string>
+    <string name="easy_press_next_btn">다음단계 버튼을 누르세요.</string>
+    <string name="easy_connect_available">연결 가능합니다.</string>
+    <string name="easy_connect_unavailable">연결 가능하지 않은 버전입니다.</string>
+
 
     <string-array name="spinner_save_pattern">
-        <item>패턴A</item>
-        <item>패턴B</item>
-        <item>패턴C</item>
+        <item>A 저장</item>
+        <item>B 저장</item>
+        <item>C 저장</item>
     </string-array>
     <!--EasyActivity 에서 사용 End-->
 </resources>

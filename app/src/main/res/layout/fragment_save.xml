@@ -29,7 +29,7 @@
                 android:layout_alignParentEnd="true"/>
             <SeekBar
                 android:id="@+id/sb_sleep_seek"
-                android:max="255"
+                android:max="18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -62,44 +62,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="5dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/background_view_rounded_single">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/Black"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:text="@string/easy_save_title_random"/>
-        <CheckBox
-            android:id="@+id/cb_random_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/easy_save_cb_random"/>
-        <RelativeLayout
-            android:id="@+id/rl_random"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tv_random_seek"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"/>
-            <SeekBar
-                android:id="@+id/sb_random_seek"
-                android:layout_width="wrap_content"
-                android:max="255"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_toStartOf="@id/tv_random_seek"/>
-        </RelativeLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="5dp"
         android:background="@drawable/background_view_rounded_single">
         <TextView
             android:layout_width="wrap_content"
@@ -108,6 +70,74 @@
             android:textStyle="bold"
             android:textSize="18sp"
             android:text="@string/easy_save_title_save"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_save_a"
+                style="@style/ButtonText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/btn_blue"
+                android:text="@string/easy_save_btn_save_a"/>
+            <Button
+                android:id="@+id/btn_save_b"
+                style="@style/ButtonText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/btn_blue"
+                android:text="@string/easy_save_btn_save_b"/>
+            <Button
+                android:id="@+id/btn_save_c"
+                style="@style/ButtonText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/btn_blue"
+                android:text="@string/easy_save_btn_save_c"/>
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_save"
+                style="@style/ButtonText"
+                android:background="@drawable/btn_blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="@string/btn_save"/>
+            <Spinner
+                android:id="@+id/sp_pattern_select"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/btn_save"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_background_ab_apptheme_titlebar"
+                android:layout_marginEnd="10dp"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_view_rounded_single">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/Black"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:text="@string/easy_save_title_random"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -132,27 +162,28 @@
                 android:layout_weight="1"
                 android:text="@string/easy_save_btn_exec_c"/>
         </LinearLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <CheckBox
+            android:id="@+id/cb_random_check"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/btn_save"
-                style="@style/ButtonText"
-                android:background="@drawable/btn_blue"
+            android:text="@string/easy_save_cb_random"/>
+        <RelativeLayout
+            android:id="@+id/rl_random"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_random_seek"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:text="@string/btn_save"/>
-            <Spinner
-                android:id="@+id/sp_pattern_select"
+                android:layout_alignParentEnd="true"/>
+            <SeekBar
+                android:id="@+id/sb_random_seek"
+                android:layout_width="wrap_content"
+                android:max="60"
+                android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_toStartOf="@id/btn_save"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/spinner_background_ab_apptheme_titlebar"
-                android:layout_marginEnd="10dp"/>
+                android:layout_toStartOf="@id/tv_random_seek"/>
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

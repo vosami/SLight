@@ -17,12 +17,15 @@ import com.syncworks.define.Define;
 import com.syncworks.define.Logger;
 import com.syncworks.leddata.LedSelect;
 import com.syncworks.slight.R;
+import com.syncworks.slight.dialog.DialogStartTime;
 import com.syncworks.slightpref.SLightPref;
 
 
 public class EffectFragment extends Fragment {
 
     SLightPref appPref;
+
+    private DialogStartTime dialogStartTime = null;
 
     private LedSelect ledSelect;
     private OnEasyFragmentListener mListener;
@@ -32,13 +35,13 @@ public class EffectFragment extends Fragment {
     private Button btnRgb[] = new Button[Define.NUMBER_OF_COLOR_LED];
     private Button btnLed[] = new Button[Define.NUMBER_OF_SINGLE_LED];
 
-    private RadioButton rbPattern[] = new RadioButton[5];
+    private RadioButton rbPattern[] = new RadioButton[6];
     private Button btnSetStartTime;
     private ToggleButton tbDelay[] = new ToggleButton[3];
     private ToggleButton tbRandom[] = new ToggleButton[2];
 
-    private boolean isDelayLong[] = new boolean[5];
-    private boolean isRandom[] = new boolean[5];
+    private boolean isDelayLong[] = new boolean[6];
+    private boolean isRandom[] = new boolean[6];
     private int alwaysStartTime;
 
 
@@ -107,6 +110,7 @@ public class EffectFragment extends Fragment {
         rbPattern[2] = (RadioButton) view.findViewById(R.id.rb_pattern_3);
         rbPattern[3] = (RadioButton) view.findViewById(R.id.rb_pattern_4);
         rbPattern[4] = (RadioButton) view.findViewById(R.id.rb_pattern_5);
+        rbPattern[5] = (RadioButton) view.findViewById(R.id.rb_pattern_6);
         btnSetStartTime = (Button) view.findViewById(R.id.btn_set_start_time);
         tbDelay[0] = (ToggleButton) view.findViewById(R.id.tb_long_2);
         tbDelay[1] = (ToggleButton) view.findViewById(R.id.tb_long_3);
@@ -119,10 +123,13 @@ public class EffectFragment extends Fragment {
         rbPattern[2].setOnClickListener(onClickListener);
         rbPattern[3].setOnClickListener(onClickListener);
         rbPattern[4].setOnClickListener(onClickListener);
+        rbPattern[5].setOnClickListener(onClickListener);
         btnSetStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO 시작 시간 대화창 표시
+                dialogStartTime = new DialogStartTime(getActivity(),alwaysStartTime);
+                dialogStartTime.setOnStartTimeListener(startTimeListener);
+                dialogStartTime.show();
             }
         });
         tbDelay[0].setOnClickListener(onOptionListener);
@@ -171,6 +178,24 @@ public class EffectFragment extends Fragment {
                 case R.id.rb_pattern_5:
                     rbClick(4);
                     break;
+                case R.id.rb_pattern_6:
+                    rbClick(5);
+                    break;
+            }
+        }
+    };
+
+    private DialogStartTime.OnStartTimeListener startTimeListener = new DialogStartTime.OnStartTimeListener() {
+        @Override
+        public void onStartTime(int time) {
+            alwaysStartTime = time;
+            doPattern(0,false,false,alwaysStartTime);
+        }
+
+        @Override
+        public void onConfirm() {
+            if (dialogStartTime.isShowing()) {
+                dialogStartTime.dismiss();
             }
         }
     };
@@ -217,7 +242,7 @@ public class EffectFragment extends Fragment {
     // 라디오 버튼 클릭
     private void rbClick(int pattern) {
         effectNum = pattern;
-        for (int i=0;i<5;i++) {
+        for (int i=0;i<6;i++) {
             if (i == pattern) {
                 rbPattern[i].setChecked(true);
                 doPattern(i);
