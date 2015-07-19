@@ -46,14 +46,14 @@ public class BluetoothDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
 		String mDevName = _objects.get(position).getName();
 		String mDevAddr = _objects.get(position).getAddress();
 		//TODO RSSI 데이터 가져오기
-		String mDevRssi = null;
+		int mDevRssi = 0;
 		if (_dataRssi.size() > position) {
-			mDevRssi = _dataRssi.get(position).toString();//_objects.get(position).EXTRA_RSSI;
+			mDevRssi = (int)_dataRssi.get(position);//_objects.get(position).EXTRA_RSSI;
 		}
 		// TextView 에 데이터 기록
 		tvDevName.setText(mDevName);
 		tvDevAddr.setText(mDevAddr);
-		tvDevRssi.setText(mDevRssi);
+		tvDevRssi.setText(Integer.toString(mDevRssi));
 		// 완성된 View 반환
         return v;
     }
