@@ -6,7 +6,7 @@
         android:id="@+id/sb_start_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="250" />
+        android:max="200" />
     <TextView
         android:id="@+id/tv_second"
         android:layout_width="match_parent"

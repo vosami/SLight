@@ -7,8 +7,8 @@
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
-    <string name="slight_version">SLight v150717</string>
-    <string name="slight_home">www.LedLife.co.kr</string>
+    <string name="slight_version">SLight v150720</string>
+    <string name="slight_home">http://LedLife.co.kr</string>
 
     <string name="led_type_rgb">RGB LED</string>
     <string name="led_type_single">단색 LED</string>
@@ -218,6 +218,7 @@
     <string name="easy_save_btn_save_b">B 저장</string>
     <string name="easy_save_btn_save_c">C 저장</string>
     <string name="easy_save_step_5_error">옵션 설정에 문제가 발생했습니다. \n잠시 후에 다시 시도하세요.</string>
+    <string name="easy_save_data_error">에러가 발생했습니다.</string>
 
 
     <string name="easy_ack">전송 완료</string>

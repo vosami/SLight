@@ -3,6 +3,8 @@ package com.syncworks.slight;
 import com.syncworks.define.Define;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -55,8 +57,8 @@ public class TxDatas {
 		return new byte[]{Define.TX_TIME_READ,0,0,0};
 	}
 
-	public static byte[] formatAlarmWrite(int enumAlarm, int enumDay, int hour, int min, int hold) {
-		return new byte[]{Define.TX_ALARM_WRITE,(byte)enumAlarm,(byte)enumDay,(byte)hour, (byte)min, (byte)hold};
+	public static byte[] formatAlarmWrite(int enumAlarm,int onOffTime ,int enumDay, int hour, int min) {
+		return new byte[]{Define.TX_ALARM_WRITE,(byte)enumAlarm,(byte)((onOffTime>>8)& 0xFF),(byte)(onOffTime&0xFF),(byte)enumDay,(byte)hour, (byte)min};
 	}
 
     public static byte[] formatMemToRom() {
@@ -115,6 +117,16 @@ public class TxDatas {
 		return new byte[]{Define.TX_SOUND_VAL,(byte)sound};
 	}
 
+	public static byte[] formatReloadTime(Calendar c) {
+
+		return new byte[]{Define.TX_TIME_RELOAD,(byte)(c.get(Calendar.YEAR)-2000),(byte)c.get(Calendar.MONTH),(byte)(c.get(Calendar.DAY_OF_MONTH)-1),
+				(byte)c.get(Calendar.HOUR_OF_DAY),(byte)c.get(Calendar.MINUTE),(byte)c.get(Calendar.SECOND)};
+	}
+
+	public static byte[] formatReadTime() {
+		return new byte[]{Define.TX_TIME_READ,0,0,0};
+	}
+
 	/**
 	 * 바이트 to 헥스 변환
 	 */
@@ -127,5 +139,14 @@ public class TxDatas {
 			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
 		}
 		return new String(hexChars);
+	}
+
+
+	public static int getDaysDifference(Date fromDate,Date toDate)
+	{
+		if(fromDate==null||toDate==null)
+			return 0;
+
+		return (int)( (toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24));
 	}
 }

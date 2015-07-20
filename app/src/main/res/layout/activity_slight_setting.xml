@@ -18,6 +18,26 @@
             android:background="@drawable/btn_purple"
             android:text="내부 저장소 초기화"
             android:onClick="onClick"/>
+        <Button
+            android:id="@+id/btn_test_1"
+            style="@style/ButtonText"
+            android:visibility="gone"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_purple"
+            android:text="테스트1"
+            android:onClick="onClick"/>
+        <Button
+            android:id="@+id/btn_test_2"
+            style="@style/ButtonText"
+            android:visibility="gone"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_purple"
+            android:text="테스트2"
+            android:onClick="onClick"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

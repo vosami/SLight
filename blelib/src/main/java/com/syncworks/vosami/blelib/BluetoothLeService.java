@@ -81,9 +81,9 @@ public class BluetoothLeService extends Service {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             //super.onConnectionStateChange(gatt, status, newState);
-            String intentAction;
+            //String intentAction;
             if (newState == BluetoothProfile.STATE_CONNECTED) {                 // 장치와 연결되면
-                intentAction = ACTION_GATT_CONNECTED;
+                //intentAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;     // 연결 상태를 연결로 설정
                 Log.d(TAG,"Connected to GATT server");  // 로그 메시지 표시
                 Log.i(TAG, "Attempting to start service discovery:" +
@@ -93,7 +93,7 @@ public class BluetoothLeService extends Service {
                     bleNotifier.bleConnected();
                 }
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {       // 장치와 연결이 끊어지면
-                intentAction = ACTION_GATT_DISCONNECTED;
+                //intentAction = ACTION_GATT_DISCONNECTED;
                 mConnectionState = STATE_DISCONNECTED;  // 연결 상태를 연결안됨으로 설정
 //                broadcastUpdate(intentAction);          // 메시지 전달
                 if (bleNotifier !=null) {
@@ -387,7 +387,9 @@ public class BluetoothLeService extends Service {
         return false;
     }
     public void getDeviceVersion() {
-        mBluetoothGatt.readCharacteristic(charLecDevVer);
+        charLecDevName = mBluetoothGatt.getService(UUID_LEC_SERVICE).getCharacteristic(UUID_LEC_VERSION);
+        readCharacteristic(charLecDevVer);
+        //mBluetoothGatt.readCharacteristic(charLecDevVer);
     }
 
     // 장치 이름을 새로 설정합니다.

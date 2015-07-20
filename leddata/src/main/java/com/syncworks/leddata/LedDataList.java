@@ -43,7 +43,8 @@ public class LedDataList implements List<LedData>, Serializable {
         switch (effect) {
             case 0:
                 ledDatas.clear();
-                add(new LedData(0,startTime));
+                add(new LedData(0, 0));
+                add(new LedData(OP_NOP,startTime));
                 add(new LedData(OP_START,0));
                 add(new LedData(191, 0));
                 add(new LedData(OP_END, 0));

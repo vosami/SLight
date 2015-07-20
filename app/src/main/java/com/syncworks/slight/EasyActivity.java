@@ -303,6 +303,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     private final static int HANDLE_CHANGE_STEP_5 = 12;
     private final static int HANDLE_CHANGE_STEP_5_ERROR = 13;
     private final static int HANDLE_SAVE_DATA = 15;
+    private final static int HANDLE_SAVE_DATA_ERROR = 16;
 
     private final static int HANDLE_ACKNOWLEDGE = 50;
 
@@ -349,6 +350,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                         // 진행 상태 대화창을 닫음
                         activity.dismissProgressDialog();
                         activity.changeStep(2);
+                        /*
                         activity.micTask = new MicrophoneTask();
                         activity.micTask.setOnSoundListener(new MicrophoneTask.OnSoundListener() {
                             @Override
@@ -361,6 +363,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                             }
                         });
                         activity.micTask.micStart();
+                        */
                         break;
                     case HANDLE_NOT_CONNECTED:
                         // 진행 상태 대화창을 닫음
@@ -419,6 +422,10 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                         activity.dismissProgressDialog();
                         activity.showSuccessToast(activity.getString(R.string.easy_save_complete));
                         break;
+                    case HANDLE_SAVE_DATA_ERROR:
+                        activity.dismissProgressDialog();
+                        activity.showErrorToast(activity.getString(R.string.easy_save_data_error));
+                        break;
                     case HANDLE_ACKNOWLEDGE:
                         activity.showDefaultToast(activity.getString(R.string.easy_ack));
                         break;
@@ -466,7 +473,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                // TODO 타이머 초기화 명령으로 수정
+                // 타이머 초기화 명령으로 수정
                 txCounterInit();
                 txBrightAll(Define.OP_CODE_MIN - 1);
                 try {
@@ -722,6 +729,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     };
 
     private int dataNum = 0;
+    private boolean isRxSaveData = false;
 
     private Runnable taskSaveData = new Runnable() {
         @Override
@@ -729,14 +737,32 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
                 for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
                     txData(TxDatas.formatSaveData(i,dataNum*Define.NUMBER_OF_SINGLE_LED+i));
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    isRxSaveData = false;
+                    for (int j=0;j<10;j++) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        // 수신 데이터가 있다면 중지
+                        if (isRxSaveData) {
+                            break;
+                        }
+                    }
+                    // 수신 데이터가 없다면 중지 후 에러 발생
+                    if (!isRxSaveData) {
+                        break;
                     }
                 }
+                if (isRxSaveData) {
+                    uiHandler.sendEmptyMessage(HANDLE_SAVE_DATA);
+                } else {
+                    uiHandler.sendEmptyMessage(HANDLE_SAVE_DATA_ERROR);
+                }
+            } else {
+                uiHandler.sendEmptyMessage(HANDLE_SAVE_DATA_ERROR);
             }
-            uiHandler.sendEmptyMessage(HANDLE_SAVE_DATA);
+
         }
     };
 
@@ -1026,6 +1052,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             default:
                 break;
         }
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
@@ -1376,6 +1403,10 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                     }
                 } else if (uuid.equals(LecGattAttributes.LEC_RX_UUID)) {
                     switch (data[0]) {
+                        case Define.TX_MEM_TO_ROM_EACH:
+                            isRxSaveData = true;
+                            Logger.d(this,"TX_MEM_TO_ROM_EACH");
+                            break;
                         case Define.TX_PARAM_READ:
                             lecHeader.setLecByte(data, 4, data[2],data[1]);
                             getIsCalledReadParam();

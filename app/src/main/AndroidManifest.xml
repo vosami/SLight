@@ -20,7 +20,7 @@
         tools:replace="label" >
         <activity
             android:name=".MainActivity"
-            android:icon="@drawable/ic_slight"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/smart_light_name"
             android:screenOrientation="portrait" >
             <intent-filter>

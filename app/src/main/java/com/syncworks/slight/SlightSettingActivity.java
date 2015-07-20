@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.syncworks.define.Define;
+import com.syncworks.define.Logger;
 import com.syncworks.slight.util.CustomToast;
 import com.syncworks.slightpref.SLightPref;
 import com.syncworks.vosami.blelib.BleConsumer;
@@ -22,6 +23,7 @@ import com.syncworks.vosami.blelib.BluetoothLeService;
 import com.syncworks.vosami.blelib.LecGattAttributes;
 
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
 
 
 public class SlightSettingActivity extends ActionBarActivity implements BleConsumer {
@@ -113,6 +115,8 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
         invalidateOptionsMenu();
     }
 
+    private final static long DAY = 86400l;
+
     @Override
     public void onBleServiceConnect() {
         Log.d(TAG,"서비스 연결됨");
@@ -153,6 +157,10 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
             public void bleDataAvailable(String uuid, byte[] data) {
                 Log.i(TAG, "bleDataAvailable");
                 if (uuid.equals(LecGattAttributes.LEC_RX_UUID)) {
+                    if (data[0] == 113) {
+                        Logger.d(this,"test" );
+                        Logger.d(this,"bleDataAvailable",data[1],data[2],data[3],data[4],data[5]);
+                    }
                     switch (data[0]) {
                         case Define.TX_ACK:
                             switch (data[1]) {
@@ -177,6 +185,20 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
             case R.id.btn_init_rom:
                 if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
                     txData(TxDatas.formatInitEEPROM());
+                }
+                break;
+            case R.id.btn_test_1:
+                if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+                    txData(TxDatas.formatSleep(false));
+                    Calendar c = Calendar.getInstance();
+                    txData(TxDatas.formatReloadTime(c));
+                    txData(TxDatas.formatAlarmWrite(0,10,0xFF,14,17));
+                    //txData(TxDatas.formatReadTime());
+                }
+                break;
+            case R.id.btn_test_2:
+                if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+                    txData(TxDatas.formatReadTime());
                 }
                 break;
         }
