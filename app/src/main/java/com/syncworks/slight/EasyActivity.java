@@ -257,6 +257,10 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                     fragment4th.initEffectNum();
                     changeStep(2);
                 } else if (curStep == 5) {
+                    // 완료 하면 버튼 초기화
+                    ledComplete();
+                    // 효과 선택 초기화
+                    fragment4th.initEffectNum();
                     changeStep(2);
                 } else {
                     changeStep(stepView.getStep() + 1);
@@ -306,6 +310,9 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     private final static int HANDLE_SAVE_DATA_ERROR = 16;
 
     private final static int HANDLE_ACKNOWLEDGE = 50;
+    private final static int HANDLE_SCAN_START = 60;
+    private final static int HANDLE_SCAN_STOP = 61;
+    private final static int HANDLE_SCAN_RESULT = 62;
 
     private final static int HANDLE_ICON_INVALIDATE = 99;
 
@@ -429,6 +436,22 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                     case HANDLE_ACKNOWLEDGE:
                         activity.showDefaultToast(activity.getString(R.string.easy_ack));
                         break;
+                    case HANDLE_SCAN_START:
+                        if (activity.fragment1st.isVisible()) {
+                            activity.fragment1st.displayScanButton(false);
+                            activity.fragment1st.clearList();
+                        }
+                        break;
+                    case HANDLE_SCAN_STOP:
+                        if (activity.fragment1st.isVisible()) {
+                            activity.fragment1st.displayScanButton(true);
+                        }
+                        break;
+                    case HANDLE_SCAN_RESULT:
+                        if (activity.fragment1st.isVisible()) {
+                            activity.fragment1st.addList((BluetoothDevice) msg.obj,msg.arg1);
+                        }
+                        break;
                     case HANDLE_ICON_INVALIDATE:
                         if (activity.bleManager.getBleConnectState() == BluetoothLeService.STATE_DISCONNECTED) {
                             activity.changeStep(1);
@@ -452,11 +475,19 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 connectState = bleManager.getBleConnectState();
                 // 10초간 연결 상태 확인
                 if (connectState == BluetoothLeService.STATE_CONNECTED) {
-                    // 연결되었으면 연결상태 확인 종료
-                    break;
+                    if (bleManager.isAcquireServices()) {
+                        // 연결되었으면 연결상태 확인 종료
+                        break;
+                    } else {
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 } else if (connectState == BluetoothLeService.STATE_CONNECTING){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -466,7 +497,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             }
 
             connectState = bleManager.getBleConnectState();
-            if (connectState == BluetoothLeService.STATE_CONNECTED) {
+            if (connectState == BluetoothLeService.STATE_CONNECTED && bleManager.isAcquireServices()) {
                 Logger.d(this, "Connected");
                 try {
                     Thread.sleep(100);
@@ -474,8 +505,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                     e.printStackTrace();
                 }
                 // 타이머 초기화 명령으로 수정
-                txCounterInit();
                 txBrightAll(Define.OP_CODE_MIN - 1);
+                txCounterInit();
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
@@ -506,7 +537,6 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                     e.printStackTrace();
                 }
                 txBrightAll(0);
-
                 uiHandler.sendEmptyMessage(HANDLE_FRAG_CONNECTED);
             } else {
                 Logger.d(this,"Not connected");
@@ -738,7 +768,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
                     txData(TxDatas.formatSaveData(i,dataNum*Define.NUMBER_OF_SINGLE_LED+i));
                     isRxSaveData = false;
-                    for (int j=0;j<10;j++) {
+                    for (int j=0;j<20;j++) {
                         try {
                             Thread.sleep(100);
                         } catch (InterruptedException e) {
@@ -916,16 +946,25 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         switch (step) {
             case 0:
                 btnNext.setText(getString(R.string.str_next));
+                stepView.clearAnimation();
                 stepView.setVisibility(View.GONE);
+                btnPrev.clearAnimation();
                 btnPrev.setVisibility(View.GONE);
+                btnPrev.invalidate();
+                btnStep5.clearAnimation();
                 btnStep5.setVisibility(View.GONE);
+                btnFinish.clearAnimation();
                 btnFinish.setVisibility(View.GONE);
                 break;
             case 1:
                 btnNext.setText(getString(R.string.str_next));
+                stepView.clearAnimation();
                 stepView.setVisibility(View.VISIBLE);
+                btnPrev.clearAnimation();
                 btnPrev.setVisibility(View.VISIBLE);
+                btnStep5.clearAnimation();
                 btnStep5.setVisibility(View.GONE);
+                btnFinish.clearAnimation();
                 btnFinish.setVisibility(View.GONE);
                 break;
             case 2:
@@ -959,6 +998,9 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         }
     }
 
+    FragmentManager fragmentManager = null;
+    FragmentTransaction fragmentTransaction = null;
+
     private void createFragment() {
         fragment0th = InstallFragment.newInstance();
         fragment1st = BleSetFragment.newInstance();
@@ -974,8 +1016,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         fragment4th.setLedSelect(this.ledDataSeries.ledSelect);
         fragment5th.setLecHeader(this.lecHeader);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentManager = getFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
         // 0단계를 보지 않겠다고 설정되어 있다면
         if (appPref.getBoolean(SLightPref.FRAG_INSTALL_NOT_SHOW)) {
             setBtnText(1);
@@ -1022,8 +1064,21 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     // 각 단계별 Fragment 변경
     private void changeFragment(int step) {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentManager = getFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        /*if (fragment0th.isVisible()) {
+            fragmentTransaction.remove(fragment0th);
+        } else if (fragment1st.isVisible()) {
+            fragmentTransaction.remove(fragment1st);
+        } else if (fragment2nd.isVisible()) {
+            fragmentTransaction.remove(fragment2nd);
+        } else if (fragment3rd.isVisible()) {
+            fragmentTransaction.remove(fragment3rd);
+        } else if (fragment4th.isVisible()) {
+            fragmentTransaction.remove(fragment4th);
+        } else if (fragment5th.isVisible()) {
+            fragmentTransaction.remove(fragment5th);
+        }*/
         switch (step) {
             case 0:
                 fragmentTransaction.replace(R.id.easy_ll_fragment, fragment0th);
@@ -1052,8 +1107,11 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             default:
                 break;
         }
+
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+        Logger.d(this,"fragmentTransaction");
     }
 
     private void changeStep(int step) {
@@ -1318,12 +1376,17 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         }
     }
 
+
     // 스캔 결과를 받아오는 인터페이스
     private SlightScanCallback slightScanCallback = new SlightScanCallback() {
         @Override
         public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
             Logger.d(this,"scanResult");
-            fragment1st.addList(device,rssi);
+            Message msg = uiHandler.obtainMessage(HANDLE_SCAN_RESULT);
+            msg.obj = device;
+            msg.arg1 = rssi;
+            uiHandler.sendMessage(msg);
+            //fragment1st.addList(device,rssi);
         }
 
         @Override
@@ -1335,10 +1398,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     // 블루투스 스캔 시작
     private void scanStart() {
         Logger.d(this, "scanStart");
-        if (fragment1st.isResumed()) {
-            fragment1st.displayScanButton(false);
-            fragment1st.clearList();
-        }
+        uiHandler.sendEmptyMessage(HANDLE_SCAN_START);
         if (!slightScanner.getStateScanning()) {
             slightScanner.start();
         }
@@ -1346,9 +1406,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     // 블루투스 스캔 중지
     private void scanStop() {
         Logger.d(this,"scanStop");
-        if (fragment1st.isResumed()) {
-            fragment1st.displayScanButton(true);
-        }
+        uiHandler.sendEmptyMessage(HANDLE_SCAN_STOP);
         if (slightScanner.getStateScanning()) {
             slightScanner.stop();
         }
@@ -1414,6 +1472,9 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                         case Define.TX_ACK:
                             switch (data[1]) {
                                 case Define.TX_MEMORY_FETCH_DATA:
+                                    uiHandler.sendEmptyMessage(HANDLE_ACKNOWLEDGE);
+                                    break;
+                                case Define.TX_PARAM_WRITE:
                                     uiHandler.sendEmptyMessage(HANDLE_ACKNOWLEDGE);
                                     break;
                             }

@@ -380,6 +380,14 @@ public class BluetoothLeService extends Service {
 		readCharacteristic(charLecRx);
         Log.d(TAG, "getGattService : " + "Success");
     }
+    public boolean isAcquireServices() {
+        if (charLecTx != null && charLecRx != null && charLecDevName != null && charLecDevVer != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public boolean isAcquireNameService() {
         if (charLecDevName != null) {
             return true;
@@ -387,7 +395,7 @@ public class BluetoothLeService extends Service {
         return false;
     }
     public void getDeviceVersion() {
-        charLecDevName = mBluetoothGatt.getService(UUID_LEC_SERVICE).getCharacteristic(UUID_LEC_VERSION);
+        charLecDevVer = mBluetoothGatt.getService(UUID_LEC_SERVICE).getCharacteristic(UUID_LEC_VERSION);
         readCharacteristic(charLecDevVer);
         //mBluetoothGatt.readCharacteristic(charLecDevVer);
     }

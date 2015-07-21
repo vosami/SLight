@@ -270,6 +270,14 @@ public class BleManager {
         }
     }
 
+    public boolean isAcquireServices() {
+        if (bluetoothLeService != null) {
+            return bluetoothLeService.isAcquireServices();
+        } else {
+            return false;
+        }
+    }
+
 
 
 }
