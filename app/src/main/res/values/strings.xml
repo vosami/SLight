@@ -234,4 +234,13 @@
         <item>C 저장</item>
     </string-array>
     <!--EasyActivity 에서 사용 End-->
+    <!--SLightSettingActivity Start-->
+    <string name="ss_date_1">월</string>
+    <string name="ss_date_2">화</string>
+    <string name="ss_date_3">수</string>
+    <string name="ss_date_4">목</string>
+    <string name="ss_date_5">금</string>
+    <string name="ss_date_6">토</string>
+    <string name="ss_date_7">일</string>
+    <!--SLightSettingActivity End-->
 </resources>

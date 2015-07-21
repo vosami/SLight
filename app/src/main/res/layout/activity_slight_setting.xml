@@ -52,12 +52,18 @@
                 android:textStyle="bold"
                 android:textColor="@color/Black"
                 android:text="알람 1 설정"/>
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="time"
-                android:ems="10"
-                android:id="@+id/editText1" />
+                android:orientation="horizontal">
+                <ToggleButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textOn="@string/ss_date_1"
+                    android:textOff="@string/ss_date_1"/>
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
