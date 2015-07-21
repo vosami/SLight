@@ -89,7 +89,7 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
             }
 
             return true;
-        } else if (id== R.id.home) {
+        } else if (id== android.R.id.home) {
             this.finish();
         }
 

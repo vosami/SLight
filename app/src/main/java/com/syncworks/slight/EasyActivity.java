@@ -103,7 +103,9 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     @Override
     protected void onStop() {
         if (isBleSupported) {
-            scanStop();
+            if (slightScanner.getStateScanning()) {
+                slightScanner.stop();
+            }
             bleManager.unbind(this);
         }
         super.onStop();

@@ -17,10 +17,10 @@
         android:label="@string/smart_light_name"
         android:screenOrientation="portrait"
         android:theme="@style/AppTheme"
+        android:icon="@mipmap/ic_launcher"
         tools:replace="label" >
         <activity
             android:name=".MainActivity"
-            android:icon="@mipmap/ic_launcher"
             android:label="@string/smart_light_name"
             android:screenOrientation="portrait" >
             <intent-filter>
