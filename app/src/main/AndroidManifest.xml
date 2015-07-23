@@ -13,11 +13,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".SLightApp"
         android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/smart_light_name"
         android:screenOrientation="portrait"
         android:theme="@style/AppTheme"
-        android:icon="@mipmap/ic_launcher"
         tools:replace="label" >
         <activity
             android:name=".MainActivity"
@@ -90,14 +91,22 @@
         <activity
             android:name=".EasyActivity"
             android:label="@string/easy_activity_step_0"
-            android:theme="@style/EasyActivityTheme"
-            android:screenOrientation="portrait">
-            <!--<intent-filter>
+            android:screenOrientation="portrait"
+            android:theme="@style/EasyActivityTheme" >
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
+        <service
+            android:name=".services.DummyService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>
