@@ -18,6 +18,9 @@ public class SLightPref {
     public final static String DEVICE_NAME = "key_name";
     // 장치 주소 저장
     public final static String DEVICE_ADDR = "key_addr";
+    // 장치 버전 저장
+    public final static String DEVICE_VERSION = "key_version";
+
 
     public final static String[] DEVICE_LED_NAME = {"key_led1","key_led2","key_led3","key_led4",
             "key_led5","key_led6","key_led7","key_led8","key_led9"};
@@ -51,6 +54,8 @@ public class SLightPref {
         putString(DEVICE_NAME,"NONE");
         // 연결 장치 주소 설정
         putString(DEVICE_ADDR,"00:00:00:00:00:00");
+        // 연결 장치 버전 저장
+        putString(DEVICE_VERSION, "");
         // LED 장치 이름 설정
         Resources r = context.getResources();
         putString(DEVICE_LED_NAME[0],r.getString(R.string.led1_txt));

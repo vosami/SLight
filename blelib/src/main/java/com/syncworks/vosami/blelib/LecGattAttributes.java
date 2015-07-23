@@ -6,6 +6,7 @@ import java.util.HashMap;
  * Created by vosami on 2015-02-25.
  */
 public class LecGattAttributes {
+    public final static byte[] TXRX_SERV_UUID = {0x1E, (byte) 0x94, (byte)0x8D, (byte)0xF1, 0x48, 0x31, (byte)0x94, (byte)0xBA, 0x75, 0x4C, 0x3E, 0x50, 0x00, 0x00, 0x3D, 0x71};
 	public static String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
     // LEC 의 Profile
     public final static String LEC_PROFILE_UUID = "713d0000-503e-4c75-ba94-3148f18d941e";

@@ -84,18 +84,19 @@ public class BluetoothLeService extends Service {
             //String intentAction;
             if (newState == BluetoothProfile.STATE_CONNECTED) {                 // 장치와 연결되면
                 //intentAction = ACTION_GATT_CONNECTED;
-                mConnectionState = STATE_CONNECTED;     // 연결 상태를 연결로 설정
-                Log.d(TAG,"Connected to GATT server");  // 로그 메시지 표시
-                Log.i(TAG, "Attempting to start service discovery:" +
-                        mBluetoothGatt.discoverServices());
+                //mConnectionState = STATE_CONNECTED;     // 연결 상태를 연결로 설정
+                Log.d(TAG, "Connected to GATT server");  // 로그 메시지 표시
+                gatt.discoverServices();
+                /*Log.i(TAG, "Attempting to start service discovery:" +
+                        mBluetoothGatt.discoverServices());*/
 //                broadcastUpdate(intentAction);          // 메시지 전달
-                if (bleNotifier !=null) {
+                /*if (bleNotifier !=null) {
                     bleNotifier.bleConnected();
-                }
+                }*/
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {       // 장치와 연결이 끊어지면
                 //intentAction = ACTION_GATT_DISCONNECTED;
+                stopTxDataThread();
                 mConnectionState = STATE_DISCONNECTED;  // 연결 상태를 연결안됨으로 설정
-//                broadcastUpdate(intentAction);          // 메시지 전달
                 if (bleNotifier !=null) {
                     bleNotifier.bleDisconnected();
                 }
@@ -111,7 +112,6 @@ public class BluetoothLeService extends Service {
                 if (bleNotifier !=null) {
                     bleNotifier.bleServiceDiscovered();
                 }
-//				broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
             } else {
                 Log.d(TAG, "onServicesDiscovered received: " + status);
             }
@@ -169,13 +169,12 @@ public class BluetoothLeService extends Service {
             if (status == BluetoothGatt.GATT_SUCCESS) {
 //                broadcastUpdate(ACTION_DATA_WRITE_COMPLETE, characteristic);
                 Log.d(TAG,"Write Complete"+status);
-                if (txDataList.size() > 0) {
+                /*if (txDataList.size() > 0) {
                     txDataList.remove(0);
                 }
                 if (txDataList.size() > 0) {
                     writeTxData(txDataList.get(0));
-                }
-
+                }*/
                 if (bleNotifier !=null) {
                     bleNotifier.bleDataWriteComplete();
                 }
@@ -379,6 +378,12 @@ public class BluetoothLeService extends Service {
 		setCharacteristicNotification(charLecRx, true);
 		readCharacteristic(charLecRx);
         Log.d(TAG, "getGattService : " + "Success");
+        // 연결 상태로 설정
+        mConnectionState = STATE_CONNECTED;
+        if (bleNotifier !=null) {
+            bleNotifier.bleConnected();
+        }
+        startTxDataThread();
     }
     public boolean isAcquireServices() {
         if (charLecTx != null && charLecRx != null && charLecDevName != null && charLecDevVer != null) {
@@ -395,8 +400,13 @@ public class BluetoothLeService extends Service {
         return false;
     }
     public void getDeviceVersion() {
-        charLecDevVer = mBluetoothGatt.getService(UUID_LEC_SERVICE).getCharacteristic(UUID_LEC_VERSION);
-        readCharacteristic(charLecDevVer);
+        //charLecDevVer = mBluetoothGatt.getService(UUID_LEC_SERVICE).getCharacteristic(UUID_LEC_VERSION);
+        if (mConnectionState == STATE_CONNECTED && charLecDevVer != null) {
+            readCharacteristic(charLecDevVer);
+        } else {
+            charLecDevVer = mBluetoothGatt.getService(UUID_LEC_SERVICE).getCharacteristic(UUID_LEC_VERSION);
+            readCharacteristic(charLecDevVer);
+        }
         //mBluetoothGatt.readCharacteristic(charLecDevVer);
     }
 
@@ -406,11 +416,12 @@ public class BluetoothLeService extends Service {
         if (mConnectionState == STATE_CONNECTED &&
                 charLecDevName != null) {
             String txStr;
-            if (mDevName.length() < 20) {
+            txStr = mDevName + " \0";
+            /*if (mDevName.length() < 20) {
                 txStr = mDevName + " \0";
             } else {
                 txStr = mDevName.substring(0,19);
-            }
+            }*/
             byte[] txBytes = txStr.getBytes();
             Log.d(TAG, "writeDeviceName"+txStr);
             charLecDevName.setValue(txBytes);
@@ -444,12 +455,12 @@ public class BluetoothLeService extends Service {
     public void writeTxList(byte[] mData) {
         if (mConnectionState == STATE_CONNECTED &&
                 charLecTx != null) {
-
-            txDataList.add(mData);
+            pushTxList(mData);
+            /*txDataList.add(mData);
             if (txDataList.size() == 1) {
                 Log.i(TAG,"write");
                 writeTxData(mData);
-            }
+            }*/
         }
     }
 
@@ -484,5 +495,46 @@ public class BluetoothLeService extends Service {
 
     public BleNotifier getBleNotifier() {
         return bleNotifier;
+    }
+
+    private void startTxDataThread() {
+        txDataList.clear();
+        txDataThread = new TxDataThread();
+        txDataThread.setLoop();
+        txDataThread.start();
+    }
+    private void stopTxDataThread() {
+        if (txDataThread != null) {
+            txDataThread.clearLoop();
+            txDataThread = null;
+        }
+    }
+
+    private TxDataThread txDataThread = null;
+
+    private class TxDataThread extends Thread {
+        private boolean isLoop = false;
+        // Thread 반복 루프 시작
+        public void setLoop() {
+            isLoop = true;
+        }
+        // Thread 반복 루프 종료
+        public void clearLoop() {
+            isLoop = false;
+        }
+        @Override
+        public void run() {
+            super.run();
+            while(isLoop) {
+                try {
+                    sleep(20);
+                    if (!txDataList.isEmpty()) {
+                        writeTxData(pullTxList());
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

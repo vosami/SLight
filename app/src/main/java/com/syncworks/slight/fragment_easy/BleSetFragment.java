@@ -3,7 +3,6 @@ package com.syncworks.slight.fragment_easy;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
-import android.bluetooth.BluetoothDevice;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,9 +18,13 @@ import android.widget.TextView;
 import com.syncworks.define.Logger;
 import com.syncworks.slight.R;
 import com.syncworks.slightpref.SLightPref;
-import com.syncworks.vosami.blelib.BluetoothDeviceAdapter;
+import com.syncworks.vosami.blelib.BleDeviceAdapter;
+import com.syncworks.vosami.blelib.BleDeviceData;
+import com.syncworks.vosami.blelib.BleScanParser;
+import com.syncworks.vosami.blelib.LecGattAttributes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -40,16 +43,17 @@ public class BleSetFragment extends Fragment {
     // 현재 설정된 장치의 이름과 주소 변수
     private String selDevName;
     private String selDevAddr;
+    private String selDevVersion;
 
-    TextView tvCurrentDeviceName, tvCurrentDeviceAddress;
+    TextView tvCurrentDeviceName, tvCurrentDeviceAddress, tvCurrentDeviceVersion;
     Button btnBleScan, btnBleStop, btnModName,btnTestConnect;
     ProgressBar pbScan;
     ListView deviceList;
 
     // 블루투스 장치 리스트
-    private List<BluetoothDevice> mDevice = new ArrayList<>();
+    private List<BleDeviceData> mDevice = new ArrayList<>();
     // 블루투스 리스트 어댑터
-    private BluetoothDeviceAdapter deviceListAdapter;
+    private BleDeviceAdapter deviceListAdapter;
 
     private OnEasyFragmentListener mListener;
 
@@ -79,18 +83,20 @@ public class BleSetFragment extends Fragment {
         appPref = new SLightPref(getActivity());
         selDevAddr = appPref.getString(SLightPref.DEVICE_ADDR);
         selDevName = appPref.getString(SLightPref.DEVICE_NAME);
+        selDevVersion = appPref.getString(SLightPref.DEVICE_VERSION);
         View view = inflater.inflate(R.layout.fragment_ble_set, container, false);
         tvCurrentDeviceName = (TextView) view.findViewById(R.id.tv_current_device_name);
         tvCurrentDeviceAddress = (TextView) view.findViewById(R.id.tv_current_device_address);
+        tvCurrentDeviceVersion = (TextView) view.findViewById(R.id.tv_current_device_version);
         btnBleScan = (Button) view.findViewById(R.id.btn_ble_scan);
         btnBleStop = (Button) view.findViewById(R.id.btn_ble_stop);
         btnTestConnect = (Button) view.findViewById(R.id.btn_dev_test_connect);
         pbScan = (ProgressBar) view.findViewById(R.id.progress_scan);
         btnModName = (Button) view.findViewById(R.id.btn_dev_mod_name);
         deviceList = (ListView) view.findViewById(R.id.lv_list_device);
-        setTvCurrentDevice(selDevName, selDevAddr);
+        setTvCurrentDevice(selDevName, selDevAddr,selDevVersion);
 
-        deviceListAdapter = new BluetoothDeviceAdapter(getActivity().getBaseContext(), R.layout.device_list_item, mDevice);
+        deviceListAdapter = new BleDeviceAdapter(getActivity().getBaseContext(), R.layout.device_list_item, mDevice);
         deviceList.setAdapter(deviceListAdapter);
         deviceList.setOnItemClickListener(itemClickListener);
 
@@ -157,24 +163,27 @@ public class BleSetFragment extends Fragment {
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            String mDevName = ((BluetoothDevice)parent.getAdapter().getItem(position)).getName();
-            String mDevAddr = ((BluetoothDevice)parent.getAdapter().getItem(position)).getAddress();
-            setTvCurrentDevice(mDevName, mDevAddr);
+            String mDevName = ((BleDeviceData)parent.getAdapter().getItem(position)).getName();
+            String mDevAddr = ((BleDeviceData)parent.getAdapter().getItem(position)).getAddr();
+            String mDevVersion = ((BleDeviceData)parent.getAdapter().getItem(position)).getVersion();
             if (mListener != null) {
-                setTvCurrentDevice(mDevName,mDevAddr);
+                setTvCurrentDevice(mDevName,mDevAddr,mDevVersion);
                 mListener.onSetDeviceItem(mDevName, mDevAddr);
             }
         }
     };
 
     // 현재 설정된 장치의 이름과 주소를 바꿔준다.
-    public void setTvCurrentDevice(String name, String addr) {
+    public void setTvCurrentDevice(String name, String addr, String version) {
         tvCurrentDeviceName.setText(name);
         tvCurrentDeviceAddress.setText(addr);
+        tvCurrentDeviceVersion.setText(version);
         selDevName = name;
         selDevAddr = addr;
+        selDevVersion = version;
         appPref.putString(SLightPref.DEVICE_NAME,selDevName);
         appPref.putString(SLightPref.DEVICE_ADDR,selDevAddr);
+        appPref.putString(SLightPref.DEVICE_VERSION,selDevVersion);
     }
 
     public void setTvCurrentDeviceName(String name) {
@@ -191,14 +200,36 @@ public class BleSetFragment extends Fragment {
         deviceListAdapter.clear();
     }
     // 블루투스 검색 리스트에 검색된 장치 추가
-    public void addList(BluetoothDevice device, int rssi) {
-        if (device != null) {
-            if (mDevice.indexOf(device) == -1) {
-                deviceListAdapter.addRssi(rssi);
-                mDevice.add(device);
+    public void addList(byte[] scanResult, String addr, int rssi) {
+        BleScanParser bsp = new BleScanParser(scanResult);
+        byte[] serviceUUID = bsp.getService();
+        if (!Arrays.equals(serviceUUID,LecGattAttributes.TXRX_SERV_UUID)) {
+            return;
+        }
+        int containDevice = 0;
+        for (int i=0;i<mDevice.size();i++) {
+            if (mDevice.get(i).getAddr().contains(addr)) {
+                containDevice++;
+                mDevice.get(i).setRssi(rssi);
                 deviceListAdapter.notifyDataSetChanged();
             }
         }
+        if (containDevice == 0) {
+            BleDeviceData bdd = new BleDeviceData(bsp.getName(),addr,rssi,bsp.getVersion());
+            mDevice.add(bdd);
+            deviceListAdapter.notifyDataSetChanged();
+        }
+
+        //mDevice.add(device);
+        //deviceListAdapter.notifyDataSetChanged();
+        /*if (device != null) {
+            if (mDevice.indexOf(device) == -1) {
+                deviceListAdapter.addRssi(rssi);
+                mDevice.add(scanResult);
+                //mDevice.add(device);
+                deviceListAdapter.notifyDataSetChanged();
+            }
+        }*/
     }
 
     // 버튼 출력 설정

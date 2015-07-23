@@ -150,6 +150,7 @@ public class Define {
     public final static byte TX_MEM_TO_ROM = 0x43;
     public final static byte TX_MEM_TO_ROM_EACH = 0x44;
     public final static byte TX_MEM_TO_ROM_PLACE = 0x45;
+    public final static byte TX_MEM_TO_ROM_COMPLETE = 0x46;
     // I2C Write (0:명령어, 1:Device Address, 2:속도, 3~4:주소, 5:길이, 6~19:기록 데이터)
     public final static byte TX_I2C_WRITE = 0x50;
     // I2C Write (0:명령어, 1:Device Address, 2:속도, 3~4:주소, 5:길이)
@@ -168,6 +169,7 @@ public class Define {
     public final static byte TX_MEMORY_WRITE_ACK = 0x63;
     public final static byte TX_MEMORY_PATTERN_ALL = 0x64;
     public final static byte TX_MEMORY_FETCH_DATA = 0x65;
+    public final static byte TX_MEMORY_FETCH_COMPLETE = 0x66;
     // 현재 시간 재설정 (0:명령어, 1~4:현재시간)
     public final static byte TX_TIME_RELOAD = 0x70;
     // 현재 시간 읽어오기 (0:명령어, 1~3:Reserved)

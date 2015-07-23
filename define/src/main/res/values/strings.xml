@@ -74,6 +74,10 @@
     <string name="tv_cur_device_title">연결할 장치</string>
     <string name="cur_device_name">LED Control</string>
     <string name="tv_cur_unknown_device">Unknown</string>
+    <string name="cur_device_rssi">-20</string>
+    <string name="rssi_title">RSSI:</string>
+    <string name="version_title">v</string>
+    <string name="cur_device_version">1.13</string>
     <string name="cur_device_addr">XX:XX:XX:XX:XX:XX</string>
     <string name="btn_back">뒤로</string>
     <string name="btn_save">저장</string>

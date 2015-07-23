@@ -47,6 +47,7 @@ import com.syncworks.vosami.blelib.BleNotifier;
 import com.syncworks.vosami.blelib.BleUtils;
 import com.syncworks.vosami.blelib.BluetoothLeService;
 import com.syncworks.vosami.blelib.LecGattAttributes;
+import com.syncworks.vosami.blelib.resolver.BluetoothCrashResolver;
 import com.syncworks.vosami.blelib.scanner.SlightScanCallback;
 import com.syncworks.vosami.blelib.scanner.SlightScanner;
 
@@ -60,6 +61,8 @@ import java.util.List;
 public class EasyActivity extends ActionBarActivity implements OnEasyFragmentListener,BleConsumer {
 
     private SLightPref appPref  = null;
+
+    private BluetoothCrashResolver crashResolver = null;
 
     private final static int MAX_STEP = 5;  // 5단계가 최고 단계로 설정
     StepView stepView;
@@ -76,6 +79,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        crashResolver = new BluetoothCrashResolver(this);
         appPref = new SLightPref(this);
         lecHeader = new LecHeaderParam();
         ledDataSeries = new LedDataSeries();
@@ -91,6 +95,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     @Override
     protected void onResume() {
+        crashResolver.setUpdateNotifier(updateNotifier);
         // 블루투스 LE를 지원한다면 스캔 시작
         if (isBleSupported) {
             Logger.d(this, "onResume");
@@ -108,8 +113,19 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             }
             bleManager.unbind(this);
         }
+        crashResolver.setUpdateNotifier(null);
         super.onStop();
     }
+
+    public BluetoothCrashResolver.UpdateNotifier updateNotifier = new BluetoothCrashResolver.UpdateNotifier() {
+        public void dataUpdated() {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    //updateView();
+                }
+            });
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -297,8 +313,9 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     //마이크 입력 태스크
     private MicrophoneTask micTask = null;
 
-    private final static int HANDLE_FRAG_CONNECTED = 1;
-    private final static int HANDLE_NOT_CONNECTED = 2;
+    private final static int HANDLE_FRAG_START = 1;
+    private final static int HANDLE_FRAG_CONNECTED = 2;
+    private final static int HANDLE_NOT_CONNECTED = 3;
 
     private final static int HANDLE_MOD_NAME_CONNECT = 5;
     private final static int HANDLE_MOD_NAME=6;
@@ -310,6 +327,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     private final static int HANDLE_CHANGE_STEP_5_ERROR = 13;
     private final static int HANDLE_SAVE_DATA = 15;
     private final static int HANDLE_SAVE_DATA_ERROR = 16;
+    private final static int HANDLE_FETCH_DATA = 20;
+    private final static int HANDLE_FETCH_DATA_ERROR = 21;
 
     private final static int HANDLE_ACKNOWLEDGE = 50;
     private final static int HANDLE_SCAN_START = 60;
@@ -355,10 +374,12 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             final EasyActivity activity = mActivity.get();
             if (activity != null) {
                 switch (msg.what) {
+                    case HANDLE_FRAG_START:
+                        activity.changeStep(2);
+                        break;
                     case HANDLE_FRAG_CONNECTED:
                         // 진행 상태 대화창을 닫음
                         activity.dismissProgressDialog();
-                        activity.changeStep(2);
                         /*
                         activity.micTask = new MicrophoneTask();
                         activity.micTask.setOnSoundListener(new MicrophoneTask.OnSoundListener() {
@@ -388,7 +409,9 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                         break;
                     case HANDLE_MOD_NAME:
                         activity.bleManager.bleDisconnect();
-                        activity.fragment1st.setTvCurrentDevice(activity.modName, activity.appPref.getString(SLightPref.DEVICE_ADDR));
+                        activity.fragment1st.setTvCurrentDevice(activity.modName,
+                                activity.appPref.getString(SLightPref.DEVICE_ADDR),
+                                activity.appPref.getString(SLightPref.DEVICE_VERSION));
                         // 진행 상태 대화창을 닫음
                         activity.dismissProgressDialog();
                         activity.scanStart();
@@ -435,6 +458,14 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                         activity.dismissProgressDialog();
                         activity.showErrorToast(activity.getString(R.string.easy_save_data_error));
                         break;
+                    case HANDLE_FETCH_DATA:
+                        activity.dismissProgressDialog();
+                        activity.showSuccessToast(activity.getString(R.string.easy_load_complete));
+                        break;
+                    case HANDLE_FETCH_DATA_ERROR:
+                        activity.dismissProgressDialog();
+                        activity.showErrorToast(activity.getString(R.string.easy_save_data_error));
+                        break;
                     case HANDLE_ACKNOWLEDGE:
                         activity.showDefaultToast(activity.getString(R.string.easy_ack));
                         break;
@@ -451,7 +482,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                         break;
                     case HANDLE_SCAN_RESULT:
                         if (activity.fragment1st.isVisible()) {
-                            activity.fragment1st.addList((BluetoothDevice) msg.obj,msg.arg1);
+                            String addr = msg.getData().getString("addr");
+                            activity.fragment1st.addList((byte[]) msg.obj,addr,msg.arg1);
                         }
                         break;
                     case HANDLE_ICON_INVALIDATE:
@@ -471,8 +503,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         public void run() {
             int connectState;
             Logger.d(this,"Try Connect");
-            bleManager.bleConnect(fragment1st.getDevAddr());
-            // 10초간 연결 상태 확인
+            bleManager.bleConnect(appPref.getString(SLightPref.DEVICE_ADDR));
+            // 5초간 연결 상태 확인
             for (int i=0;i<10;i++) {
                 connectState = bleManager.getBleConnectState();
                 // 10초간 연결 상태 확인
@@ -501,6 +533,13 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             connectState = bleManager.getBleConnectState();
             if (connectState == BluetoothLeService.STATE_CONNECTED && bleManager.isAcquireServices()) {
                 Logger.d(this, "Connected");
+                uiHandler.sendEmptyMessage(HANDLE_FRAG_START);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                txData(TxDatas.formatSleep(true));
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -655,11 +694,16 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             }
             if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
                 isStartTestConnect = true;
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 bleManager.getDevVersion();
-                for (int i=0;i<5;i++) {
+                for (int i=0;i<50;i++) {
                     if (isStartTestConnect) {
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(100);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -767,17 +811,36 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         @Override
         public void run() {
             if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
-                for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
-                    txData(TxDatas.formatSaveData(i,dataNum*Define.NUMBER_OF_SINGLE_LED+i));
-                    isRxSaveData = false;
-                    for (int j=0;j<20;j++) {
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                txData(TxDatas.formatSaveDataPlace(dataNum));
+                for (int i=0;i<50;i++) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (isRxSaveData) {
+                        break;
+                    }
+                }
+                /*for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+                    for (int j=0;j<4;j++) {
+                        byte[] txDatas = TxDatas.formatSaveData(i, dataNum * Define.NUMBER_OF_SINGLE_LED + i,j);
+                        isRxSaveData = false;
+                        txData(txDatas);
+                        //txData(TxDatas.formatSaveData(i,dataNum*Define.NUMBER_OF_SINGLE_LED+i));
+                        for (int k = 0; k < 20; k++) {
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            // 수신 데이터가 있다면 중지
+                            if (isRxSaveData) {
+                                break;
+                            }
                         }
-                        // 수신 데이터가 있다면 중지
-                        if (isRxSaveData) {
+                        // 수신 데이터가 없다면 중지 후 에러 발생
+                        if (!isRxSaveData) {
                             break;
                         }
                     }
@@ -785,7 +848,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                     if (!isRxSaveData) {
                         break;
                     }
-                }
+                }*/
                 if (isRxSaveData) {
                     uiHandler.sendEmptyMessage(HANDLE_SAVE_DATA);
                 } else {
@@ -795,6 +858,58 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 uiHandler.sendEmptyMessage(HANDLE_SAVE_DATA_ERROR);
             }
 
+        }
+    };
+
+
+    private boolean isRxFetchData = false;
+
+    private Runnable taskFetchData = new Runnable() {
+
+        @Override
+        public void run() {
+            if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+                /*for (int i = 0; i < Define.NUMBER_OF_SINGLE_LED; i++) {
+                    byte[] txDatas = TxDatas.formatFetchData(dataNum, i);
+                    isRxFetchData = false;
+                    txData(txDatas);
+                    for (int k = 0; k < 20; k++) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        // 수신 데이터가 있다면 중지
+                        if (isRxFetchData) {
+                            break;
+                        }
+                    }
+                    // 수신 데이터가 없다면 중지 후 에러 발생
+                    if (!isRxFetchData) {
+                        break;
+                    }
+                }*/
+                txData(TxDatas.formatFetchDataPlace(dataNum));
+                for (int k = 0; k < 50; k++) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    // 수신 데이터가 있다면 중지
+                    if (isRxFetchData) {
+                        break;
+                    }
+                }
+                if (isRxFetchData) {
+                    txCounterInit();
+                    uiHandler.sendEmptyMessage(HANDLE_FETCH_DATA);
+                } else {
+                    uiHandler.sendEmptyMessage(HANDLE_FETCH_DATA_ERROR);
+                }
+            } else {
+                uiHandler.sendEmptyMessage(HANDLE_FETCH_DATA_ERROR);
+            }
         }
     };
 
@@ -861,7 +976,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         ab.setTitle(getString(R.string.easy_mod_name_dialog));
         final EditText inputName = new EditText(this);
         String name = appPref.getString(SLightPref.DEVICE_NAME);
-        name = name.replace(name.substring(name.length()-1), "");
+        name = name.replace(" ", "");
         inputName.setText(name);
         inputName.setSingleLine();
         inputName.requestFocus();
@@ -882,7 +997,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         ab.setPositiveButton(getString(R.string.str_confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                modName = inputName.getText().toString();
+                modName = inputName.getText().toString() + " ";
                 modNameDialog.dismiss();
                 showProgressDialog();
                 new Thread(taskModifyName).start();
@@ -1201,7 +1316,6 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             txPattern(blueLedNum, ledDataSeries.ledExeDatas[blueLedNum].toByteArray(ledDataSeries.ledOptions[ledNum]));
 
         } else {
-            //ledDataSeries.ledSelect.setRgb(ledNum, LedSelect.SelectType.DEFAULT);
             // 3개 LED 밝기 데이터 전달
             txPattern(redLedNum, offPattern);
             txPattern(greenLedNum, offPattern);
@@ -1310,11 +1424,13 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     @Override
     public void onSleepLedCheck(boolean isCheckLed) {
+        Logger.d(this,"onSleepLedCheck");
         txData(TxDatas.formatSleepBlinkCheck(isCheckLed));
     }
 
     @Override
     public void onSleep(boolean isSleep) {
+        Logger.d(this,"onSleep");
         txData(TxDatas.formatSleep(isSleep));
     }
 
@@ -1330,9 +1446,13 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     @Override
     public void onFetchData(int dataNum) {
-        txData(TxDatas.formatFetchData(dataNum));
+        showProgressDialog();
+        this.dataNum = dataNum;
+        new Thread(taskFetchData).start();
+        //txData(TxDatas.formatFetchData(dataNum));
     }
 
+    @Override
     public void onSaveData(int dataNum) {
         //txData(TxDatas.formatSaveData(dataNum));
         showProgressDialog();
@@ -1385,8 +1505,11 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
             Logger.d(this,"scanResult");
             Message msg = uiHandler.obtainMessage(HANDLE_SCAN_RESULT);
-            msg.obj = device;
+            msg.obj = scanRecord;
             msg.arg1 = rssi;
+            Bundle mac = new Bundle();
+            mac.putString("addr",device.getAddress());
+            msg.setData(mac);
             uiHandler.sendMessage(msg);
             //fragment1st.addList(device,rssi);
         }
@@ -1401,9 +1524,10 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     private void scanStart() {
         Logger.d(this, "scanStart");
         uiHandler.sendEmptyMessage(HANDLE_SCAN_START);
-        if (!slightScanner.getStateScanning()) {
+        slightScanner.start();
+        /*if (!slightScanner.getStateScanning()) {
             slightScanner.start();
-        }
+        }*/
     }
     // 블루투스 스캔 중지
     private void scanStop() {
@@ -1446,7 +1570,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                             e.printStackTrace();
                         }
                         if (rxName != null) {
-                            if (rxName.contains(modName)) {
+                            if (rxName.contains(modName.replace(" ",""))) {
                                 // 이름 설정
                                 modName = rxName;
                                 // 이름 변경 실행 핸들러 동작
@@ -1464,8 +1588,12 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 } else if (uuid.equals(LecGattAttributes.LEC_RX_UUID)) {
                     switch (data[0]) {
                         case Define.TX_MEM_TO_ROM_EACH:
-                            isRxSaveData = true;
+                            //isRxSaveData = true;
                             Logger.d(this,"TX_MEM_TO_ROM_EACH");
+                            break;
+                        case Define.TX_MEM_TO_ROM_COMPLETE:
+                            isRxSaveData = true;
+                            Logger.d(this,"TX_MEM_TO_ROM_COMPLETE",data[3]);
                             break;
                         case Define.TX_PARAM_READ:
                             lecHeader.setLecByte(data, 4, data[2],data[1]);
@@ -1474,14 +1602,18 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                         case Define.TX_ACK:
                             switch (data[1]) {
                                 case Define.TX_MEMORY_FETCH_DATA:
-                                    uiHandler.sendEmptyMessage(HANDLE_ACKNOWLEDGE);
+                                    isRxFetchData = true;
+                                    //uiHandler.sendEmptyMessage(HANDLE_ACKNOWLEDGE);
                                     break;
                                 case Define.TX_PARAM_WRITE:
                                     uiHandler.sendEmptyMessage(HANDLE_ACKNOWLEDGE);
                                     break;
                             }
                             break;
-
+                        case Define.TX_MEMORY_FETCH_COMPLETE:
+                            isRxFetchData = true;
+                            Logger.d(this,"TX_MEMORY_FETCH_COMPLETE",data[3]);
+                            break;
                     }
                 } else if (uuid.equals(LecGattAttributes.LEC_VERSION_UUID)) {
                     isStartTestConnect = false;
@@ -1491,12 +1623,13 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                         e.printStackTrace();
                         versionName = "NONE";
                     }
-                    if (versionName.contains("1.13")) {
+                    String verNum = versionName.replaceAll("[^0-9,.]","");
+                    float verFloat = Float.parseFloat(verNum);
+                    if (verFloat >= 1.14f) {
                         uiHandler.sendEmptyMessage(HANDLE_COMPLETE_CONNECT_TEST);
                     } else {
                         uiHandler.sendEmptyMessage(HANDLE_NOT_AVAILABLE_CONNECT);
                     }
-                    Logger.d(this,"Version",versionName);
                 }
 
 
@@ -1524,6 +1657,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     // 데이터 송신 함수
     private void txData(byte[] array) {
+        Logger.d(this,"txData",TxDatas.bytesToHex(array));
         bleManager.writeTxData(array);
     }
     /**

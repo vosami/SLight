@@ -99,13 +99,13 @@ public class TxDatas {
 	}
 
 	// EEPROM 에 있는 데이터 실행
-	public static byte[] formatFetchData(int dataNum) {
-		return new byte[]{Define.TX_MEMORY_FETCH_DATA,(byte)dataNum,0,0};
+	public static byte[] formatFetchData(int dataNum,int ledNum) {
+		return new byte[]{Define.TX_MEMORY_FETCH_DATA,(byte)dataNum,(byte)ledNum,0};
 	}
 
 	// EEPROM 에 데이터 저장
-	public static byte[] formatSaveData(int ledNum, int dataNum) {
-		return new byte[]{Define.TX_MEM_TO_ROM_EACH,(byte)ledNum,(byte)dataNum,0};
+	public static byte[] formatSaveData(int ledNum, int dataNum, int num) {
+		return new byte[]{Define.TX_MEM_TO_ROM_EACH,(byte)ledNum,(byte)dataNum,(byte)num};
 	}
 	// EEPROM 초기화
 	public static byte[] formatInitEEPROM() {
@@ -125,6 +125,14 @@ public class TxDatas {
 
 	public static byte[] formatReadTime() {
 		return new byte[]{Define.TX_TIME_READ,0,0,0};
+	}
+
+	public static byte[] formatSaveDataPlace(int dataPlace) {
+		return new byte[]{Define.TX_MEM_TO_ROM_PLACE,(byte)dataPlace,0,0};
+	}
+
+	public static byte[] formatFetchDataPlace(int dataPlace) {
+		return new byte[]{Define.TX_MEMORY_FETCH_DATA,(byte)dataPlace,0,0};
 	}
 
 	/**

@@ -220,7 +220,7 @@ public class LedSelectFragment extends Fragment {
         public void onClick(View buttonView) {
             switch (buttonView.getId()) {
                 case R.id.rgb_1:
-                    clickRgb(1);
+                    clickRgb(0);
                     break;
                 case R.id.rgb_2:
                     clickRgb(1);
@@ -377,9 +377,9 @@ public class LedSelectFragment extends Fragment {
     }
 
     private void clickSingleWithClear(int ledNum) {
-        int led1Num = ledNum/3*3;
-        int led2Num = led1Num+1;
-        int led3Num = led1Num+2;
+        int led1Num = ledNum / 3 * 3;
+        int led2Num = led1Num + 1;
+        int led3Num = led1Num + 2;
         if (btnSingle[led1Num].getBtnState() == LedSelect.SelectType.DISABLED) {
             btnSingle[led1Num].setBtnState(LedSelect.SelectType.DEFAULT);
         }
@@ -404,9 +404,15 @@ public class LedSelectFragment extends Fragment {
         ledSelect.setLed(ledNum, LedSelect.SelectType.SELECTED);
         ledOptions[ledNum].init();
         displayBtn();
-        mListener.onSelectLed(led1Num, btnSingle[led1Num].getBtnChecked());
-        mListener.onSelectLed(led2Num, btnSingle[led2Num].getBtnChecked());
-        mListener.onSelectLed(led3Num, btnSingle[led3Num].getBtnChecked());
+        if (btnSingle[led1Num].getBtnState() != LedSelect.SelectType.COMPLETED) {
+            mListener.onSelectLed(led1Num, btnSingle[led1Num].getBtnChecked());
+        }
+        if (btnSingle[led2Num].getBtnState() != LedSelect.SelectType.COMPLETED) {
+            mListener.onSelectLed(led2Num, btnSingle[led2Num].getBtnChecked());
+        }
+        if (btnSingle[led3Num].getBtnState() != LedSelect.SelectType.COMPLETED) {
+            mListener.onSelectLed(led3Num, btnSingle[led3Num].getBtnChecked());
+        }
     }
 
     @Override

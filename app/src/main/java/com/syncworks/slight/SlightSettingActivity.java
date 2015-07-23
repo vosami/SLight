@@ -198,7 +198,8 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
                 break;
             case R.id.btn_test_2:
                 if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
-                    txData(TxDatas.formatReadTime());
+                    //txData(TxDatas.formatSaveDataPlace(1));
+                    txData(TxDatas.formatFetchDataPlace(2));
                 }
                 break;
         }

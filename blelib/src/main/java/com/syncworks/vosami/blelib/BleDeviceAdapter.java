@@ -1,6 +1,5 @@
 package com.syncworks.vosami.blelib;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,27 +7,24 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 /**
  * Created by vosami on 2015-02-25.
  */
-public class BluetoothDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
-    private List<BluetoothDevice> _objects;
-    private List<Integer> _dataRssi;
+public class BleDeviceAdapter extends ArrayAdapter<BleDeviceData> {
+    private List<BleDeviceData> _objects;
 
 	// Adapter 생성자
-    public BluetoothDeviceAdapter(Context context, int resource, List<BluetoothDevice> objects) {
+    public BleDeviceAdapter(Context context, int resource, List<BleDeviceData> objects) {
         super(context, resource, objects);
 		this._objects = objects;
-        this._dataRssi = new ArrayList<Integer>();
     }
 
-    public void addRssi(int mRssi) {
+    /*public void addRssi(int mRssi) {
         this._dataRssi.add(mRssi);
-    }
+    }*/
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -44,18 +40,15 @@ public class BluetoothDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
 		TextView tvDevRssi = (TextView) v.findViewById(R.id.li_dev_rssi);
 		TextView tvDevVersion = (TextView) v.findViewById(R.id.li_dev_version);
 		// _objects 데이터에서 현재 위치의 데이터 가져오기
-		String mDevName = _objects.get(position).getName();
-		String mDevAddr = _objects.get(position).getAddress();
-		//TODO RSSI 데이터 가져오기
-		int mDevRssi = 0;
-		if (_dataRssi.size() > position) {
-			mDevRssi = (int)_dataRssi.get(position);//_objects.get(position).EXTRA_RSSI;
-		}
+		//String mDevName = _objects.get(position).getName();
+		//String mDevAddr = _objects.get(position).getAddress();
+
 		// TextView 에 데이터 기록
-		tvDevName.setText(mDevName);
-		tvDevAddr.setText(mDevAddr);
+		tvDevName.setText(_objects.get(position).getName());
+		tvDevAddr.setText(_objects.get(position).getAddr());
+		int mDevRssi = _objects.get(position).getRssi();
 		tvDevRssi.setText(Integer.toString(mDevRssi));
-		tvDevVersion.setText("");
+		tvDevVersion.setText(_objects.get(position).getVersion());
 		// 완성된 View 반환
         return v;
     }

@@ -7,7 +7,7 @@
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
-    <string name="slight_version">SLight v150721</string>
+    <string name="slight_version">SLight v150723</string>
     <string name="slight_home">http://LedLife.co.kr</string>
 
     <string name="led_type_rgb">RGB LED</string>
@@ -223,6 +223,7 @@
 
     <string name="easy_ack">전송 완료</string>
     <string name="easy_save_complete">저장 완료</string>
+    <string name="easy_load_complete">실행 완료</string>
     <string name="easy_press_next_btn">다음단계 버튼을 누르세요.</string>
     <string name="easy_connect_available">연결 가능합니다.</string>
     <string name="easy_connect_unavailable">연결 가능하지 않은 버전입니다.</string>

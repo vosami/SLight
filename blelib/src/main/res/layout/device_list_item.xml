@@ -8,43 +8,53 @@
         android:id="@+id/li_dev_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:paddingBottom="5dp"
+        android:textSize="18sp"
         android:textColor="#0000FF"
         android:textStyle="bold"
-        android:text="Device Name"/>
+        android:text="@string/tv_cur_unknown_device"/>
+    <TextView
+        android:id="@+id/li_dev_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="16sp"
+        android:textColor="#0000FF"
+        android:text="@string/cur_device_version"/>
     <TextView
         android:id="@+id/li_dev_addr_lt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/li_dev_name"
-        android:text="("/>
+        android:text="@string/lt"/>
     <TextView
         android:id="@+id/li_dev_addr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/li_dev_name"
         android:layout_toEndOf="@id/li_dev_addr_lt"
-        android:text="Device Address"/>
+        android:text="@string/cur_device_addr"/>
     <TextView
         android:id="@+id/li_dev_addr_gt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/li_dev_name"
         android:layout_toEndOf="@id/li_dev_addr"
-        android:text=")"/>
+        android:text="@string/gt"/>
     <TextView
         android:id="@+id/li_dev_rssi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignBottom="@id/li_dev_addr"
-        android:text="-60"/>
+        android:text="@string/cur_device_rssi"/>
     <TextView
         android:id="@+id/li_dev_rssi_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toStartOf="@id/li_dev_rssi"
         android:layout_alignBottom="@id/li_dev_addr"
-        android:text="RSSI:"/>
+        android:text="@string/rssi_title"/>
 
 </RelativeLayout>
