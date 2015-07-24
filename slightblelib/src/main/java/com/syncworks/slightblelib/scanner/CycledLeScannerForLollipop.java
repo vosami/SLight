@@ -83,13 +83,13 @@ public class CycledLeScannerForLollipop extends CycledLeScanner {
     protected boolean deferScanIfNeeded() {
         long millisecondsUntilStart = mNextScanCycleStartTime - System.currentTimeMillis();
         if (millisecondsUntilStart > 0) {
-            if (true) {
+            {
                 long secsSinceLastDetection = System.currentTimeMillis() -
                         DetectionTracker.getInstance().getLastDetectionTime();
                 // If we have seen a device recently
                 // devices should behave like pre-Android L devices, because we don't want to drain battery
                 // by continuously delivering packets for beacons visible in the background
-                if (mScanDeferredBefore == false) {
+                if (!mScanDeferredBefore) {
                     if (secsSinceLastDetection > BACKGROUND_L_SCAN_DETECTION_PERIOD_MILLIS) {
                         mBackgroundLScanStartTime = System.currentTimeMillis();
                         mBackgroundLScanFirstDetectionTime = 0l;
@@ -101,8 +101,9 @@ public class CycledLeScannerForLollipop extends CycledLeScanner {
 
                         try {
                             if (getScanner() != null) {
-                                getScanner().startScan(new ScanFilterUtils().createScanFiltersForBeaconParsers(
-                                        bleManager.getBeaconParsers()), settings, getNewLeScanCallback());
+                                List<ScanFilter> filters = new ArrayList<>();
+                                getScanner().startScan(filters,settings,getNewLeScanCallback());
+                                //getScanner().startScan(new ScanFilterUtils().createScanFiltersForBeaconParsers(bleManager.getBeaconParsers()), settings, getNewLeScanCallback());
                             }
                         }
                         catch (IllegalStateException e) {
@@ -182,7 +183,7 @@ public class CycledLeScannerForLollipop extends CycledLeScanner {
 
     @Override
     protected void startScan() {
-        List<ScanFilter> filters = new ArrayList<ScanFilter>();
+        List<ScanFilter> filters = new ArrayList<>();
         ScanSettings settings;
 
         if (backgroundFlag) {

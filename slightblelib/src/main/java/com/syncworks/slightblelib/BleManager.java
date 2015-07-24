@@ -129,7 +129,7 @@ public class BleManager {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Log.d(TAG, "onServiceDisconnected");
+            Logger.d(TAG, "onServiceDisconnected");
             //bluetoothLeService = null;
         }
     };
@@ -140,15 +140,15 @@ public class BleManager {
             final String action = intent.getAction();
             // 연결 완료 메시지를 받으면
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
-                Log.d(TAG, "Connected");
+                Logger.d(TAG, "Connected");
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                Log.d(TAG, "Disconnected");
+                Logger.d(TAG, "Disconnected");
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                Log.d(TAG, "Service Discovered");
+                Logger.d(TAG, "Service Discovered");
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                Log.d(TAG, "Data Available");
+                Logger.d(TAG, "Data Available");
             } else if (BluetoothLeService.ACTION_DATA_WRITE_COMPLETE.equals(action)) {
-                Log.d(TAG, "Data Write Complete");
+                Logger.d(TAG, "Data Write Complete");
             }
         }
     };
