@@ -14,6 +14,7 @@
       <module fileurl="file://$PROJECT_DIR$/ledselectlayout/ledselectlayout.iml" filepath="$PROJECT_DIR$/ledselectlayout/ledselectlayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/ledviewlayout/ledviewlayout.iml" filepath="$PROJECT_DIR$/ledviewlayout/ledviewlayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/scriptdata/scriptdata.iml" filepath="$PROJECT_DIR$/scriptdata/scriptdata.iml" />
+      <module fileurl="file://$PROJECT_DIR$/slightblelib/slightblelib.iml" filepath="$PROJECT_DIR$/slightblelib/slightblelib.iml" />
       <module fileurl="file://$PROJECT_DIR$/slightpref/slightpref.iml" filepath="$PROJECT_DIR$/slightpref/slightpref.iml" />
       <module fileurl="file://$PROJECT_DIR$/soundmeter/soundmeter.iml" filepath="$PROJECT_DIR$/soundmeter/soundmeter.iml" />
       <module fileurl="file://$PROJECT_DIR$/titlebarlayout/titlebarlayout.iml" filepath="$PROJECT_DIR$/titlebarlayout/titlebarlayout.iml" />

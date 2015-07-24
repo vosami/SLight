@@ -1,12 +1,14 @@
 package com.syncworks.vosami.blelib.scanner;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
-import android.util.Log;
+
+import com.syncworks.define.Logger;
 
 import java.util.Date;
 
@@ -14,8 +16,9 @@ import java.util.Date;
  * Created by vosami on 2015-04-28.
  * 블루투스 스캐너
  */
+@TargetApi(18)
 public abstract class SlightScanner {
-    private final static String TAG = SlightScanner.class.getSimpleName();
+    private final static Object TAG = SlightScanner.class;
     // 블루투스 어댑터 설정
     private BluetoothAdapter mBluetoothAdapter = null;
 
@@ -39,14 +42,14 @@ public abstract class SlightScanner {
     public static SlightScanner createScanner(Context _context, long _scanPeriod, SlightScanCallback _slightScanCallback) {
         boolean useAndroidLScanner;
         if (Build.VERSION.SDK_INT < 18) {
-            Log.w(TAG, "Not supported prior to API 18");
+            Logger.w(TAG, "Not supported prior to API 18");
             return null;
         }
         if (Build.VERSION.SDK_INT < 21) {
-            Log.i(TAG, "This is not Android 5.0.  We are using old scanning APIs");
+            Logger.i(TAG, "This is not Android 5.0.  We are using old scanning APIs");
             useAndroidLScanner = false;
         } else {
-            Log.i(TAG,"This Android 5.0.  We are using new scanning APIs");
+            Logger.i(TAG,"This Android 5.0.  We are using new scanning APIs");
             useAndroidLScanner = true;
         }
 
@@ -58,17 +61,17 @@ public abstract class SlightScanner {
     }
 
     public void start() {
-        Log.d(TAG, "start() called");
+        Logger.d(TAG, "start() called");
         if (!isScanning) {
             scanLeDevice(true);
         } else {
-            Log.d(TAG,"scanning already started");
+            Logger.d(TAG,"scanning already started");
         }
     }
 
     @SuppressLint("NewApi")
     public void stop() {
-        Log.d(TAG, "stop() called");
+        Logger.d(TAG, "stop() called");
         mScanCycleStopTime = 0;
     }
 
@@ -85,7 +88,7 @@ public abstract class SlightScanner {
     @SuppressLint("NewApi")
     protected void scanLeDevice(final Boolean enable) {
         if (getBluetoothAdapter() == null) {
-            Log.e(TAG, "No bluetooth adapter");
+            Logger.e(TAG, "No bluetooth adapter");
             return;
         }
 
@@ -93,7 +96,7 @@ public abstract class SlightScanner {
             if (deferScanIfNeeded()) {
                 return;
             }
-            Log.d(TAG,"starting a new scan cycle");
+            Logger.d(TAG,"starting a new scan cycle");
             if (!isScanning) {
                 isScanning = true;
                 try {
@@ -101,21 +104,21 @@ public abstract class SlightScanner {
                         try {
                             startScan();
                         } catch(Exception e) {
-                            Log.d(TAG,"Internal Android exception scanning");
+                            Logger.d(TAG,"Internal Android exception scanning");
                         }
                     } else {
-                        Log.d(TAG,"Bluetooth is disabled.  Cannot scan.");
+                        Logger.d(TAG,"Bluetooth is disabled.  Cannot scan.");
                     }
                 } catch (Exception e) {
-                    Log.d(TAG,"Exception starting bluetooth scan.  Perhaps bluetooth is disabled or unavailable?");
+                    Logger.d(TAG,"Exception starting bluetooth scan.  Perhaps bluetooth is disabled or unavailable?");
                 }
             } else {
-                Log.d(TAG,"We are already scanning");
+                Logger.d(TAG,"We are already scanning");
             }
             mScanCycleStopTime = (new Date().getTime() + scanPeriod);
             scheduleScanCycleStop();
         } else {
-            Log.d(TAG,"disabling scan");
+            Logger.d(TAG,"disabling scan");
             isScanning = false;
             stopScan();
         }
@@ -125,21 +128,21 @@ public abstract class SlightScanner {
 
 
     private void finishScanCycle() {
-        Log.d(TAG, "Done with scan cycle");
+        Logger.d(TAG, "Done with scan cycle");
         slightScanCallback.onEnd();
         if (isScanning) {
             if (getBluetoothAdapter() != null) {
                 if (getBluetoothAdapter().isEnabled()) {
                     try {
-                        Log.d(TAG, "stopping bluetooth le scan");
+                        Logger.d(TAG, "stopping bluetooth le scan");
 
                         finishScan();
 
                     } catch (Exception e) {
-                        Log.w(TAG, "Internal Android exception scanning");
+                        Logger.w(TAG, "Internal Android exception scanning");
                     }
                 } else {
-                    Log.w(TAG, "Bluetooth is disabled.  Cannot scan for beacons.");
+                    Logger.w(TAG, "Bluetooth is disabled.  Cannot scan for beacons.");
                 }
             }
             isScanning = false;
@@ -153,7 +156,7 @@ public abstract class SlightScanner {
                     (BluetoothManager) context.getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE);
             mBluetoothAdapter = bluetoothManager.getAdapter();
             if (mBluetoothAdapter == null) {
-                Log.w(TAG, "Failed to construct a BluetoothAdapter");
+                Logger.w(TAG, "Failed to construct a BluetoothAdapter");
             }
         }
         return mBluetoothAdapter;

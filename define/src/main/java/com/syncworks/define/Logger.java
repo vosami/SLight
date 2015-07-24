@@ -37,6 +37,7 @@ public final class Logger {
             Log.w(name, formatString(message, args));
         }
     }
+
     // Error 메시지
     public static void e(Object o, String message, Object... args) {
         if (DEBUG) {

@@ -1,4 +1,4 @@
-package com.syncworks.vosami.blelib;
+package com.syncworks.slightblelib;
 
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
@@ -40,6 +40,9 @@ public class BleManager {
 
     protected BleNotifier bleNotifier = null;
 
+    private static boolean sAndroidLScanningDisabled = false;
+    private static boolean sManifestCheckingDisabled = false;
+
     public static BleManager getBleManager(Context context) {
         if (client == null) {
             Logger.d(TAG_C,"BleManager Creation");
@@ -72,13 +75,13 @@ public class BleManager {
         synchronized (consumers) {
             ConsumerInfo consumerInfo = consumers.putIfAbsent(consumer, new ConsumerInfo());
             if (consumerInfo != null) {
-                Log.d(TAG, "This consumer is already bound");
+                Logger.d(TAG, "This consumer is already bound");
             }
             else {
-                Log.d(TAG, "This consumer is not bound. binding:"+ consumer);
+                Logger.d(TAG, "This consumer is not bound. binding:"+ consumer);
                 Intent intent = new Intent(consumer.getApplicationContext(), BluetoothLeService.class);
                 consumer.bindService(intent, bluetoothLeServiceConnection ,Context.BIND_AUTO_CREATE);
-                Log.d(TAG,"consumer count is now: "+consumers.size());
+                Logger.d(TAG,"consumer count is now: "+consumers.size());
 
             }
         }
@@ -90,7 +93,7 @@ public class BleManager {
         }
         synchronized (consumers) {
             if (consumers.containsKey(consumer)) {
-                Log.d(TAG, "Unbind");
+                Logger.d(TAG, "Unbind");
                 consumer.unbindService(bluetoothLeServiceConnection);
                 consumers.remove(consumer);
                 if (consumers.size() == 0) {
@@ -98,7 +101,7 @@ public class BleManager {
                 }
             }
             else {
-                Log.d(TAG,"This consumer is not bound to: "+consumer);
+                Logger.d(TAG,"This consumer is not bound to: "+consumer);
             }
         }
     }
@@ -108,10 +111,10 @@ public class BleManager {
         public void onServiceConnected(ComponentName name, IBinder service) {
             bluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
             if (!bluetoothLeService.initialize()) {
-                Log.e(TAG, "Unable to initialize Bluetooth");
+                Logger.e(TAG, "Unable to initialize Bluetooth");
                 return;
             }
-            Log.d(TAG, "I get the SmartLight Service");
+            Logger.d(TAG, "I get the SmartLight Service");
             synchronized (consumers) {
                 Iterator<Map.Entry<BleConsumer,ConsumerInfo>> iterator = consumers.entrySet().iterator();
                 while (iterator.hasNext()) {
@@ -285,4 +288,34 @@ public class BleManager {
 
 
 
+
+    /**
+     * Determines if Android L Scanning is disabled by user selection
+     *
+     * @return
+     */
+    public static boolean isAndroidLScanningDisabled() {
+        return sAndroidLScanningDisabled;
+    }
+
+    /**
+     * Allows disabling use of Android L BLE Scanning APIs on devices with API 21+
+     * If set to false (default), devices with API 21+ will use the Android L APIs to
+     * scan for beacons
+     *
+     * @param disabled
+     */
+    public static void setAndroidLScanningDisabled(boolean disabled) {
+        sAndroidLScanningDisabled = disabled;
+    }
+
+    /**
+     * Allows disabling check of manifest for proper configuration of service.  Useful for unit
+     * testing
+     *
+     * @param disabled
+     */
+    public static void setsManifestCheckingDisabled(boolean disabled) {
+        sManifestCheckingDisabled = disabled;
+    }
 }
