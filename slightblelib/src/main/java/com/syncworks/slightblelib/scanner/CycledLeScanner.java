@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Handler;
 
 import com.syncworks.define.Logger;
-import com.syncworks.slightblelib.BleManager;
 import com.syncworks.slightblelib.resolver.BluetoothCrashResolver;
 import com.syncworks.slightblelib.startup.StartupBroadcastReceiver;
 
@@ -69,7 +68,7 @@ public abstract class CycledLeScanner {
         if (Build.VERSION.SDK_INT < 21) {
             Logger.i(TAG,"This is not Android 5.0.  We are using old scanning APIs");
             useAndroidLScanner = false;
-        } else if (BleManager.isAndroidLScanningDisabled()) {
+        } else if (true/*BleManager.isAndroidLScanningDisabled()*/) {
             Logger.i(TAG,"This Android 5.0, but L scanning is disabled. We are using old scanning APIs");
         } else {
             Logger.i(TAG,"This Android 5.0.  We are using new scanning APIs");
