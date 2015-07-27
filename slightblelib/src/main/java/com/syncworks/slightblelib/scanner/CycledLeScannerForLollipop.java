@@ -33,7 +33,7 @@ public class CycledLeScannerForLollipop extends CycledLeScanner {
 
     public CycledLeScannerForLollipop(Context context, long scanPeriod, long betweenScanPeriod, boolean backgroundFlag, CycledLeScanCallback cycledLeScanCallback, BluetoothCrashResolver crashResolver) {
         super(context, scanPeriod, betweenScanPeriod, backgroundFlag, cycledLeScanCallback, crashResolver);
-        bleManager = BleManager.getBleManager(context);
+        //bleManager = BleManager.getBleManager(context);
     }
 
     @Override

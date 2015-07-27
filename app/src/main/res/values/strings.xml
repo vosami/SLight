@@ -7,7 +7,7 @@
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
-    <string name="slight_version">SLight v150723</string>
+    <string name="slight_version">SLight v150727</string>
     <string name="slight_home">http://LedLife.co.kr</string>
 
     <string name="led_type_rgb">RGB LED</string>
@@ -243,5 +243,15 @@
     <string name="ss_date_5">금</string>
     <string name="ss_date_6">토</string>
     <string name="ss_date_7">일</string>
+    <string name="ss_am">오전</string>
+    <string name="ss_pm">오후</string>
+    <string name="ss_dang">:</string>
+    <string name="ss_off">OFF</string>
+    <string name="ss_on">ON</string>
+    <string name="ss_alarm_1_title">알람 1</string>
+    <string name="ss_alarm_2_title">알람 2</string>
+    <string name="ss_alarm_3_title">알람 3</string>
+    <string name="ss_alarm_modify">알람 변경</string>
+    <string name="ss_alarm_run_time">동작 시간</string>
     <!--SLightSettingActivity End-->
 </resources>

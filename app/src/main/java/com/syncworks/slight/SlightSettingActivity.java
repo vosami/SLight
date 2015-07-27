@@ -10,6 +10,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.syncworks.define.Define;
@@ -23,7 +25,6 @@ import com.syncworks.vosami.blelib.BluetoothLeService;
 import com.syncworks.vosami.blelib.LecGattAttributes;
 
 import java.lang.ref.WeakReference;
-import java.util.Calendar;
 
 
 public class SlightSettingActivity extends ActionBarActivity implements BleConsumer {
@@ -36,6 +37,10 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
     // 연결 상태 확인
     private boolean connectionState = false;
 
+    private TextView alarmAPM[], alarmHour[], alarmMin[];
+    private TextView alarmDate[][];
+    private Switch alarmOnOff[];
+    private TextView alarmRunTime[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,52 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        findViews();
+    }
+
+    private void findViews() {
+        alarmAPM = new TextView[3];
+        alarmHour = new TextView[3];
+        alarmMin = new TextView[3];
+        alarmDate = new TextView[3][7];
+        alarmOnOff = new Switch[3];
+        alarmRunTime = new TextView[3];
+        alarmAPM[0] = (TextView) findViewById(R.id.alarm_1_apm);
+        alarmAPM[1] = (TextView) findViewById(R.id.alarm_2_apm);
+        alarmAPM[2] = (TextView) findViewById(R.id.alarm_3_apm);
+        alarmHour[0] = (TextView) findViewById(R.id.alarm_1_hour);
+        alarmHour[1] = (TextView) findViewById(R.id.alarm_2_hour);
+        alarmHour[2] = (TextView) findViewById(R.id.alarm_3_hour);
+        alarmMin[0] = (TextView) findViewById(R.id.alarm_1_minute);
+        alarmMin[1] = (TextView) findViewById(R.id.alarm_2_minute);
+        alarmMin[2] = (TextView) findViewById(R.id.alarm_3_minute);
+        alarmDate[0][0] = (TextView) findViewById(R.id.alarm_1_date_1);
+        alarmDate[0][1] = (TextView) findViewById(R.id.alarm_1_date_2);
+        alarmDate[0][2] = (TextView) findViewById(R.id.alarm_1_date_3);
+        alarmDate[0][3] = (TextView) findViewById(R.id.alarm_1_date_4);
+        alarmDate[0][4] = (TextView) findViewById(R.id.alarm_1_date_5);
+        alarmDate[0][5] = (TextView) findViewById(R.id.alarm_1_date_6);
+        alarmDate[0][6] = (TextView) findViewById(R.id.alarm_1_date_7);
+        alarmDate[1][0] = (TextView) findViewById(R.id.alarm_2_date_1);
+        alarmDate[1][1] = (TextView) findViewById(R.id.alarm_2_date_2);
+        alarmDate[1][2] = (TextView) findViewById(R.id.alarm_2_date_3);
+        alarmDate[1][3] = (TextView) findViewById(R.id.alarm_2_date_4);
+        alarmDate[1][4] = (TextView) findViewById(R.id.alarm_2_date_5);
+        alarmDate[1][5] = (TextView) findViewById(R.id.alarm_2_date_6);
+        alarmDate[1][6] = (TextView) findViewById(R.id.alarm_2_date_7);
+        alarmDate[2][0] = (TextView) findViewById(R.id.alarm_3_date_1);
+        alarmDate[2][1] = (TextView) findViewById(R.id.alarm_3_date_2);
+        alarmDate[2][2] = (TextView) findViewById(R.id.alarm_3_date_3);
+        alarmDate[2][3] = (TextView) findViewById(R.id.alarm_3_date_4);
+        alarmDate[2][4] = (TextView) findViewById(R.id.alarm_3_date_5);
+        alarmDate[2][5] = (TextView) findViewById(R.id.alarm_3_date_6);
+        alarmDate[2][6] = (TextView) findViewById(R.id.alarm_3_date_7);
+        alarmOnOff[0] = (Switch) findViewById(R.id.alarm_1_onoff);
+        alarmOnOff[1] = (Switch) findViewById(R.id.alarm_2_onoff);
+        alarmOnOff[2] = (Switch) findViewById(R.id.alarm_3_onoff);
+        alarmRunTime[0] = (TextView) findViewById(R.id.alarm_1_run_minute);
+        alarmRunTime[1] = (TextView) findViewById(R.id.alarm_2_run_minute);
+        alarmRunTime[2] = (TextView) findViewById(R.id.alarm_3_run_minute);
     }
 
     @Override
@@ -79,13 +130,14 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
         if (id == R.id.action_connect) {
             if (connectionState) {
                 bleManager.bleDisconnect();
-                Log.d(TAG, "연결되었습니다.");
+                Toast.makeText(this,getString(R.string.ble_connect_complete),Toast.LENGTH_SHORT).show();
+                Logger.d(TAG, "연결되었습니다.");
             } else {
                 SLightPref appPref = new SLightPref(this);
                 String address = appPref.getString(SLightPref.DEVICE_ADDR);
                 bleManager.bleConnect(address);
                 CustomToast.middleTop(this, "연결 시도중입니다.");
-                Log.d(TAG,"연결 X");
+                Logger.d(TAG,"연결 X");
             }
 
             return true;
@@ -114,8 +166,6 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
         connectionState = stateConnect;
         invalidateOptionsMenu();
     }
-
-    private final static long DAY = 86400l;
 
     @Override
     public void onBleServiceConnect() {
@@ -182,7 +232,13 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
 
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_init_rom:
+            case R.id.alarm_1_modify:
+                break;
+            case R.id.alarm_2_modify:
+                break;
+            case R.id.alarm_3_modify:
+                break;
+            /*case R.id.btn_init_rom:
                 if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
                     txData(TxDatas.formatInitEEPROM());
                 }
@@ -201,7 +257,7 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
                     //txData(TxDatas.formatSaveDataPlace(1));
                     txData(TxDatas.formatFetchDataPlace(2));
                 }
-                break;
+                break;*/
         }
     }
 

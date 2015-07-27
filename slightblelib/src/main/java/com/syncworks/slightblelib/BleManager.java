@@ -1,23 +1,6 @@
 package com.syncworks.slightblelib;
 
-import android.bluetooth.BluetoothManager;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.IBinder;
-import android.util.Log;
-
-import com.syncworks.define.Logger;
-
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * Created by vosami on 2015-03-19.
@@ -34,6 +17,7 @@ public class BleManager {
     private Context _context;
     // BleManager 를 하나만 만들기 위해 Static 설정
     protected static BleManager client = null;
+    /*
     private final ConcurrentMap<BleConsumer, ConsumerInfo> consumers = new ConcurrentHashMap<>();
 
     private BluetoothLeService bluetoothLeService = null;
@@ -168,154 +152,6 @@ public class BleManager {
     private class ConsumerInfo {
         public boolean isConnected = false;
     }
+*/
 
-    /**
-     * 현재 액티비티가 블루투스 서비스와 연결되어 있는지 확인
-     * @param consumer
-     * @return
-     */
-    public boolean isBound(BleConsumer consumer) {
-        synchronized (consumers) {
-            return consumer != null && consumers.get(consumer) != null && (bluetoothLeService != null);
-        }
-    }
-
-    /**
-     * 현재 액티비티 또는 서비스 외에 다른 동작과 연결된 것이 있는지 확인
-     * @param consumer
-     * @return
-     */
-    public boolean isBoundedExceptMe(BleConsumer consumer) {
-        synchronized (consumers) {
-            return consumer != null && consumers.size() == 1 && consumers.get(consumer) != null && (bluetoothLeService != null);
-        }
-    }
-
-    /**
-     * 블루투스 서비스와 연결되어 있는 액티비티가 있는지 확인
-     * @return
-     */
-    public boolean isAnyConsumerBound() {
-        synchronized (consumers) {
-            return consumers.size() > 0 && (bluetoothLeService != null);
-        }
-    }
-
-    /**
-     * 블루투스 서비스가 연결되어 있는지 확인
-     * @return
-     */
-    public boolean isBleServiceConnected() {
-        boolean retBool = false;
-        synchronized (consumers) {
-            if (bluetoothLeService != null) {
-                if (bluetoothLeService.getStateConnect() == BluetoothLeService.STATE_CONNECTED) {
-                    retBool = true;
-                }
-            }
-        }
-        return retBool;
-    }
-
-    // 블루투스 연결
-    public void bleConnect(String addr) {
-        if (bluetoothLeService != null && bluetoothLeService.getStateConnect() != BluetoothLeService.STATE_CONNECTED) {
-			if (addr.length() >5) {
-				bluetoothLeService.connect(addr);
-			}
-        }
-    }
-    // 블루투스 해제
-    public void bleDisconnect() {
-        if (bluetoothLeService != null && bluetoothLeService.getStateConnect() == BluetoothLeService.STATE_CONNECTED) {
-            bluetoothLeService.disconnect();
-        }
-    }
-    // 블루투스 연결 상태 확인
-    public int getBleConnectState() {
-        if (bluetoothLeService != null) {
-            return bluetoothLeService.getStateConnect();
-        }
-        return BluetoothLeService.STATE_DISCONNECTED;
-    }
-
-    public void setBleNotifier(BleNotifier notifier) {
-        bluetoothLeService.setBleNotifier(notifier);
-//        bleNotifier = notifier;
-    }
-
-    public BleNotifier getBleNotifier() {
-        return bluetoothLeService.getBleNotifier();
-//        return this.bleNotifier;
-    }
-    // 데이터 송신 메소드
-    public void writeTxData(byte[] mData) {
-        if (bluetoothLeService != null) {
-            int length = mData.length;
-            byte[] newData = new byte[length];
-            for (int i=0;i<length;i++) {
-                newData[i] = mData[i];
-            }
-            bluetoothLeService.writeTxList(newData);
-        }
-    }
-
-    public void writeName(String name) {
-        if (bluetoothLeService != null) {
-            bluetoothLeService.writeDeviceName(name);
-        }
-    }
-
-    public void getName() {
-        if (bluetoothLeService != null) {
-            bluetoothLeService.getDeviceName();
-        }
-    }
-
-    public void getDevVersion() {
-        if (bluetoothLeService != null) {
-            bluetoothLeService.getDeviceVersion();
-        }
-    }
-
-    public boolean isAcquireServices() {
-        if (bluetoothLeService != null) {
-            return bluetoothLeService.isAcquireServices();
-        } else {
-            return false;
-        }
-    }
-
-
-
-
-    /**
-     * Determines if Android L Scanning is disabled by user selection
-     *
-     * @return
-     */
-    public static boolean isAndroidLScanningDisabled() {
-        return sAndroidLScanningDisabled;
-    }
-
-    /**
-     * Allows disabling use of Android L BLE Scanning APIs on devices with API 21+
-     * If set to false (default), devices with API 21+ will use the Android L APIs to
-     * scan for beacons
-     *
-     * @param disabled
-     */
-    public static void setAndroidLScanningDisabled(boolean disabled) {
-        sAndroidLScanningDisabled = disabled;
-    }
-
-    /**
-     * Allows disabling check of manifest for proper configuration of service.  Useful for unit
-     * testing
-     *
-     * @param disabled
-     */
-    public static void setsManifestCheckingDisabled(boolean disabled) {
-        sManifestCheckingDisabled = disabled;
-    }
 }

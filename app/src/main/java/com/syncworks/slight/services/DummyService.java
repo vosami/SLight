@@ -6,8 +6,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.syncworks.slight.SLightApp;
-
 public class DummyService extends Service {
     private final IBinder binder = new LocalBinder();
     private static final String TAG = "DummyService";
@@ -41,6 +39,6 @@ public class DummyService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "Service (and presumably Application) is being destroyed.  We will stop the crash resolver.");
-        ((SLightApp)getApplication()).getBluetoothCrashResolver().stop();
+        //((SLightApp)getApplication()).getBluetoothCrashResolver().stop();
     }
 }

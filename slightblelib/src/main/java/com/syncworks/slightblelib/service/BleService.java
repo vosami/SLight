@@ -89,6 +89,7 @@ public class BleService extends Service {
         @Override
         public void handleMessage(Message msg) {
             BleService service = mService.get();
+            /*
             StartRMData startRMData = (StartRMData) msg.obj;
 
             if (service != null) {
@@ -121,6 +122,7 @@ public class BleService extends Service {
                         super.handleMessage(msg);
                 }
             }
+            */
         }
     }
 }
