@@ -144,9 +144,11 @@
     <string name="ble_change_name">이름변경</string>
     <string name="ble_test_connect">연결테스트</string>
 
+    <string name="easy_check_not_scan">설정된 장치가 있다면 검색 안함</string>
     <string name="easy_mod_name_dialog">스마트라이트 이름 설정</string>
     <string name="easy_progress_dialog">잠시 기다려 주세요.</string>
     <string name="easy_ble_not_connect">연결할 수 없습니다.</string>
+    <string name="easy_ble_not_available_connect">검색하여 사용 가능한 스마트라이트를 설정하세요.</string>
     <string name="easy_mod_name_error">이름 변경 중 에러 발생</string>
     <string name="easy_mod_name_success">이름 변경 완료</string>
     <string name="easy_name_length_filter">12byte(한글6자) 까지 입력할 수 있습니다.</string>
@@ -204,13 +206,13 @@
     <string name="easy_effect_title_save">스마트라이트에 저장</string>
     <string name="easy_effect_btn_start_time">시작 시간 설정</string>
 
-    <string name="easy_save_title_sleep">에너지 절약 설정</string>
+    <string name="easy_save_title_sleep">LED 자동 차단 시간 설정</string>
     <string name="easy_save_cb_sleep">에너지 절약 동작 중 LED 체크(25초마다 차례대로)</string>
     <string name="easy_save_btn_sleep">잠자기</string>
     <string name="easy_save_btn_wakeup">깨우기</string>
-    <string name="easy_save_title_random">실행</string>
+    <string name="easy_save_title_random">저장되어 있던 LED 효과 실행</string>
     <string name="easy_save_cb_random">무작위 실행</string>
-    <string name="easy_save_title_save">저장</string>
+    <string name="easy_save_title_save">설정하신 LED 효과 저장</string>
     <string name="easy_save_btn_exec_a">A 실행</string>
     <string name="easy_save_btn_exec_b">B 실행</string>
     <string name="easy_save_btn_exec_c">C 실행</string>

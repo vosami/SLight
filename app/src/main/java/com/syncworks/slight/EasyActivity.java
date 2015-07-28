@@ -144,7 +144,9 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         if (id == R.id.action_connect) {
             bleManager.bleDisconnect();
         } else if (id == R.id.action_disconnect) {
-            bleManager.bleConnect(appPref.getString(SLightPref.DEVICE_ADDR));
+            if (isAvailConnect()) {
+                bleManager.bleConnect(appPref.getString(SLightPref.DEVICE_ADDR));
+            }
         } else if (id == R.id.action_help) {
             Logger.d(this,"action_help");
             switch (stepView.getStep()) {
@@ -354,7 +356,6 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     private void displayToast(@EasyToast int id) {
         if (id == TOAST_NOT_CONNECT) {
-//            Toast.makeText(this,getString(R.string.easy_ble_not_connect),Toast.LENGTH_LONG).show();
             showErrorToast(getString(R.string.easy_ble_not_connect));
         }
     }
@@ -421,7 +422,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                         activity.bleManager.bleDisconnect();
                         activity.dismissProgressDialog();
                         activity.showErrorToast(activity.getString(R.string.easy_mod_name_error));
-                        activity.scanStart();
+                        //activity.scanStart();
                         break;
                     case HANDLE_NOT_AVAILABLE_CONNECT:
                         activity.bleManager.bleDisconnect();
@@ -502,31 +503,33 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         @Override
         public void run() {
             int connectState;
-            Logger.d(this,"Try Connect");
-            bleManager.bleConnect(appPref.getString(SLightPref.DEVICE_ADDR));
-            // 5초간 연결 상태 확인
-            for (int i=0;i<10;i++) {
-                connectState = bleManager.getBleConnectState();
-                // 10초간 연결 상태 확인
-                if (connectState == BluetoothLeService.STATE_CONNECTED) {
-                    if (bleManager.isAcquireServices()) {
-                        // 연결되었으면 연결상태 확인 종료
-                        break;
-                    } else {
+            Logger.d(this, "Try Connect");
+            if (isAvailConnect()) {
+                bleManager.bleConnect(appPref.getString(SLightPref.DEVICE_ADDR));
+                // 5초간 연결 상태 확인
+                for (int i=0;i<10;i++) {
+                    connectState = bleManager.getBleConnectState();
+                    // 10초간 연결 상태 확인
+                    if (connectState == BluetoothLeService.STATE_CONNECTED) {
+                        if (bleManager.isAcquireServices()) {
+                            // 연결되었으면 연결상태 확인 종료
+                            break;
+                        } else {
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } else if (connectState == BluetoothLeService.STATE_CONNECTING){
                         try {
                             Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                    } else {
+                        break;
                     }
-                } else if (connectState == BluetoothLeService.STATE_CONNECTING){
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    break;
                 }
             }
 
@@ -593,22 +596,24 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         public void run() {
             int connectState;
             Logger.d(this,"Try Connect");
-            bleManager.bleConnect(fragment1st.getDevAddr());
-            // 10초간 연결 상태 확인
-            for (int i=0;i<10;i++) {
-                connectState = bleManager.getBleConnectState();
+            if (isAvailConnect()) {
+                bleManager.bleConnect(fragment1st.getDevAddr());
                 // 10초간 연결 상태 확인
-                if (connectState == BluetoothLeService.STATE_CONNECTED) {
-                    // 연결되었으면 연결상태 확인 종료
-                    break;
-                } else if (connectState == BluetoothLeService.STATE_CONNECTING){
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                for (int i = 0; i < 10; i++) {
+                    connectState = bleManager.getBleConnectState();
+                    // 10초간 연결 상태 확인
+                    if (connectState == BluetoothLeService.STATE_CONNECTED) {
+                        // 연결되었으면 연결상태 확인 종료
+                        break;
+                    } else if (connectState == BluetoothLeService.STATE_CONNECTING) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        break;
                     }
-                } else {
-                    break;
                 }
             }
             connectState = bleManager.getBleConnectState();
@@ -674,22 +679,24 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         @Override
         public void run() {
             int connectState;
-            bleManager.bleConnect(fragment1st.getDevAddr());
-            // 10초간 연결 상태 확인
-            for (int i=0;i<10;i++) {
-                connectState = bleManager.getBleConnectState();
+            if (isAvailConnect()) {
+                bleManager.bleConnect(fragment1st.getDevAddr());
                 // 10초간 연결 상태 확인
-                if (connectState == BluetoothLeService.STATE_CONNECTED) {
-                    // 연결되었으면 연결상태 확인 종료
-                    break;
-                } else if (connectState == BluetoothLeService.STATE_CONNECTING){
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                for (int i = 0; i < 10; i++) {
+                    connectState = bleManager.getBleConnectState();
+                    // 10초간 연결 상태 확인
+                    if (connectState == BluetoothLeService.STATE_CONNECTED) {
+                        // 연결되었으면 연결상태 확인 종료
+                        break;
+                    } else if (connectState == BluetoothLeService.STATE_CONNECTING) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        break;
                     }
-                } else {
-                    break;
                 }
             }
             if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
@@ -1022,21 +1029,32 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     /** 토스트 시작
      */
+    ErrorToast errorToast;
+    SuccessToast successToast;
+    Toast defaultToast;
     private void showErrorToast(String txt) {
-
-        ErrorToast errorToast = new ErrorToast(this);
+        if (errorToast != null) {
+            errorToast.cancel();
+        }
+        errorToast = new ErrorToast(this);
         errorToast.showToast(txt, Toast.LENGTH_LONG);
     }
 
     private void showSuccessToast(String txt) {
-        SuccessToast successToast = new SuccessToast(this);
+        if (successToast != null) {
+            successToast.cancel();
+        }
+        successToast = new SuccessToast(this);
         successToast.showToast(txt,Toast.LENGTH_SHORT);
     }
 
     private void showDefaultToast(String txt) {
-        Toast toast = Toast.makeText(this,txt,Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER,0,0);
-        toast.show();
+        if (defaultToast != null) {
+            defaultToast.cancel();
+        }
+        defaultToast = Toast.makeText(this,txt,Toast.LENGTH_SHORT);
+        defaultToast.setGravity(Gravity.CENTER,0,0);
+        defaultToast.show();
     }
 
     /** 토스트 종료
@@ -1494,7 +1512,6 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         } else {
             // 스마트폰이 Bluetooth LE 를 지원하지 않는다면 메시지 출력
             showErrorToast(getString(R.string.ble_not_support));
-//            Toast.makeText(this, getString(R.string.ble_not_support), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -1570,7 +1587,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                             e.printStackTrace();
                         }
                         if (rxName != null) {
-                            if (rxName.contains(modName.replace(" ",""))) {
+                            if (rxName.contains(modName.replace(" ", ""))) {
                                 // 이름 설정
                                 modName = rxName;
                                 // 이름 변경 실행 핸들러 동작
@@ -1589,14 +1606,14 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                     switch (data[0]) {
                         case Define.TX_MEM_TO_ROM_EACH:
                             //isRxSaveData = true;
-                            Logger.d(this,"TX_MEM_TO_ROM_EACH");
+                            Logger.d(this, "TX_MEM_TO_ROM_EACH");
                             break;
                         case Define.TX_MEM_TO_ROM_COMPLETE:
                             isRxSaveData = true;
-                            Logger.d(this,"TX_MEM_TO_ROM_COMPLETE",data[3]);
+                            Logger.d(this, "TX_MEM_TO_ROM_COMPLETE", data[3]);
                             break;
                         case Define.TX_PARAM_READ:
-                            lecHeader.setLecByte(data, 4, data[2],data[1]);
+                            lecHeader.setLecByte(data, 4, data[2], data[1]);
                             getIsCalledReadParam();
                             break;
                         case Define.TX_ACK:
@@ -1612,7 +1629,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                             break;
                         case Define.TX_MEMORY_FETCH_COMPLETE:
                             isRxFetchData = true;
-                            Logger.d(this,"TX_MEMORY_FETCH_COMPLETE",data[3]);
+                            Logger.d(this, "TX_MEMORY_FETCH_COMPLETE", data[3]);
                             break;
                     }
                 } else if (uuid.equals(LecGattAttributes.LEC_VERSION_UUID)) {
@@ -1623,7 +1640,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                         e.printStackTrace();
                         versionName = "NONE";
                     }
-                    String verNum = versionName.replaceAll("[^0-9,.]","");
+                    String verNum = versionName.replaceAll("[^0-9,.]", "");
                     float verFloat = Float.parseFloat(verNum);
                     if (verFloat >= 1.14f) {
                         uiHandler.sendEmptyMessage(HANDLE_COMPLETE_CONNECT_TEST);
@@ -1665,4 +1682,19 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
      */
 
 
+    /** 설정된 장치가 초기상태(NONE, 00:00:00:00:00:00)인지 확인하여 스마트라이트 장치를 설정하였다면 연결 가능(true) 반환하고
+     * 연결 가능하지 않다면(false) 에러 토스트 출력
+     * @return 연결 가능상태 반환
+     */
+    private boolean isAvailConnect() {
+        String initName = getString(R.string.str_none);
+        String initAddr = getString(R.string.cur_device_addr);
+        String devName = appPref.getString(SLightPref.DEVICE_NAME);
+        String devAddr = appPref.getString(SLightPref.DEVICE_ADDR);
+        if (devName.equals(initName) || devAddr.equals(initAddr)) {
+            showErrorToast(getString(R.string.easy_ble_not_available_connect));
+            return false;
+        }
+        return true;
+    }
 }

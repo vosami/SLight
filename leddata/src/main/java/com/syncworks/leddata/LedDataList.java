@@ -39,6 +39,11 @@ public class LedDataList implements List<LedData>, Serializable {
         add(new LedData(OP_END, 0));
     }
 
+    // RGB 효과 데이터 설정 함수
+    public void setRgbEffect(int effect, int rgbNum, int randomDelay, int startTime) {
+
+    }
+
     public void setEffect(int effect, boolean isDelayLong, boolean isRandom, int startTime) {
         switch (effect) {
             case 0:

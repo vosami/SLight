@@ -27,6 +27,7 @@ public class SLightPref {
     public final static String[] DEVICE_COLOR_LED_NAME = {"key_color_led1","key_color_led2","key_color_led3"};
 
     public final static String[] EASY_ACTIVITY = {"key_easy1","key_easy2","key_easy3","key_easy4","key_easy5"};
+    public final static String EASY_BLE_NOT_SCAN = "key_easy_not_scan";
 
     public final static String FRAG_INSTALL_NOT_SHOW = "key_install_not_show";
     private static Context context;
@@ -51,9 +52,17 @@ public class SLightPref {
         // 최초 실행 확인 변수 설정
         putBoolean(DEVICE_FIRST, true);
         // 연결 장치 이름 설정
-        putString(DEVICE_NAME,"NONE");
+        String strNone = "";
+        if (context != null) {
+            strNone = context.getString(R.string.str_none);
+        }
+        putString(DEVICE_NAME,strNone);
         // 연결 장치 주소 설정
-        putString(DEVICE_ADDR,"00:00:00:00:00:00");
+        String strAddr = "";
+        if (context != null) {
+            strAddr = context.getString(R.string.cur_device_addr);
+        }
+        putString(DEVICE_ADDR,strAddr);
         // 연결 장치 버전 저장
         putString(DEVICE_VERSION, "");
         // LED 장치 이름 설정
@@ -76,6 +85,7 @@ public class SLightPref {
         putBoolean(EASY_ACTIVITY[2],false);
         putBoolean(EASY_ACTIVITY[3],false);
         putBoolean(EASY_ACTIVITY[4],false);
+        putBoolean(EASY_BLE_NOT_SCAN,true);
     }
 
     public void putString(String key, String val) {
@@ -87,7 +97,11 @@ public class SLightPref {
     public String getString(String key) {
         // 데이터가 없다면 "NONE"을 반환, 에러 발생하면 "ERROR" 반환
         try {
-            return pref.getString(key, "NONE");
+            String strNone = "";
+            if (context != null) {
+                strNone = context.getString(R.string.str_none);
+            }
+            return pref.getString(key, strNone);
         } catch (Exception e) {
             Log.e(PREF_NAME, "Error getString");
             return "ERROR";

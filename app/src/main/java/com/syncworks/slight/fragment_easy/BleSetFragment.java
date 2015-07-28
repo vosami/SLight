@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,11 +45,13 @@ public class BleSetFragment extends Fragment {
     private String selDevName;
     private String selDevAddr;
     private String selDevVersion;
+    private boolean isNotScan;
 
     TextView tvCurrentDeviceName, tvCurrentDeviceAddress, tvCurrentDeviceVersion;
     Button btnBleScan, btnBleStop, btnModName,btnTestConnect;
     ProgressBar pbScan;
     ListView deviceList;
+    CheckBox cbNotScan;
 
     // 블루투스 장치 리스트
     private List<BleDeviceData> mDevice = new ArrayList<>();
@@ -84,7 +87,10 @@ public class BleSetFragment extends Fragment {
         selDevAddr = appPref.getString(SLightPref.DEVICE_ADDR);
         selDevName = appPref.getString(SLightPref.DEVICE_NAME);
         selDevVersion = appPref.getString(SLightPref.DEVICE_VERSION);
+        isNotScan = appPref.getBoolean(SLightPref.EASY_BLE_NOT_SCAN);
         View view = inflater.inflate(R.layout.fragment_ble_set, container, false);
+        cbNotScan = (CheckBox) view.findViewById(R.id.cb_not_scan);
+        cbNotScan.setChecked(isNotScan);
         tvCurrentDeviceName = (TextView) view.findViewById(R.id.tv_current_device_name);
         tvCurrentDeviceAddress = (TextView) view.findViewById(R.id.tv_current_device_address);
         tvCurrentDeviceVersion = (TextView) view.findViewById(R.id.tv_current_device_version);
@@ -109,6 +115,15 @@ public class BleSetFragment extends Fragment {
             appPref.putBoolean(SLightPref.EASY_ACTIVITY[0],true);
             showOverLay();
         }
+        cbNotScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                appPref.putBoolean(SLightPref.EASY_BLE_NOT_SCAN,cbNotScan.isChecked());
+                if (cbNotScan.isChecked()) {
+                    mListener.onScanStop();
+                }
+            }
+        });
         return view;
     }
 
@@ -117,7 +132,14 @@ public class BleSetFragment extends Fragment {
         super.onStart();
         Logger.d(this,"onStart");
         if (mListener != null) {
-            mListener.onFrag1Start();
+            // 설정된 장치가 없거나 장치 검색 체크박스가 해제되어 있다면 검색 시작
+            String devName = appPref.getString(SLightPref.DEVICE_NAME);
+            if (!appPref.getBoolean(SLightPref.EASY_BLE_NOT_SCAN) || ((devName.length() == 4)&&(devName.contains(getString(R.string.str_none))))) {
+                mListener.onFrag1Start();
+                displayScanButton(false);
+            } else {
+                displayScanButton(true);
+            }
         }
     }
 

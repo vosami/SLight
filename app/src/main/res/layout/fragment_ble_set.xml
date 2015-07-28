@@ -93,10 +93,16 @@
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/background_view_rounded_single">
+        <CheckBox
+            android:id="@+id/cb_not_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/easy_check_not_scan"/>
         <Button
             android:id="@+id/btn_ble_scan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/cb_not_scan"
             android:layout_alignParentEnd="true"
             android:textColor="@color/Black"
             android:text="@string/ble_scan"
@@ -105,6 +111,7 @@
             android:id="@+id/btn_ble_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/cb_not_scan"
             android:layout_alignParentEnd="true"
             android:textColor="@color/Black"
             android:text="@string/ble_stop"/>
@@ -112,7 +119,7 @@
             android:id="@+id/progress_scan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_below="@id/cb_not_scan"
             android:layout_toStartOf="@id/btn_ble_stop"/>
         <TextView
             style="@style/tv_title_bold"
@@ -120,7 +127,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_alignParentTop="true"
+            android:layout_below="@id/cb_not_scan"
             android:layout_alignParentStart="true"
             android:text="@string/ble_scan_result_list"/>
         <ListView
