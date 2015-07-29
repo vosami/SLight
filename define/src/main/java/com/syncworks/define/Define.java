@@ -23,6 +23,12 @@ public class Define {
 	public final static int SINGLE_LED_789_ACTIVATE =       4;
 	public final static boolean SINGLE_LED =               	true;
 	public final static boolean COLOR_LED =                	false;
+    public final static int DEFINED_PATTERN =               1;
+    public final static int CUSTOM_PATTERN =                0;
+    public final static int SINGLE_PATTERN =                0;
+    public final static int RED_PATTERN =                   1;
+    public final static int GREEN_PATTERN =                 2;
+    public final static int BLUE_PATTERN =                  3;
     public final static int SELECTED_LED1 =       			0x0001;
     public final static int SELECTED_LED2 =       			0x0002;
     public final static int SELECTED_LED3 =       			0x0004;
@@ -72,6 +78,15 @@ public class Define {
     // 변수 값으로 밝기 설정 - 명령어(1Byte) + 변수 선택(2bit,i,a,b,c) + 유지시간(6bit)
     public final static int OP_VAR_VAL =                    0xC9;
     public final static int OP_SOUND_VAL =                  0xCA;
+    public final static int OP_RANDOM_VAR_C =               0xCB;
+
+    // LED 패턴 설정 스크립트
+    // 0~127:사용자 정의 패턴, 128~191:사전 설정 단색 패턴, 192~255:사전 설정 RGB 패턴
+    public final static int OP_HEAD_PATTERN =               0xCD;
+    // 옵션 설정, 3bit:reserved, 1bit:랜덤 On/Off, 4bit: 효과 시간 설정
+    public final static int OP_HEAD_OPTION =                0xCE;
+    // 사전 딜레이 설정, 밝기 0, 딜레이 *10-1
+    public final static int OP_HEAD_START_DELAY =           0xCF;
     // 변수 A 초기화
     public final static int OP_PUT_VAR_A =                  0xD0;
     // 변수 B 초기화
@@ -87,6 +102,10 @@ public class Define {
     public final static int OP_GET_MSP =                    0xE1;
     public final static int OP_PUT_SENSOR =                 0xE2;
     public final static int OP_GET_SENSOR =                 0xE3;
+
+    public final static int OP_TRANS_BRIGHT_START =         0xEA;
+    public final static int OP_TRANS_BRIGHT_STOP =          0xEB;
+    public final static int OP_TRANS_BRIGHT_COUNT =         0xEC;
 
 	// 반복문 시작 - 명령어(1Byte) + 반복횟수(8bit)
 	public final static int OP_FOR_START = 					0xF0;

@@ -88,7 +88,25 @@ public class LedData implements Serializable,Comparator<LedData> {
                     _duration = (((int) args[0]) << 6) & 0xC0;
                 }
                 break;
-            case OP_SOUND_VAL:
+            case OP_HEAD_PATTERN:
+                if (args.length == 1) {
+                    _val = instruct;
+                    _duration = (int) args[0];
+                } else if (args.length == 2) {
+                    _val = instruct;
+                    param1 = ((int) args[0]) & 0x03;
+                    param2 = (int) args[1];
+                    _duration = (param1 << 5) | param2;
+                } else if (args.length == 3) {
+                    _val = instruct;
+                    param1 = ((int) args[0]) & 0x03;
+                    param2 = ((int) args[1]) & 0x01;
+                    param3 = (int) args[2];
+                    _duration = (param1 << 5) | (param2 << 7) | param3;
+                }
+                break;
+            case OP_HEAD_OPTION:
+                break;
             case OP_PUT_VAR_A:
             case OP_PUT_VAR_B:
             case OP_PUT_VAR_C:
@@ -157,8 +175,10 @@ public class LedData implements Serializable,Comparator<LedData> {
                 }
                 break;
             default:
-                _val = 0;
-                _duration = 0;
+                if (args.length == 1) {
+                    _val = instruct;
+                    _duration = (int) args[0];;
+                }
                 break;
 
         }

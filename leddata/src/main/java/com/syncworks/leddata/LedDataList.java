@@ -40,8 +40,26 @@ public class LedDataList implements List<LedData>, Serializable {
     }
 
     // RGB 효과 데이터 설정 함수
-    public void setRgbEffect(int effect, int rgbNum, int randomDelay, int startTime) {
-
+    public void setRgbEffect(int effect, int rgbNum, int effectTime, int randomDelay, int startTime) {
+        switch (effect) {
+            case 6:
+                ledDatas.clear();
+                add(new LedData(OP_HEAD_PATTERN, rgbNum, DEFINED_PATTERN, effect));
+                add(new LedData(OP_HEAD_OPTION, randomDelay, effectTime));
+                add(new LedData(OP_HEAD_START_DELAY, startTime));
+                add(new LedData(191,9));    // 255,0,0
+                add(new LedData(191,9));    // 255,140,0
+                add(new LedData(191,9));    // 255,255,0
+                add(new LedData(0,9));      // 0,128,0
+                add(new LedData(0,9));      // 0,0,255
+                add(new LedData(56,9));     // 75,0,130
+                add(new LedData(96,9));     // 128,0,128
+                add(new LedData(0,18));     // 모두 끄고 200ms 대기
+                add(new LedData(OP_START,0));
+                add(new LedData(0,0));
+                add(new LedData(OP_END,0));
+                break;
+        }
     }
 
     public void setEffect(int effect, boolean isDelayLong, boolean isRandom, int startTime) {
