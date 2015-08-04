@@ -7,7 +7,7 @@
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
-    <string name="slight_version">SLight v150727</string>
+    <string name="slight_version">SLight v150805</string>
     <string name="slight_home">http://LedLife.co.kr</string>
 
     <string name="led_type_rgb">RGB LED</string>
@@ -221,7 +221,10 @@
     <string name="easy_save_btn_save_c">C 저장</string>
     <string name="easy_save_step_5_error">옵션 설정에 문제가 발생했습니다. \n잠시 후에 다시 시도하세요.</string>
     <string name="easy_save_data_error">에러가 발생했습니다.</string>
-
+    <string name="easy_save_runtime_a">A 실행 시간</string>
+    <string name="easy_save_runtime_b">B 실행 시간</string>
+    <string name="easy_save_runtime_c">C 실행 시간</string>
+    <string name="easy_save_runtime_random">랜덤 실행 시간</string>
 
     <string name="easy_ack">전송 완료</string>
     <string name="easy_save_complete">저장 완료</string>
@@ -230,7 +233,9 @@
     <string name="easy_connect_available">연결 가능합니다.</string>
     <string name="easy_connect_unavailable">연결 가능하지 않은 버전입니다.</string>
 
-
+    <string name="easy_save_radio_default">기본 실행</string>
+    <string name="easy_save_radio_sequential">순차 실행</string>
+    <string name="easy_save_radio_random">랜덤 실행</string>
     <string-array name="spinner_save_pattern">
         <item>A 저장</item>
         <item>B 저장</item>

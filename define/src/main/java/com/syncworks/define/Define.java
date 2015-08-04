@@ -199,6 +199,8 @@ public class Define {
     public final static byte TX_INIT_SET = (byte) 0x80;
     // 스마트라이트 재우기
     public final static byte TX_WAKE_UP = (byte) 0x90;
+    // 타이머 멈추기
+    public final static byte TX_MINUTE_TIMER_START = (byte) 0x91;
 
 	/**
 	 * 디렉토리 관련

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.syncworks.define.Define;
 import com.syncworks.define.Logger;
+import com.syncworks.slight.dialog.DialogAlarmSet;
 import com.syncworks.slight.util.CustomToast;
 import com.syncworks.slightpref.SLightPref;
 import com.syncworks.vosami.blelib.BleConsumer;
@@ -231,12 +232,19 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
     }
 
     public void onClick(View v) {
+        DialogAlarmSet dialog;
         switch (v.getId()) {
             case R.id.alarm_1_modify:
+                dialog = new DialogAlarmSet(this);
+                dialog.show();
                 break;
             case R.id.alarm_2_modify:
+                dialog = new DialogAlarmSet(this);
+                dialog.show();
                 break;
             case R.id.alarm_3_modify:
+                dialog = new DialogAlarmSet(this);
+                dialog.show();
                 break;
             /*case R.id.btn_init_rom:
                 if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {

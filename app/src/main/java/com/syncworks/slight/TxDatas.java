@@ -1,6 +1,7 @@
 package com.syncworks.slight;
 
 import com.syncworks.define.Define;
+import com.syncworks.slight.util.LecHeaderParam;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,6 +46,7 @@ public class TxDatas {
 		return txScriptList;
 	}
 
+
 	public static byte[] formatInitCount() {
 		return new byte[]{Define.TX_INIT_COUNT,0,0,0};
 	}
@@ -57,8 +59,8 @@ public class TxDatas {
 		return new byte[]{Define.TX_TIME_READ,0,0,0};
 	}
 
-	public static byte[] formatAlarmWrite(int enumAlarm,int onOffTime ,int enumDay, int hour, int min) {
-		return new byte[]{Define.TX_ALARM_WRITE,(byte)enumAlarm,(byte)((onOffTime>>8)& 0xFF),(byte)(onOffTime&0xFF),(byte)enumDay,(byte)hour, (byte)min};
+	public static byte[] formatAlarmWrite(int option,int runTime ,int enumDay, int hour, int min) {
+		return new byte[]{Define.TX_ALARM_WRITE,0x5A,(byte)option,(byte)runTime,(byte)enumDay,(byte)hour, (byte)min};
 	}
 
     public static byte[] formatMemToRom() {
@@ -78,25 +80,21 @@ public class TxDatas {
 		return new byte[]{Define.TX_WAKE_UP,wakeUpParam,0,0};
 	}
 
-	public static byte[] formatSleepBlinkCheck(boolean isBlink) {
-		byte blinkParam = 0;
-		if (isBlink) {
-			blinkParam = 1;
+	public static byte[] formatMinuteTimerStart(boolean isTimerStart) {
+		byte timerStart = 0;
+		if (isTimerStart) {
+			timerStart = 1;
 		}
-		return new byte[]{Define.TX_PARAM_WRITE,58,1,blinkParam};
-	}
-	// 동작 시간 설정
-	public static byte[] formatSleepTime(int time) {
-		byte hByte, lByte;
-		hByte = (byte) ((time >> 8) & 0xFF);
-		lByte = (byte) (time & 0xFF);
-		return new byte[]{Define.TX_PARAM_WRITE,32,2,lByte,hByte};
+		return new byte[]{Define.TX_MINUTE_TIMER_START,timerStart,0,0};
 	}
 
-	// 랜덤 플레이
-	public static byte[] formatRandomPlay(int playTime) {
-		return new byte[]{Define.TX_PARAM_WRITE,59,1,(byte)playTime,0};
+	// 동작 시간 설정
+	public static byte[] formatSleepTime(int time) {
+		byte lByte;
+		lByte = (byte) (time & 0xFF);
+		return new byte[]{Define.TX_PARAM_WRITE,32,1,lByte};
 	}
+
 
 	// EEPROM 에 있는 데이터 실행
 	public static byte[] formatFetchData(int dataNum,int ledNum) {
@@ -133,6 +131,14 @@ public class TxDatas {
 
 	public static byte[] formatFetchDataPlace(int dataPlace) {
 		return new byte[]{Define.TX_MEMORY_FETCH_DATA,(byte)dataPlace,0,0};
+	}
+
+	public static byte[] formatSetParam(int param) {
+		return new byte[]{Define.TX_PARAM_WRITE, LecHeaderParam.HEADER_PARAM_ORDER,1, (byte) param};
+	}
+
+	public static byte[] formatSetSeqTime(int order, int runTime) {
+		return new byte[]{Define.TX_PARAM_WRITE, (byte) (LecHeaderParam.HEADER_SEQ_TIME_ORDER + order),1, (byte) runTime};
 	}
 
 	/**

@@ -14,7 +14,7 @@ public class SLightApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        BleManager bleManager = BleManager.getBleManager(this);
+        //BleManager bleManager = BleManager.getBleManager(this);
         Logger.d(this, "Application onCreate");
     }
 

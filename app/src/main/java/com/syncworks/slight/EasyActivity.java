@@ -55,6 +55,8 @@ import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -79,7 +81,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        crashResolver = new BluetoothCrashResolver(this);
+        //crashResolver = new BluetoothCrashResolver(this);
         appPref = new SLightPref(this);
         lecHeader = new LecHeaderParam();
         ledDataSeries = new LedDataSeries();
@@ -91,32 +93,40 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         }
         findViews();
         createFragment();
-    }
 
-    @Override
-    protected void onResume() {
-        crashResolver.setUpdateNotifier(updateNotifier);
-        // 블루투스 LE를 지원한다면 스캔 시작
         if (isBleSupported) {
             Logger.d(this, "onResume");
             // 블루투스 연결 매니저 설정
             bleManager.bind(this);
         }
-        super.onResume();
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
         if (isBleSupported) {
             if (slightScanner.getStateScanning()) {
                 slightScanner.stop();
             }
             bleManager.unbind(this);
         }
-        crashResolver.setUpdateNotifier(null);
-        super.onStop();
+        super.onDestroy();
     }
 
+    @Override
+    protected void onResume() {
+        //crashResolver.setUpdateNotifier(updateNotifier);
+        // 블루투스 LE를 지원한다면 스캔 시작
+
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+
+        //crashResolver.setUpdateNotifier(null);
+        super.onStop();
+    }
+/*
     public BluetoothCrashResolver.UpdateNotifier updateNotifier = new BluetoothCrashResolver.UpdateNotifier() {
         public void dataUpdated() {
             runOnUiThread(new Runnable() {
@@ -126,7 +136,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             });
         }
     };
-
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -542,7 +552,13 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                Calendar calendar = Calendar.getInstance();
+                byte[] c = TxDatas.formatReloadTime(calendar);
+                txData(c);
+                // LED 깨우기
                 txData(TxDatas.formatSleep(true));
+                // 분 이벤트 종료
+                txData(TxDatas.formatMinuteTimerStart(false));
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -818,6 +834,10 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         @Override
         public void run() {
             if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+                Calendar calendar = Calendar.getInstance();
+
+                //txData(TxDatas.formatAlarmWrite(0,60,0x7F,calendar.get(Calendar.HOUR),calendar.get(Calendar.MINUTE)));
+                txData(TxDatas.formatAlarmWrite(0x88,10,0xFF,0,25));
                 txData(TxDatas.formatSaveDataPlace(dataNum));
                 for (int i=0;i<50;i++) {
                     try {
@@ -1246,7 +1266,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-        Logger.d(this,"fragmentTransaction");
+        Logger.d(this, "fragmentTransaction");
     }
 
     private void changeStep(int step) {
@@ -1349,7 +1369,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     @Override
     public void onBrightLed(int ledNum, int bright) {
-        ledDataSeries.ledOptions[ledNum].setRatioBright(bright*100/(Define.OP_CODE_MIN-1));
+        ledDataSeries.ledOptions[ledNum].setRatioBright(bright * 100 / (Define.OP_CODE_MIN - 1));
         List<byte[]> mDataList = TxDatas.formatMemWrite(ledNum,
                 ledDataSeries.ledExeDatas[ledNum].toByteArray(ledDataSeries.ledOptions[ledNum]));
         int dataCount = mDataList.size();
@@ -1363,6 +1383,9 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     @Override
     public void onEffect(int effect, boolean isDelayLong, boolean isRandom, int startTime) {
 
+        txData(TxDatas.formatSleep(false));
+        // 분 이벤트 종료
+        txData(TxDatas.formatMinuteTimerStart(false));
         for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
             if (ledDataSeries.ledSelect.getLed(i) == LedSelect.SelectType.SELECTED) {
                 ledDataSeries.ledOptions[i].setDelayStart(startTime);
@@ -1428,6 +1451,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 txData(TxDatas.formatInitCount());
             }
         }
+        txData(TxDatas.formatSleep(true));
     }
 
     @Override
@@ -1441,12 +1465,6 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     }
 
     @Override
-    public void onSleepLedCheck(boolean isCheckLed) {
-        Logger.d(this,"onSleepLedCheck");
-        txData(TxDatas.formatSleepBlinkCheck(isCheckLed));
-    }
-
-    @Override
     public void onSleep(boolean isSleep) {
         Logger.d(this,"onSleep");
         txData(TxDatas.formatSleep(isSleep));
@@ -1455,11 +1473,6 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     @Override
     public void onSleepTime(int time) {
         txData(TxDatas.formatSleepTime(time));
-    }
-
-    @Override
-    public void onRandomPlay(int playTime) {
-        txData(TxDatas.formatRandomPlay(playTime));
     }
 
     @Override
@@ -1476,6 +1489,18 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         showProgressDialog();
         this.dataNum = dataNum;
         new Thread(taskSaveData).start();
+    }
+
+    @Override
+    public void onSetParam(int param) {
+        Logger.d(this,"onSetParam");
+        txData(TxDatas.formatSetParam(param));
+    }
+
+    @Override
+    public void onSetSeqTime(int order, int runTime) {
+        Logger.d(this,"onSetSeqTime");
+        txData(TxDatas.formatSetSeqTime(order, runTime));
     }
 
     @Override
@@ -1642,7 +1667,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                     }
                     String verNum = versionName.replaceAll("[^0-9,.]", "");
                     float verFloat = Float.parseFloat(verNum);
-                    if (verFloat >= 1.14f) {
+                    if (verFloat >= 1.15f) {
                         uiHandler.sendEmptyMessage(HANDLE_COMPLETE_CONNECT_TEST);
                     } else {
                         uiHandler.sendEmptyMessage(HANDLE_NOT_AVAILABLE_CONNECT);
