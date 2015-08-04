@@ -116,9 +116,8 @@ public class TxDatas {
 	}
 
 	public static byte[] formatReloadTime(Calendar c) {
-
 		return new byte[]{Define.TX_TIME_RELOAD,(byte)(c.get(Calendar.YEAR)-2000),(byte)c.get(Calendar.MONTH),(byte)(c.get(Calendar.DAY_OF_MONTH)-1),
-				(byte)c.get(Calendar.HOUR_OF_DAY),(byte)c.get(Calendar.MINUTE),(byte)c.get(Calendar.SECOND)};
+				(byte)(c.get(Calendar.HOUR_OF_DAY)),(byte)c.get(Calendar.MINUTE),(byte)c.get(Calendar.SECOND)};
 	}
 
 	public static byte[] formatReadTime() {

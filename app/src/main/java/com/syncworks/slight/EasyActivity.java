@@ -836,8 +836,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
                 Calendar calendar = Calendar.getInstance();
 
-                //txData(TxDatas.formatAlarmWrite(0,60,0x7F,calendar.get(Calendar.HOUR),calendar.get(Calendar.MINUTE)));
-                txData(TxDatas.formatAlarmWrite(0x88,10,0xFF,0,25));
+                txData(TxDatas.formatAlarmWrite(0x88,60,0x7F,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)));
+                //txData(TxDatas.formatAlarmWrite(0x88,60,0xFF,2,17));
                 txData(TxDatas.formatSaveDataPlace(dataNum));
                 for (int i=0;i<50;i++) {
                     try {
@@ -1466,7 +1466,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 
     @Override
     public void onSleep(boolean isSleep) {
-        Logger.d(this,"onSleep");
+        Logger.d(this, "onSleep");
         txData(TxDatas.formatSleep(isSleep));
     }
 
@@ -1486,9 +1486,13 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     @Override
     public void onSaveData(int dataNum) {
         //txData(TxDatas.formatSaveData(dataNum));
-        showProgressDialog();
-        this.dataNum = dataNum;
-        new Thread(taskSaveData).start();
+        if (dataNum == 2) {
+            txData(TxDatas.formatReadTime());
+        } else {
+            showProgressDialog();
+            this.dataNum = dataNum;
+            new Thread(taskSaveData).start();
+        }
     }
 
     @Override
