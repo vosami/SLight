@@ -836,7 +836,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
                 Calendar calendar = Calendar.getInstance();
 
-                txData(TxDatas.formatAlarmWrite(0x88,60,0x7F,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)));
+                txData(TxDatas.formatAlarmWrite(2,0x88,60,0x7F,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)));
                 //txData(TxDatas.formatAlarmWrite(0x88,60,0xFF,2,17));
                 txData(TxDatas.formatSaveDataPlace(dataNum));
                 for (int i=0;i<50;i++) {

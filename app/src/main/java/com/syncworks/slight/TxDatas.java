@@ -59,8 +59,8 @@ public class TxDatas {
 		return new byte[]{Define.TX_TIME_READ,0,0,0};
 	}
 
-	public static byte[] formatAlarmWrite(int option,int runTime ,int enumDay, int hour, int min) {
-		return new byte[]{Define.TX_ALARM_WRITE,0x5A,(byte)option,(byte)runTime,(byte)enumDay,(byte)hour, (byte)min};
+	public static byte[] formatAlarmWrite(int alarmNum, int option,int runTime ,int enumDay, int hour, int min) {
+		return new byte[]{Define.TX_ALARM_WRITE, (byte) alarmNum,(byte)option,(byte)runTime,(byte)enumDay,(byte)hour, (byte)min};
 	}
 
     public static byte[] formatMemToRom() {
