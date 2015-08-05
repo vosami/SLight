@@ -263,14 +263,17 @@ public class SaveFragment extends Fragment {
                 case R.id.rb_run_pattern_a:
                     setRunPattern(0);
                     doSetParam(lecHeader.getParam());
+                    doFetchData(0);
                     break;
                 case R.id.rb_run_pattern_b:
                     setRunPattern(1);
                     doSetParam(lecHeader.getParam());
+                    doFetchData(1);
                     break;
                 case R.id.rb_run_pattern_c:
                     setRunPattern(2);
                     doSetParam(lecHeader.getParam());
+                    doFetchData(2);
                     break;
             }
         }
@@ -422,6 +425,12 @@ public class SaveFragment extends Fragment {
     private void doSetSeqRunTime(int order, int runTime) {
         if (mListener != null) {
             mListener.onSetSeqTime(order, runTime);
+        }
+    }
+
+    private void doFetchData(int dataNum) {
+        if (mListener != null) {
+            mListener.onFetchData(dataNum);
         }
     }
 

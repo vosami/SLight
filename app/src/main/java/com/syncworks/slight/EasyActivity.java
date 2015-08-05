@@ -56,7 +56,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 
@@ -835,8 +834,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         public void run() {
             if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
                 Calendar calendar = Calendar.getInstance();
-
-                txData(TxDatas.formatAlarmWrite(2,0x88,60,0x7F,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)));
+                int option = 0x80 | ((dataNum<<3) & 0x18);
+                txData(TxDatas.formatAlarmWrite(2,option,60,0x7F,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)));
                 //txData(TxDatas.formatAlarmWrite(0x88,60,0xFF,2,17));
                 txData(TxDatas.formatSaveDataPlace(dataNum));
                 for (int i=0;i<50;i++) {
@@ -1486,13 +1485,16 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     @Override
     public void onSaveData(int dataNum) {
         //txData(TxDatas.formatSaveData(dataNum));
-        if (dataNum == 2) {
+        /*if (dataNum == 2) {
             txData(TxDatas.formatReadTime());
         } else {
             showProgressDialog();
             this.dataNum = dataNum;
             new Thread(taskSaveData).start();
-        }
+        }*/
+        showProgressDialog();
+        this.dataNum = dataNum;
+        new Thread(taskSaveData).start();
     }
 
     @Override
