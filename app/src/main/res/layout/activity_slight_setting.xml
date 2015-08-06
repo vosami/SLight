@@ -743,19 +743,19 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <Button
-                android:id="@+id/btn_sleep"
+                android:id="@+id/ss_btn_sleep"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/easy_save_btn_sleep"
-                android:onClick="onClick"/>
+                android:onClick="onSleep"/>
             <Button
-                android:id="@+id/btn_wakeup"
+                android:id="@+id/ss_btn_wakeup"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/easy_save_btn_wakeup"
-                android:onClick="onClick"/>
+                android:onClick="onSleep"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

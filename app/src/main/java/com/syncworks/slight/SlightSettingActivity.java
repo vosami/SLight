@@ -404,6 +404,17 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
 
     private DialogAlarmSet dialog = null;
 
+    public void onSleep(View v) {
+        switch (v.getId()) {
+            case R.id.ss_btn_sleep:
+                txData(TxDatas.formatSleep(false));
+                break;
+            case R.id.ss_btn_wakeup:
+                txData(TxDatas.formatSleep(true));
+                break;
+        }
+    }
+
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.alarm_1_modify:
@@ -421,30 +432,28 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
                         headerParam.getAlarmMinute(2),headerParam.getAlarmDate(2),headerParam.getAlarmRunTime(2),headerParam.getAlarmRunMode(2)));
                 dialog.show();
                 break;
-            case R.id.btn_sleep:
-                txData(TxDatas.formatSleep(false));
-                break;
-        }
-        dialog.setOnAlarmSet(new DialogAlarmSet.OnAlarmSet() {
-            @Override
-            public void onCancel() {
-                dialog.cancel();
-            }
 
-            @Override
-            public void onConfirm(int alarmNum, int date, int hour, int minute, int runTime, int runMode) {
-                headerParam.setAlarmDate(alarmNum, date);
-                headerParam.setAlarmHour(alarmNum, hour);
-                headerParam.setAlarmMinute(alarmNum, minute);
-                headerParam.setAlarmRunTime(alarmNum, runTime);
-                headerParam.setAlarmRunMode(alarmNum, runMode);
-                headerParam.setAlarmRunPattern(alarmNum, 0);
-                headerParam.setAlarmOnOff(alarmNum,true);
-                txData(TxDatas.formatAlarmWrite(alarmNum,headerParam.getAlarmParam(alarmNum),runTime, date, hour, minute));
-                invalidate();
-                dialog.cancel();
-            }
-        });
+        }
+            dialog.setOnAlarmSet(new DialogAlarmSet.OnAlarmSet() {
+                @Override
+                public void onCancel() {
+                    dialog.cancel();
+                }
+
+                @Override
+                public void onConfirm(int alarmNum, int date, int hour, int minute, int runTime, int runMode) {
+                    headerParam.setAlarmDate(alarmNum, date);
+                    headerParam.setAlarmHour(alarmNum, hour);
+                    headerParam.setAlarmMinute(alarmNum, minute);
+                    headerParam.setAlarmRunTime(alarmNum, runTime);
+                    headerParam.setAlarmRunMode(alarmNum, runMode);
+                    headerParam.setAlarmRunPattern(alarmNum, 0);
+                    headerParam.setAlarmOnOff(alarmNum, true);
+                    txData(TxDatas.formatAlarmWrite(alarmNum, headerParam.getAlarmParam(alarmNum), runTime, date, hour, minute));
+                    invalidate();
+                    dialog.cancel();
+                }
+            });
     }
 
     private void txData(byte[] array) {
