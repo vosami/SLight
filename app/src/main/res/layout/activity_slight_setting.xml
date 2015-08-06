@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -9,37 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <!--<Button
-            android:id="@+id/btn_init_rom"
-            style="@style/ButtonText"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_purple"
-            android:text="내부 저장소 초기화"
-            android:onClick="onClick"/>
-        <Button
-            android:id="@+id/btn_test_1"
-            style="@style/ButtonText"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_purple"
-            android:text="테스트1"
-            android:onClick="onClick"/>
-        <Button
-            android:id="@+id/btn_test_2"
-            style="@style/ButtonText"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_purple"
-            android:text="테스트2"
-            android:onClick="onClick"/>-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:orientation="vertical"
             android:padding="5dp"
             android:background="@drawable/background_view_rounded_single">
@@ -72,7 +45,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/Black"
                     android:textSize="30sp"
-                    android:text="6"/>
+                    android:text="0"/>
                 <TextView
                     android:id="@+id/alarm_1_dang"
                     android:layout_width="wrap_content"
@@ -92,7 +65,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/Black"
                     android:textSize="30sp"
-                    android:text="20"/>
+                    android:text="00"/>
                 <Switch
                     android:id="@+id/alarm_1_onoff"
                     android:layout_alignParentEnd="true"
@@ -105,13 +78,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <Button
-                    android:id="@+id/alarm_1_modify"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:text="@string/ss_alarm_modify"
-                    android:onClick="onClick"/>
                 <LinearLayout
                     android:id="@+id/ll_date_1"
                     android:layout_width="wrap_content"
@@ -123,7 +89,6 @@
                         android:layout_width="wrap_content"
                         android:gravity="center_horizontal"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
                         android:textColor="@color/LightGrey"
                         android:text="@string/ss_date_1"/>
                     <TextView
@@ -176,6 +141,7 @@
                         android:text="@string/ss_date_7"/>
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/ll_date_bar_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -188,7 +154,6 @@
                         android:layout_width="0dp"
                         android:layout_height="1dp"
                         android:layout_weight="1"
-                        android:layout_marginStart="3dp"
                         android:background="@color/Red"/>
                     <View
                         android:id="@+id/alarm_1_date_2_bar"
@@ -240,32 +205,57 @@
                         android:background="@color/Red"/>
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/alarm_1_option"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@id/ll_date_bar_1"
                     android:layout_alignParentStart="true"
-                    android:layout_alignBottom="@id/alarm_1_modify"
-                    android:orientation="horizontal">
-                    <TextView
+                    android:orientation="vertical">
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="동작시간:"/>
-                    <TextView
-                        android:id="@+id/alarm_1_run_minute"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ss_alarm_run_time"/>
+                        <TextView
+                            android:id="@+id/alarm_1_run_minute"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ss_alarm_run_time_default"/>
+                    </LinearLayout>
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="150분"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="동작 모드:"/>
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ss_alarm_run_mode"/>
+                        <TextView
+                            android:id="@+id/alarm_1_run_mode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ss_alarm_run_mode_default"/>
+                    </LinearLayout>
                 </LinearLayout>
-
+                <Button
+                    android:id="@+id/alarm_1_modify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignBottom="@id/alarm_1_option"
+                    android:text="@string/ss_alarm_modify"
+                    android:onClick="onClick"/>
             </RelativeLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:orientation="vertical"
             android:padding="5dp"
             android:background="@drawable/background_view_rounded_single">
@@ -298,7 +288,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/Black"
                     android:textSize="30sp"
-                    android:text="6"/>
+                    android:text="0"/>
                 <TextView
                     android:id="@+id/alarm_2_dang"
                     android:layout_width="wrap_content"
@@ -318,7 +308,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/Black"
                     android:textSize="30sp"
-                    android:text="20"/>
+                    android:text="00"/>
                 <Switch
                     android:id="@+id/alarm_2_onoff"
                     android:layout_alignParentEnd="true"
@@ -331,88 +321,184 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/alarm_2_date_1"
+                <LinearLayout
+                    android:id="@+id/ll_date_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true"
-                    android:text="@string/ss_date_1"/>
-                <TextView
-                    android:id="@+id/alarm_2_date_2"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/alarm_2_date_1"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/LightGrey"
+                        android:text="@string/ss_date_1"/>
+                    <TextView
+                        android:id="@+id/alarm_2_date_2"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/LightGrey"
+                        android:text="@string/ss_date_2"/>
+                    <TextView
+                        android:id="@+id/alarm_2_date_3"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/LightGrey"
+                        android:text="@string/ss_date_3"/>
+                    <TextView
+                        android:id="@+id/alarm_2_date_4"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/LightGrey"
+                        android:text="@string/ss_date_4"/>
+                    <TextView
+                        android:id="@+id/alarm_2_date_5"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/LightGrey"
+                        android:text="@string/ss_date_5"/>
+                    <TextView
+                        android:id="@+id/alarm_2_date_6"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/LightGrey"
+                        android:text="@string/ss_date_6"/>
+                    <TextView
+                        android:id="@+id/alarm_2_date_7"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/LightGrey"
+                        android:text="@string/ss_date_7"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ll_date_bar_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/alarm_2_date_1"
-                    android:text="@string/ss_date_2"/>
-                <TextView
-                    android:id="@+id/alarm_2_date_3"
+                    android:orientation="horizontal"
+                    android:layout_alignStart="@id/ll_date_2"
+                    android:layout_alignEnd="@id/ll_date_2"
+                    android:layout_below="@id/ll_date_2">
+                    <View
+                        android:id="@+id/alarm_2_date_1_bar"
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/Red"/>
+                    <View
+                        android:id="@+id/alarm_2_date_2_bar"
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@color/Red"/>
+                    <View
+                        android:id="@+id/alarm_2_date_3_bar"
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@color/Red"/>
+                    <View
+                        android:id="@+id/alarm_2_date_4_bar"
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@color/Red"/>
+                    <View
+                        android:id="@+id/alarm_2_date_5_bar"
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@color/Red"/>
+                    <View
+                        android:id="@+id/alarm_2_date_6_bar"
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@color/Red"/>
+                    <View
+                        android:id="@+id/alarm_2_date_7_bar"
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@color/Red"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/alarm_2_option"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/alarm_2_date_2"
-                    android:text="@string/ss_date_3"/>
-                <TextView
-                    android:id="@+id/alarm_2_date_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/alarm_2_date_3"
-                    android:text="@string/ss_date_4"/>
-                <TextView
-                    android:id="@+id/alarm_2_date_5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/alarm_2_date_4"
-                    android:text="@string/ss_date_5"/>
-                <TextView
-                    android:id="@+id/alarm_2_date_6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/alarm_2_date_5"
-                    android:text="@string/ss_date_6"/>
-                <TextView
-                    android:id="@+id/alarm_2_date_7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/alarm_2_date_6"
-                    android:text="@string/ss_date_7"/>
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@id/ll_date_bar_2"
+                    android:layout_alignParentStart="true"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ss_alarm_run_time"/>
+                        <TextView
+                            android:id="@+id/alarm_2_run_minute"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ss_alarm_run_time_default"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ss_alarm_run_mode"/>
+                        <TextView
+                            android:id="@+id/alarm_2_run_mode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ss_alarm_run_mode_default"/>
+                    </LinearLayout>
+                </LinearLayout>
                 <Button
                     android:id="@+id/alarm_2_modify"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignBottom="@id/alarm_2_option"
                     android:text="@string/ss_alarm_modify"
                     android:onClick="onClick"/>
-                <TextView
-                    android:id="@+id/alarm_2_run_minute"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignBottom="@id/alarm_2_modify"
-                    android:text="150"/>
-                <TextView
-                    android:id="@+id/alarm_2_run_minute_txt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/alarm_2_run_minute"
-                    android:layout_alignBottom="@id/alarm_2_modify"
-                    android:text="@string/str_minute"/>
             </RelativeLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:orientation="vertical"
             android:padding="5dp"
             android:background="@drawable/background_view_rounded_single">
@@ -445,7 +531,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/Black"
                     android:textSize="30sp"
-                    android:text="6"/>
+                    android:text="0"/>
                 <TextView
                     android:id="@+id/alarm_3_dang"
                     android:layout_width="wrap_content"
@@ -465,7 +551,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/Black"
                     android:textSize="30sp"
-                    android:text="20"/>
+                    android:text="00"/>
                 <Switch
                     android:id="@+id/alarm_3_onoff"
                     android:layout_alignParentEnd="true"
@@ -478,89 +564,198 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/alarm_3_date_1"
+                <LinearLayout
+                    android:id="@+id/ll_date_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true"
-                    android:text="@string/ss_date_1"/>
-                <TextView
-                    android:id="@+id/alarm_3_date_2"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/alarm_3_date_1"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/LightGrey"
+                        android:text="@string/ss_date_1"/>
+                    <TextView
+                        android:id="@+id/alarm_3_date_2"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/LightGrey"
+                        android:text="@string/ss_date_2"/>
+                    <TextView
+                        android:id="@+id/alarm_3_date_3"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/LightGrey"
+                        android:text="@string/ss_date_3"/>
+                    <TextView
+                        android:id="@+id/alarm_3_date_4"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/LightGrey"
+                        android:text="@string/ss_date_4"/>
+                    <TextView
+                        android:id="@+id/alarm_3_date_5"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/LightGrey"
+                        android:text="@string/ss_date_5"/>
+                    <TextView
+                        android:id="@+id/alarm_3_date_6"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/LightGrey"
+                        android:text="@string/ss_date_6"/>
+                    <TextView
+                        android:id="@+id/alarm_3_date_7"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/LightGrey"
+                        android:text="@string/ss_date_7"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ll_date_bar_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/alarm_3_date_1"
-                    android:text="@string/ss_date_2"/>
-                <TextView
-                    android:id="@+id/alarm_3_date_3"
+                    android:orientation="horizontal"
+                    android:layout_alignStart="@id/ll_date_3"
+                    android:layout_alignEnd="@id/ll_date_3"
+                    android:layout_below="@id/ll_date_3">
+                    <View
+                        android:id="@+id/alarm_3_date_1_bar"
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/Red"/>
+                    <View
+                        android:id="@+id/alarm_3_date_2_bar"
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@color/Red"/>
+                    <View
+                        android:id="@+id/alarm_3_date_3_bar"
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@color/Red"/>
+                    <View
+                        android:id="@+id/alarm_3_date_4_bar"
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@color/Red"/>
+                    <View
+                        android:id="@+id/alarm_3_date_5_bar"
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@color/Red"/>
+                    <View
+                        android:id="@+id/alarm_3_date_6_bar"
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@color/Red"/>
+                    <View
+                        android:id="@+id/alarm_3_date_7_bar"
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@color/Red"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/alarm_3_option"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/alarm_3_date_2"
-                    android:text="@string/ss_date_3"/>
-                <TextView
-                    android:id="@+id/alarm_3_date_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/alarm_3_date_3"
-                    android:text="@string/ss_date_4"/>
-                <TextView
-                    android:id="@+id/alarm_3_date_5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/alarm_3_date_4"
-                    android:text="@string/ss_date_5"/>
-                <TextView
-                    android:id="@+id/alarm_3_date_6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/alarm_3_date_5"
-                    android:text="@string/ss_date_6"/>
-                <TextView
-                    android:id="@+id/alarm_3_date_7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/alarm_3_date_6"
-                    android:text="@string/ss_date_7"/>
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@id/ll_date_bar_3"
+                    android:layout_alignParentStart="true"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ss_alarm_run_time"/>
+                        <TextView
+                            android:id="@+id/alarm_3_run_minute"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ss_alarm_run_time_default"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ss_alarm_run_mode"/>
+                        <TextView
+                            android:id="@+id/alarm_3_run_mode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ss_alarm_run_mode_default"/>
+                    </LinearLayout>
+                </LinearLayout>
                 <Button
                     android:id="@+id/alarm_3_modify"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignBottom="@id/alarm_3_option"
                     android:text="@string/ss_alarm_modify"
                     android:onClick="onClick"/>
-                <TextView
-                    android:id="@+id/alarm_3_run_minute"
-                    android:layout_width="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignBottom="@id/alarm_3_modify"
-                    android:layout_height="wrap_content"
-                    android:text="150"/>
-                <TextView
-                    android:id="@+id/alarm_3_run_minute_txt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/alarm_3_run_minute"
-                    android:layout_alignBottom="@id/alarm_3_modify"
-                    android:text="@string/str_minute"/>
-
             </RelativeLayout>
         </LinearLayout>
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="알람설정은 준비중입니다."/>
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_sleep"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/easy_save_btn_sleep"
+                android:onClick="onClick"/>
+            <Button
+                android:id="@+id/btn_wakeup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/easy_save_btn_wakeup"
+                android:onClick="onClick"/>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

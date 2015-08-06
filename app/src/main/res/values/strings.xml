@@ -259,6 +259,14 @@
     <string name="ss_alarm_2_title">알람 2</string>
     <string name="ss_alarm_3_title">알람 3</string>
     <string name="ss_alarm_modify">알람 변경</string>
-    <string name="ss_alarm_run_time">동작 시간</string>
+    <string name="ss_alarm_run_time">동작시간: </string>
+    <string name="ss_alarm_run_mode">동작모드: </string>
+    <string name="ss_alarm_run_time_default">1분</string>
+    <string name="ss_alarm_run_mode_default">기본실행</string>
+    <string name="ss_alarm_run_mode_sequence">순차실행</string>
+    <string name="ss_alarm_run_mode_random">랜덤실행</string>
+    <string name="ss_alarm_read_error">알람 설정 값을 가져올 수 없습니다.</string>
+    <string name="ss_alarm_try_init_ble">스마트 라이트 장치를 설정해 주세요.</string>
+    <string name="ss_alarm_write_success">전송 완료</string>
     <!--SLightSettingActivity End-->
 </resources>

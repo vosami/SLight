@@ -162,4 +162,5 @@
         <item name="android:max">191</item>
         <item name="android:progress">95</item>
     </style>
+
 </resources>

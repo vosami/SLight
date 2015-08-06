@@ -8,8 +8,14 @@ import com.syncworks.slight.TxDatas;
  * LED 헤
  */
 public class LecHeaderParam {
+    public final static int ALARM_LENGTH = 5;
+    public final static int HEADER_ALARM_ORDER = 33;
     public final static int HEADER_SEQ_TIME_ORDER = 50;
     public final static int HEADER_PARAM_ORDER = 54;
+
+    public final static int PARAM_RUN_MODE_DEFAULT = 0;
+    public final static int PARAM_RUN_MODE_SEQUENTIAL = 1;
+    public final static int PARAM_RUN_MODE_RANDOM = 2;
 
     private byte[] lecByte = new byte[64];
 
@@ -86,5 +92,73 @@ public class LecHeaderParam {
 
     public int getParam() {
         return lecByte[HEADER_PARAM_ORDER];
+    }
+
+    public void setAlarmDate(int alarmNum, int date) {
+        lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum] = (byte)date;
+    }
+
+    public int getAlarmDate(int alarmNum) {
+        return lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum];
+    }
+
+    public void setAlarmHour(int alarmNum, int hour) {
+        lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 1] = (byte)hour;
+    }
+
+    public int getAlarmHour(int alarmNum) {
+        return lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 1];
+    }
+
+    public void setAlarmMinute(int alarmNum, int min) {
+        lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 2] = (byte)min;
+    }
+
+    public int getAlarmMinute(int alarmNum) {
+        return lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 2];
+    }
+
+    public void setAlarmRunTime(int alarmNum, int runTime) {
+        lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 3] = (byte)runTime;
+    }
+
+    public int getAlarmRunTime(int alarmNum) {
+        return lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 3];
+    }
+
+    public void setAlarmOnOff(int alarmNum, boolean onOff) {
+        if (onOff) {
+            lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 4] |= 0x80;
+        } else {
+            lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 4] &= 0x7F;
+        }
+    }
+
+    public boolean getAlarmOnOff(int alarmNum) {
+        return (lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 4] & 0x80) != 0;
+    }
+
+    public void setAlarmRunMode(int alarmNum, int runMode) {
+        byte param = lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 4];
+        param = (byte) ((param & 0x9F) | (runMode <<5));
+        lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 4] = param;
+    }
+
+    public int getAlarmRunMode(int alarmNum) {
+        return (lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 4] & 0x60) >> 5;
+    }
+
+    public void setAlarmRunPattern(int alarmNum, int runPattern) {
+        byte param = lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 4];
+        param = (byte) ((param & 0xE7) | (runPattern <<3));
+        lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 4] = param;
+    }
+
+    public int getAlarmRunPattern(int alarmNum) {
+        return (lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 4] & 0x18) >> 3;
+    }
+
+    public int getAlarmParam(int alarmNum) {
+        return lecByte[HEADER_ALARM_ORDER + ALARM_LENGTH * alarmNum + 4];
     }
 }
