@@ -20,6 +20,8 @@ public class DialogStartTime extends Dialog{
     SeekBar sbTime;
     TextView tvTime;
 
+    private int effectNum = 0;
+
     private int progress = 0;
 
     public DialogStartTime(Context context) {
@@ -81,13 +83,13 @@ public class DialogStartTime extends Dialog{
     private OnStartTimeListener listener = null;
 
     public interface OnStartTimeListener {
-        void onStartTime(int time);
+        void onStartTime(int effectNum, int time);
         void onConfirm();
     }
 
     private void doStartTime(int time) {
         if (listener != null) {
-            listener.onStartTime(time);
+            listener.onStartTime(effectNum , time);
         }
     }
 

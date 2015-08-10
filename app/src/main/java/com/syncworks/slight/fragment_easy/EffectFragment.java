@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.RadioButton;
 import android.widget.ToggleButton;
 
@@ -18,7 +19,10 @@ import com.syncworks.define.Logger;
 import com.syncworks.leddata.LedSelect;
 import com.syncworks.slight.R;
 import com.syncworks.slight.dialog.DialogStartTime;
+import com.syncworks.slight.util.BaseExpandableAdapter;
 import com.syncworks.slightpref.SLightPref;
+
+import java.util.ArrayList;
 
 
 public class EffectFragment extends Fragment {
@@ -40,10 +44,15 @@ public class EffectFragment extends Fragment {
     private ToggleButton tbDelay[] = new ToggleButton[3];
     private ToggleButton tbRandom[] = new ToggleButton[2];
 
-    private boolean isDelayLong[] = new boolean[6];
-    private boolean isRandom[] = new boolean[6];
-    private int alwaysStartTime;
+    private int patternTime[] = new int[7];
+    private int randomTime[] = new int[7];
+    private int startTime[] = new int[7];
 
+
+    private ExpandableListView mListView;
+    private ArrayList<String> mGroupList = null;
+    private ArrayList<ArrayList<String>> mChildList = null;
+    private ArrayList<String> mChildListContent = null;
 
     /**
      * Use this factory method to create a new instance of
@@ -64,17 +73,27 @@ public class EffectFragment extends Fragment {
     }
 
     public void init() {
-        isDelayLong[0] = false;
-        isDelayLong[1] = false;
-        isDelayLong[2] = false;
-        isDelayLong[3] = false;
-        isDelayLong[4] = false;
-        isRandom[0] = false;
-        isRandom[1] = false;
-        isRandom[2] = false;
-        isRandom[3] = false;
-        isRandom[4] = false;
-        alwaysStartTime = 0;
+        patternTime[0] = 0;
+        patternTime[1] = 0;
+        patternTime[2] = 0;
+        patternTime[3] = 0;
+        patternTime[4] = 0;
+        patternTime[5] = 0;
+        patternTime[6] = 0;
+        randomTime[0] = 0;
+        randomTime[1] = 0;
+        randomTime[2] = 0;
+        randomTime[3] = 0;
+        randomTime[4] = 0;
+        randomTime[5] = 0;
+        randomTime[6] = 0;
+        startTime[0] = 0;
+        startTime[1] = 0;
+        startTime[2] = 0;
+        startTime[3] = 0;
+        startTime[4] = 0;
+        startTime[5] = 0;
+        startTime[6] = 0;
     }
 
     @Override
@@ -92,6 +111,7 @@ public class EffectFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_effect,container,false);
 
+
         btnRgb[0] = (Button) view.findViewById(R.id.rgb_1);
         btnRgb[1] = (Button) view.findViewById(R.id.rgb_2);
         btnRgb[2] = (Button) view.findViewById(R.id.rgb_3);
@@ -104,7 +124,7 @@ public class EffectFragment extends Fragment {
         btnLed[6] = (Button) view.findViewById(R.id.led_7);
         btnLed[7] = (Button) view.findViewById(R.id.led_8);
         btnLed[8] = (Button) view.findViewById(R.id.led_9);
-
+/*
         rbPattern[0] = (RadioButton) view.findViewById(R.id.rb_pattern_1);
         rbPattern[1] = (RadioButton) view.findViewById(R.id.rb_pattern_2);
         rbPattern[2] = (RadioButton) view.findViewById(R.id.rb_pattern_3);
@@ -137,12 +157,54 @@ public class EffectFragment extends Fragment {
         tbDelay[2].setOnClickListener(onOptionListener);
         tbRandom[0].setOnClickListener(onOptionListener);
         tbRandom[1].setOnClickListener(onOptionListener);
-
+*/
         if (!appPref.getBoolean(SLightPref.EASY_ACTIVITY[3])) {
             appPref.putBoolean(SLightPref.EASY_ACTIVITY[3],true);
             showOverLay();
         }
 
+        mListView = (ExpandableListView) view.findViewById(R.id.elv_effect);
+        mGroupList = new ArrayList<>();
+        mChildList = new ArrayList<>();
+        mChildListContent = new ArrayList<>();
+
+        mGroupList.add(getString(R.string.easy_effect_pattern_always));
+        mGroupList.add(getString(R.string.easy_effect_pattern_pulse));
+        mGroupList.add(getString(R.string.easy_effect_pattern_flash));
+        mGroupList.add(getString(R.string.easy_effect_pattern_updown));
+        mGroupList.add(getString(R.string.easy_effect_pattern_torch));
+        mGroupList.add(getString(R.string.easy_effect_rgb_rainbow));
+        mGroupList.add(getString(R.string.easy_effect_rgb_sin));
+
+        mChildListContent.add("1");
+
+        mChildList.add(mChildListContent);
+        mChildList.add(mChildListContent);
+        mChildList.add(mChildListContent);
+        mChildList.add(mChildListContent);
+        mChildList.add(mChildListContent);
+        mChildList.add(mChildListContent);
+        mChildList.add(mChildListContent);
+
+        mListView.setAdapter(new BaseExpandableAdapter(getActivity(), mGroupList, mChildList));
+
+        mListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                for (int i = 0; i < mListView.getChildCount(); i++) {
+                    if (i != groupPosition) {
+                        mListView.collapseGroup(i);
+                    }
+                }
+            }
+        });
+
+        mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                return false;
+            }
+        });
         // Inflate the layout for this fragment
         return view;
     }
@@ -163,6 +225,7 @@ public class EffectFragment extends Fragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+                /*
                 case R.id.rb_pattern_1:
                     rbClick(0);
                     break;
@@ -181,15 +244,16 @@ public class EffectFragment extends Fragment {
                 case R.id.rb_pattern_6:
                     rbClick(5);
                     break;
+                    */
             }
         }
     };
 
     private DialogStartTime.OnStartTimeListener startTimeListener = new DialogStartTime.OnStartTimeListener() {
         @Override
-        public void onStartTime(int time) {
-            alwaysStartTime = time;
-            doPattern(0,false,false,alwaysStartTime);
+        public void onStartTime(int effectNum, int time) {
+            startTime[effectNum] = time;
+            doPattern(effectNum,patternTime[effectNum],randomTime[effectNum],startTime[effectNum]);
         }
 
         @Override
@@ -205,6 +269,7 @@ public class EffectFragment extends Fragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+                /*
                 case R.id.tb_long_2:
                     isDelayLong[1] = tbDelay[0].isChecked();
                     if (rbPattern[1].isChecked()) {
@@ -235,6 +300,7 @@ public class EffectFragment extends Fragment {
                         doPattern(2,tbDelay[1].isChecked(),tbRandom[1].isChecked(),0);
                     }
                     break;
+                    */
             }
         }
     };
@@ -244,10 +310,10 @@ public class EffectFragment extends Fragment {
         effectNum = pattern;
         for (int i=0;i<6;i++) {
             if (i == pattern) {
-                rbPattern[i].setChecked(true);
+//                rbPattern[i].setChecked(true);
                 doPattern(i);
             } else {
-                rbPattern[i].setChecked(false);
+//                rbPattern[i].setChecked(false);
             }
         }
     }
@@ -287,8 +353,10 @@ public class EffectFragment extends Fragment {
                     showLed(i);
                 }
             }
+            // 리스트뷰 Expand 초기화
+            mListView.expandGroup(effectNum);
             // 라디오 버튼 초기화
-            rbClick(effectNum);
+            //rbClick(effectNum);
         }
     }
 
@@ -313,13 +381,13 @@ public class EffectFragment extends Fragment {
     // EasyActivity 에 패턴 전달
     private void doPattern(int effect) {
         if (mListener != null) {
-            mListener.onEffect(effect, isDelayLong[effect], isRandom[effect], 0);
+            mListener.onEffect(effect, patternTime[effect], randomTime[effect], 0);
         }
     }
 
-    private void doPattern(int effect, boolean isDelay, boolean isRandom, int startTime) {
+    private void doPattern(int effect, int patternTime, int randomTime, int startTime) {
         if (mListener != null) {
-            mListener.onEffect(effect,isDelay, isRandom, startTime);
+            mListener.onEffect(effect,patternTime, randomTime, startTime);
         }
     }
 

@@ -200,7 +200,15 @@
     <string name="easy_effect_pattern_flash">번쩍이기</string>
     <string name="easy_effect_pattern_updown">오르내리</string>
     <string name="easy_effect_pattern_torch">횃불효과</string>
+    <string name="easy_effect_rgb_rainbow">레인보우</string>
+    <string name="easy_effect_rgb_sin">정현파형</string>
     <string name="easy_effect_pattern_sound">소리효과</string>
+
+    <string name="easy_effect_option_start_time">시작시간</string>
+    <string name="easy_effect_option_pattern_time">효과시간</string>
+    <string name="easy_effect_option_random_time">랜덤시간</string>
+
+
     <string name="easy_effect_select_start_time">시작 시간 설정</string>
 
     <string name="easy_effect_title_save">스마트라이트에 저장</string>
