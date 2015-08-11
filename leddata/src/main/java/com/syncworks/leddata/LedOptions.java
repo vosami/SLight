@@ -54,6 +54,9 @@ public class LedOptions implements Serializable{
             patternDelayOption++;
         }
     }
+    public void setPatternDelayOption(int option) {
+        patternDelayOption = option;
+    }
     // 패턴 딜레이 옵션 읽어오기
     public int getPatternDelayOption() {
         return patternDelayOption;
@@ -65,6 +68,9 @@ public class LedOptions implements Serializable{
         } else {
             randomDelayOption++;
         }
+    }
+    public void setRandomDelayOption(int option) {
+        randomDelayOption = option;
     }
     // 랜덤 지연 옵션 읽어오기
     public int getRandomDelayOption() {

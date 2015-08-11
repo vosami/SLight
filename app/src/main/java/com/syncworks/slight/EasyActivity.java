@@ -1168,7 +1168,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         fragment3rd.setLedSelect(this.ledDataSeries.ledSelect);
         fragment3rd.setLedOptions(this.ledDataSeries.ledOptions);
         fragment4th.setLedSelect(this.ledDataSeries.ledSelect);
-        fragment4th.setLedOption(this.ledDataSeries.ledOptions);
+        //fragment4th.setLedOption(this.ledDataSeries.ledOptions);
         fragment5th.setLecHeader(this.lecHeader);
 
         fragmentManager = getFragmentManager();
@@ -1381,21 +1381,27 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     }
 
     @Override
-    public void onEffect(int effect, int isDelayLong, int isRandom, int startTime) {
+    public void onEffectStart(boolean isStart) {
+        if (isStart) {
+            txData(TxDatas.formatSleep(false));
+            // 분 이벤트 종료
+            txData(TxDatas.formatMinuteTimerStart(false));
+        } else {
+            txData(TxDatas.formatSleep(true));
+        }
+    }
 
+    @Override
+    public void onEffect(int effect, int patternTime, int randomTime, int startTime) {
         txData(TxDatas.formatSleep(false));
         // 분 이벤트 종료
         txData(TxDatas.formatMinuteTimerStart(false));
-        /*for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
             if (ledDataSeries.ledSelect.getLed(i) == LedSelect.SelectType.SELECTED) {
-                ledDataSeries.ledOptions[i].setDelayStart(startTime);
-
-                if (isDelayLong) {
-                    ledDataSeries.ledOptions[i].setRatioDuration(100);
-                } else {
-                    ledDataSeries.ledOptions[i].setRatioDuration(200);
-                }
-                ledDataSeries.ledExeDatas[i].setEffect(effect, isDelayLong, isRandom, startTime);
+                ledDataSeries.ledOptions[i].setDelayStartOption(startTime);
+                ledDataSeries.ledOptions[i].setPatternDelayOption(patternTime);
+                ledDataSeries.ledOptions[i].setRandomDelayOption(randomTime);
+                ledDataSeries.ledExeDatas[i].setEffect(effect, patternTime, randomTime, startTime);
                 // LED 선택 프래그먼트에 효과 값 전달
                 fragment2nd.setPattern(false, i, effect);
                 List<byte[]> mDataList = TxDatas.formatMemWrite(i,
@@ -1404,56 +1410,60 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 for (int j=0;j<dataCount;j++) {
                     txData(mDataList.get(j));
                 }
-                //txPattern(i, ledDataSeries.ledExeDatas[i].toByteArray(ledDataSeries.ledOptions[i]));
+                txPattern(i, ledDataSeries.ledExeDatas[i].toByteArray(ledDataSeries.ledOptions[i]));
                 txData(TxDatas.formatInitCount());
 
             }
         }
         for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
             if (ledDataSeries.ledSelect.getRgb(i) == LedSelect.SelectType.SELECTED) {
-                ledDataSeries.ledOptions[i*3].setDelayStart(startTime);
-                ledDataSeries.ledOptions[i*3 + 1].setDelayStart(startTime);
-                ledDataSeries.ledOptions[i*3 + 2].setDelayStart(startTime);
-                if (isDelayLong) {
-                    ledDataSeries.ledOptions[i*3].setRatioDuration(100);
-                    ledDataSeries.ledOptions[i*3 + 1].setRatioDuration(100);
-                    ledDataSeries.ledOptions[i*3 + 2].setRatioDuration(100);
-                } else {
-                    ledDataSeries.ledOptions[i*3].setRatioDuration(200);
-                    ledDataSeries.ledOptions[i*3 + 1].setRatioDuration(200);
-                    ledDataSeries.ledOptions[i*3 + 2].setRatioDuration(200);
-                }
-                ledDataSeries.ledExeDatas[i*3].setEffect(effect, isDelayLong, isRandom, startTime);
-                ledDataSeries.ledExeDatas[i*3 + 1].setEffect(effect, isDelayLong, isRandom, startTime);
-                ledDataSeries.ledExeDatas[i*3 + 2].setEffect(effect, isDelayLong, isRandom, startTime);
-
+                ledDataSeries.ledOptions[i*3].setDelayStartOption(startTime);
+                ledDataSeries.ledOptions[i*3 + 1].setDelayStartOption(startTime);
+                ledDataSeries.ledOptions[i*3 + 2].setDelayStartOption(startTime);
+                ledDataSeries.ledOptions[i*3].setPatternDelayOption(patternTime);
+                ledDataSeries.ledOptions[i*3 + 1].setPatternDelayOption(patternTime);
+                ledDataSeries.ledOptions[i*3 + 2].setPatternDelayOption(patternTime);
+                ledDataSeries.ledOptions[i*3].setRandomDelayOption(randomTime);
+                ledDataSeries.ledOptions[i*3 + 1].setRandomDelayOption(randomTime);
+                ledDataSeries.ledOptions[i*3 + 2].setRandomDelayOption(randomTime);
+                List<byte[]> mDataList;
+                int dataCount;
+                ledDataSeries.ledExeDatas[i*3].setRgbEffect(effect, i * 3, patternTime, randomTime, startTime);
                 // LED 선택 프래그먼트에 효과 값 전달
                 fragment2nd.setPattern(true, i, effect);
-                List<byte[]> mDataList = TxDatas.formatMemWrite(i*3,
+                mDataList = TxDatas.formatMemWrite(i*3,
                         ledDataSeries.ledExeDatas[i*3].toByteArray(ledDataSeries.ledOptions[i*3]));
-                int dataCount = mDataList.size();
+                dataCount = mDataList.size();
                 for (int j=0;j<dataCount;j++) {
                     txData(mDataList.get(j));
                 }
-                List<byte[]> mDataList2 = TxDatas.formatMemWrite(i*3+1,
-                        ledDataSeries.ledExeDatas[i*3+1].toByteArray(ledDataSeries.ledOptions[i*3+1]));
-                int dataCount2 = mDataList2.size();
-                for (int j=0;j<dataCount2;j++) {
-                    txData(mDataList2.get(j));
+                ledDataSeries.ledExeDatas[i*3 + 1].setRgbEffect(effect, i * 3 +1, patternTime, randomTime, startTime);
+                // LED 선택 프래그먼트에 효과 값 전달
+                fragment2nd.setPattern(true, i, effect);
+                mDataList = TxDatas.formatMemWrite(i*3 + 1,
+                        ledDataSeries.ledExeDatas[i*3 + 1].toByteArray(ledDataSeries.ledOptions[i*3 + 1]));
+                dataCount = mDataList.size();
+                for (int j=0;j<dataCount;j++) {
+                    txData(mDataList.get(j));
                 }
-                List<byte[]> mDataList3 = TxDatas.formatMemWrite(i*3+2,
-                        ledDataSeries.ledExeDatas[i*3+2].toByteArray(ledDataSeries.ledOptions[i*3+2]));
-                int dataCount3 = mDataList3.size();
-                for (int j=0;j<dataCount3;j++) {
-                    txData(mDataList3.get(j));
+                ledDataSeries.ledExeDatas[i*3 + 2].setRgbEffect(effect, i * 3 +2, patternTime, randomTime, startTime);
+                // LED 선택 프래그먼트에 효과 값 전달
+                fragment2nd.setPattern(true, i, effect);
+                mDataList = TxDatas.formatMemWrite(i*3 + 2,
+                        ledDataSeries.ledExeDatas[i*3 + 2].toByteArray(ledDataSeries.ledOptions[i*3 + 2]));
+                dataCount = mDataList.size();
+                for (int j=0;j<dataCount;j++) {
+                    txData(mDataList.get(j));
                 }
-//                txPattern(i * 3, ledDataSeries.ledExeDatas[i * 3].toByteArray(ledDataSeries.ledOptions[i * 3]));
-//                txPattern(i*3 + 1,ledDataSeries.ledExeDatas[i*3 + 1].toByteArray(ledDataSeries.ledOptions[i*3 + 1]));
-//                txPattern(i*3 + 2,ledDataSeries.ledExeDatas[i*3 + 2].toByteArray(ledDataSeries.ledOptions[i*3 + 2]));
                 txData(TxDatas.formatInitCount());
             }
-        }*/
+        }
         txData(TxDatas.formatSleep(true));
+    }
+
+    @Override
+    public void onRgbEffect(int effect, int delayLong, int randomTime, int startTime) {
+
     }
 
     @Override

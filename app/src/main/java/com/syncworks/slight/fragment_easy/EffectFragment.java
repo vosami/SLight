@@ -15,11 +15,11 @@ import android.widget.ToggleButton;
 
 import com.syncworks.define.Define;
 import com.syncworks.define.Logger;
-import com.syncworks.leddata.LedOptions;
 import com.syncworks.leddata.LedSelect;
 import com.syncworks.slight.R;
 import com.syncworks.slight.dialog.DialogStartTime;
 import com.syncworks.slight.util.BaseExpandableAdapter;
+import com.syncworks.slight.util.BaseExpandableInterface;
 import com.syncworks.slight.util.EffectListData;
 import com.syncworks.slight.util.EffectOptionData;
 import com.syncworks.slightpref.SLightPref;
@@ -34,10 +34,14 @@ public class EffectFragment extends Fragment {
     private DialogStartTime dialogStartTime = null;
 
     private LedSelect ledSelect;
-    private LedOptions ledOption[];
+    //private LedOptions ledOption[];
     private OnEasyFragmentListener mListener;
 
-    private int effectNum = 0;
+    private static int staticEffectNum = 0;
+    private static int staticStartTime = 0;
+    private static int staticEffectTime = 2;
+    private static int staticRandomTime = 0;
+
 
     private Button btnRgb[] = new Button[Define.NUMBER_OF_COLOR_LED];
     private Button btnLed[] = new Button[Define.NUMBER_OF_SINGLE_LED];
@@ -47,9 +51,9 @@ public class EffectFragment extends Fragment {
     private ToggleButton tbDelay[] = new ToggleButton[3];
     private ToggleButton tbRandom[] = new ToggleButton[2];*/
 
-    private int patternTime[] = new int[7];
+    /*private int patternTime[] = new int[7];
     private int randomTime[] = new int[7];
-    private int startTime[] = new int[7];
+    private int startTime[] = new int[7];*/
 
 
     private ExpandableListView mListView;
@@ -75,39 +79,19 @@ public class EffectFragment extends Fragment {
         this.ledSelect = ls;
     }
 
-    public void setLedOption(LedOptions option[]) {
+    /*public void setLedOption(LedOptions option[]) {
         this.ledOption = option;
-    }
+    }*/
 
-    public void init() {
-        patternTime[0] = 0;
-        patternTime[1] = 0;
-        patternTime[2] = 0;
-        patternTime[3] = 0;
-        patternTime[4] = 0;
-        patternTime[5] = 0;
-        patternTime[6] = 0;
-        randomTime[0] = 0;
-        randomTime[1] = 0;
-        randomTime[2] = 0;
-        randomTime[3] = 0;
-        randomTime[4] = 0;
-        randomTime[5] = 0;
-        randomTime[6] = 0;
-        startTime[0] = 0;
-        startTime[1] = 0;
-        startTime[2] = 0;
-        startTime[3] = 0;
-        startTime[4] = 0;
-        startTime[5] = 0;
-        startTime[6] = 0;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        init();
         Logger.d(this, "EffectFragment create");
+        staticEffectNum = 0;
+        staticStartTime = 0;
+        staticEffectTime = 2;
+        staticRandomTime = 0;
     }
 
 
@@ -173,56 +157,127 @@ public class EffectFragment extends Fragment {
         mListView = (ExpandableListView) view.findViewById(R.id.elv_effect);
         mGroupList = new ArrayList<>();
         mChildList = new ArrayList<>();
-        EffectListData listData[] = new EffectListData[7];
-        for (int i=0;i<7;i++) {
-            listData[i] = new EffectListData();
-            listData[i].init();
-        }
-        listData[0].effectName = getString(R.string.easy_effect_pattern_always);
-        listData[0].imgId = R.drawable.ic_pattern_always;
-        mGroupList.add(listData[0]);
-        listData[1].effectName = getString(R.string.easy_effect_pattern_pulse);
-        listData[1].imgId = R.drawable.ic_pattern_pulse;
-        mGroupList.add(listData[1]);
-        listData[2].effectName = getString(R.string.easy_effect_pattern_flash);
-        listData[2].imgId = R.drawable.ic_pattern_flash;
-        mGroupList.add(listData[2]);
-        listData[3].effectName = getString(R.string.easy_effect_pattern_updown);
-        listData[3].imgId = R.drawable.ic_pattern_up_down;
-        mGroupList.add(listData[3]);
-        listData[4].effectName = getString(R.string.easy_effect_pattern_torch);
-        listData[4].imgId = R.drawable.ic_pattern_torch;
-        mGroupList.add(listData[4]);
-        listData[5].effectName = getString(R.string.easy_effect_rgb_rainbow);
-        listData[5].imgId = R.drawable.ic_pattern_always;
-        mGroupList.add(listData[5]);
-        listData[6].effectName = getString(R.string.easy_effect_rgb_sin);
-        listData[6].imgId = R.drawable.ic_pattern_always;
-        mGroupList.add(listData[6]);
+        EffectListData listData[];
+        EffectOptionData optionData[];
 
-        EffectOptionData optionData[] = new EffectOptionData[7];
-        for (int i=0;i<7;i++) {
-            optionData[i] = new EffectOptionData();
-            optionData[i].isShowStartDelay = true;
-            if (i == 0) {
-                optionData[i].isShowEffectDelay = false;
-                optionData[i].isShowRandomDelay = false;
-            } else {
-                optionData[i].isShowEffectDelay = true;
-                optionData[i].isShowRandomDelay = true;
+        int listCount;
+        if (getLedSelected() == LED_NOT_SELECTED) {
+            listData = new EffectListData[1];
+            optionData = new EffectOptionData[1];
+            listData[0] = new EffectListData();
+            listData[0].init();
+            listData[0].effectName = getString(R.string.easy_effect_not_selected);
+            optionData[0] = new EffectOptionData();
+            mGroupList.add(listData[0]);
+            mChildList.add(optionData[0]);
+        } else if (getLedSelected() == LED_RGB_ONLY_SELECTED) {
+            listCount = 7;
+            listData = new EffectListData[listCount];
+            for (int i=0;i<listCount;i++) {
+                listData[i] = new EffectListData();
+                listData[i].init();
             }
-            optionData[i].timeStartDelay = 0;
-            optionData[i].timeEffectDelay = 0;
-            optionData[i].timeRandomDelay = 0;
+            listData[0].effectName = getString(R.string.easy_effect_pattern_always);
+            listData[0].imgId = R.drawable.ic_pattern_always;
+            mGroupList.add(listData[0]);
+            listData[1].effectName = getString(R.string.easy_effect_pattern_pulse);
+            listData[1].imgId = R.drawable.ic_pattern_pulse;
+            mGroupList.add(listData[1]);
+            listData[2].effectName = getString(R.string.easy_effect_pattern_flash);
+            listData[2].imgId = R.drawable.ic_pattern_flash;
+            mGroupList.add(listData[2]);
+            listData[3].effectName = getString(R.string.easy_effect_pattern_updown);
+            listData[3].imgId = R.drawable.ic_pattern_up_down;
+            mGroupList.add(listData[3]);
+            listData[4].effectName = getString(R.string.easy_effect_pattern_torch);
+            listData[4].imgId = R.drawable.ic_pattern_torch;
+            mGroupList.add(listData[4]);
+            listData[5].effectName = getString(R.string.easy_effect_rgb_rainbow);
+            listData[5].imgId = R.drawable.ic_pattern_rainbow;
+            mGroupList.add(listData[5]);
+            listData[6].effectName = getString(R.string.easy_effect_rgb_sin);
+            listData[6].imgId = R.drawable.ic_pattern_sin;
+            mGroupList.add(listData[6]);
+            optionData = new EffectOptionData[listCount];
+            for (int i=0;i<listCount;i++) {
+                optionData[i] = new EffectOptionData();
+                optionData[i].isShowStartDelay = true;
+                if (i == 0) {
+                    optionData[i].isShowEffectDelay = false;
+                    optionData[i].isShowRandomDelay = false;
+                } else {
+                    optionData[i].isShowEffectDelay = true;
+                    optionData[i].isShowRandomDelay = true;
+                }
+                if (staticEffectNum == i) {
+                    optionData[i].timeStartDelay = staticStartTime;
+                    optionData[i].timeEffectDelay = staticEffectTime;
+                    optionData[i].timeRandomDelay = staticRandomTime;
+                } else {
+                    optionData[i].timeStartDelay = 0;
+                    optionData[i].timeEffectDelay = 2;
+                    optionData[i].timeRandomDelay = 0;
+                }
+            }
+
+            mChildList.add(optionData[0]);
+            mChildList.add(optionData[1]);
+            mChildList.add(optionData[2]);
+            mChildList.add(optionData[3]);
+            mChildList.add(optionData[4]);
+            mChildList.add(optionData[5]);
+            mChildList.add(optionData[6]);
+        } else {
+            listCount = 5;
+            listData = new EffectListData[listCount];
+            for (int i=0;i<listCount;i++) {
+                listData[i] = new EffectListData();
+                listData[i].init();
+            }
+            listData[0].effectName = getString(R.string.easy_effect_pattern_always);
+            listData[0].imgId = R.drawable.ic_pattern_always;
+            mGroupList.add(listData[0]);
+            listData[1].effectName = getString(R.string.easy_effect_pattern_pulse);
+            listData[1].imgId = R.drawable.ic_pattern_pulse;
+            mGroupList.add(listData[1]);
+            listData[2].effectName = getString(R.string.easy_effect_pattern_flash);
+            listData[2].imgId = R.drawable.ic_pattern_flash;
+            mGroupList.add(listData[2]);
+            listData[3].effectName = getString(R.string.easy_effect_pattern_updown);
+            listData[3].imgId = R.drawable.ic_pattern_up_down;
+            mGroupList.add(listData[3]);
+            listData[4].effectName = getString(R.string.easy_effect_pattern_torch);
+            listData[4].imgId = R.drawable.ic_pattern_torch;
+            mGroupList.add(listData[4]);
+            optionData = new EffectOptionData[listCount];
+            for (int i=0;i<listCount;i++) {
+                optionData[i] = new EffectOptionData();
+                optionData[i].isShowStartDelay = true;
+                if (i == 0) {
+                    optionData[i].isShowEffectDelay = false;
+                    optionData[i].isShowRandomDelay = false;
+                } else {
+                    optionData[i].isShowEffectDelay = true;
+                    optionData[i].isShowRandomDelay = true;
+                }
+                if (staticEffectNum == i) {
+                    optionData[i].timeStartDelay = staticStartTime;
+                    optionData[i].timeEffectDelay = staticEffectTime;
+                    optionData[i].timeRandomDelay = staticRandomTime;
+                } else {
+                    optionData[i].timeStartDelay = 0;
+                    optionData[i].timeEffectDelay = 2;
+                    optionData[i].timeRandomDelay = 0;
+                }
+            }
+
+            mChildList.add(optionData[0]);
+            mChildList.add(optionData[1]);
+            mChildList.add(optionData[2]);
+            mChildList.add(optionData[3]);
+            mChildList.add(optionData[4]);
         }
 
-        mChildList.add(optionData[0]);
-        mChildList.add(optionData[1]);
-        mChildList.add(optionData[2]);
-        mChildList.add(optionData[3]);
-        mChildList.add(optionData[4]);
-        mChildList.add(optionData[5]);
-        mChildList.add(optionData[6]);
         expandableAdapter = new BaseExpandableAdapter(getActivity(),mGroupList,mChildList);
         mListView.setAdapter(expandableAdapter);
 
@@ -240,9 +295,43 @@ public class EffectFragment extends Fragment {
         mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                staticEffectNum = groupPosition;
+                staticStartTime = 0;
+                staticEffectTime = 2;
+                staticRandomTime = 0;
+                expandableAdapter.setStartTime(staticEffectNum, staticStartTime);
+                expandableAdapter.setEffectTime(staticEffectNum, staticEffectTime);
+                expandableAdapter.setRandomTime(staticEffectNum, staticRandomTime);
+                expandableAdapter.notifyDataSetChanged();
+                doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime);
                 return false;
             }
         });
+
+        expandableAdapter.setOnExpandableListener(new BaseExpandableInterface() {
+            @Override
+            public void onStartTime(int curGroup, int startTime) {
+                dialogStartTime = new DialogStartTime(getActivity(),staticStartTime);
+                dialogStartTime.setOnStartTimeListener(startTimeListener);
+                dialogStartTime.show();
+            }
+
+            @Override
+            public void onEffectTime(int curGroup, int effectTime) {
+                //mChildList.get(curGroup).timeEffectDelay = effectTime;
+                expandableAdapter.notifyDataSetChanged();
+                staticEffectTime = effectTime;
+                doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime);
+            }
+
+            @Override
+            public void onRandomTime(int curGroup, int randomTime) {
+                expandableAdapter.notifyDataSetChanged();
+                staticRandomTime = randomTime;
+                doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime);
+            }
+        });
+
         // Inflate the layout for this fragment
         return view;
     }
@@ -319,8 +408,10 @@ public class EffectFragment extends Fragment {
     private DialogStartTime.OnStartTimeListener startTimeListener = new DialogStartTime.OnStartTimeListener() {
         @Override
         public void onStartTime(int effectNum, int time) {
-            startTime[effectNum] = time;
-            doPattern(effectNum,patternTime[effectNum],randomTime[effectNum],startTime[effectNum]);
+            staticStartTime = time;
+            expandableAdapter.setStartTime(staticEffectNum,time);
+            expandableAdapter.notifyDataSetChanged();
+            doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime);
         }
 
         @Override
@@ -392,7 +483,14 @@ public class EffectFragment extends Fragment {
         }
     }
     public void initEffectNum() {
-        effectNum = 0;
+        staticEffectNum = 0;
+        staticStartTime = 0;
+        staticEffectTime = 2;
+        staticRandomTime = 0;
+    }
+
+    public int getEffectNum() {
+        return staticEffectNum;
     }
 
     private void displaySet() {
@@ -410,7 +508,20 @@ public class EffectFragment extends Fragment {
             }
 
             // 리스트뷰 Expand 초기화
-            mListView.expandGroup(effectNum);
+            if (staticEffectNum > mListView.getChildCount()) {
+                staticEffectNum = 0;
+                staticStartTime = 0;
+                staticEffectTime = 2;
+                staticRandomTime = 0;
+            }
+            for (int i = 0; i < mListView.getChildCount(); i++) {
+                if (i == staticEffectNum) {
+                    mListView.expandGroup(i);
+                } else {
+                    mListView.collapseGroup(i);
+                }
+            }
+            //mListView.expandGroup(staticEffectNum);
 
         }
     }
@@ -436,7 +547,7 @@ public class EffectFragment extends Fragment {
     // EasyActivity 에 패턴 전달
     private void doPattern(int effect) {
         if (mListener != null) {
-            mListener.onEffect(effect, patternTime[effect], randomTime[effect], 0);
+            mListener.onEffect(effect, staticEffectTime, staticRandomTime, staticStartTime);
         }
     }
 

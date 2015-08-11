@@ -40,29 +40,8 @@ public class LedDataList implements List<LedData>, Serializable {
     }
 
     // RGB 효과 데이터 설정 함수
-    public void setRgbEffect(int effect, int rgbNum, int effectTime, int randomDelay, int startTime) {
-        switch (effect) {
-            case 6:
-                ledDatas.clear();
-                add(new LedData(OP_HEAD_PATTERN, rgbNum, DEFINED_PATTERN, effect));
-                add(new LedData(OP_HEAD_OPTION, randomDelay, effectTime));
-                add(new LedData(OP_HEAD_START_DELAY, startTime));
-                add(new LedData(191,9));    // 255,0,0
-                add(new LedData(191,9));    // 255,140,0
-                add(new LedData(191,9));    // 255,255,0
-                add(new LedData(0,9));      // 0,128,0
-                add(new LedData(0,9));      // 0,0,255
-                add(new LedData(56,9));     // 75,0,130
-                add(new LedData(96,9));     // 128,0,128
-                add(new LedData(0,18));     // 모두 끄고 200ms 대기
-                add(new LedData(OP_START,0));
-                add(new LedData(0,0));
-                add(new LedData(OP_END,0));
-                break;
-        }
-    }
-
-    public void setEffect(int effect, boolean isDelayLong, boolean isRandom, int startTime) {
+    public void setRgbEffect(int effect, int rgbNum, int patternTime, int randomTime, int startTime) {
+        int rgbPer = rgbNum % 3;
         switch (effect) {
             case 0:
                 ledDatas.clear();
@@ -74,61 +53,534 @@ public class LedDataList implements List<LedData>, Serializable {
                 break;
             case 1:
                 ledDatas.clear();
+                add(new LedData(0, 0));
+                add(new LedData(OP_NOP, startTime));
                 add(new LedData(OP_START, 0));
-                add(new LedData(191,50));
-                add(new LedData(0,48));
-                if (isRandom) {
-                    add(new LedData(OP_RANDOM_DELAY,3));
+                switch (patternTime) {
+                    case 0:
+                        add(new LedData(191,30));
+                        add(new LedData(0,18));
+                        break;
+                    case 1:
+                        add(new LedData(191,30));
+                        add(new LedData(0,48));
+                        break;
+                    case 2:
+                        add(new LedData(191,50));
+                        add(new LedData(0,48));
+                        break;
+                    case 3:
+                        add(new LedData(191,50));
+                        add(new LedData(0,68));
+                        break;
+                    case 4:
+                        add(new LedData(191,50));
+                        add(new LedData(0,88));
+                        break;
+                }
+                switch (randomTime) {
+                    case 0:
+                        break;
+                    case 1:
+                        add(new LedData(OP_RANDOM_DELAY,2));
+                        break;
+                    case 2:
+                        add(new LedData(OP_RANDOM_DELAY,4));
+                        break;
+                    case 3:
+                        add(new LedData(OP_RANDOM_DELAY,5));
+                        break;
+                    case 4:
+                        add(new LedData(OP_RANDOM_DELAY,6));
+                        break;
                 }
                 add(new LedData(OP_END,0));
                 break;
             case 2:
                 ledDatas.clear();
+                add(new LedData(0, 0));
+                add(new LedData(OP_NOP, startTime));
                 add(new LedData(OP_START, 0));
-                add(new LedData(0,100));
                 add(new LedData(191,0));
-                if (isRandom) {
-                    add(new LedData(OP_RANDOM_DELAY,3));
+                add(new LedData(0,40*(patternTime + 1)));
+                switch (randomTime) {
+                    case 0:
+                        break;
+                    case 1:
+                        add(new LedData(OP_RANDOM_DELAY,2));
+                        break;
+                    case 2:
+                        add(new LedData(OP_RANDOM_DELAY,4));
+                        break;
+                    case 3:
+                        add(new LedData(OP_RANDOM_DELAY,5));
+                        break;
+                    case 4:
+                        add(new LedData(OP_RANDOM_DELAY,6));
+                        break;
                 }
                 add(new LedData(OP_END,0));
                 break;
             case 3:
+                int patternTime3 = 2*(patternTime + 1);
                 ledDatas.clear();
+                add(new LedData(0, 0));
+                add(new LedData(OP_NOP, startTime));
                 add(new LedData(OP_START, 0));
-                add(new LedData(0,5));
-                add(new LedData(20,5));
-                add(new LedData(35,5));
-                add(new LedData(50,5));
-                add(new LedData(75,5));
-                add(new LedData(100,5));
-                add(new LedData(130,5));
-                add(new LedData(160,5));
-                add(new LedData(191,5));
-                add(new LedData(160,5));
-                add(new LedData(130,5));
-                add(new LedData(100,5));
-                add(new LedData(75,5));
-                add(new LedData(50,5));
-                add(new LedData(35,5));
-                add(new LedData(20,5));
-                add(new LedData(0,5));
-                if (isRandom) {
-                    add(new LedData(OP_RANDOM_DELAY,3));
+                add(new LedData(0,patternTime3));
+                add(new LedData(20,patternTime3));
+                add(new LedData(35,patternTime3));
+                add(new LedData(50,patternTime3));
+                add(new LedData(75,patternTime3));
+                add(new LedData(100,patternTime3));
+                add(new LedData(130,patternTime3));
+                add(new LedData(160,patternTime3));
+                add(new LedData(191,patternTime3));
+                add(new LedData(160,patternTime3));
+                add(new LedData(130,patternTime3));
+                add(new LedData(100,patternTime3));
+                add(new LedData(75,patternTime3));
+                add(new LedData(50,patternTime3));
+                add(new LedData(35,patternTime3));
+                add(new LedData(20,patternTime3));
+                add(new LedData(0,patternTime3));
+                switch (randomTime) {
+                    case 0:
+                        break;
+                    case 1:
+                        add(new LedData(OP_RANDOM_DELAY,2));
+                        break;
+                    case 2:
+                        add(new LedData(OP_RANDOM_DELAY,4));
+                        break;
+                    case 3:
+                        add(new LedData(OP_RANDOM_DELAY,5));
+                        break;
+                    case 4:
+                        add(new LedData(OP_RANDOM_DELAY,6));
+                        break;
                 }
                 add(new LedData(OP_END,0));
                 break;
             case 4:
                 ledDatas.clear();
+                add(new LedData(0, 0));
+                add(new LedData(OP_NOP, startTime));
                 add(new LedData(OP_START, 0));
                 add(new LedData(OP_RANDOM_VAL,252));
+                switch (patternTime) {
+                    case 0:
+                        break;
+                    case 1:
+                        add(new LedData(OP_NOP, patternTime));
+                        break;
+                    case 2:
+                        add(new LedData(OP_NOP, patternTime));
+                        break;
+                    case 3:
+                        add(new LedData(OP_NOP, patternTime));
+                        break;
+                    case 4:
+                        add(new LedData(OP_NOP, patternTime));
+                        break;
+                }
+                switch (randomTime) {
+                    case 0:
+                        break;
+                    case 1:
+                        add(new LedData(OP_RANDOM_DELAY,2));
+                        break;
+                    case 2:
+                        add(new LedData(OP_RANDOM_DELAY,4));
+                        break;
+                    case 3:
+                        add(new LedData(OP_RANDOM_DELAY,5));
+                        break;
+                    case 4:
+                        add(new LedData(OP_RANDOM_DELAY,6));
+                        break;
+                }
                 add(new LedData(OP_END,0));
                 break;
             case 5:
+                int patternTime5 = 30*(patternTime + 1);
+                int patternNop5 = 20*(patternTime + 1);
+                if (rgbPer == 0) {
+                    ledDatas.clear();
+                    add(new LedData(OP_HEAD_PATTERN, rgbNum, DEFINED_PATTERN, effect));
+                    add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                    add(new LedData(OP_HEAD_START_DELAY, startTime));
+                    add(new LedData(OP_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 191));   // 빨강
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,191));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,191));    // 주황
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,191));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,191));    // 노랑
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,0));     // 초록
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,0));    // 파랑
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,56));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,56));     // 남색
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,96));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,96));     // 보라
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,191));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    switch (randomTime) {
+                        case 0:
+                            break;
+                        case 1:
+                            add(new LedData(OP_RANDOM_DELAY,2));
+                            break;
+                        case 2:
+                            add(new LedData(OP_RANDOM_DELAY,4));
+                            break;
+                        case 3:
+                            add(new LedData(OP_RANDOM_DELAY,5));
+                            break;
+                        case 4:
+                            add(new LedData(OP_RANDOM_DELAY,6));
+                            break;
+                    }
+                    add(new LedData(OP_END,0));
+                } else if (rgbPer == 1){
+                    ledDatas.clear();
+                    add(new LedData(OP_HEAD_PATTERN, rgbNum, DEFINED_PATTERN, effect));
+                    add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                    add(new LedData(OP_HEAD_START_DELAY, startTime));
+                    add(new LedData(OP_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));   // 빨강
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,105));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,105));    // 주황
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,191));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,191));    // 노랑
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,96));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,96));     // 초록
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,0));    // 파랑
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,0));     // 남색
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,0));     // 보라
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    switch (randomTime) {
+                        case 0:
+                            break;
+                        case 1:
+                            add(new LedData(OP_RANDOM_DELAY,2));
+                            break;
+                        case 2:
+                            add(new LedData(OP_RANDOM_DELAY,4));
+                            break;
+                        case 3:
+                            add(new LedData(OP_RANDOM_DELAY,5));
+                            break;
+                        case 4:
+                            add(new LedData(OP_RANDOM_DELAY,6));
+                            break;
+                    }
+                    add(new LedData(OP_END,0));
+                } else {
+                    ledDatas.clear();
+                    add(new LedData(OP_HEAD_PATTERN, rgbNum, DEFINED_PATTERN, effect));
+                    add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                    add(new LedData(OP_HEAD_START_DELAY, startTime));
+                    add(new LedData(OP_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));   // 빨강
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,0));    // 주황
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,0));    // 노랑
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,0));     // 초록
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,191));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,191));    // 파랑
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,97));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,97));     // 남색
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,96));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,96));     // 보라
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
+                    add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    switch (randomTime) {
+                        case 0:
+                            break;
+                        case 1:
+                            add(new LedData(OP_RANDOM_DELAY,2));
+                            break;
+                        case 2:
+                            add(new LedData(OP_RANDOM_DELAY,4));
+                            break;
+                        case 3:
+                            add(new LedData(OP_RANDOM_DELAY,5));
+                            break;
+                        case 4:
+                            add(new LedData(OP_RANDOM_DELAY,6));
+                            break;
+                    }
+                    add(new LedData(OP_END,0));
+                }
+                break;
+            case 6:
+                int patternTime6 = 7+(patternTime*2);
+                int patternGap6 = 2*(patternTime + 1);
+                if (rgbPer == 0) {
+                    ledDatas.clear();
+                    add(new LedData(OP_HEAD_PATTERN, rgbNum, DEFINED_PATTERN, effect));
+                    add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                    add(new LedData(OP_HEAD_START_DELAY, startTime));
+                    add(new LedData(OP_START,0));
+                    add(new LedData(OP_SIN_SHIFT,0x9F));
+                    add(new LedData(OP_SIN_COUNT,0xFF));
+                    add(new LedData(OP_SIN_START,patternTime6));
+                    add(new LedData(OP_END,0));
+                } else if (rgbPer == 1) {
+                    ledDatas.clear();
+                    add(new LedData(OP_HEAD_PATTERN, rgbNum, DEFINED_PATTERN, effect));
+                    add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                    add(new LedData(OP_HEAD_START_DELAY, startTime));
+                    add(new LedData(OP_START,0));
+                    add(new LedData(OP_SIN_SHIFT,0x9F));
+                    add(new LedData(OP_SIN_COUNT,0xFF));
+                    add(new LedData(OP_SIN_START,patternTime6 + patternGap6));
+                    add(new LedData(OP_END,0));
+                } else {
+                    ledDatas.clear();
+                    add(new LedData(OP_HEAD_PATTERN, rgbNum, DEFINED_PATTERN, effect));
+                    add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                    add(new LedData(OP_HEAD_START_DELAY, startTime));
+                    add(new LedData(OP_START,0));
+                    add(new LedData(OP_SIN_SHIFT,0x9F));
+                    add(new LedData(OP_SIN_COUNT,0xFF));
+                    add(new LedData(OP_SIN_START,patternTime6 + patternGap6*2));
+                    add(new LedData(OP_END,0));
+                }
+                break;
+        }
+    }
+
+    public void setEffect(int effect, int patternTime, int randomTime, int startTime) {
+        switch (effect) {
+            case 0:
                 ledDatas.clear();
+                add(new LedData(0, 0));
+                add(new LedData(OP_NOP,startTime));
+                add(new LedData(OP_START,0));
+                add(new LedData(191, 0));
+                add(new LedData(OP_END, 0));
+                break;
+            case 1:
+                ledDatas.clear();
+                add(new LedData(0, 0));
+                add(new LedData(OP_NOP, startTime));
                 add(new LedData(OP_START, 0));
-                add(new LedData(OP_SOUND_VAL, 0));
+                switch (patternTime) {
+                    case 0:
+                        add(new LedData(191,30));
+                        add(new LedData(0,18));
+                        break;
+                    case 1:
+                        add(new LedData(191,30));
+                        add(new LedData(0,48));
+                        break;
+                    case 2:
+                        add(new LedData(191,50));
+                        add(new LedData(0,48));
+                        break;
+                    case 3:
+                        add(new LedData(191,50));
+                        add(new LedData(0,68));
+                        break;
+                    case 4:
+                        add(new LedData(191,50));
+                        add(new LedData(0,88));
+                        break;
+                }
+                switch (randomTime) {
+                    case 0:
+                        break;
+                    case 1:
+                        add(new LedData(OP_RANDOM_DELAY,2));
+                        break;
+                    case 2:
+                        add(new LedData(OP_RANDOM_DELAY,4));
+                        break;
+                    case 3:
+                        add(new LedData(OP_RANDOM_DELAY,5));
+                        break;
+                    case 4:
+                        add(new LedData(OP_RANDOM_DELAY,6));
+                        break;
+                }
                 add(new LedData(OP_END,0));
                 break;
+            case 2:
+                ledDatas.clear();
+                add(new LedData(0, 0));
+                add(new LedData(OP_NOP, startTime));
+                add(new LedData(OP_START, 0));
+                add(new LedData(191,0));
+                add(new LedData(0,40*(patternTime + 1)));
+                switch (randomTime) {
+                    case 0:
+                        break;
+                    case 1:
+                        add(new LedData(OP_RANDOM_DELAY,2));
+                        break;
+                    case 2:
+                        add(new LedData(OP_RANDOM_DELAY,4));
+                        break;
+                    case 3:
+                        add(new LedData(OP_RANDOM_DELAY,5));
+                        break;
+                    case 4:
+                        add(new LedData(OP_RANDOM_DELAY,6));
+                        break;
+                }
+                add(new LedData(OP_END,0));
+                break;
+            case 3:
+                int patternTime3 = 2*(patternTime + 1);
+                ledDatas.clear();
+                add(new LedData(0, 0));
+                add(new LedData(OP_NOP, startTime));
+                add(new LedData(OP_START, 0));
+                add(new LedData(0,patternTime3));
+                add(new LedData(20,patternTime3));
+                add(new LedData(35,patternTime3));
+                add(new LedData(50,patternTime3));
+                add(new LedData(75,patternTime3));
+                add(new LedData(100,patternTime3));
+                add(new LedData(130,patternTime3));
+                add(new LedData(160,patternTime3));
+                add(new LedData(191,patternTime3));
+                add(new LedData(160,patternTime3));
+                add(new LedData(130,patternTime3));
+                add(new LedData(100,patternTime3));
+                add(new LedData(75,patternTime3));
+                add(new LedData(50,patternTime3));
+                add(new LedData(35,patternTime3));
+                add(new LedData(20,patternTime3));
+                add(new LedData(0,patternTime3));
+                switch (randomTime) {
+                    case 0:
+                        break;
+                    case 1:
+                        add(new LedData(OP_RANDOM_DELAY,2));
+                        break;
+                    case 2:
+                        add(new LedData(OP_RANDOM_DELAY,4));
+                        break;
+                    case 3:
+                        add(new LedData(OP_RANDOM_DELAY,5));
+                        break;
+                    case 4:
+                        add(new LedData(OP_RANDOM_DELAY,6));
+                        break;
+                }
+                add(new LedData(OP_END,0));
+                break;
+            case 4:
+                ledDatas.clear();
+                add(new LedData(0, 0));
+                add(new LedData(OP_NOP, startTime));
+                add(new LedData(OP_START, 0));
+                add(new LedData(OP_RANDOM_VAL,252));
+                switch (patternTime) {
+                    case 0:
+                        break;
+                    case 1:
+                        add(new LedData(OP_NOP, patternTime));
+                        break;
+                    case 2:
+                        add(new LedData(OP_NOP, patternTime));
+                        break;
+                    case 3:
+                        add(new LedData(OP_NOP, patternTime));
+                        break;
+                    case 4:
+                        add(new LedData(OP_NOP, patternTime));
+                        break;
+                }
+                switch (randomTime) {
+                    case 0:
+                        break;
+                    case 1:
+                        add(new LedData(OP_RANDOM_DELAY,2));
+                        break;
+                    case 2:
+                        add(new LedData(OP_RANDOM_DELAY,4));
+                        break;
+                    case 3:
+                        add(new LedData(OP_RANDOM_DELAY,5));
+                        break;
+                    case 4:
+                        add(new LedData(OP_RANDOM_DELAY,6));
+                        break;
+                }
+                add(new LedData(OP_END,0));
+                break;
+
         }
     }
 

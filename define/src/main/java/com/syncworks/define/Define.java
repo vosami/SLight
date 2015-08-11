@@ -97,6 +97,10 @@ public class Define {
     public final static int OP_CALC_VAR_A =                 0xD5;
     public final static int OP_CALC_VAR_B =                 0xD6;
     public final static int OP_CALC_VAR_C =                 0xD7;
+
+    public final static int OP_SIN_SHIFT =                  0xDA;
+    public final static int OP_SIN_COUNT =                  0xDB;
+    public final static int OP_SIN_START =                  0xDC;
     //
     public final static int OP_PUT_MSP =                    0xE0;
     public final static int OP_GET_MSP =                    0xE1;
@@ -106,6 +110,7 @@ public class Define {
     public final static int OP_TRANS_BRIGHT_START =         0xEA;
     public final static int OP_TRANS_BRIGHT_STOP =          0xEB;
     public final static int OP_TRANS_BRIGHT_COUNT =         0xEC;
+    public final static int OP_TRANS_START =                0xED;
 
 	// 반복문 시작 - 명령어(1Byte) + 반복횟수(8bit)
 	public final static int OP_FOR_START = 					0xF0;

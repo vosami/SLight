@@ -204,6 +204,8 @@
     <string name="easy_effect_rgb_sin">정현파형</string>
     <string name="easy_effect_pattern_sound">소리효과</string>
 
+    <string name="easy_effect_not_selected">선택된 LED가 없습니다.</string>
+
     <string name="easy_effect_option_start_time">시작시간</string>
     <string name="easy_effect_option_pattern_time">효과시간</string>
     <string name="easy_effect_option_random_time">랜덤시간</string>

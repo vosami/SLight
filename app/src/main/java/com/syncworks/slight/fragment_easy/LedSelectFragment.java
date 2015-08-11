@@ -142,7 +142,8 @@ public class LedSelectFragment extends Fragment {
             R.drawable.ic_pattern_flash,
             R.drawable.ic_pattern_up_down,
             R.drawable.ic_pattern_torch,
-            R.drawable.ic_pattern_torch
+            R.drawable.ic_pattern_rainbow,
+            R.drawable.ic_pattern_sin
     };
 
     private void displayBtn() {

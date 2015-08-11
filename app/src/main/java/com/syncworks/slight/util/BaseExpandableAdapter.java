@@ -9,9 +9,11 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.syncworks.define.Logger;
 import com.syncworks.slight.R;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
     private ChildHolder childHolder = null;
     private Context context = null;
     private int lastSelectGroup = 0;
+    private BaseExpandableInterface listener = null;
 
     public BaseExpandableAdapter(Context c, ArrayList<EffectListData> groupList,
                                  ArrayList<EffectOptionData> childList){
@@ -41,6 +44,39 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
             this.childList.add(tempOption);
         }
         this.context = c;
+    }
+
+    public void setOnExpandableListener(BaseExpandableInterface listener) {
+        this.listener = listener;
+    }
+
+    private void doStartTime(int curGroup, int startTime) {
+        if (listener != null) {
+            listener.onStartTime(curGroup, startTime);
+        }
+    }
+
+    private void doEffectTime(int curGroup, int effectTime) {
+        if (listener != null) {
+            listener.onEffectTime(curGroup, effectTime);
+        }
+    }
+
+    private void doRandomTime(int curGroup, int randomTime) {
+        if (listener != null) {
+            listener.onRandomTime(curGroup, randomTime);
+        }
+    }
+
+    public void setStartTime(int group, int startTime) {
+        this.childList.get(group).get(0).timeStartDelay = startTime;
+        Logger.d(this,"setStartTime",startTime);
+    }
+    public void setEffectTime(int group, int effectTime) {
+        this.childList.get(group).get(0).timeEffectDelay = effectTime;
+    }
+    public void setRandomTime(int group, int randomTime) {
+        this.childList.get(group).get(0).timeRandomDelay = randomTime;
     }
 
     // 그룹 포지션을 반환한다.
@@ -94,30 +130,10 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
         } else {
             viewHolder.ll_background.setBackgroundColor(Color.rgb(0xFF,0xFF,0xFF));
         }
-        viewHolder.iv_pattern.setImageDrawable(context.getResources().getDrawable(groupList.get(groupPosition).imgId));
-        /*switch (groupPosition) {
-            case 0:
-                viewHolder.iv_pattern.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pattern_always));
-                break;
-            case 1:
-                viewHolder.iv_pattern.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pattern_pulse));
-                break;
-            case 2:
-                viewHolder.iv_pattern.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pattern_flash));
-                break;
-            case 3:
-                viewHolder.iv_pattern.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pattern_up_down));
-                break;
-            case 4:
-                viewHolder.iv_pattern.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pattern_torch));
-                break;
-            case 5:
-                viewHolder.iv_pattern.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pattern_always));
-                break;
-            case 6:
-                viewHolder.iv_pattern.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pattern_always));
-                break;
-        }*/
+        int imgId = groupList.get(groupPosition).imgId;
+        if (imgId != 0) {
+            viewHolder.iv_pattern.setImageDrawable(context.getResources().getDrawable(groupList.get(groupPosition).imgId));
+        }
 
         viewHolder.tv_groupName.setText(getGroup(groupPosition));
 
@@ -155,42 +171,91 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
             childHolder.btnStartTime = (Button) v.findViewById(R.id.btn_start_time);
             childHolder.btnPatternTime = (Button) v.findViewById(R.id.btn_pattern_time);
             childHolder.btnRandomTime = (Button) v.findViewById(R.id.btn_random_time);
+            childHolder.llStartTime = (LinearLayout) v.findViewById(R.id.ll_start_time);
+            childHolder.llEffectTime = (LinearLayout) v.findViewById(R.id.ll_effect_time);
+            childHolder.llRandomTime = (LinearLayout) v.findViewById(R.id.ll_random_time);
+            childHolder.pbStartTime = (ProgressBar) v.findViewById(R.id.progressbar_start_time);
+            childHolder.stepEffectTime = new View[5];
+            childHolder.stepEffectTime[0] = v.findViewById(R.id.effect_step_0);
+            childHolder.stepEffectTime[1] = v.findViewById(R.id.effect_step_1);
+            childHolder.stepEffectTime[2] = v.findViewById(R.id.effect_step_2);
+            childHolder.stepEffectTime[3] = v.findViewById(R.id.effect_step_3);
+            childHolder.stepEffectTime[4] = v.findViewById(R.id.effect_step_4);
+            childHolder.stepRandomTime = new View[5];
+            childHolder.stepRandomTime[0] = v.findViewById(R.id.random_step_0);
+            childHolder.stepRandomTime[1] = v.findViewById(R.id.random_step_1);
+            childHolder.stepRandomTime[2] = v.findViewById(R.id.random_step_2);
+            childHolder.stepRandomTime[3] = v.findViewById(R.id.random_step_3);
+            childHolder.stepRandomTime[4] = v.findViewById(R.id.random_step_4);
             v.setTag(childHolder);
         }else{
             childHolder = (ChildHolder)v.getTag();
         }
         if (childList.get(groupPosition).get(0).isShowStartDelay) {
             childHolder.btnStartTime.setVisibility(View.VISIBLE);
-            int timeStartDelay = childList.get(groupPosition).get(0).timeStartDelay;
+            childHolder.llStartTime.setVisibility(View.VISIBLE);
+            childHolder.pbStartTime.setProgress(childList.get(groupPosition).get(0).timeStartDelay);
         } else {
             childHolder.btnStartTime.setVisibility(View.INVISIBLE);
+            childHolder.llStartTime.setVisibility(View.INVISIBLE);
         }
         if (childList.get(groupPosition).get(0).isShowEffectDelay) {
             childHolder.btnPatternTime.setVisibility(View.VISIBLE);
+            childHolder.llEffectTime.setVisibility(View.VISIBLE);
+            int effectDelay = childList.get(groupPosition).get(0).timeEffectDelay;
+            for (int i=0;i < 5;i++) {
+                if (effectDelay >= i) {
+                    childHolder.stepEffectTime[i].setVisibility(View.VISIBLE);
+                } else {
+                    childHolder.stepEffectTime[i].setVisibility(View.INVISIBLE);
+                }
+            }
         } else {
             childHolder.btnPatternTime.setVisibility(View.INVISIBLE);
+            childHolder.llEffectTime.setVisibility(View.INVISIBLE);
         }
         if (childList.get(groupPosition).get(0).isShowRandomDelay) {
             childHolder.btnRandomTime.setVisibility(View.VISIBLE);
+            childHolder.llRandomTime.setVisibility(View.VISIBLE);
+            int randomDelay = childList.get(groupPosition).get(0).timeRandomDelay;
+            for (int i=0;i < 5;i++) {
+                if (randomDelay >= i) {
+                    childHolder.stepRandomTime[i].setVisibility(View.VISIBLE);
+                } else {
+                    childHolder.stepRandomTime[i].setVisibility(View.INVISIBLE);
+                }
+            }
         } else {
             childHolder.btnRandomTime.setVisibility(View.INVISIBLE);
+            childHolder.llRandomTime.setVisibility(View.INVISIBLE);
         }
         childHolder.btnStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Button StartTime" + curGroupPosition + " is clicked !", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "효과" + curGroupPosition + " 가 선택되었습니다.", Toast.LENGTH_SHORT).show();
+                doStartTime(curGroupPosition, childList.get(curGroupPosition).get(0).timeStartDelay);
             }
         });
         childHolder.btnPatternTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Button PatternTime" + curGroupPosition + " is clicked !", Toast.LENGTH_SHORT).show();
+                childList.get(curGroupPosition).get(0).timeEffectDelay++;
+                if (childList.get(curGroupPosition).get(0).timeEffectDelay > 4) {
+                    childList.get(curGroupPosition).get(0).timeEffectDelay = 0;
+                }
+                doEffectTime(curGroupPosition, childList.get(curGroupPosition).get(0).timeEffectDelay);
+                Toast.makeText(context, "효과시간" + (childList.get(curGroupPosition).get(0).timeEffectDelay+1) + " 이 선택되었습니다.", Toast.LENGTH_SHORT).show();
             }
         });
         childHolder.btnRandomTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Button RandomTime " + curGroupPosition + " is clicked !", Toast.LENGTH_SHORT).show();
+                childList.get(curGroupPosition).get(0).timeRandomDelay++;
+                if (childList.get(curGroupPosition).get(0).timeRandomDelay > 4) {
+                    childList.get(curGroupPosition).get(0).timeRandomDelay = 0;
+                }
+                doRandomTime(curGroupPosition, childList.get(curGroupPosition).get(0).timeRandomDelay);
+                Toast.makeText(context, "랜덤시간" + (childList.get(curGroupPosition).get(0).timeEffectDelay + 1) + " 이 선택되었습니다.", Toast.LENGTH_SHORT).show();
             }
         });
         //childHolder.btnStartTime.setText(getChild(groupPosition, childPosition));
@@ -215,6 +280,12 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
         public Button btnStartTime;
         public Button btnPatternTime;
         public Button btnRandomTime;
+        public LinearLayout llStartTime;
+        public LinearLayout llEffectTime;
+        public LinearLayout llRandomTime;
+        public ProgressBar pbStartTime;
+        public View stepEffectTime[];
+        public View stepRandomTime[];
     }
 
 }
