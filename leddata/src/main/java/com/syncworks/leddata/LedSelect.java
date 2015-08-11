@@ -22,6 +22,8 @@ public class LedSelect implements Serializable{
     private SelectType[] led = new SelectType[NUMBER_OF_SINGLE_LED];
 
 
+
+
     public LedSelect() {
         init();
     }

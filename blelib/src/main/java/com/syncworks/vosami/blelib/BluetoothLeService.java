@@ -362,28 +362,35 @@ public class BluetoothLeService extends Service {
 
     // 송수신 Profile 을 확인합니다.
     private void getGattService() {
-        // LEC 서비스를 지원하지 않는다면 중지
+        boolean isSuccess = false;
+
         BluetoothGattService gattService = mBluetoothGatt.getService(UUID_LEC_SERVICE);
         if (gattService == null) {
             Log.d(TAG,"getGattService" + "NULL");
             return;
         }
-
         charLecTx = gattService.getCharacteristic(UUID_LEC_TX);
         charLecRx = gattService.getCharacteristic(UUID_LEC_RX);
         charLecDevName = gattService.getCharacteristic(UUID_LEC_DEV_NAME);
         charLecDevVer = gattService.getCharacteristic(UUID_LEC_VERSION);
         charLecTxPower = gattService.getCharacteristic(UUID_LEC_TX_POWER);
-
-		setCharacteristicNotification(charLecRx, true);
-		readCharacteristic(charLecRx);
-        Log.d(TAG, "getGattService : " + "Success");
-        // 연결 상태로 설정
-        mConnectionState = STATE_CONNECTED;
-        if (bleNotifier !=null) {
-            bleNotifier.bleConnected();
+        if (charLecTx != null && charLecRx != null && charLecDevName != null && charLecDevVer != null) {
+            isSuccess = true;
         }
-        startTxDataThread();
+
+        if (isSuccess) {
+            setCharacteristicNotification(charLecRx, true);
+            readCharacteristic(charLecRx);
+            Log.d(TAG, "getGattService : " + "Success");
+            // 연결 상태로 설정
+            mConnectionState = STATE_CONNECTED;
+            if (bleNotifier != null) {
+                bleNotifier.bleConnected();
+            }
+            startTxDataThread();
+        } else {
+            disconnect();
+        }
     }
     public boolean isAcquireServices() {
         if (charLecTx != null && charLecRx != null && charLecDevName != null && charLecDevVer != null) {

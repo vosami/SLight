@@ -11,15 +11,17 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.RadioButton;
 import android.widget.ToggleButton;
 
 import com.syncworks.define.Define;
 import com.syncworks.define.Logger;
+import com.syncworks.leddata.LedOptions;
 import com.syncworks.leddata.LedSelect;
 import com.syncworks.slight.R;
 import com.syncworks.slight.dialog.DialogStartTime;
 import com.syncworks.slight.util.BaseExpandableAdapter;
+import com.syncworks.slight.util.EffectListData;
+import com.syncworks.slight.util.EffectOptionData;
 import com.syncworks.slightpref.SLightPref;
 
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public class EffectFragment extends Fragment {
     private DialogStartTime dialogStartTime = null;
 
     private LedSelect ledSelect;
+    private LedOptions ledOption[];
     private OnEasyFragmentListener mListener;
 
     private int effectNum = 0;
@@ -39,10 +42,10 @@ public class EffectFragment extends Fragment {
     private Button btnRgb[] = new Button[Define.NUMBER_OF_COLOR_LED];
     private Button btnLed[] = new Button[Define.NUMBER_OF_SINGLE_LED];
 
-    private RadioButton rbPattern[] = new RadioButton[6];
+    /*private RadioButton rbPattern[] = new RadioButton[6];
     private Button btnSetStartTime;
     private ToggleButton tbDelay[] = new ToggleButton[3];
-    private ToggleButton tbRandom[] = new ToggleButton[2];
+    private ToggleButton tbRandom[] = new ToggleButton[2];*/
 
     private int patternTime[] = new int[7];
     private int randomTime[] = new int[7];
@@ -50,9 +53,9 @@ public class EffectFragment extends Fragment {
 
 
     private ExpandableListView mListView;
-    private ArrayList<String> mGroupList = null;
-    private ArrayList<ArrayList<String>> mChildList = null;
-    private ArrayList<String> mChildListContent = null;
+    private ArrayList<EffectListData> mGroupList = null;
+    private ArrayList<EffectOptionData> mChildList = null;
+    private BaseExpandableAdapter expandableAdapter = null;
 
     /**
      * Use this factory method to create a new instance of
@@ -70,6 +73,10 @@ public class EffectFragment extends Fragment {
 
     public void setLedSelect(LedSelect ls) {
         this.ledSelect = ls;
+    }
+
+    public void setLedOption(LedOptions option[]) {
+        this.ledOption = option;
     }
 
     public void init() {
@@ -166,27 +173,58 @@ public class EffectFragment extends Fragment {
         mListView = (ExpandableListView) view.findViewById(R.id.elv_effect);
         mGroupList = new ArrayList<>();
         mChildList = new ArrayList<>();
-        mChildListContent = new ArrayList<>();
+        EffectListData listData[] = new EffectListData[7];
+        for (int i=0;i<7;i++) {
+            listData[i] = new EffectListData();
+            listData[i].init();
+        }
+        listData[0].effectName = getString(R.string.easy_effect_pattern_always);
+        listData[0].imgId = R.drawable.ic_pattern_always;
+        mGroupList.add(listData[0]);
+        listData[1].effectName = getString(R.string.easy_effect_pattern_pulse);
+        listData[1].imgId = R.drawable.ic_pattern_pulse;
+        mGroupList.add(listData[1]);
+        listData[2].effectName = getString(R.string.easy_effect_pattern_flash);
+        listData[2].imgId = R.drawable.ic_pattern_flash;
+        mGroupList.add(listData[2]);
+        listData[3].effectName = getString(R.string.easy_effect_pattern_updown);
+        listData[3].imgId = R.drawable.ic_pattern_up_down;
+        mGroupList.add(listData[3]);
+        listData[4].effectName = getString(R.string.easy_effect_pattern_torch);
+        listData[4].imgId = R.drawable.ic_pattern_torch;
+        mGroupList.add(listData[4]);
+        listData[5].effectName = getString(R.string.easy_effect_rgb_rainbow);
+        listData[5].imgId = R.drawable.ic_pattern_always;
+        mGroupList.add(listData[5]);
+        listData[6].effectName = getString(R.string.easy_effect_rgb_sin);
+        listData[6].imgId = R.drawable.ic_pattern_always;
+        mGroupList.add(listData[6]);
 
-        mGroupList.add(getString(R.string.easy_effect_pattern_always));
-        mGroupList.add(getString(R.string.easy_effect_pattern_pulse));
-        mGroupList.add(getString(R.string.easy_effect_pattern_flash));
-        mGroupList.add(getString(R.string.easy_effect_pattern_updown));
-        mGroupList.add(getString(R.string.easy_effect_pattern_torch));
-        mGroupList.add(getString(R.string.easy_effect_rgb_rainbow));
-        mGroupList.add(getString(R.string.easy_effect_rgb_sin));
+        EffectOptionData optionData[] = new EffectOptionData[7];
+        for (int i=0;i<7;i++) {
+            optionData[i] = new EffectOptionData();
+            optionData[i].isShowStartDelay = true;
+            if (i == 0) {
+                optionData[i].isShowEffectDelay = false;
+                optionData[i].isShowRandomDelay = false;
+            } else {
+                optionData[i].isShowEffectDelay = true;
+                optionData[i].isShowRandomDelay = true;
+            }
+            optionData[i].timeStartDelay = 0;
+            optionData[i].timeEffectDelay = 0;
+            optionData[i].timeRandomDelay = 0;
+        }
 
-        mChildListContent.add("1");
-
-        mChildList.add(mChildListContent);
-        mChildList.add(mChildListContent);
-        mChildList.add(mChildListContent);
-        mChildList.add(mChildListContent);
-        mChildList.add(mChildListContent);
-        mChildList.add(mChildListContent);
-        mChildList.add(mChildListContent);
-
-        mListView.setAdapter(new BaseExpandableAdapter(getActivity(), mGroupList, mChildList));
+        mChildList.add(optionData[0]);
+        mChildList.add(optionData[1]);
+        mChildList.add(optionData[2]);
+        mChildList.add(optionData[3]);
+        mChildList.add(optionData[4]);
+        mChildList.add(optionData[5]);
+        mChildList.add(optionData[6]);
+        expandableAdapter = new BaseExpandableAdapter(getActivity(),mGroupList,mChildList);
+        mListView.setAdapter(expandableAdapter);
 
         mListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
@@ -207,6 +245,35 @@ public class EffectFragment extends Fragment {
         });
         // Inflate the layout for this fragment
         return view;
+    }
+
+    private final static int LED_NOT_SELECTED = 0;
+    private final static int LED_SELECTED = 1;
+    private final static int LED_SINGLE_ONLY_SELECTED = 2;
+    private final static int LED_RGB_ONLY_SELECTED = 3;
+
+    private int getLedSelected() {
+        int ledCount = 0;
+        int rgbCount = 0;
+        for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
+            if (ledSelect.getRgb(i) == LedSelect.SelectType.SELECTED) {
+                rgbCount++;
+            }
+        }
+        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+            if (ledSelect.getLed(i) == LedSelect.SelectType.SELECTED) {
+                ledCount++;
+            }
+        }
+        if (ledCount == 0 && rgbCount == 0) {
+            return LED_NOT_SELECTED;
+        } else if (ledCount != 0 && rgbCount == 0) {
+            return LED_SINGLE_ONLY_SELECTED;
+        } else if (ledCount == 0) {
+            return LED_RGB_ONLY_SELECTED;
+        } else {
+            return LED_SELECTED;
+        }
     }
 
     @Override
@@ -305,18 +372,6 @@ public class EffectFragment extends Fragment {
         }
     };
 
-    // 라디오 버튼 클릭
-    private void rbClick(int pattern) {
-        effectNum = pattern;
-        for (int i=0;i<6;i++) {
-            if (i == pattern) {
-//                rbPattern[i].setChecked(true);
-                doPattern(i);
-            } else {
-//                rbPattern[i].setChecked(false);
-            }
-        }
-    }
 
     private void showRgb(int i) {
         btnLed[i*3].setVisibility(View.GONE);
@@ -353,10 +408,10 @@ public class EffectFragment extends Fragment {
                     showLed(i);
                 }
             }
+
             // 리스트뷰 Expand 초기화
             mListView.expandGroup(effectNum);
-            // 라디오 버튼 초기화
-            //rbClick(effectNum);
+
         }
     }
 

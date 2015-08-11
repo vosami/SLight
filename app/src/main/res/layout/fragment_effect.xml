@@ -119,17 +119,22 @@
             android:layout_weight="1"
             android:text="@string/led9_str"/>
     </LinearLayout>
-    <ExpandableListView
-        android:id="@+id/elv_effect"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/easy_ll_btn_group"
         android:layout_alignParentBottom="true"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/background_view_rounded_single"
-        android:groupIndicator="@null"/>
+        android:layout_margin="5dp"
+        android:background="@drawable/background_view_rounded_single">
+        <ExpandableListView
+            android:id="@+id/elv_effect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_margin="10dp"/>
+    </LinearLayout>
+
     <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

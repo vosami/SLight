@@ -1168,6 +1168,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         fragment3rd.setLedSelect(this.ledDataSeries.ledSelect);
         fragment3rd.setLedOptions(this.ledDataSeries.ledOptions);
         fragment4th.setLedSelect(this.ledDataSeries.ledSelect);
+        fragment4th.setLedOption(this.ledDataSeries.ledOptions);
         fragment5th.setLecHeader(this.lecHeader);
 
         fragmentManager = getFragmentManager();
@@ -1380,14 +1381,15 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     }
 
     @Override
-    public void onEffect(int effect, boolean isDelayLong, boolean isRandom, int startTime) {
+    public void onEffect(int effect, int isDelayLong, int isRandom, int startTime) {
 
         txData(TxDatas.formatSleep(false));
         // 분 이벤트 종료
         txData(TxDatas.formatMinuteTimerStart(false));
-        for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
+        /*for (int i=0;i<Define.NUMBER_OF_SINGLE_LED;i++) {
             if (ledDataSeries.ledSelect.getLed(i) == LedSelect.SelectType.SELECTED) {
                 ledDataSeries.ledOptions[i].setDelayStart(startTime);
+
                 if (isDelayLong) {
                     ledDataSeries.ledOptions[i].setRatioDuration(100);
                 } else {
@@ -1404,6 +1406,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 }
                 //txPattern(i, ledDataSeries.ledExeDatas[i].toByteArray(ledDataSeries.ledOptions[i]));
                 txData(TxDatas.formatInitCount());
+
             }
         }
         for (int i=0;i<Define.NUMBER_OF_COLOR_LED;i++) {
@@ -1449,7 +1452,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
 //                txPattern(i*3 + 2,ledDataSeries.ledExeDatas[i*3 + 2].toByteArray(ledDataSeries.ledOptions[i*3 + 2]));
                 txData(TxDatas.formatInitCount());
             }
-        }
+        }*/
         txData(TxDatas.formatSleep(true));
     }
 

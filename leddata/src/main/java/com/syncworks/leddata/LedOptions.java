@@ -16,10 +16,11 @@ public class LedOptions implements Serializable{
     private int delayStart = 0;                                 // 시작 지연 설정
     private int delayEnd = 0;                                   // 마지막 지연 설정
     private int delayMiddle = 0;                                // 중간 지연 설정
-    private boolean isApplyDelayStart = false;                  // 시작 지연 적용 설정
-    private boolean isApplyDelayEnd = false;                    // 마지막 지연 적용 설정
-    private boolean isApplyDelayMiddle = false;                 // 중간 지연 적용 설정
-    private int idOfPattern = 0;                                // 적용 패턴 값
+    private int delayStartOption = 0;                           // 시작 지연 적용 설정
+    private int delayEndOption = 0;                             // 마지막 지연 적용 설정
+    private int delayMiddleOption = 0;                          // 중간 지연 적용 설정
+    private int patternDelayOption = 0;                         // 적용 패턴 값
+    private int randomDelayOption = 0;                          // 랜덤 지연 설정 옵션
 
     public LedOptions() {
         init();
@@ -31,11 +32,45 @@ public class LedOptions implements Serializable{
         delayStart = 0;
         delayEnd = 0;
         delayMiddle = 0;
-        isApplyDelayStart = false;
-        isApplyDelayEnd = false;
-        isApplyDelayMiddle = false;
-        idOfPattern = 0;
+        delayStartOption = 0;
+        delayEndOption = 0;
+        delayMiddleOption = 0;
+        patternDelayOption = 0;
+        randomDelayOption = 0;
     }
+    // 시작 지연 옵션 값 설정
+    public void setDelayStartOption(int delay) {
+        delayStartOption = delay;
+    }
+    // 시작 지연 옵션 값 읽어오기
+    public int getDelayStartOption() {
+        return delayStartOption;
+    }
+    // 패턴 딜레이 옵션 설정
+    public void addPatternDelayOption() {
+        if (patternDelayOption >= 4) {
+            patternDelayOption = 0;
+        } else {
+            patternDelayOption++;
+        }
+    }
+    // 패턴 딜레이 옵션 읽어오기
+    public int getPatternDelayOption() {
+        return patternDelayOption;
+    }
+    // 랜덤 지연 옵션 설정
+    public void addRandomDelayOption() {
+        if (randomDelayOption >= 4) {
+            randomDelayOption = 0;
+        } else {
+            randomDelayOption++;
+        }
+    }
+    // 랜덤 지연 옵션 읽어오기
+    public int getRandomDelayOption() {
+        return randomDelayOption;
+    }
+
     // 밝기 비율 설정
     public void setRatioBright(int ratio) {
         if (ratio >=0 && ratio<=MAX_BRIGHT_RATIO) {
@@ -66,18 +101,7 @@ public class LedOptions implements Serializable{
             this.delayMiddle = delay;
         }
     }
-    // 시작 지연 설정
-    public void applyDelayStart(boolean bool) {
-        isApplyDelayStart = bool;
-    }
-    // 종료 지연 설정
-    public void applyDelayEnd(boolean bool) {
-        isApplyDelayEnd = bool;
-    }
-    // 중간 지연 설정
-    public void applyDelayMiddle(boolean bool) {
-        isApplyDelayMiddle = bool;
-    }
+
     // 밝기 비율 읽기
     public int getRatioBright() {
         return this.ratioBright;
@@ -88,37 +112,15 @@ public class LedOptions implements Serializable{
     }
     // 시작 지연 읽기
     public int getDelayStart() {
-        if (isApplyDelayStart) {
-            return this.delayStart;
-        } else {
-            return 0;
-        }
+        return this.delayStart;
     }
     // 종료 지연 읽기
     public int getDelayEnd() {
-        if (isApplyDelayEnd) {
-            return this.delayEnd;
-        } else {
-            return 0;
-        }
+        return this.delayEnd;
     }
     // 중간 지연 읽기
     public int getDelayMiddle() {
-        if (isApplyDelayMiddle) {
-            return this.delayMiddle;
-        } else {
-            return 0;
-        }
-    }
-    //
-    public boolean isApplyDelayStart() {
-        return isApplyDelayStart;
+        return this.delayMiddle;
     }
 
-    public boolean isApplyDelayEnd() {
-        return isApplyDelayEnd;
-    }
-    public boolean isApplyDelayMiddle() {
-        return isApplyDelayMiddle;
-    }
 }

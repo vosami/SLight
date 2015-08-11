@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,26 +21,32 @@ import java.util.ArrayList;
  */
 public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 
-    private ArrayList<String> groupList = null;
-    private ArrayList<ArrayList<String>> childList = null;
+    private ArrayList<EffectListData> groupList = null;
+    private ArrayList<ArrayList<EffectOptionData>> childList = null;
     private LayoutInflater inflater = null;
     private ViewHolder viewHolder = null;
     private ChildHolder childHolder = null;
     private Context context = null;
+    private int lastSelectGroup = 0;
 
-    public BaseExpandableAdapter(Context c, ArrayList<String> groupList,
-                                 ArrayList<ArrayList<String>> childList){
+    public BaseExpandableAdapter(Context c, ArrayList<EffectListData> groupList,
+                                 ArrayList<EffectOptionData> childList){
         super();
         this.inflater = LayoutInflater.from(c);
         this.groupList = groupList;
-        this.childList = childList;
+        this.childList = new ArrayList<>();
+        for (int i=0;i<groupList.size();i++) {
+            ArrayList<EffectOptionData> tempOption = new ArrayList<>();
+            tempOption.add(childList.get(i));
+            this.childList.add(tempOption);
+        }
         this.context = c;
     }
 
     // 그룹 포지션을 반환한다.
     @Override
     public String getGroup(int groupPosition) {
-        return groupList.get(groupPosition);
+        return groupList.get(groupPosition).effectName;
     }
 
     // 그룹 사이즈를 반환한다.
@@ -67,19 +74,28 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
             viewHolder.tv_groupName = (TextView) v.findViewById(R.id.tv_group);
             viewHolder.iv_image = (ImageView) v.findViewById(R.id.iv_image);
             viewHolder.iv_pattern = (ImageView) v.findViewById(R.id.iv_pattern);
+            viewHolder.ll_background = (LinearLayout) v.findViewById(R.id.list_expandable_row_background);
             v.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder)v.getTag();
         }
-
+        if (isExpanded) {
+            lastSelectGroup = groupPosition;
+        }
         // 그룹을 펼칠때와 닫을때 아이콘을 변경해 준다.
-        if(isExpanded){
+        if(lastSelectGroup == groupPosition){
             viewHolder.iv_image.setBackgroundColor(Color.GREEN);
-        }else{
+        }else {
             viewHolder.iv_image.setBackgroundColor(Color.WHITE);
         }
-
-        switch (groupPosition) {
+        boolean isEven = (groupPosition % 2) == 0;
+        if (isEven) {
+            viewHolder.ll_background.setBackgroundColor(Color.rgb(0xFA,0xFA,0xFA));
+        } else {
+            viewHolder.ll_background.setBackgroundColor(Color.rgb(0xFF,0xFF,0xFF));
+        }
+        viewHolder.iv_pattern.setImageDrawable(context.getResources().getDrawable(groupList.get(groupPosition).imgId));
+        /*switch (groupPosition) {
             case 0:
                 viewHolder.iv_pattern.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pattern_always));
                 break;
@@ -101,7 +117,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
             case 6:
                 viewHolder.iv_pattern.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pattern_always));
                 break;
-        }
+        }*/
 
         viewHolder.tv_groupName.setText(getGroup(groupPosition));
 
@@ -111,7 +127,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
     // 차일드뷰를 반환한다.
     @Override
     public String getChild(int groupPosition, int childPosition) {
-        return childList.get(groupPosition).get(childPosition);
+        return null;//childList.get(groupPosition).get(childPosition);
     }
 
     // 차일드뷰 사이즈를 반환한다.
@@ -131,7 +147,6 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
-
         View v = convertView;
         curGroupPosition = groupPosition;
         if(v == null){
@@ -143,6 +158,22 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
             v.setTag(childHolder);
         }else{
             childHolder = (ChildHolder)v.getTag();
+        }
+        if (childList.get(groupPosition).get(0).isShowStartDelay) {
+            childHolder.btnStartTime.setVisibility(View.VISIBLE);
+            int timeStartDelay = childList.get(groupPosition).get(0).timeStartDelay;
+        } else {
+            childHolder.btnStartTime.setVisibility(View.INVISIBLE);
+        }
+        if (childList.get(groupPosition).get(0).isShowEffectDelay) {
+            childHolder.btnPatternTime.setVisibility(View.VISIBLE);
+        } else {
+            childHolder.btnPatternTime.setVisibility(View.INVISIBLE);
+        }
+        if (childList.get(groupPosition).get(0).isShowRandomDelay) {
+            childHolder.btnRandomTime.setVisibility(View.VISIBLE);
+        } else {
+            childHolder.btnRandomTime.setVisibility(View.INVISIBLE);
         }
         childHolder.btnStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,7 +208,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
         public ImageView iv_image;
         public ImageView iv_pattern;
         public TextView tv_groupName;
-        public TextView tv_childName;
+        public LinearLayout ll_background;
     }
 
     class ChildHolder {
