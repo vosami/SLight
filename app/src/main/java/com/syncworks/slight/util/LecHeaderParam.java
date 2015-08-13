@@ -39,9 +39,12 @@ public class LecHeaderParam {
         this.lecByte[32] = (byte)(offTime);
     }
 
+    // 오프타임 설정
     public int getOffTime() {
-        Logger.v(this,"getOffTime",lecByte[33],lecByte[32]);
-        return (lecByte[32]);
+        int retVal;
+        retVal = (int)(lecByte[32] & 0xFF);
+        Logger.v(this,"getOffTime",retVal);
+        return (retVal);
     }
 
     public int getSequenceRunTime(int order) {
