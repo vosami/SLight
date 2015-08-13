@@ -561,7 +561,7 @@ public class EffectFragment extends Fragment {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setContentView(R.layout.dialog_help_ble_set);
+        dialog.setContentView(R.layout.dialog_help_effect);
         dialog.setCanceledOnTouchOutside(true);
         //for dismissing anywhere you touch
         View masterView = dialog.findViewById(R.id.overlay_help);

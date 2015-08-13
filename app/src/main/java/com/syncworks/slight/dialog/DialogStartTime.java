@@ -74,7 +74,7 @@ public class DialogStartTime extends Dialog{
     }
 
     private void setSecondText(int progress) {
-        double sec = progress * 0.06;
+        double sec = progress * 0.05;
         sec = Math.round(sec*10d)/10d;
         String txt = Double.toString(sec) + getContext().getString(R.string.str_sec);
         tvTime.setText(txt);

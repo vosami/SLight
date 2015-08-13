@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by vosami on 2015-02-25.
+ * 블루투스 Device 어댑터
  */
 public class BleDeviceAdapter extends ArrayAdapter<BleDeviceData> {
     private List<BleDeviceData> _objects;
@@ -48,7 +49,7 @@ public class BleDeviceAdapter extends ArrayAdapter<BleDeviceData> {
 		tvDevAddr.setText(_objects.get(position).getAddr());
 		int mDevRssi = _objects.get(position).getRssi();
 		tvDevRssi.setText(Integer.toString(mDevRssi));
-		tvDevVersion.setText(_objects.get(position).getVersion());
+		tvDevVersion.setText("");
 		// 완성된 View 반환
         return v;
     }

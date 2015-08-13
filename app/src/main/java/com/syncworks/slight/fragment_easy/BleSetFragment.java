@@ -199,7 +199,7 @@ public class BleSetFragment extends Fragment {
     public void setTvCurrentDevice(String name, String addr, String version) {
         tvCurrentDeviceName.setText(name);
         tvCurrentDeviceAddress.setText(addr);
-        tvCurrentDeviceVersion.setText(version);
+        tvCurrentDeviceVersion.setText("");
         selDevName = name;
         selDevAddr = addr;
         selDevVersion = version;

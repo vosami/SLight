@@ -7,18 +7,19 @@
     <TextView
         android:id="@+id/dh1"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textColor="@color/White"
-        android:text="1. 스마트라이트의 동작 시간을 설정할 수 있습니다. \n동작 시간동안 사용자가 설정한 효과가 동작되며, 휴면중에는 설정한 효과가 동작하지 않습니다."/>
+        android:text="1. 스마트라이트의 저장소에 현재 효과를 저장합니다. \n세 저장소에 저장할 수 있습니다."/>
     <TextView
         android:id="@+id/dh2"
         android:layout_below="@id/dh1"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="30dp"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
@@ -27,19 +28,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/White"
-        android:text="2. 스마트라이트의 저장소에 현재 효과를 저장합니다. \n세 저장소에 저장할 수 있습니다."/>
+        android:text="2. 스마트라이트에는 저장소가 3개 있습니다. 각 저장소에 저장되어 있는 효과를 실행할 수 있으며, 한가지 효과만 지속/순서대로 실행/무작위 실행으로 설정할 수 있습니다."/>
     <TextView
         android:id="@+id/dh3"
         android:layout_below="@id/dh2"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:textSize="18sp"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:textColor="@color/White"
-        android:text="3. 스마트라이트에는 저장소가 3개 있습니다. 기본 저장소인 'A 저장소' 가 실행되지만 무작위로 3개의 저장소가 실행되게 설정할 수 있습니다."/>
+        android:text="3. 스마트라이트의 동작 시간을 설정할 수 있습니다. \n동작 시간동안 사용자가 설정한 효과가 동작되며, 휴면중에는 설정한 효과가 동작하지 않습니다."/>
     <TextView
         android:layout_alignParentBottom="true"
         android:paddingStart="10dp"

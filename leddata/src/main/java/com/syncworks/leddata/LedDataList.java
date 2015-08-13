@@ -382,8 +382,8 @@ public class LedDataList implements List<LedData>, Serializable {
                 }
                 break;
             case 6:
-                int patternTime6 = 7+(patternTime*2);
-                int patternGap6 = 2*(patternTime + 1);
+                int patternTime6 = (5-patternTime) * 16;
+                int patternGap6 = 8*(patternTime + 1);
                 if (rgbPer == 0) {
                     ledDatas.clear();
                     add(new LedData(OP_HEAD_PATTERN, rgbNum, DEFINED_PATTERN, effect));

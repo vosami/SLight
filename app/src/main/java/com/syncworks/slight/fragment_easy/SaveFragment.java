@@ -183,7 +183,7 @@ public class SaveFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if (seekBar.getProgress() >= seekBar.getMax()) {
-                    mListener.onSleepTime(0xFFFF);
+                    mListener.onSleepTime(0xFF);
                 } else {
                     mListener.onSleepTime((seekBar.getProgress()+1)*10);
                 }
