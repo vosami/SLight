@@ -217,7 +217,7 @@
     <string name="easy_effect_btn_start_time">시작 시간 설정</string>
 
     <string name="easy_save_title_sleep">LED 자동 차단 시간 설정</string>
-    <string name="easy_save_cb_sleep">에너지 절약 동작 중 LED 체크(25초마다 차례대로)</string>
+    <string name="easy_save_cb_sleep">LED 차단 후 10분마다 각 1분씩 체크 동작</string>
     <string name="easy_save_btn_sleep">잠자기</string>
     <string name="easy_save_btn_wakeup">깨우기</string>
     <string name="easy_save_title_random">저장되어 있던 LED 효과 실행</string>
