@@ -200,6 +200,8 @@
     <string name="easy_effect_pattern_flash">번쩍이기</string>
     <string name="easy_effect_pattern_updown">오르내리</string>
     <string name="easy_effect_pattern_torch">횃불효과</string>
+    <string name="easy_effect_pattern_sin">정현파형</string>
+    <string name="easy_effect_pattern_laser">레이저파</string>
     <string name="easy_effect_rgb_rainbow">레인보우</string>
     <string name="easy_effect_rgb_sin">정현파형</string>
     <string name="easy_effect_pattern_sound">소리효과</string>

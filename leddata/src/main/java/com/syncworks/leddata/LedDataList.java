@@ -17,6 +17,15 @@ import static com.syncworks.define.Define.*;
  */
 public class LedDataList implements List<LedData>, Serializable {
 
+    private final static int EF_ALWAYS =    0; // 항상켜기
+    private final static int EF_PULSE =     1; // 깜박이기
+    private final static int EF_FLASH =     2; // 번쩍이기
+    private final static int EF_UP_DOWN =   3; // 오르내리
+    private final static int EF_TORCH =     4; // 횃불효과
+    private final static int EF_SIN =       5; // 정현파
+    private final static int EF_LASER =     6; // 레이저파
+
+
     // 스크립트 데이터
     private List<LedData> ledDatas;
 
@@ -43,7 +52,7 @@ public class LedDataList implements List<LedData>, Serializable {
     public void setRgbEffect(int effect, int rgbNum, int patternTime, int randomTime, int startTime) {
         int rgbPer = rgbNum % 3;
         switch (effect) {
-            case 0:
+            case EF_ALWAYS:
                 ledDatas.clear();
                 add(new LedData(0, 0));
                 add(new LedData(OP_NOP,startTime));
@@ -51,7 +60,7 @@ public class LedDataList implements List<LedData>, Serializable {
                 add(new LedData(191, 0));
                 add(new LedData(OP_END, 0));
                 break;
-            case 1:
+            case EF_PULSE:
                 ledDatas.clear();
                 add(new LedData(0, 0));
                 add(new LedData(OP_NOP, startTime));
@@ -96,7 +105,7 @@ public class LedDataList implements List<LedData>, Serializable {
                 }
                 add(new LedData(OP_END,0));
                 break;
-            case 2:
+            case EF_FLASH:
                 ledDatas.clear();
                 add(new LedData(0, 0));
                 add(new LedData(OP_NOP, startTime));
@@ -121,7 +130,7 @@ public class LedDataList implements List<LedData>, Serializable {
                 }
                 add(new LedData(OP_END,0));
                 break;
-            case 3:
+            case EF_UP_DOWN:
                 int patternTime3 = 2*(patternTime + 1);
                 ledDatas.clear();
                 add(new LedData(0, 0));
@@ -162,7 +171,7 @@ public class LedDataList implements List<LedData>, Serializable {
                 }
                 add(new LedData(OP_END,0));
                 break;
-            case 4:
+            case EF_TORCH:
                 ledDatas.clear();
                 add(new LedData(0, 0));
                 add(new LedData(OP_NOP, startTime));
@@ -421,7 +430,7 @@ public class LedDataList implements List<LedData>, Serializable {
 
     public void setEffect(int effect, int patternTime, int randomTime, int startTime) {
         switch (effect) {
-            case 0:
+            case EF_ALWAYS:
                 ledDatas.clear();
                 add(new LedData(0, 0));
                 add(new LedData(OP_NOP,startTime));
@@ -429,7 +438,7 @@ public class LedDataList implements List<LedData>, Serializable {
                 add(new LedData(191, 0));
                 add(new LedData(OP_END, 0));
                 break;
-            case 1:
+            case EF_PULSE:
                 ledDatas.clear();
                 add(new LedData(0, 0));
                 add(new LedData(OP_NOP, startTime));
@@ -474,7 +483,7 @@ public class LedDataList implements List<LedData>, Serializable {
                 }
                 add(new LedData(OP_END,0));
                 break;
-            case 2:
+            case EF_FLASH:
                 ledDatas.clear();
                 add(new LedData(0, 0));
                 add(new LedData(OP_NOP, startTime));
@@ -499,29 +508,21 @@ public class LedDataList implements List<LedData>, Serializable {
                 }
                 add(new LedData(OP_END,0));
                 break;
-            case 3:
-                int patternTime3 = 2*(patternTime + 1);
+            // 오르내리 효과
+            case EF_UP_DOWN:
+                int patternTime3 = 40*(patternTime+1);
                 ledDatas.clear();
                 add(new LedData(0, 0));
                 add(new LedData(OP_NOP, startTime));
                 add(new LedData(OP_START, 0));
-                add(new LedData(0,patternTime3));
-                add(new LedData(20,patternTime3));
-                add(new LedData(35,patternTime3));
-                add(new LedData(50,patternTime3));
-                add(new LedData(75,patternTime3));
-                add(new LedData(100,patternTime3));
-                add(new LedData(130,patternTime3));
-                add(new LedData(160,patternTime3));
-                add(new LedData(191,patternTime3));
-                add(new LedData(160,patternTime3));
-                add(new LedData(130,patternTime3));
-                add(new LedData(100,patternTime3));
-                add(new LedData(75,patternTime3));
-                add(new LedData(50,patternTime3));
-                add(new LedData(35,patternTime3));
-                add(new LedData(20,patternTime3));
-                add(new LedData(0,patternTime3));
+                add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                add(new LedData(OP_TRANS_BRIGHT_STOP, 191));
+                add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime3));
+                add(new LedData(OP_TRANS_START,patternTime));
+                add(new LedData(OP_TRANS_BRIGHT_START, 191));
+                add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime3));
+                add(new LedData(OP_TRANS_START,patternTime));
                 switch (randomTime) {
                     case 0:
                         break;
@@ -540,7 +541,7 @@ public class LedDataList implements List<LedData>, Serializable {
                 }
                 add(new LedData(OP_END,0));
                 break;
-            case 4:
+            case EF_TORCH:
                 ledDatas.clear();
                 add(new LedData(0, 0));
                 add(new LedData(OP_NOP, startTime));
@@ -580,7 +581,35 @@ public class LedDataList implements List<LedData>, Serializable {
                 }
                 add(new LedData(OP_END,0));
                 break;
-
+            case EF_SIN:
+                ledDatas.clear();
+                add(new LedData(OP_HEAD_PATTERN, EF_SIN, DEFINED_PATTERN, effect));
+                add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                add(new LedData(OP_HEAD_START_DELAY, startTime));
+                add(new LedData(OP_START,0));
+                add(new LedData(OP_SIN_SHIFT,0x9F));
+                add(new LedData(OP_SIN_COUNT,0xFF));
+                add(new LedData(OP_SIN_START,10 - patternTime));
+                switch (randomTime) {
+                    case 0:
+                        break;
+                    case 1:
+                        add(new LedData(OP_RANDOM_DELAY,2));
+                        break;
+                    case 2:
+                        add(new LedData(OP_RANDOM_DELAY,4));
+                        break;
+                    case 3:
+                        add(new LedData(OP_RANDOM_DELAY,5));
+                        break;
+                    case 4:
+                        add(new LedData(OP_RANDOM_DELAY,6));
+                        break;
+                }
+                add(new LedData(OP_END,0));
+                break;
+            case EF_LASER:
+                break;
         }
     }
 
@@ -770,10 +799,15 @@ public class LedDataList implements List<LedData>, Serializable {
                         delay = lo.getDelayEnd();
                         break;
                     case OP_RANDOM_VAL:
-                    case OP_RANDOM_DELAY:
                         temp1 = (delay >> 3) & 0x1F;
                         temp2 = delay & 0x07;
                         temp1 = temp1 * lo.getRatioBright() / 100;
+                        delay = ((temp1 << 3) & 0xF8) | (temp2);
+                        break;
+                    case OP_RANDOM_DELAY:
+                        temp1 = (delay >> 3) & 0x1F;
+                        temp2 = delay & 0x07;
+                        temp1 = temp1 * lo.getRatioDuration() / 100;
                         delay = ((temp1 << 3) & 0xF8) | (temp2);
                         break;
                     case OP_NOP:
@@ -785,6 +819,13 @@ public class LedDataList implements List<LedData>, Serializable {
                         break;
                     case OP_SOUND_VAL:
                         delay = 10 - lo.getRatioBright()/10;
+                        break;
+                    case OP_SIN_SHIFT:
+                        temp1 = (delay >> 4) & 0x0F;
+                        temp2 = (delay & 0x0F);
+                        temp1 = temp1 * lo.getRatioBright() / 100;
+                        temp2 = temp2 * lo.getRatioBright() / 100;
+                        delay = ((temp1 << 4) & 0xF0) | (temp2 & 0x0F);
                         break;
                 }
             }

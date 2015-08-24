@@ -106,6 +106,15 @@ public class LedData implements Serializable,Comparator<LedData> {
                 }
                 break;
             case OP_HEAD_OPTION:
+                if (args.length == 1) {
+                    _val = instruct;
+                    _duration = (int) args[0];
+                } else if (args.length == 2) {
+                    _val = instruct;
+                    param1 = ((int) args[0]) & 0x0F;
+                    param2 = (int) args[1];
+                    _duration = (param1 << 4) | param2;
+                }
                 break;
             case OP_PUT_VAR_A:
             case OP_PUT_VAR_B:

@@ -1410,7 +1410,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 for (int j=0;j<dataCount;j++) {
                     txData(mDataList.get(j));
                 }
-                txPattern(i, ledDataSeries.ledExeDatas[i].toByteArray(ledDataSeries.ledOptions[i]));
+                //txPattern(i, ledDataSeries.ledExeDatas[i].toByteArray(ledDataSeries.ledOptions[i]));
                 txData(TxDatas.formatInitCount());
 
             }
@@ -1712,6 +1712,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         data[3] = (byte) (size/2);
         for (int i=0;i<size;i++) {
             data[4+i] = array[i];
+            Logger.d(this,"txPattern",ledNum,array[i]);
         }
         txData(data);
     }
