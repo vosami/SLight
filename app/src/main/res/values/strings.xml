@@ -202,6 +202,7 @@
     <string name="easy_effect_pattern_torch">횃불효과</string>
     <string name="easy_effect_pattern_sin">정현파형</string>
     <string name="easy_effect_pattern_laser">레이저파</string>
+    <string name="easy_effect_pattern_breathe">숨쉬는듯</string>
     <string name="easy_effect_rgb_rainbow">레인보우</string>
     <string name="easy_effect_rgb_sin">정현파형</string>
     <string name="easy_effect_pattern_sound">소리효과</string>
@@ -280,5 +281,6 @@
     <string name="ss_alarm_read_error">알람 설정 값을 가져올 수 없습니다.</string>
     <string name="ss_alarm_try_init_ble">스마트 라이트 장치를 설정해 주세요.</string>
     <string name="ss_alarm_write_success">전송 완료</string>
+    <string name="title_activity_gallery">GalleryActivity</string>
     <!--SLightSettingActivity End-->
 </resources>

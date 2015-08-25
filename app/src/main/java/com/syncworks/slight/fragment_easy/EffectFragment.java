@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ToggleButton;
 
 import com.syncworks.define.Define;
 import com.syncworks.define.Logger;
@@ -171,6 +170,71 @@ public class EffectFragment extends Fragment {
             mGroupList.add(listData[0]);
             mChildList.add(optionData[0]);
         } else if (getLedSelected() == LED_RGB_ONLY_SELECTED) {
+            listCount = 9;
+            listData = new EffectListData[listCount];
+            for (int i=0;i<listCount;i++) {
+                listData[i] = new EffectListData();
+                listData[i].init();
+            }
+            listData[0].effectName = getString(R.string.easy_effect_pattern_always);
+            listData[0].imgId = R.drawable.ic_pattern_always;
+            mGroupList.add(listData[0]);
+            listData[1].effectName = getString(R.string.easy_effect_pattern_pulse);
+            listData[1].imgId = R.drawable.ic_pattern_pulse;
+            mGroupList.add(listData[1]);
+            listData[2].effectName = getString(R.string.easy_effect_pattern_flash);
+            listData[2].imgId = R.drawable.ic_pattern_flash;
+            mGroupList.add(listData[2]);
+            listData[3].effectName = getString(R.string.easy_effect_pattern_updown);
+            listData[3].imgId = R.drawable.ic_pattern_up_down;
+            mGroupList.add(listData[3]);
+            listData[4].effectName = getString(R.string.easy_effect_pattern_torch);
+            listData[4].imgId = R.drawable.ic_pattern_torch;
+            mGroupList.add(listData[4]);
+            listData[5].effectName = getString(R.string.easy_effect_pattern_sin);
+            listData[5].imgId = R.drawable.ic_pattern_single_sin;
+            mGroupList.add(listData[5]);
+            listData[6].effectName = getString(R.string.easy_effect_pattern_laser);
+            listData[6].imgId = R.drawable.ic_pattern_torch;
+            mGroupList.add(listData[6]);
+            listData[7].effectName = getString(R.string.easy_effect_pattern_breathe);
+            listData[7].imgId = R.drawable.ic_pattern_breathe;
+            mGroupList.add(listData[7]);
+            listData[8].effectName = getString(R.string.easy_effect_rgb_rainbow);
+            listData[8].imgId = R.drawable.ic_pattern_rainbow;
+            mGroupList.add(listData[8]);
+            optionData = new EffectOptionData[listCount];
+            for (int i=0;i<listCount;i++) {
+                optionData[i] = new EffectOptionData();
+                optionData[i].isShowStartDelay = true;
+                if (i == 0) {
+                    optionData[i].isShowEffectDelay = false;
+                    optionData[i].isShowRandomDelay = false;
+                } else {
+                    optionData[i].isShowEffectDelay = true;
+                    optionData[i].isShowRandomDelay = true;
+                }
+                if (staticEffectNum == i) {
+                    optionData[i].timeStartDelay = staticStartTime;
+                    optionData[i].timeEffectDelay = staticEffectTime;
+                    optionData[i].timeRandomDelay = staticRandomTime;
+                } else {
+                    optionData[i].timeStartDelay = 0;
+                    optionData[i].timeEffectDelay = 2;
+                    optionData[i].timeRandomDelay = 0;
+                }
+            }
+
+            mChildList.add(optionData[0]);
+            mChildList.add(optionData[1]);
+            mChildList.add(optionData[2]);
+            mChildList.add(optionData[3]);
+            mChildList.add(optionData[4]);
+            mChildList.add(optionData[5]);
+            mChildList.add(optionData[6]);
+            mChildList.add(optionData[7]);
+            mChildList.add(optionData[8]);
+        } else {
             listCount = 8;
             listData = new EffectListData[listCount];
             for (int i=0;i<listCount;i++) {
@@ -193,13 +257,13 @@ public class EffectFragment extends Fragment {
             listData[4].imgId = R.drawable.ic_pattern_torch;
             mGroupList.add(listData[4]);
             listData[5].effectName = getString(R.string.easy_effect_pattern_sin);
-            listData[5].imgId = R.drawable.ic_pattern_torch;
+            listData[5].imgId = R.drawable.ic_pattern_single_sin;
             mGroupList.add(listData[5]);
             listData[6].effectName = getString(R.string.easy_effect_pattern_laser);
-            listData[6].imgId = R.drawable.ic_pattern_torch;
+            listData[6].imgId = R.drawable.ic_pattern_laser;
             mGroupList.add(listData[6]);
-            listData[7].effectName = getString(R.string.easy_effect_rgb_rainbow);
-            listData[7].imgId = R.drawable.ic_pattern_rainbow;
+            listData[7].effectName = getString(R.string.easy_effect_pattern_breathe);
+            listData[7].imgId = R.drawable.ic_pattern_breathe;
             mGroupList.add(listData[7]);
             optionData = new EffectOptionData[listCount];
             for (int i=0;i<listCount;i++) {
@@ -231,63 +295,6 @@ public class EffectFragment extends Fragment {
             mChildList.add(optionData[5]);
             mChildList.add(optionData[6]);
             mChildList.add(optionData[7]);
-        } else {
-            listCount = 7;
-            listData = new EffectListData[listCount];
-            for (int i=0;i<listCount;i++) {
-                listData[i] = new EffectListData();
-                listData[i].init();
-            }
-            listData[0].effectName = getString(R.string.easy_effect_pattern_always);
-            listData[0].imgId = R.drawable.ic_pattern_always;
-            mGroupList.add(listData[0]);
-            listData[1].effectName = getString(R.string.easy_effect_pattern_pulse);
-            listData[1].imgId = R.drawable.ic_pattern_pulse;
-            mGroupList.add(listData[1]);
-            listData[2].effectName = getString(R.string.easy_effect_pattern_flash);
-            listData[2].imgId = R.drawable.ic_pattern_flash;
-            mGroupList.add(listData[2]);
-            listData[3].effectName = getString(R.string.easy_effect_pattern_updown);
-            listData[3].imgId = R.drawable.ic_pattern_up_down;
-            mGroupList.add(listData[3]);
-            listData[4].effectName = getString(R.string.easy_effect_pattern_torch);
-            listData[4].imgId = R.drawable.ic_pattern_torch;
-            mGroupList.add(listData[4]);
-            listData[5].effectName = getString(R.string.easy_effect_pattern_sin);
-            listData[5].imgId = R.drawable.ic_pattern_torch;
-            mGroupList.add(listData[5]);
-            listData[6].effectName = getString(R.string.easy_effect_pattern_laser);
-            listData[6].imgId = R.drawable.ic_pattern_torch;
-            mGroupList.add(listData[6]);
-            optionData = new EffectOptionData[listCount];
-            for (int i=0;i<listCount;i++) {
-                optionData[i] = new EffectOptionData();
-                optionData[i].isShowStartDelay = true;
-                if (i == 0) {
-                    optionData[i].isShowEffectDelay = false;
-                    optionData[i].isShowRandomDelay = false;
-                } else {
-                    optionData[i].isShowEffectDelay = true;
-                    optionData[i].isShowRandomDelay = true;
-                }
-                if (staticEffectNum == i) {
-                    optionData[i].timeStartDelay = staticStartTime;
-                    optionData[i].timeEffectDelay = staticEffectTime;
-                    optionData[i].timeRandomDelay = staticRandomTime;
-                } else {
-                    optionData[i].timeStartDelay = 0;
-                    optionData[i].timeEffectDelay = 2;
-                    optionData[i].timeRandomDelay = 0;
-                }
-            }
-
-            mChildList.add(optionData[0]);
-            mChildList.add(optionData[1]);
-            mChildList.add(optionData[2]);
-            mChildList.add(optionData[3]);
-            mChildList.add(optionData[4]);
-            mChildList.add(optionData[5]);
-            mChildList.add(optionData[6]);
         }
 
         expandableAdapter = new BaseExpandableAdapter(getActivity(),mGroupList,mChildList);
@@ -296,7 +303,8 @@ public class EffectFragment extends Fragment {
         mListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
-                for (int i = 0; i < mListView.getChildCount(); i++) {
+                int childCount = mListView.getCount();
+                for (int i = 0; i < childCount; i++) {
                     if (i != groupPosition) {
                         mListView.collapseGroup(i);
                     }
@@ -388,34 +396,6 @@ public class EffectFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    // 패턴 선택 리스너
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                /*
-                case R.id.rb_pattern_1:
-                    rbClick(0);
-                    break;
-                case R.id.rb_pattern_2:
-                    rbClick(1);
-                    break;
-                case R.id.rb_pattern_3:
-                    rbClick(2);
-                    break;
-                case R.id.rb_pattern_4:
-                    rbClick(3);
-                    break;
-                case R.id.rb_pattern_5:
-                    rbClick(4);
-                    break;
-                case R.id.rb_pattern_6:
-                    rbClick(5);
-                    break;
-                    */
-            }
-        }
-    };
 
     private DialogStartTime.OnStartTimeListener startTimeListener = new DialogStartTime.OnStartTimeListener() {
         @Override
@@ -430,47 +410,6 @@ public class EffectFragment extends Fragment {
         public void onConfirm() {
             if (dialogStartTime.isShowing()) {
                 dialogStartTime.dismiss();
-            }
-        }
-    };
-
-    // 옵션 리스너
-    private ToggleButton.OnClickListener onOptionListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                /*
-                case R.id.tb_long_2:
-                    isDelayLong[1] = tbDelay[0].isChecked();
-                    if (rbPattern[1].isChecked()) {
-                        doPattern(1,tbDelay[0].isChecked(),tbRandom[0].isChecked(),0);
-                    }
-                    break;
-                case R.id.tb_long_3:
-                    isDelayLong[2] = tbDelay[1].isChecked();
-                    if (rbPattern[2].isChecked()) {
-                        doPattern(2,tbDelay[1].isChecked(),tbRandom[1].isChecked(),0);
-                    }
-                    break;
-                case R.id.tb_long_4:
-                    isDelayLong[3] = tbDelay[2].isChecked();
-                    if (rbPattern[3].isChecked()) {
-                        doPattern(3,tbDelay[2].isChecked(),false,0);
-                    }
-                    break;
-                case R.id.tb_random_2:
-                    isRandom[1] = tbRandom[0].isChecked();
-                    if (rbPattern[1].isChecked()) {
-                        doPattern(1,tbDelay[0].isChecked(),tbRandom[0].isChecked(),0);
-                    }
-                    break;
-                case R.id.tb_random_3:
-                    isRandom[2] = tbRandom[1].isChecked();
-                    if (rbPattern[2].isChecked()) {
-                        doPattern(2,tbDelay[1].isChecked(),tbRandom[1].isChecked(),0);
-                    }
-                    break;
-                    */
             }
         }
     };
@@ -526,7 +465,7 @@ public class EffectFragment extends Fragment {
                 staticEffectTime = 2;
                 staticRandomTime = 0;
             }
-            for (int i = 0; i < mListView.getChildCount(); i++) {
+            for (int i = 0; i < mListView.getCount(); i++) {
                 if (i == staticEffectNum) {
                     mListView.expandGroup(i);
                 } else {

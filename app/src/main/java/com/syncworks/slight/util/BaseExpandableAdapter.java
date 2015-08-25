@@ -32,6 +32,8 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
     private int lastSelectGroup = 0;
     private BaseExpandableInterface listener = null;
 
+    private Toast mToast = null;
+
     public BaseExpandableAdapter(Context c, ArrayList<EffectListData> groupList,
                                  ArrayList<EffectOptionData> childList){
         super();
@@ -244,7 +246,11 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
                     childList.get(curGroupPosition).get(0).timeEffectDelay = 0;
                 }
                 doEffectTime(curGroupPosition, childList.get(curGroupPosition).get(0).timeEffectDelay);
-                Toast.makeText(context, "효과시간" + (childList.get(curGroupPosition).get(0).timeEffectDelay+1) + " 이 선택되었습니다.", Toast.LENGTH_SHORT).show();
+                if (mToast != null) {
+                    mToast.cancel();
+                }
+                mToast = Toast.makeText(context, "효과시간" + (childList.get(curGroupPosition).get(0).timeEffectDelay+1) + " 이 선택되었습니다.", Toast.LENGTH_SHORT);
+                mToast.show();
             }
         });
         childHolder.btnRandomTime.setOnClickListener(new View.OnClickListener() {
@@ -255,10 +261,13 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
                     childList.get(curGroupPosition).get(0).timeRandomDelay = 0;
                 }
                 doRandomTime(curGroupPosition, childList.get(curGroupPosition).get(0).timeRandomDelay);
-                Toast.makeText(context, "랜덤시간" + (childList.get(curGroupPosition).get(0).timeEffectDelay + 1) + " 이 선택되었습니다.", Toast.LENGTH_SHORT).show();
+                if (mToast != null) {
+                    mToast.cancel();
+                }
+                mToast = Toast.makeText(context, "랜덤시간" + (childList.get(curGroupPosition).get(0).timeEffectDelay + 1) + " 이 선택되었습니다.", Toast.LENGTH_SHORT);
+                mToast.show();
             }
         });
-        //childHolder.btnStartTime.setText(getChild(groupPosition, childPosition));
 
         return v;
     }

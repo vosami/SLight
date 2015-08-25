@@ -24,11 +24,11 @@
             android:name=".MainActivity"
             android:label="@string/smart_light_name"
             android:screenOrientation="portrait" >
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".BleSetActivity"
@@ -102,11 +102,22 @@
             </intent-filter>
             -->
         </activity>
+
         <service
             android:name=".services.DummyService"
             android:enabled="true"
             android:exported="true" >
         </service>
+
+        <activity
+            android:name=".GalleryActivity"
+            android:label="@string/title_activity_gallery" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

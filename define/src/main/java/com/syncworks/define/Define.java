@@ -54,6 +54,9 @@ public class Define {
     public final static int RANDOM_GAP_32 =                 0x05;
     public final static int RANDOM_GAP_64 =                 0x06;
     public final static int RANDOM_GAP_128 =                0x07;
+
+    public final static int OP_MACRO_MIN_VAL =              0xFF00;
+    public final static int OP_MACRO_MAX_VAL =              0xFF01;
 	/**
 	 * 명령어 리스트
 	 */
