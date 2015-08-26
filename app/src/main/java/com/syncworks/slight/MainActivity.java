@@ -111,6 +111,10 @@ public class MainActivity extends ActionBarActivity {
 				intent = new Intent(this, SlightSettingActivity.class);
                 startActivity(intent);
 				break;
+			case R.id.btn_gallery_web:
+				intent = new Intent(this, GalleryActivity.class);
+				startActivity(intent);
+				break;
 			// SLight 설치 방법 버튼 클릭시
 			case R.id.btn_slight_setting:
 				createDialog();

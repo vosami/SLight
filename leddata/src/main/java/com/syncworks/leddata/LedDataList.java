@@ -233,26 +233,21 @@ public class LedDataList implements List<LedData>, Serializable {
                 add(new LedData(OP_END,0));
                 break;
             case EF_LASER:
-                int pattern6 = (patternTime+1) * 30;
+                int pattern6 = (patternTime+1) * 5;
                 ledDatas.clear();
                 add(new LedData(OP_HEAD_PATTERN, EF_LASER, DEFINED_PATTERN, effect));
                 add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
                 add(new LedData(OP_HEAD_START_DELAY, startTime));
                 add(new LedData(OP_START,0));
-                add(new LedData(0,10));
-                add(new LedData(20,10));
-                add(new LedData(30,10));
-                add(new LedData(40,10));
-                add(new LedData(50,10));
-                add(new LedData(60,10));
-                add(new LedData(80,10));
-                add(new LedData(90,10));
-                add(new LedData(100,1));
+                add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                add(new LedData(OP_TRANS_BRIGHT_STOP, 100));
+                add(new LedData(OP_TRANS_BRIGHT_COUNT,pattern6));
+                add(new LedData(OP_TRANS_START,0));
                 add(new LedData(120,1));
                 add(new LedData(191,1));
                 add(new LedData(120,1));
                 add(new LedData(0,0));
-                add(new LedData(OP_NOP,pattern6));
+                add(new LedData(OP_NOP,30 + patternTime*10));
                 switch (randomTime) {
                     case 0:
                         break;
@@ -277,16 +272,20 @@ public class LedDataList implements List<LedData>, Serializable {
                 add(new LedData(OP_HEAD_PATTERN, EF_LASER, DEFINED_PATTERN, effect));
                 add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
                 add(new LedData(OP_HEAD_START_DELAY, startTime));
-                add(new LedData(OP_START,0));
+                add(new LedData(OP_START, 0));
                 add(new LedData(OP_TRANS_BRIGHT_START, 100));
                 add(new LedData(OP_TRANS_BRIGHT_STOP, 191));
                 add(new LedData(OP_TRANS_BRIGHT_COUNT,pattern7));
                 add(new LedData(OP_TRANS_START,0));
                 add(new LedData(OP_TRANS_BRIGHT_START, 191));
-                add(new LedData(OP_TRANS_BRIGHT_STOP, 100));
+                add(new LedData(OP_TRANS_BRIGHT_STOP, 40));
                 add(new LedData(OP_TRANS_BRIGHT_COUNT,pattern7));
                 add(new LedData(OP_TRANS_START,0));
-                add(new LedData(OP_NOP,50*patternTime));
+                add(new LedData(OP_TRANS_BRIGHT_START, 40));
+                add(new LedData(OP_TRANS_BRIGHT_STOP, 100));
+                add(new LedData(OP_TRANS_BRIGHT_COUNT,pattern7/2));
+                add(new LedData(OP_TRANS_START,0));
+                add(new LedData(OP_NOP,30 + 10*patternTime));
                 switch (randomTime) {
                     case 0:
                         break;
@@ -669,26 +668,21 @@ public class LedDataList implements List<LedData>, Serializable {
                 add(new LedData(OP_END,0));
                 break;
             case EF_LASER:
-                int pattern6 = (patternTime+1) * 30;
+                int pattern6 = (patternTime+1) * 50;
                 ledDatas.clear();
                 add(new LedData(OP_HEAD_PATTERN, EF_LASER, DEFINED_PATTERN, effect));
                 add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
                 add(new LedData(OP_HEAD_START_DELAY, startTime));
                 add(new LedData(OP_START,0));
-                add(new LedData(0,10));
-                add(new LedData(20,10));
-                add(new LedData(30,10));
-                add(new LedData(40,10));
-                add(new LedData(50,10));
-                add(new LedData(60,10));
-                add(new LedData(80,10));
-                add(new LedData(90,10));
-                add(new LedData(100,1));
+                add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                add(new LedData(OP_TRANS_BRIGHT_STOP, 100));
+                add(new LedData(OP_TRANS_BRIGHT_COUNT,pattern6));
+                add(new LedData(OP_TRANS_START,0));
                 add(new LedData(120,1));
                 add(new LedData(191,1));
                 add(new LedData(120,1));
                 add(new LedData(0,0));
-                add(new LedData(OP_NOP,pattern6));
+                add(new LedData(OP_NOP,30 + patternTime*10));
                 switch (randomTime) {
                     case 0:
                         break;
@@ -713,16 +707,20 @@ public class LedDataList implements List<LedData>, Serializable {
                 add(new LedData(OP_HEAD_PATTERN, EF_LASER, DEFINED_PATTERN, effect));
                 add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
                 add(new LedData(OP_HEAD_START_DELAY, startTime));
-                add(new LedData(OP_START,0));
+                add(new LedData(OP_START, 0));
                 add(new LedData(OP_TRANS_BRIGHT_START, 100));
                 add(new LedData(OP_TRANS_BRIGHT_STOP, 191));
                 add(new LedData(OP_TRANS_BRIGHT_COUNT,pattern7));
                 add(new LedData(OP_TRANS_START,0));
                 add(new LedData(OP_TRANS_BRIGHT_START, 191));
-                add(new LedData(OP_TRANS_BRIGHT_STOP, 100));
+                add(new LedData(OP_TRANS_BRIGHT_STOP, 40));
                 add(new LedData(OP_TRANS_BRIGHT_COUNT,pattern7));
                 add(new LedData(OP_TRANS_START,0));
-                add(new LedData(OP_NOP,50*patternTime));
+                add(new LedData(OP_TRANS_BRIGHT_START, 40));
+                add(new LedData(OP_TRANS_BRIGHT_STOP, 100));
+                add(new LedData(OP_TRANS_BRIGHT_COUNT,pattern7/2));
+                add(new LedData(OP_TRANS_START,0));
+                add(new LedData(OP_NOP,30 + 10*patternTime));
                 switch (randomTime) {
                     case 0:
                         break;

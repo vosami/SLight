@@ -24,11 +24,11 @@
             android:name=".MainActivity"
             android:label="@string/smart_light_name"
             android:screenOrientation="portrait" >
-            <!--<intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
         <activity
             android:name=".BleSetActivity"
@@ -112,11 +112,11 @@
         <activity
             android:name=".GalleryActivity"
             android:label="@string/title_activity_gallery" >
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
     </application>
 
