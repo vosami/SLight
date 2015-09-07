@@ -129,9 +129,9 @@ public class LedData implements Serializable,Comparator<LedData> {
             case OP_CALC_VAR_C:
                 if (args.length == 3) {
                     _val = instruct;
-                    param1 = Integer.valueOf((String) args[0]) & 0x03;
-                    param2 = Integer.valueOf((String) args[1]) & 0x03;
-                    param3 = Integer.valueOf((String) args[2]) & 0x0F;
+                    param1 = (int) args[0] & 0x03;
+                    param2 = (int) args[1] & 0x03;
+                    param3 = (int) args[2] & 0x0F;
                     _duration = (param1 << 6) | (param2 << 4) | param3;
                 }
                 break;
@@ -187,9 +187,9 @@ public class LedData implements Serializable,Comparator<LedData> {
             case OP_IF:
                 if (args.length == 3) {
                     _val = instruct;
-                    param1 = Integer.valueOf((String) args[0]) & 0x03;
-                    param2 = Integer.valueOf((String) args[1]) & 0x03;
-                    param3 = Integer.valueOf((String) args[2]) & 0x0F;
+                    param1 = (int) args[0] & 0x03;
+                    param2 = (int) args[1] & 0x03;
+                    param3 = (int) args[2] & 0x0F;
                     _duration = (param1 << 6) | (param2 << 4) | param3;
                 }
                 break;

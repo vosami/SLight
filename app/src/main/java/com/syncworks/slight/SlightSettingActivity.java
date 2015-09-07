@@ -171,7 +171,7 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
         alarmHour[alarmNum].setText(hour);
         alarmMin[alarmNum].setText(minute);
         alarmOnOff[alarmNum].setChecked(headerParam.getAlarmOnOff(alarmNum));
-        alarmRunTime[alarmNum].setText(Integer.toString(headerParam.getAlarmRunTime(alarmNum)) + getString(R.string.str_minute));
+        alarmRunTime[alarmNum].setText(Integer.toString((headerParam.getAlarmRunTime(alarmNum)&0xFF)) + getString(R.string.str_minute));
         setAlarmMode(alarmNum, headerParam.getAlarmRunMode(alarmNum));
         setAlarmDate(alarmNum,headerParam.getAlarmDate(alarmNum));
     }
@@ -419,17 +419,17 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
         switch (v.getId()) {
             case R.id.alarm_1_modify:
                 dialog = new DialogAlarmSet(this, new AlarmDialogData(0,headerParam.getAlarmHour(0),
-                        headerParam.getAlarmMinute(0),headerParam.getAlarmDate(0),headerParam.getAlarmRunTime(0),headerParam.getAlarmRunMode(0)));
+                        headerParam.getAlarmMinute(0),headerParam.getAlarmDate(0),headerParam.getAlarmRunTime(0)&0xFF,headerParam.getAlarmRunMode(0)));
                 dialog.show();
                 break;
             case R.id.alarm_2_modify:
                 dialog = new DialogAlarmSet(this, new AlarmDialogData(1,headerParam.getAlarmHour(1),
-                        headerParam.getAlarmMinute(1),headerParam.getAlarmDate(1),headerParam.getAlarmRunTime(1),headerParam.getAlarmRunMode(1)));
+                        headerParam.getAlarmMinute(1),headerParam.getAlarmDate(1),headerParam.getAlarmRunTime(1)&0xFF,headerParam.getAlarmRunMode(1)));
                 dialog.show();
                 break;
             case R.id.alarm_3_modify:
                 dialog = new DialogAlarmSet(this, new AlarmDialogData(2,headerParam.getAlarmHour(2),
-                        headerParam.getAlarmMinute(2),headerParam.getAlarmDate(2),headerParam.getAlarmRunTime(2),headerParam.getAlarmRunMode(2)));
+                        headerParam.getAlarmMinute(2),headerParam.getAlarmDate(2),headerParam.getAlarmRunTime(2)&0xFF,headerParam.getAlarmRunMode(2)));
                 dialog.show();
                 break;
 

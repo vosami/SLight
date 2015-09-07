@@ -7,8 +7,8 @@
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
-    <string name="slight_version">SLight v150826</string>
-    <string name="slight_home">http://LedLife.co.kr</string>
+    <string name="slight_version">SLight v150904</string>
+    <string name="slight_home">http://easyLED.co.kr</string>
 
     <string name="led_type_rgb">RGB LED</string>
     <string name="led_type_single">단색 LED</string>
@@ -198,13 +198,17 @@
     <string name="easy_effect_pattern_always">항상켜기</string>
     <string name="easy_effect_pattern_pulse">깜박이기</string>
     <string name="easy_effect_pattern_flash">번쩍이기</string>
+    <string name="easy_effect_pattern_double">두번번쩍</string>
     <string name="easy_effect_pattern_updown">오르내리</string>
     <string name="easy_effect_pattern_torch">횃불효과</string>
     <string name="easy_effect_pattern_sin">정현파형</string>
     <string name="easy_effect_pattern_laser">레이저파</string>
     <string name="easy_effect_pattern_breathe">숨쉬는듯</string>
+    <string name="easy_effect_pattern_cannon">대포효과C</string>
+    <string name="easy_effect_pattern_explosion">폭발효과C</string>
     <string name="easy_effect_rgb_rainbow">레인보우</string>
     <string name="easy_effect_rgb_sin">정현파형</string>
+
     <string name="easy_effect_pattern_sound">소리효과</string>
 
     <string name="easy_effect_not_selected">선택된 LED가 없습니다.</string>
@@ -281,6 +285,7 @@
     <string name="ss_alarm_read_error">알람 설정 값을 가져올 수 없습니다.</string>
     <string name="ss_alarm_try_init_ble">스마트 라이트 장치를 설정해 주세요.</string>
     <string name="ss_alarm_write_success">전송 완료</string>
+    <string name="ss_alarm_dialog_notice">LED 효과 실행 순서 상세 설정은 LED 효과 설정 5단계에서 하실 수 있습니다.</string>
     <string name="title_activity_gallery">GalleryActivity</string>
     <!--SLightSettingActivity End-->
 </resources>

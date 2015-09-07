@@ -140,11 +140,14 @@ public class LedSelectFragment extends Fragment {
             R.drawable.ic_pattern_always,
             R.drawable.ic_pattern_pulse,
             R.drawable.ic_pattern_flash,
+            R.drawable.ic_pattern_double,
             R.drawable.ic_pattern_up_down,
             R.drawable.ic_pattern_torch,
             R.drawable.ic_pattern_single_sin,
             R.drawable.ic_pattern_laser,
             R.drawable.ic_pattern_breathe,
+            R.drawable.ic_pattern_cannon,
+            R.drawable.ic_pattern_explosion,
             R.drawable.ic_pattern_rainbow
     };
 

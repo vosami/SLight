@@ -170,7 +170,7 @@ public class EffectFragment extends Fragment {
             mGroupList.add(listData[0]);
             mChildList.add(optionData[0]);
         } else if (getLedSelected() == LED_RGB_ONLY_SELECTED) {
-            listCount = 9;
+            listCount = 12;
             listData = new EffectListData[listCount];
             for (int i=0;i<listCount;i++) {
                 listData[i] = new EffectListData();
@@ -185,24 +185,33 @@ public class EffectFragment extends Fragment {
             listData[2].effectName = getString(R.string.easy_effect_pattern_flash);
             listData[2].imgId = R.drawable.ic_pattern_flash;
             mGroupList.add(listData[2]);
-            listData[3].effectName = getString(R.string.easy_effect_pattern_updown);
-            listData[3].imgId = R.drawable.ic_pattern_up_down;
+            listData[3].effectName = getString(R.string.easy_effect_pattern_double);
+            listData[3].imgId = R.drawable.ic_pattern_double;
             mGroupList.add(listData[3]);
-            listData[4].effectName = getString(R.string.easy_effect_pattern_torch);
-            listData[4].imgId = R.drawable.ic_pattern_torch;
+            listData[4].effectName = getString(R.string.easy_effect_pattern_updown);
+            listData[4].imgId = R.drawable.ic_pattern_up_down;
             mGroupList.add(listData[4]);
-            listData[5].effectName = getString(R.string.easy_effect_pattern_sin);
-            listData[5].imgId = R.drawable.ic_pattern_single_sin;
+            listData[5].effectName = getString(R.string.easy_effect_pattern_torch);
+            listData[5].imgId = R.drawable.ic_pattern_torch;
             mGroupList.add(listData[5]);
-            listData[6].effectName = getString(R.string.easy_effect_pattern_laser);
-            listData[6].imgId = R.drawable.ic_pattern_torch;
+            listData[6].effectName = getString(R.string.easy_effect_pattern_sin);
+            listData[6].imgId = R.drawable.ic_pattern_single_sin;
             mGroupList.add(listData[6]);
-            listData[7].effectName = getString(R.string.easy_effect_pattern_breathe);
-            listData[7].imgId = R.drawable.ic_pattern_breathe;
+            listData[7].effectName = getString(R.string.easy_effect_pattern_laser);
+            listData[7].imgId = R.drawable.ic_pattern_torch;
             mGroupList.add(listData[7]);
-            listData[8].effectName = getString(R.string.easy_effect_rgb_rainbow);
-            listData[8].imgId = R.drawable.ic_pattern_rainbow;
+            listData[8].effectName = getString(R.string.easy_effect_pattern_breathe);
+            listData[8].imgId = R.drawable.ic_pattern_breathe;
             mGroupList.add(listData[8]);
+            listData[9].effectName = getString(R.string.easy_effect_pattern_cannon);
+            listData[9].imgId = R.drawable.ic_pattern_cannon;
+            mGroupList.add(listData[9]);
+            listData[10].effectName = getString(R.string.easy_effect_pattern_explosion);
+            listData[10].imgId = R.drawable.ic_pattern_explosion;
+            mGroupList.add(listData[10]);
+            listData[11].effectName = getString(R.string.easy_effect_rgb_rainbow);
+            listData[11].imgId = R.drawable.ic_pattern_rainbow;
+            mGroupList.add(listData[11]);
             optionData = new EffectOptionData[listCount];
             for (int i=0;i<listCount;i++) {
                 optionData[i] = new EffectOptionData();
@@ -234,8 +243,11 @@ public class EffectFragment extends Fragment {
             mChildList.add(optionData[6]);
             mChildList.add(optionData[7]);
             mChildList.add(optionData[8]);
+            mChildList.add(optionData[9]);
+            mChildList.add(optionData[10]);
+            mChildList.add(optionData[11]);
         } else {
-            listCount = 8;
+            listCount = 11;
             listData = new EffectListData[listCount];
             for (int i=0;i<listCount;i++) {
                 listData[i] = new EffectListData();
@@ -250,21 +262,30 @@ public class EffectFragment extends Fragment {
             listData[2].effectName = getString(R.string.easy_effect_pattern_flash);
             listData[2].imgId = R.drawable.ic_pattern_flash;
             mGroupList.add(listData[2]);
-            listData[3].effectName = getString(R.string.easy_effect_pattern_updown);
-            listData[3].imgId = R.drawable.ic_pattern_up_down;
+            listData[3].effectName = getString(R.string.easy_effect_pattern_double);
+            listData[3].imgId = R.drawable.ic_pattern_double;
             mGroupList.add(listData[3]);
-            listData[4].effectName = getString(R.string.easy_effect_pattern_torch);
-            listData[4].imgId = R.drawable.ic_pattern_torch;
+            listData[4].effectName = getString(R.string.easy_effect_pattern_updown);
+            listData[4].imgId = R.drawable.ic_pattern_up_down;
             mGroupList.add(listData[4]);
-            listData[5].effectName = getString(R.string.easy_effect_pattern_sin);
-            listData[5].imgId = R.drawable.ic_pattern_single_sin;
+            listData[5].effectName = getString(R.string.easy_effect_pattern_torch);
+            listData[5].imgId = R.drawable.ic_pattern_torch;
             mGroupList.add(listData[5]);
-            listData[6].effectName = getString(R.string.easy_effect_pattern_laser);
-            listData[6].imgId = R.drawable.ic_pattern_laser;
+            listData[6].effectName = getString(R.string.easy_effect_pattern_sin);
+            listData[6].imgId = R.drawable.ic_pattern_single_sin;
             mGroupList.add(listData[6]);
-            listData[7].effectName = getString(R.string.easy_effect_pattern_breathe);
-            listData[7].imgId = R.drawable.ic_pattern_breathe;
+            listData[7].effectName = getString(R.string.easy_effect_pattern_laser);
+            listData[7].imgId = R.drawable.ic_pattern_laser;
             mGroupList.add(listData[7]);
+            listData[8].effectName = getString(R.string.easy_effect_pattern_breathe);
+            listData[8].imgId = R.drawable.ic_pattern_breathe;
+            mGroupList.add(listData[8]);
+            listData[9].effectName = getString(R.string.easy_effect_pattern_cannon);
+            listData[9].imgId = R.drawable.ic_pattern_cannon;
+            mGroupList.add(listData[9]);
+            listData[10].effectName = getString(R.string.easy_effect_pattern_explosion);
+            listData[10].imgId = R.drawable.ic_pattern_explosion;
+            mGroupList.add(listData[10]);
             optionData = new EffectOptionData[listCount];
             for (int i=0;i<listCount;i++) {
                 optionData[i] = new EffectOptionData();
@@ -295,6 +316,9 @@ public class EffectFragment extends Fragment {
             mChildList.add(optionData[5]);
             mChildList.add(optionData[6]);
             mChildList.add(optionData[7]);
+            mChildList.add(optionData[8]);
+            mChildList.add(optionData[9]);
+            mChildList.add(optionData[10]);
         }
 
         expandableAdapter = new BaseExpandableAdapter(getActivity(),mGroupList,mChildList);

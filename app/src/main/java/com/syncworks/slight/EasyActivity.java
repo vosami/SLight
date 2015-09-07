@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -190,6 +191,22 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
             menu.getItem(1).setVisible(true);
         }
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Logger.d(this, "ActivityResult");
+        if (requestCode == BleUtils.REQUEST_ENABLE_BT) {
+            if (resultCode == RESULT_OK) {
+                bleCheck();
+                if (isBleSupported) {
+                    Logger.d(this, "onResume");
+                    // 블루투스 연결 매니저 설정
+                    bleManager.bind(this);
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     // 뷰 등록
