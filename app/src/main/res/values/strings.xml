@@ -250,6 +250,10 @@
     <string name="easy_connect_available">연결 가능합니다.</string>
     <string name="easy_connect_unavailable">연결 가능하지 않은 버전입니다.</string>
 
+    <string name="easy_radio_success_default">기본 실행 완료</string>
+    <string name="easy_radio_success_sequential">순차 실행 완료</string>
+    <string name="easy_radio_success_random">랜덤 실행 완료</string>
+
     <string name="easy_save_radio_default">기본 실행</string>
     <string name="easy_save_radio_sequential">순차 실행</string>
     <string name="easy_save_radio_random">랜덤 실행</string>

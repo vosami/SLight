@@ -357,6 +357,8 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     private final static int HANDLE_SAVE_DATA_ERROR = 16;
     private final static int HANDLE_FETCH_DATA = 20;
     private final static int HANDLE_FETCH_DATA_ERROR = 21;
+    private final static int HANDLE_RUN_MODE = 25;
+    private final static int HANDLE_RUN_MODE_ERROR = 26;
 
     private final static int HANDLE_ACKNOWLEDGE = 50;
     private final static int HANDLE_SCAN_START = 60;
@@ -490,6 +492,22 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                         activity.showSuccessToast(activity.getString(R.string.easy_load_complete));
                         break;
                     case HANDLE_FETCH_DATA_ERROR:
+                        activity.dismissProgressDialog();
+                        activity.showErrorToast(activity.getString(R.string.easy_save_data_error));
+                        break;
+                    case HANDLE_RUN_MODE:
+                        activity.dismissProgressDialog();
+                        //Logger.d(this, "HANDLE_RUN_MODE", activity.dataNum);
+                        if (activity.trmRunMode == 0) {
+                            activity.showSuccessToast(activity.getString(R.string.easy_radio_success_default));
+                        } else if (activity.trmRunMode == 1) {
+                            activity.showSuccessToast(activity.getString(R.string.easy_radio_success_sequential));
+                        } else {
+                            activity.showSuccessToast(activity.getString(R.string.easy_radio_success_random));
+                        }
+                        //activity.showSuccessToast(activity.getString(R.string.easy_load_complete));
+                        break;
+                    case HANDLE_RUN_MODE_ERROR:
                         activity.dismissProgressDialog();
                         activity.showErrorToast(activity.getString(R.string.easy_save_data_error));
                         break;
@@ -952,6 +970,77 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 }
             } else {
                 uiHandler.sendEmptyMessage(HANDLE_FETCH_DATA_ERROR);
+            }
+        }
+    };
+
+    private int trmRunMode = 0;
+
+    private Runnable taskRunMode = new Runnable() {
+        @Override
+        public void run() {
+            if (bleManager.getBleConnectState() == BluetoothLeService.STATE_CONNECTED) {
+                txData(TxDatas.formatSleep(true));
+                txData(TxDatas.formatMinuteTimerStart(false));
+                if (trmRunMode == 0) {
+                    txData(TxDatas.formatFetchDataPlace(dataNum));
+                    txCounterInit();
+                    for (int k = 0; k < 50; k++) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        // 수신 데이터가 있다면 중지
+                        if (isRxFetchData) {
+                            break;
+                        }
+                    }
+                } else {
+                    txData(TxDatas.formatFetchDataPlace(0));
+                    txCounterInit();
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    txData(TxDatas.formatFetchDataPlace(1));
+                    txCounterInit();
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    txData(TxDatas.formatFetchDataPlace(2));
+                    txCounterInit();
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    txData(TxDatas.formatFetchDataPlace(dataNum));
+                    for (int k = 0; k < 50; k++) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        // 수신 데이터가 있다면 중지
+                        if (isRxFetchData) {
+                            break;
+                        }
+                    }
+                }
+                if (isRxFetchData) {
+                    txCounterInit();
+                    txData(TxDatas.formatMinuteTimerStart(true));
+                    //Logger.d(this, "HANDLE_RUN_MODE Start", trmRunMode);
+                    uiHandler.sendEmptyMessage(HANDLE_RUN_MODE);
+                } else {
+                    uiHandler.sendEmptyMessage(HANDLE_RUN_MODE_ERROR);
+                }
+            } else {
+                uiHandler.sendEmptyMessage(HANDLE_RUN_MODE_ERROR);
             }
         }
     };
@@ -1510,6 +1599,14 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
         this.dataNum = dataNum;
         new Thread(taskFetchData).start();
         //txData(TxDatas.formatFetchData(dataNum));
+    }
+
+    @Override
+    public void onSetRunMode(int runMode, int runPattern) {
+        showProgressDialog();
+        this.trmRunMode = runMode;
+        this.dataNum = runPattern;
+        new Thread(taskRunMode).start();
     }
 
     @Override

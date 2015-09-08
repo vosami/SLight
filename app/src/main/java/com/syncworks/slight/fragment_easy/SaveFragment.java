@@ -251,14 +251,20 @@ public class SaveFragment extends Fragment {
                 case R.id.rb_run_mode_default:
                     setRunModeViews(0);
                     doSetParam(lecHeader.getParam());
+                    doRunMode(0, lecHeader.getRunPattern());
+//                    doFetchData(lecHeader.getRunPattern());
                     break;
                 case R.id.rb_run_mode_sequence:
                     setRunModeViews(1);
                     doSetParam(lecHeader.getParam());
+                    doRunMode(1,0);
+//                    doFetchData(0);
                     break;
                 case R.id.rb_run_mode_random:
                     setRunModeViews(2);
+                    doRunMode(2, 0);
                     doSetParam(lecHeader.getParam());
+//                    doFetchData(0);
                     break;
                 case R.id.rb_run_pattern_a:
                     setRunPattern(0);
@@ -364,6 +370,12 @@ public class SaveFragment extends Fragment {
         lecHeader.setRunPattern(runPattern);
     }
 
+    private int getRunPattern() {
+        int runPattern = lecHeader.getRunPattern();
+        rbRunPattern[runPattern].setChecked(true);
+        return runPattern;
+    }
+
     private void setSequenceRunTime() {
         sbRunTime[0].setProgress(lecHeader.getSequenceRunTime(0) - 1);
         sbRunTime[1].setProgress(lecHeader.getSequenceRunTime(1) - 1);
@@ -431,6 +443,12 @@ public class SaveFragment extends Fragment {
     private void doFetchData(int dataNum) {
         if (mListener != null) {
             mListener.onFetchData(dataNum);
+        }
+    }
+
+    private void doRunMode(int runMode, int runPattern) {
+        if (mListener != null) {
+            mListener.onSetRunMode(runMode, runPattern);
         }
     }
 

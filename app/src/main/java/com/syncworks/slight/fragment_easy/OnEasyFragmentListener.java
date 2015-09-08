@@ -38,6 +38,8 @@ public interface OnEasyFragmentListener {
     public void onSleepTime(int minute);
     // Fetch Data
     public void onFetchData(int dataNum);
+    // Run Mode
+    public void onSetRunMode(int runMode, int runPattern);
     // Save Data
     public void onSaveData(int dataNum);
     // 파라미터 설정
