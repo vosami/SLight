@@ -170,7 +170,7 @@ public class EffectFragment extends Fragment {
             mGroupList.add(listData[0]);
             mChildList.add(optionData[0]);
         } else if (getLedSelected() == LED_RGB_ONLY_SELECTED) {
-            listCount = 12;
+            listCount = 10;
             listData = new EffectListData[listCount];
             for (int i=0;i<listCount;i++) {
                 listData[i] = new EffectListData();
@@ -203,15 +203,15 @@ public class EffectFragment extends Fragment {
             listData[8].effectName = getString(R.string.easy_effect_pattern_breathe);
             listData[8].imgId = R.drawable.ic_pattern_breathe;
             mGroupList.add(listData[8]);
-            listData[9].effectName = getString(R.string.easy_effect_pattern_cannon);
+            /*listData[9].effectName = getString(R.string.easy_effect_pattern_cannon);
             listData[9].imgId = R.drawable.ic_pattern_cannon;
             mGroupList.add(listData[9]);
             listData[10].effectName = getString(R.string.easy_effect_pattern_explosion);
             listData[10].imgId = R.drawable.ic_pattern_explosion;
-            mGroupList.add(listData[10]);
-            listData[11].effectName = getString(R.string.easy_effect_rgb_rainbow);
-            listData[11].imgId = R.drawable.ic_pattern_rainbow;
-            mGroupList.add(listData[11]);
+            mGroupList.add(listData[10]);*/
+            listData[9].effectName = getString(R.string.easy_effect_rgb_rainbow);
+            listData[9].imgId = R.drawable.ic_pattern_rainbow;
+            mGroupList.add(listData[9]);
             optionData = new EffectOptionData[listCount];
             for (int i=0;i<listCount;i++) {
                 optionData[i] = new EffectOptionData();
@@ -244,10 +244,10 @@ public class EffectFragment extends Fragment {
             mChildList.add(optionData[7]);
             mChildList.add(optionData[8]);
             mChildList.add(optionData[9]);
-            mChildList.add(optionData[10]);
-            mChildList.add(optionData[11]);
+            /*mChildList.add(optionData[10]);
+            mChildList.add(optionData[11]);*/
         } else {
-            listCount = 11;
+            listCount = 9;
             listData = new EffectListData[listCount];
             for (int i=0;i<listCount;i++) {
                 listData[i] = new EffectListData();
@@ -280,12 +280,12 @@ public class EffectFragment extends Fragment {
             listData[8].effectName = getString(R.string.easy_effect_pattern_breathe);
             listData[8].imgId = R.drawable.ic_pattern_breathe;
             mGroupList.add(listData[8]);
-            listData[9].effectName = getString(R.string.easy_effect_pattern_cannon);
+            /*listData[9].effectName = getString(R.string.easy_effect_pattern_cannon);
             listData[9].imgId = R.drawable.ic_pattern_cannon;
             mGroupList.add(listData[9]);
             listData[10].effectName = getString(R.string.easy_effect_pattern_explosion);
             listData[10].imgId = R.drawable.ic_pattern_explosion;
-            mGroupList.add(listData[10]);
+            mGroupList.add(listData[10]);*/
             optionData = new EffectOptionData[listCount];
             for (int i=0;i<listCount;i++) {
                 optionData[i] = new EffectOptionData();
@@ -317,8 +317,8 @@ public class EffectFragment extends Fragment {
             mChildList.add(optionData[6]);
             mChildList.add(optionData[7]);
             mChildList.add(optionData[8]);
-            mChildList.add(optionData[9]);
-            mChildList.add(optionData[10]);
+            /*mChildList.add(optionData[9]);
+            mChildList.add(optionData[10]);*/
         }
 
         expandableAdapter = new BaseExpandableAdapter(getActivity(),mGroupList,mChildList);

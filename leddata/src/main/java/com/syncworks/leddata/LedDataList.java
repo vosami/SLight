@@ -26,9 +26,9 @@ public class LedDataList implements List<LedData>, Serializable {
     private final static int EF_SIN =       6; // 정현파
     private final static int EF_LASER =     7; // 레이저파
     private final static int EF_BREATHE =   8; // 숨쉬기파
-    private final static int EF_CANNON =    9; // 대포효과
-    private final static int EF_EXPLOSION = 10; // 폭발효과
-    private final static int EF_RAINBOW =   11; // 숨쉬기파
+    /*private final static int EF_CANNON =    9; // 대포효과
+    private final static int EF_EXPLOSION = 10; // 폭발효과*/
+    private final static int EF_RAINBOW =   9; // 숨쉬기파
 
 
     // 스크립트 데이터
@@ -770,7 +770,7 @@ public class LedDataList implements List<LedData>, Serializable {
                 }
                 add(new LedData(OP_END,0));
                 break;
-            case EF_CANNON:
+            /*case EF_CANNON:
                 ledDatas.clear();
                 add(new LedData(0, 0));
                 add(new LedData(OP_NOP, startTime));
@@ -828,7 +828,7 @@ public class LedDataList implements List<LedData>, Serializable {
                 add(new LedData(0, 0));
                 add(new LedData(OP_END_IF,0));
                 add(new LedData(OP_END,0));
-                break;
+                break;*/
         }
     }
 

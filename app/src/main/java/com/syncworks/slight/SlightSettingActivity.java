@@ -57,6 +57,7 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
     private Switch alarmOnOff[];
     private TextView alarmRunTime[];
     private TextView alarmRunMode[];
+    private TextView alarmDevName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,7 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
         alarmOnOff = new Switch[3];
         alarmRunTime = new TextView[3];
         alarmRunMode = new TextView[3];
+        alarmDevName = new TextView(this);
         alarmAPM[0] = (TextView) findViewById(R.id.alarm_1_apm);
         alarmAPM[1] = (TextView) findViewById(R.id.alarm_2_apm);
         alarmAPM[2] = (TextView) findViewById(R.id.alarm_3_apm);
@@ -139,6 +141,7 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
         alarmRunMode[0] = (TextView) findViewById(R.id.alarm_1_run_mode);
         alarmRunMode[1] = (TextView) findViewById(R.id.alarm_2_run_mode);
         alarmRunMode[2] = (TextView) findViewById(R.id.alarm_3_run_mode);
+        alarmDevName = (TextView) findViewById(R.id.alarm_device_name);
 
         alarmOnOff[0].setOnCheckedChangeListener(onCheckedChangeListener);
         alarmOnOff[1].setOnCheckedChangeListener(onCheckedChangeListener);
@@ -146,6 +149,10 @@ public class SlightSettingActivity extends ActionBarActivity implements BleConsu
         alarmOnOff[0].setOnTouchListener(switchTouchListener);
         alarmOnOff[1].setOnTouchListener(switchTouchListener);
         alarmOnOff[2].setOnTouchListener(switchTouchListener);
+        SLightPref appPref = new SLightPref(this);
+        String devName = appPref.getString(SLightPref.DEVICE_NAME);
+        String devAddr = appPref.getString(SLightPref.DEVICE_ADDR);
+        alarmDevName.setText(devName + "(" +devAddr + ")");
     }
 
     private void invalidate() {

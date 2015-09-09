@@ -119,11 +119,11 @@
                 android:layout_weight="1"
                 android:text="@string/easy_save_radio_random"/>
         </RadioGroup>
-        <TextView
+        <!--<TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="@string/ss_alarm_dialog_notice"/>
+            android:text="@string/ss_alarm_dialog_notice"/>-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
