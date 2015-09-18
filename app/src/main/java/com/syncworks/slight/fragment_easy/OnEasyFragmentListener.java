@@ -24,7 +24,7 @@ public interface OnEasyFragmentListener {
 
     public void onEffectStart(boolean isStart);
 
-    public void onEffect(int effect, int delayLong, int randomTime, int startTime);
+    public void onEffect(int effect, int delayLong, int randomTime, int startTime, int patternOption);
 
     public void onRgbEffect(int effect, int delayLong, int randomTime, int startTime);
 

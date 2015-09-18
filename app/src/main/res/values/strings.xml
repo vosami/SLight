@@ -7,7 +7,7 @@
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
-    <string name="slight_version">SLight v150904</string>
+    <string name="slight_version">SLight v150918</string>
     <string name="slight_home">http://easyLED.co.kr</string>
 
     <string name="led_type_rgb">RGB LED</string>
@@ -195,7 +195,7 @@
     <string name="easy_led_select_tv_cancel_notify">이전 적용된 효과가 취소됩니다.</string>
 
     <string name="easy_effect_select">LED 효과 선택</string>
-    <string name="easy_effect_pattern_always">항상켜기</string>
+    <string name="easy_effect_pattern_always">항상켜기/끄기</string>
     <string name="easy_effect_pattern_pulse">깜박이기</string>
     <string name="easy_effect_pattern_flash">번쩍이기</string>
     <string name="easy_effect_pattern_double">두번번쩍</string>
@@ -206,8 +206,11 @@
     <string name="easy_effect_pattern_breathe">숨쉬는듯</string>
     <string name="easy_effect_pattern_cannon">대포효과C</string>
     <string name="easy_effect_pattern_explosion">폭발효과C</string>
+    <string name="easy_effect_pattern_fluorescent">고장난형광등</string>
+    <string name="easy_effect_pattern_lightening">번개효과</string>
     <string name="easy_effect_rgb_rainbow">레인보우</string>
     <string name="easy_effect_rgb_sin">정현파형</string>
+
 
     <string name="easy_effect_pattern_sound">소리효과</string>
 
@@ -216,6 +219,7 @@
     <string name="easy_effect_option_start_time">시작시간</string>
     <string name="easy_effect_option_pattern_time">효과시간</string>
     <string name="easy_effect_option_random_time">랜덤시간</string>
+    <string name="easy_effect_option_pattern_option">효과옵션</string>
 
 
     <string name="easy_effect_select_start_time">시작 시간 설정</string>

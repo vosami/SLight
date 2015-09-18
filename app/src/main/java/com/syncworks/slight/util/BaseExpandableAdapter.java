@@ -69,6 +69,11 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
             listener.onRandomTime(curGroup, randomTime);
         }
     }
+    private void doPatternOption(int curGroup, int patternOption) {
+        if (listener != null) {
+            listener.onPatternOption(curGroup, patternOption);
+        }
+    }
 
     public void setStartTime(int group, int startTime) {
         this.childList.get(group).get(0).timeStartDelay = startTime;
@@ -173,9 +178,11 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
             childHolder.btnStartTime = (Button) v.findViewById(R.id.btn_start_time);
             childHolder.btnPatternTime = (Button) v.findViewById(R.id.btn_pattern_time);
             childHolder.btnRandomTime = (Button) v.findViewById(R.id.btn_random_time);
+            childHolder.btnPatternOption = (Button) v.findViewById(R.id.btn_pattern_option);
             childHolder.llStartTime = (LinearLayout) v.findViewById(R.id.ll_start_time);
             childHolder.llEffectTime = (LinearLayout) v.findViewById(R.id.ll_effect_time);
             childHolder.llRandomTime = (LinearLayout) v.findViewById(R.id.ll_random_time);
+            childHolder.llOption = (LinearLayout) v.findViewById(R.id.ll_pattern_option);
             childHolder.pbStartTime = (ProgressBar) v.findViewById(R.id.progressbar_start_time);
             childHolder.stepEffectTime = new View[5];
             childHolder.stepEffectTime[0] = v.findViewById(R.id.effect_step_0);
@@ -189,6 +196,11 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
             childHolder.stepRandomTime[2] = v.findViewById(R.id.random_step_2);
             childHolder.stepRandomTime[3] = v.findViewById(R.id.random_step_3);
             childHolder.stepRandomTime[4] = v.findViewById(R.id.random_step_4);
+            childHolder.stepOption = new View[4];
+            childHolder.stepOption[0] = v.findViewById(R.id.option_step_0);
+            childHolder.stepOption[1] = v.findViewById(R.id.option_step_1);
+            childHolder.stepOption[2] = v.findViewById(R.id.option_step_2);
+            childHolder.stepOption[3] = v.findViewById(R.id.option_step_3);
             v.setTag(childHolder);
         }else{
             childHolder = (ChildHolder)v.getTag();
@@ -198,8 +210,8 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
             childHolder.llStartTime.setVisibility(View.VISIBLE);
             childHolder.pbStartTime.setProgress(childList.get(groupPosition).get(0).timeStartDelay);
         } else {
-            childHolder.btnStartTime.setVisibility(View.INVISIBLE);
-            childHolder.llStartTime.setVisibility(View.INVISIBLE);
+            childHolder.btnStartTime.setVisibility(View.GONE);
+            childHolder.llStartTime.setVisibility(View.GONE);
         }
         if (childList.get(groupPosition).get(0).isShowEffectDelay) {
             childHolder.btnPatternTime.setVisibility(View.VISIBLE);
@@ -213,8 +225,8 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
                 }
             }
         } else {
-            childHolder.btnPatternTime.setVisibility(View.INVISIBLE);
-            childHolder.llEffectTime.setVisibility(View.INVISIBLE);
+            childHolder.btnPatternTime.setVisibility(View.GONE);
+            childHolder.llEffectTime.setVisibility(View.GONE);
         }
         if (childList.get(groupPosition).get(0).isShowRandomDelay) {
             childHolder.btnRandomTime.setVisibility(View.VISIBLE);
@@ -228,9 +240,25 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
                 }
             }
         } else {
-            childHolder.btnRandomTime.setVisibility(View.INVISIBLE);
-            childHolder.llRandomTime.setVisibility(View.INVISIBLE);
+            childHolder.btnRandomTime.setVisibility(View.GONE);
+            childHolder.llRandomTime.setVisibility(View.GONE);
         }
+        if (childList.get(groupPosition).get(0).isShowPatternOption) {
+            childHolder.btnPatternOption.setVisibility(View.VISIBLE);
+            childHolder.llOption.setVisibility(View.VISIBLE);
+            int patternOption = childList.get(groupPosition).get(0).patternOption;
+            for (int i=0;i<4;i++) {
+                if (patternOption >= i) {
+                    childHolder.stepOption[i].setVisibility(View.VISIBLE);
+                } else {
+                    childHolder.stepOption[i].setVisibility(View.INVISIBLE);
+                }
+            }
+        } else {
+            childHolder.btnPatternOption.setVisibility(View.GONE);
+            childHolder.llOption.setVisibility(View.GONE);
+        }
+
         childHolder.btnStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -268,6 +296,21 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
                 mToast.show();
             }
         });
+        childHolder.btnPatternOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                childList.get(curGroupPosition).get(0).patternOption++;
+                if (childList.get(curGroupPosition).get(0).patternOption > 3) {
+                    childList.get(curGroupPosition).get(0).patternOption = 0;
+                }
+                doPatternOption(curGroupPosition, childList.get(curGroupPosition).get(0).patternOption);
+                if (mToast != null) {
+                    mToast.cancel();
+                }
+                mToast = Toast.makeText(context, "효과옵션" + (childList.get(curGroupPosition).get(0).patternOption + 1) + " 이 선택되었습니다.", Toast.LENGTH_SHORT);
+                mToast.show();
+            }
+        });
 
         return v;
     }
@@ -289,12 +332,15 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
         public Button btnStartTime;
         public Button btnPatternTime;
         public Button btnRandomTime;
+        public Button btnPatternOption;
         public LinearLayout llStartTime;
         public LinearLayout llEffectTime;
         public LinearLayout llRandomTime;
+        public LinearLayout llOption;
         public ProgressBar pbStartTime;
         public View stepEffectTime[];
         public View stepRandomTime[];
+        public View stepOption[];
     }
 
 }
