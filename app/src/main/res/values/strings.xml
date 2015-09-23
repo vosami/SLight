@@ -7,7 +7,7 @@
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
-    <string name="slight_version">SLight v150918</string>
+    <string name="slight_version">SLight v150924</string>
     <string name="slight_home">http://easyLED.co.kr</string>
 
     <string name="led_type_rgb">RGB LED</string>
@@ -219,7 +219,13 @@
     <string name="easy_effect_option_start_time">시작시간</string>
     <string name="easy_effect_option_pattern_time">효과시간</string>
     <string name="easy_effect_option_random_time">랜덤시간</string>
-    <string name="easy_effect_option_pattern_option">효과옵션</string>
+    <string name="easy_effect_option_pattern_option">1:켜기</string>
+    <string-array name="easy_effect_option_array_pattern_option">
+        <item>1:켜기</item>
+        <item>2:서서히켜기</item>
+        <item>3:끄기</item>
+        <item>4:서서히끄기</item>
+    </string-array>
 
 
     <string name="easy_effect_select_start_time">시작 시간 설정</string>

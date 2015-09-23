@@ -245,8 +245,11 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
         }
         if (childList.get(groupPosition).get(0).isShowPatternOption) {
             childHolder.btnPatternOption.setVisibility(View.VISIBLE);
-            childHolder.llOption.setVisibility(View.VISIBLE);
             int patternOption = childList.get(groupPosition).get(0).patternOption;
+            String[] optBtnText = context.getResources().getStringArray(R.array.easy_effect_option_array_pattern_option);
+            childHolder.btnPatternOption.setText(optBtnText[patternOption]);
+            childHolder.llOption.setVisibility(View.VISIBLE);
+
             for (int i=0;i<4;i++) {
                 if (patternOption >= i) {
                     childHolder.stepOption[i].setVisibility(View.VISIBLE);

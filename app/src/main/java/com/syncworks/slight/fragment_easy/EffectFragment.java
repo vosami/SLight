@@ -46,6 +46,7 @@ public class EffectFragment extends Fragment {
     private Button btnRgb[] = new Button[Define.NUMBER_OF_COLOR_LED];
     private Button btnLed[] = new Button[Define.NUMBER_OF_SINGLE_LED];
 
+
     /*private RadioButton rbPattern[] = new RadioButton[6];
     private Button btnSetStartTime;
     private ToggleButton tbDelay[] = new ToggleButton[3];
@@ -102,7 +103,6 @@ public class EffectFragment extends Fragment {
         appPref = new SLightPref(getActivity());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_effect,container,false);
-
 
         btnRgb[0] = (Button) view.findViewById(R.id.rgb_1);
         btnRgb[1] = (Button) view.findViewById(R.id.rgb_2);
@@ -206,10 +206,10 @@ public class EffectFragment extends Fragment {
             listData[8].imgId = R.drawable.ic_pattern_breathe;
             mGroupList.add(listData[8]);
             listData[9].effectName = getString(R.string.easy_effect_pattern_fluorescent);
-            listData[9].imgId = R.drawable.ic_pattern_breathe;
+            listData[9].imgId = R.drawable.ic_pattern_fluorescent;
             mGroupList.add(listData[9]);
             listData[10].effectName = getString(R.string.easy_effect_pattern_lightening);
-            listData[10].imgId = R.drawable.ic_pattern_breathe;
+            listData[10].imgId = R.drawable.ic_pattern_thunder;
             mGroupList.add(listData[10]);
             /*listData[9].effectName = getString(R.string.easy_effect_pattern_cannon);
             listData[9].imgId = R.drawable.ic_pattern_cannon;
@@ -295,10 +295,10 @@ public class EffectFragment extends Fragment {
             listData[8].imgId = R.drawable.ic_pattern_breathe;
             mGroupList.add(listData[8]);
             listData[9].effectName = getString(R.string.easy_effect_pattern_fluorescent);
-            listData[9].imgId = R.drawable.ic_pattern_cannon;
+            listData[9].imgId = R.drawable.ic_pattern_fluorescent;
             mGroupList.add(listData[9]);
             listData[10].effectName = getString(R.string.easy_effect_pattern_lightening);
-            listData[10].imgId = R.drawable.ic_pattern_cannon;
+            listData[10].imgId = R.drawable.ic_pattern_thunder;
             mGroupList.add(listData[10]);
 
             /*listData[9].effectName = getString(R.string.easy_effect_pattern_cannon);
@@ -370,6 +370,7 @@ public class EffectFragment extends Fragment {
                 staticStartTime = 0;
                 staticEffectTime = 2;
                 staticRandomTime = 0;
+                staticPatternOption = 0;
                 expandableAdapter.setStartTime(staticEffectNum, staticStartTime);
                 expandableAdapter.setEffectTime(staticEffectNum, staticEffectTime);
                 expandableAdapter.setRandomTime(staticEffectNum, staticRandomTime);
@@ -522,7 +523,9 @@ public class EffectFragment extends Fragment {
                 staticStartTime = 0;
                 staticEffectTime = 2;
                 staticRandomTime = 0;
+                staticPatternOption = 0;
             }
+
             for (int i = 0; i < mListView.getCount(); i++) {
                 if (i == staticEffectNum) {
                     mListView.expandGroup(i);

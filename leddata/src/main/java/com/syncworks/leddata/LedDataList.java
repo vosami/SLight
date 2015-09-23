@@ -72,7 +72,7 @@ public class LedDataList implements List<LedData>, Serializable {
                     add(new LedData(OP_NOP,startTime));
                     add(new LedData(OP_TRANS_BRIGHT_START, 0));
                     add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
-                    add(new LedData(OP_TRANS_BRIGHT_COUNT,100));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,250));
                     add(new LedData(OP_TRANS_START,patternTime));
                     add(new LedData(OP_START,0));
                     add(new LedData(191, 0));
@@ -88,7 +88,7 @@ public class LedDataList implements List<LedData>, Serializable {
                     add(new LedData(OP_NOP,startTime));
                     add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
                     add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
-                    add(new LedData(OP_TRANS_BRIGHT_COUNT,100));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,250));
                     add(new LedData(OP_TRANS_START,patternTime));
                     add(new LedData(OP_START,0));
                     add(new LedData(0, 0));
@@ -246,7 +246,7 @@ public class LedDataList implements List<LedData>, Serializable {
                 add(new LedData(OP_START,0));
                 add(new LedData(OP_SIN_SHIFT,0x9F));
                 add(new LedData(OP_SIN_COUNT,0xFF));
-                add(new LedData(OP_SIN_START,10 - patternTime));
+                add(new LedData(OP_SIN_START,10 - (patternTime*2)));
                 switch (randomTime) {
                     case 0:
                         break;
@@ -611,8 +611,8 @@ public class LedDataList implements List<LedData>, Serializable {
                     add(new LedData(OP_NOP,startTime));
                     add(new LedData(OP_TRANS_BRIGHT_START, 0));
                     add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
-                    add(new LedData(OP_TRANS_BRIGHT_COUNT,100));
-                    add(new LedData(OP_TRANS_START,patternTime));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,250));
+                    add(new LedData(OP_TRANS_START,0));
                     add(new LedData(OP_START,0));
                     add(new LedData(191, 0));
                     add(new LedData(OP_END, 0));
@@ -627,8 +627,8 @@ public class LedDataList implements List<LedData>, Serializable {
                     add(new LedData(OP_NOP,startTime));
                     add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
                     add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
-                    add(new LedData(OP_TRANS_BRIGHT_COUNT,100));
-                    add(new LedData(OP_TRANS_START,patternTime));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,250));
+                    add(new LedData(OP_TRANS_START,0));
                     add(new LedData(OP_START,0));
                     add(new LedData(0, 0));
                     add(new LedData(OP_END, 0));
@@ -813,7 +813,7 @@ public class LedDataList implements List<LedData>, Serializable {
                 add(new LedData(OP_START,0));
                 add(new LedData(OP_SIN_SHIFT,0x9F));
                 add(new LedData(OP_SIN_COUNT,0xFF));
-                add(new LedData(OP_SIN_START,10 - patternTime));
+                add(new LedData(OP_SIN_START,10 - (patternTime*2)));
                 switch (randomTime) {
                     case 0:
                         break;
