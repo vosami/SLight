@@ -22,15 +22,17 @@ public class LedDataList implements List<LedData>, Serializable {
     private final static int EF_FLASH =     2; // 번쩍이기
     private final static int EF_DOUBLE =    3; // 두번번쩍
     private final static int EF_UP_DOWN =   4; // 오르내리
-    private final static int EF_TORCH =     5; // 횃불효과
-    private final static int EF_SIN =       6; // 정현파
-    private final static int EF_LASER =     7; // 레이저파
-    private final static int EF_BREATHE =   8; // 숨쉬기파
-    private final static int EF_FALSE =     9; // 고장효과
-    private final static int EF_LIGHTENING = 10; // 번개효과
-    /*private final static int EF_CANNON =    9; // 대포효과
-    private final static int EF_EXPLOSION = 10; // 폭발효과*/
-    private final static int EF_RAINBOW =   11; // 숨쉬기파
+    private final static int EF_FIREFLY =   5; // 반딧불이 효과
+    private final static int EF_TORCH =     6; // 횃불효과
+    private final static int EF_SIN =       7; // 정현파
+    private final static int EF_LASER =     8; // 레이저파
+    private final static int EF_BREATHE =   9; // 숨쉬기파
+    private final static int EF_FALSE =     10; // 고장효과
+    private final static int EF_LIGHTENING = 11; // 번개효과
+    //private final static int EF_WELDING =   12; // 용접효과
+    private final static int EF_CANNON =    12; // 대포효과
+    private final static int EF_EXPLOSION = 13; // 폭발효과
+    private final static int EF_RAINBOW =   14; // 숨쉬기파
 
 
     // 스크립트 데이터
@@ -196,6 +198,38 @@ public class LedDataList implements List<LedData>, Serializable {
                         break;
                 }
                 add(new LedData(OP_END,0));
+                add(new LedData(OP_END,0));
+                break;
+            case EF_FIREFLY:
+                ledDatas.clear();
+                add(new LedData(0, 0));
+                add(new LedData(OP_NOP, startTime));
+                add(new LedData(OP_START, 0));
+                add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                add(new LedData(OP_TRANS_BRIGHT_COUNT,10* (patternTime + 1)));
+                add(new LedData(OP_TRANS_START,patternTime));
+                add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                add(new LedData(OP_TRANS_BRIGHT_COUNT,20* (patternTime + 1)));
+                add(new LedData(OP_TRANS_START,patternTime));
+                add(new LedData(OP_NOP,(patternTime+1)*20 + 50));
+                switch (randomTime) {
+                    case 0:
+                        break;
+                    case 1:
+                        add(new LedData(OP_RANDOM_DELAY,18));
+                        break;
+                    case 2:
+                        add(new LedData(OP_RANDOM_DELAY,20));
+                        break;
+                    case 3:
+                        add(new LedData(OP_RANDOM_DELAY,21));
+                        break;
+                    case 4:
+                        add(new LedData(OP_RANDOM_DELAY,27));
+                        break;
+                }
                 add(new LedData(OP_END,0));
                 break;
             case EF_TORCH:
@@ -765,6 +799,38 @@ public class LedDataList implements List<LedData>, Serializable {
                 }
                 add(new LedData(OP_END,0));
                 break;
+            case EF_FIREFLY:
+                ledDatas.clear();
+                add(new LedData(0, 0));
+                add(new LedData(OP_NOP, startTime));
+                add(new LedData(OP_START, 0));
+                add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                add(new LedData(OP_TRANS_BRIGHT_COUNT,10* (patternTime + 1)));
+                add(new LedData(OP_TRANS_START,patternTime));
+                add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                add(new LedData(OP_TRANS_BRIGHT_COUNT,20* (patternTime + 1)));
+                add(new LedData(OP_TRANS_START,patternTime));
+                add(new LedData(OP_NOP,(patternTime+1)*20 + 50));
+                switch (randomTime) {
+                    case 0:
+                        break;
+                    case 1:
+                        add(new LedData(OP_RANDOM_DELAY,18));
+                        break;
+                    case 2:
+                        add(new LedData(OP_RANDOM_DELAY,20));
+                        break;
+                    case 3:
+                        add(new LedData(OP_RANDOM_DELAY,21));
+                        break;
+                    case 4:
+                        add(new LedData(OP_RANDOM_DELAY,27));
+                        break;
+                }
+                add(new LedData(OP_END,0));
+                break;
             case EF_TORCH:
                 ledDatas.clear();
                 add(new LedData(0, 0));
@@ -948,7 +1014,7 @@ public class LedDataList implements List<LedData>, Serializable {
                 add(new LedData(OP_RANDOM_DELAY,lightTime));
                 add(new LedData(OP_RANDOM_DELAY,lightTime));
                 add(new LedData(OP_RANDOM_VAR_C,2));
-                add(new LedData(OP_IF,DATA_C,  DATA_LARGE, 2));
+                add(new LedData(OP_IF,DATA_C, DATA_LARGE, 2));
                 add(new LedData(191,0));
                 add(new LedData(0,10));
                 add(new LedData(OP_RANDOM_DELAY,lightTime));
@@ -980,20 +1046,53 @@ public class LedDataList implements List<LedData>, Serializable {
                 add(new LedData(OP_RANDOM_DELAY,lightTime));
                 add(new LedData(OP_END, 0));
                 break;
-            /*case EF_CANNON:
+            /*
+            case EF_WELDING:
+                ledDatas.clear();
+                add(new LedData(OP_HEAD_PATTERN, EF_WELDING, DEFINED_PATTERN, effect));
+                add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                add(new LedData(OP_HEAD_START_DELAY, startTime));
+                add(new LedData(OP_START, 0));
+                add(new LedData(191,patternTime));
+                add(new LedData(0,patternTime*2 + 1));
+                add(new LedData(OP_FOR_START,50));
+                add(new LedData(OP_RANDOM_VAL,252));
+                add(new LedData(OP_FOR_END, 0));
+                add(new LedData(0,patternTime*10));
+                add(new LedData(OP_RANDOM_DELAY,62));
+                add(new LedData(OP_FOR_START,10));
+                add(new LedData(OP_RANDOM_VAL,60));
+                add(new LedData(OP_FOR_END, 0));
+                add(new LedData(OP_FOR_START,10));
+                add(new LedData(OP_RANDOM_VAL,174));
+                add(new LedData(OP_FOR_END, 0));
+                add(new LedData(OP_FOR_START,10));
+                add(new LedData(OP_RANDOM_VAL,252));
+                add(new LedData(OP_FOR_END, 0));
+                add(new LedData(OP_FOR_START,10));
+                add(new LedData(OP_RANDOM_VAL,174));
+                add(new LedData(OP_FOR_END, 0));
+                add(new LedData(OP_FOR_START,10));
+                add(new LedData(OP_RANDOM_VAL,60));
+                add(new LedData(OP_FOR_END, 0));
+                add(new LedData(0,patternTime*2 + 1));
+                add(new LedData(OP_END, 0));
+                break;
+                */
+            case EF_CANNON:
                 ledDatas.clear();
                 add(new LedData(0, 0));
                 add(new LedData(OP_NOP, startTime));
                 add(new LedData(OP_START, 0));
-                add(new LedData(0,0));
-                add(new LedData(50,0));
-                add(new LedData(100,0));
-                add(new LedData(150,0));
-                add(new LedData(191,0));
-                add(new LedData(150,0));
-                add(new LedData(100,0));
-                add(new LedData(50,0));
-                add(new LedData(0,0));
+                add(new LedData(0,1));
+                add(new LedData(50,1));
+                add(new LedData(100,1));
+                add(new LedData(150,1));
+                add(new LedData(191,5));
+                add(new LedData(150,5));
+                add(new LedData(100,5));
+                add(new LedData(50,5));
+                add(new LedData(0,5));
                 add(new LedData(OP_PUT_VAR_C,100));
                 add(new LedData(OP_LONG_DELAY,20*(patternTime + 1)));
                 switch (randomTime) {
@@ -1038,7 +1137,7 @@ public class LedDataList implements List<LedData>, Serializable {
                 add(new LedData(0, 0));
                 add(new LedData(OP_END_IF,0));
                 add(new LedData(OP_END,0));
-                break;*/
+                break;
         }
     }
 

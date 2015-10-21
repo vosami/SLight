@@ -8,8 +8,8 @@ android {
 		applicationId "com.syncworks.slight"
 		minSdkVersion 18
 		targetSdkVersion 21
-		versionCode 16
-		versionName "2.0.5"
+		versionCode 18
+		versionName "2.0.7"
 	}
 	buildTypes {
 		release {

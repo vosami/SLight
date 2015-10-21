@@ -7,7 +7,7 @@
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
-    <string name="slight_version">SLight v150924</string>
+    <string name="slight_version">SLight v151022</string>
     <string name="slight_home">http://easyLED.co.kr</string>
 
     <string name="led_type_rgb">RGB LED</string>
@@ -200,21 +200,23 @@
     <string name="easy_effect_pattern_flash">번쩍이기</string>
     <string name="easy_effect_pattern_double">두번번쩍</string>
     <string name="easy_effect_pattern_updown">오르내리</string>
+    <string name="easy_effect_pattern_firefly">밧딧불이</string>
     <string name="easy_effect_pattern_torch">횃불효과</string>
     <string name="easy_effect_pattern_sin">정현파형</string>
     <string name="easy_effect_pattern_laser">레이저파</string>
     <string name="easy_effect_pattern_breathe">숨쉬는듯</string>
-    <string name="easy_effect_pattern_cannon">대포효과C</string>
-    <string name="easy_effect_pattern_explosion">폭발효과C</string>
+    <string name="easy_effect_pattern_cannon">대포효과</string>
+    <string name="easy_effect_pattern_explosion">폭발효과</string>
     <string name="easy_effect_pattern_fluorescent">고장난형광등</string>
     <string name="easy_effect_pattern_lightening">번개효과</string>
+    <string name="easy_effect_pattern_welding">용접효과</string>
     <string name="easy_effect_rgb_rainbow">레인보우</string>
     <string name="easy_effect_rgb_sin">정현파형</string>
 
 
     <string name="easy_effect_pattern_sound">소리효과</string>
 
-    <string name="easy_effect_not_selected">선택된 LED가 없습니다.</string>
+    <string name="easy_effect_not_selected">선택된 LED 가 없습니다.</string>
 
     <string name="easy_effect_option_start_time">시작시간</string>
     <string name="easy_effect_option_pattern_time">효과시간</string>
