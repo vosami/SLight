@@ -207,6 +207,7 @@
     <string name="easy_effect_pattern_breathe">숨쉬는듯</string>
     <string name="easy_effect_pattern_cannon">대포효과</string>
     <string name="easy_effect_pattern_explosion">폭발효과</string>
+    <string name="easy_effect_pattern_energy">에네르기파</string>
     <string name="easy_effect_pattern_fluorescent">고장난형광등</string>
     <string name="easy_effect_pattern_lightening">번개효과</string>
     <string name="easy_effect_pattern_welding">용접효과</string>

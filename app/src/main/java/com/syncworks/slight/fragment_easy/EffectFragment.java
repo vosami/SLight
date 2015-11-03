@@ -270,7 +270,7 @@ public class EffectFragment extends Fragment {
             /*mChildList.add(optionData[10]);
             mChildList.add(optionData[11]);*/
         } else {
-            listCount = 14;
+            listCount = 15;
             listData = new EffectListData[listCount];
             for (int i=0;i<listCount;i++) {
                 listData[i] = new EffectListData();
@@ -322,6 +322,9 @@ public class EffectFragment extends Fragment {
             listData[13].effectName = getString(R.string.easy_effect_pattern_explosion);
             listData[13].imgId = R.drawable.ic_pattern_explosion;
             mGroupList.add(listData[13]);
+            listData[14].effectName = getString(R.string.easy_effect_pattern_energy);
+            listData[14].imgId = R.drawable.ic_pattern_explosion;
+            mGroupList.add(listData[14]);
             optionData = new EffectOptionData[listCount];
             for (int i=0;i<listCount;i++) {
                 optionData[i] = new EffectOptionData();
@@ -362,6 +365,7 @@ public class EffectFragment extends Fragment {
             mChildList.add(optionData[11]);
             mChildList.add(optionData[12]);
             mChildList.add(optionData[13]);
+            mChildList.add(optionData[14]);
             /*mChildList.add(optionData[9]);
             mChildList.add(optionData[10]);*/
         }

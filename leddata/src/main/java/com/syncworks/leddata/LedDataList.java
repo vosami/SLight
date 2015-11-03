@@ -32,6 +32,7 @@ public class LedDataList implements List<LedData>, Serializable {
     //private final static int EF_WELDING =   12; // 용접효과
     private final static int EF_CANNON =    12; // 대포효과
     private final static int EF_EXPLOSION = 13; // 폭발효과
+    private final static int EF_ENERGY =    14; // 에네르기파
     private final static int EF_RAINBOW =   14; // 숨쉬기파
 
 
@@ -1136,6 +1137,37 @@ public class LedDataList implements List<LedData>, Serializable {
                 add(new LedData(OP_ELSE,0));
                 add(new LedData(0, 0));
                 add(new LedData(OP_END_IF,0));
+                add(new LedData(OP_END,0));
+                break;
+            case EF_ENERGY:
+                ledDatas.clear();
+                add(new LedData(0, 0));
+                add(new LedData(OP_START, 0));
+                add(new LedData(OP_FOR_START,14));
+                add(new LedData(20, 7));
+                add(new LedData(40, 7));
+                add(new LedData(OP_FOR_END, 0));
+                add(new LedData(OP_FOR_START,22));
+                add(new LedData(50,5));
+                add(new LedData(70,5));
+                add(new LedData(OP_FOR_END,0));
+                add(new LedData(OP_FOR_START,28));
+                add(new LedData(80,3));
+                add(new LedData(100,3));
+                add(new LedData(OP_FOR_END,0));
+                add(new LedData(OP_FOR_START,40));
+                add(new LedData(90,1));
+                add(new LedData(110,1));
+                add(new LedData(OP_FOR_END,0));
+                add(new LedData(OP_FOR_START,200));
+                add(new LedData(150,0));
+                add(new LedData(190,0));
+                add(new LedData(OP_FOR_END,0));
+                add(new LedData(OP_TRANS_BRIGHT_START, 190));
+                add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                add(new LedData(OP_TRANS_BRIGHT_COUNT,50));
+                add(new LedData(OP_TRANS_START,0));
+                add(new LedData(0,200));
                 add(new LedData(OP_END,0));
                 break;
         }
