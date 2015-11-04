@@ -7,7 +7,7 @@
     <string name="title_activity_led_effect">LedEffectActivity</string>
     <string name="title_activity_test">TestActivity</string>
 
-    <string name="slight_version">SLight v151022</string>
+    <string name="slight_version">SLight v151105</string>
     <string name="slight_home">http://easyLED.co.kr</string>
 
     <string name="led_type_rgb">RGB LED</string>
