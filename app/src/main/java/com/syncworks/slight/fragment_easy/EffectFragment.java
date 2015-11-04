@@ -172,7 +172,7 @@ public class EffectFragment extends Fragment {
             mGroupList.add(listData[0]);
             mChildList.add(optionData[0]);
         } else if (getLedSelected() == LED_RGB_ONLY_SELECTED) {
-            listCount = 15;
+            listCount = 16;
             listData = new EffectListData[listCount];
             for (int i=0;i<listCount;i++) {
                 listData[i] = new EffectListData();
