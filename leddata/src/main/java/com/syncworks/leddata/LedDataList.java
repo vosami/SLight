@@ -34,6 +34,12 @@ public class LedDataList implements List<LedData>, Serializable {
     private final static int EF_EXPLOSION = 13; // 폭발효과
     private final static int EF_ENERGY =    14; // 에네르기파
     private final static int EF_RAINBOW =   15; // 숨쉬기파
+    private final static int EF_RAINBOW_PASTEL = 16; // 레인보우 파스텔
+    private final static int EF_XMAS_TOTAL = 15; // 크리스마스 트리
+    private final static int EF_XMAS_1 = 16; // 크리스마스 트리
+    private final static int EF_XMAS_2 = 17; // 크리스마스 트리
+    private final static int EF_XMAS_3 = 18; // 크리스마스 트리
+    private final static int EF_ENGINE = 19; // 제트 엔진 효과
 
 
     // 스크립트 데이터
@@ -59,7 +65,7 @@ public class LedDataList implements List<LedData>, Serializable {
     }
 
     // RGB 효과 데이터 설정 함수
-    public void setRgbEffect(int effect, int rgbNum, int patternTime, int randomTime, int startTime, int patternOption) {
+    public void setRgbEffect(int effect, int rgbNum, int patternTime, int randomTime, int startTime, int patternOption, int type) {
         int rgbPer = rgbNum % 3;
         switch (effect) {
             case EF_ALWAYS:
@@ -590,16 +596,16 @@ public class LedDataList implements List<LedData>, Serializable {
                     add(new LedData(OP_NOP,patternNop5));
                     add(new LedData(OP_TRANS_START,0));
                     add(new LedData(OP_TRANS_BRIGHT_START,0));    // 파랑
-                    add(new LedData(OP_TRANS_BRIGHT_STOP,56));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,100));
                     add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
                     add(new LedData(OP_NOP,patternNop5));
                     add(new LedData(OP_TRANS_START,0));
-                    add(new LedData(OP_TRANS_BRIGHT_START,56));     // 남색
-                    add(new LedData(OP_TRANS_BRIGHT_STOP,96));
+                    add(new LedData(OP_TRANS_BRIGHT_START,100));     // 남색
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,180));
                     add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
                     add(new LedData(OP_NOP,patternNop5));
                     add(new LedData(OP_TRANS_START,0));
-                    add(new LedData(OP_TRANS_BRIGHT_START,96));     // 보라
+                    add(new LedData(OP_TRANS_BRIGHT_START,180));     // 보라
                     add(new LedData(OP_TRANS_BRIGHT_STOP,191));
                     add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
                     add(new LedData(OP_NOP,patternNop5));
@@ -628,26 +634,26 @@ public class LedDataList implements List<LedData>, Serializable {
                     add(new LedData(OP_HEAD_START_DELAY, startTime));
                     add(new LedData(OP_START,0));
                     add(new LedData(OP_TRANS_BRIGHT_START, 0));   // 빨강
-                    add(new LedData(OP_TRANS_BRIGHT_STOP,105));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,157));
                     add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
                     add(new LedData(OP_NOP,patternNop5));
                     add(new LedData(OP_TRANS_START,0));
-                    add(new LedData(OP_TRANS_BRIGHT_START,105));    // 주황
+                    add(new LedData(OP_TRANS_BRIGHT_START,157));    // 주황
                     add(new LedData(OP_TRANS_BRIGHT_STOP,191));
                     add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
                     add(new LedData(OP_NOP,patternNop5));
                     add(new LedData(OP_TRANS_START,0));
                     add(new LedData(OP_TRANS_BRIGHT_START,191));    // 노랑
-                    add(new LedData(OP_TRANS_BRIGHT_STOP,96));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,191));
                     add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
                     add(new LedData(OP_NOP,patternNop5));
                     add(new LedData(OP_TRANS_START,0));
-                    add(new LedData(OP_TRANS_BRIGHT_START,96));     // 초록
-                    add(new LedData(OP_TRANS_BRIGHT_STOP,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,191));     // 초록
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,4));
                     add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
                     add(new LedData(OP_NOP,patternNop5));
                     add(new LedData(OP_TRANS_START,0));
-                    add(new LedData(OP_TRANS_BRIGHT_START,0));    // 파랑
+                    add(new LedData(OP_TRANS_BRIGHT_START,4));    // 파랑
                     add(new LedData(OP_TRANS_BRIGHT_STOP,0));
                     add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
                     add(new LedData(OP_NOP,patternNop5));
@@ -696,29 +702,208 @@ public class LedDataList implements List<LedData>, Serializable {
                     add(new LedData(OP_NOP,patternNop5));
                     add(new LedData(OP_TRANS_START,0));
                     add(new LedData(OP_TRANS_BRIGHT_START,0));    // 노랑
-                    add(new LedData(OP_TRANS_BRIGHT_STOP,0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,50));
                     add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
                     add(new LedData(OP_NOP,patternNop5));
                     add(new LedData(OP_TRANS_START,0));
-                    add(new LedData(OP_TRANS_BRIGHT_START,0));     // 초록
+                    add(new LedData(OP_TRANS_BRIGHT_START,50));     // 초록
                     add(new LedData(OP_TRANS_BRIGHT_STOP,191));
                     add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
                     add(new LedData(OP_NOP,patternNop5));
                     add(new LedData(OP_TRANS_START,0));
                     add(new LedData(OP_TRANS_BRIGHT_START,191));    // 파랑
-                    add(new LedData(OP_TRANS_BRIGHT_STOP,97));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,63));
                     add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
                     add(new LedData(OP_NOP,patternNop5));
                     add(new LedData(OP_TRANS_START,0));
-                    add(new LedData(OP_TRANS_BRIGHT_START,97));     // 남색
-                    add(new LedData(OP_TRANS_BRIGHT_STOP,96));
+                    add(new LedData(OP_TRANS_BRIGHT_START,63));     // 남색
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,180));
                     add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
                     add(new LedData(OP_NOP,patternNop5));
                     add(new LedData(OP_TRANS_START,0));
-                    add(new LedData(OP_TRANS_BRIGHT_START,96));     // 보라
+                    add(new LedData(OP_TRANS_BRIGHT_START,180));     // 보라
                     add(new LedData(OP_TRANS_BRIGHT_STOP,0));
                     add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime5));
                     add(new LedData(OP_NOP,patternNop5));
+                    add(new LedData(OP_TRANS_START,0));
+                    switch (randomTime) {
+                        case 0:
+                            break;
+                        case 1:
+                            add(new LedData(OP_RANDOM_DELAY,2));
+                            break;
+                        case 2:
+                            add(new LedData(OP_RANDOM_DELAY,4));
+                            break;
+                        case 3:
+                            add(new LedData(OP_RANDOM_DELAY,5));
+                            break;
+                        case 4:
+                            add(new LedData(OP_RANDOM_DELAY,6));
+                            break;
+                    }
+                    add(new LedData(OP_END,0));
+                }
+                break;
+            case EF_RAINBOW_PASTEL:
+                int patternTime16 = 30*(patternTime + 1);
+                int patternNop16 = 20*(patternTime + 1);
+                if (rgbPer == 0) {
+                    ledDatas.clear();
+                    add(new LedData(OP_HEAD_PATTERN, rgbNum, DEFINED_PATTERN, effect));
+                    add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                    add(new LedData(OP_HEAD_START_DELAY, startTime));
+                    add(new LedData(OP_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 175));   // 빨강
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,169));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,169));    // 주황
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,183));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,183));    // 노랑
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,146));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,146));     // 초록
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,109));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,109));    // 파랑
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,125));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,125));     // 남색
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,149));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,149));     // 보라
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,175));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    switch (randomTime) {
+                        case 0:
+                            break;
+                        case 1:
+                            add(new LedData(OP_RANDOM_DELAY,2));
+                            break;
+                        case 2:
+                            add(new LedData(OP_RANDOM_DELAY,4));
+                            break;
+                        case 3:
+                            add(new LedData(OP_RANDOM_DELAY,5));
+                            break;
+                        case 4:
+                            add(new LedData(OP_RANDOM_DELAY,6));
+                            break;
+                    }
+                    add(new LedData(OP_END,0));
+                } else if (rgbPer == 1) {
+                    ledDatas.clear();
+                    add(new LedData(OP_HEAD_PATTERN, rgbNum, DEFINED_PATTERN, effect));
+                    add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                    add(new LedData(OP_HEAD_START_DELAY, startTime));
+                    add(new LedData(OP_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 113));   // 빨강
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,146));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,146));    // 주황
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,175));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,175));    // 노랑
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,166));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,166));     // 초록
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,143));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,143));    // 파랑
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,131));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,131));     // 남색
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,112));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,112));     // 보라
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,113));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    switch (randomTime) {
+                        case 0:
+                            break;
+                        case 1:
+                            add(new LedData(OP_RANDOM_DELAY,2));
+                            break;
+                        case 2:
+                            add(new LedData(OP_RANDOM_DELAY,4));
+                            break;
+                        case 3:
+                            add(new LedData(OP_RANDOM_DELAY,5));
+                            break;
+                        case 4:
+                            add(new LedData(OP_RANDOM_DELAY,6));
+                            break;
+                    }
+                    add(new LedData(OP_END,0));
+                } else if(rgbPer == 2) {
+                    ledDatas.clear();
+                    add(new LedData(OP_HEAD_PATTERN, rgbNum, DEFINED_PATTERN, effect));
+                    add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                    add(new LedData(OP_HEAD_START_DELAY, startTime));
+                    add(new LedData(OP_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 112));   // 빨강
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,110));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,110));    // 주황
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,112));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,112));    // 노랑
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,139));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,139));     // 초록
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,164));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,164));    // 파랑
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,176));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,176));     // 남색
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,160));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START,160));     // 보라
+                    add(new LedData(OP_TRANS_BRIGHT_STOP,112));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,patternTime16));
+                    add(new LedData(OP_NOP,patternNop16));
                     add(new LedData(OP_TRANS_START,0));
                     switch (randomTime) {
                         case 0:
@@ -743,7 +928,7 @@ public class LedDataList implements List<LedData>, Serializable {
         }
     }
 
-    public void setEffect(int effect, int patternTime, int randomTime, int startTime, int patternOption) {
+    public void setEffect(int effect, int patternTime, int randomTime, int startTime, int patternOption, int type) {
         switch (effect) {
             case EF_ALWAYS:
                 ledDatas.clear();
@@ -1301,6 +1486,555 @@ public class LedDataList implements List<LedData>, Serializable {
                     case 4:
                         add(new LedData(OP_RANDOM_DELAY,69));
                         break;
+                }
+                add(new LedData(OP_END, 0));
+                break;
+            case EF_XMAS_TOTAL:
+                int xmasPattern = patternTime + 1;
+                ledDatas.clear();
+                add(new LedData(OP_HEAD_PATTERN, EF_XMAS_TOTAL, DEFINED_PATTERN, effect));
+                add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                add(new LedData(OP_HEAD_START_DELAY, startTime));
+                add(new LedData(OP_START, 0));
+                if (type==0) {
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(0, 20));
+                    add(new LedData(191, 20));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(191, 80));
+                    add(new LedData(0, 80));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 35));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START,10*xmasPattern));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,200));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,200));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(0, 50));
+                    add(new LedData(OP_FOR_END,0));
+
+                } else if (type == 1) {
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(191, 20));
+                    add(new LedData(0, 20));
+                    add(new LedData(OP_FOR_END, 0));
+
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(0, 80));
+                    add(new LedData(191, 80));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(0, 35));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START,10*xmasPattern));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,200));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(0, 50));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,200));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_FOR_END,0));
+                } else if (type==2) {
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(191, 20));
+                    add(new LedData(0, 20));
+                    add(new LedData(0, 20));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(0, 30));
+                    add(new LedData(0, 30));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(191, 80));
+                    add(new LedData(0, 80));
+                    add(new LedData(0, 80));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 45));
+                    add(new LedData(0, 45));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START,10*xmasPattern));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,200));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,200));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(0, 205));
+                    add(new LedData(0, 205));
+                    add(new LedData(OP_FOR_END,0));
+                } else if (type==3) {
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(0, 20));
+                    add(new LedData(191, 20));
+                    add(new LedData(0, 20));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(0, 30));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(0, 30));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(0, 80));
+                    add(new LedData(191, 80));
+                    add(new LedData(0, 80));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(0, 45));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 45));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START,10*xmasPattern));
+                    add(new LedData(0, 205));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,200));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,200));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(0, 205));
+                    add(new LedData(OP_FOR_END,0));
+                } else if (type==4) {
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(0, 20));
+                    add(new LedData(0, 20));
+                    add(new LedData(191, 20));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(0, 30));
+                    add(new LedData(0, 30));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(0, 80));
+                    add(new LedData(0, 80));
+                    add(new LedData(191, 80));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 20*xmasPattern));
+                    add(new LedData(0, 45));
+                    add(new LedData(0, 45));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START,10*xmasPattern));
+                    add(new LedData(0, 205));
+                    add(new LedData(0, 205));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,200));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,200));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_FOR_END,0));
+                }
+                add(new LedData(OP_END, 0));
+                break;
+            case EF_XMAS_1:
+                ledDatas.clear();
+                add(new LedData(OP_HEAD_PATTERN, EF_XMAS_1, DEFINED_PATTERN, effect));
+                add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                add(new LedData(OP_HEAD_START_DELAY, startTime));
+                add(new LedData(OP_START, 0));
+                if (type == 0) {
+                    add(new LedData(191, 20*(patternTime+1)));
+                    add(new LedData(0, 20*(patternTime+1)));
+                } else if (type == 1) {
+                    add(new LedData(0, 20*(patternTime+1)));
+                    add(new LedData(191, 20*(patternTime+1)));
+                } else if (type == 2) {
+                    add(new LedData(191, 20*(patternTime+1)));
+                    add(new LedData(0, 20*(patternTime+1)));
+                    add(new LedData(0, 20*(patternTime+1)));
+                } else if (type == 3) {
+                    add(new LedData(0, 20*(patternTime+1)));
+                    add(new LedData(191, 20*(patternTime+1)));
+                    add(new LedData(0, 20*(patternTime+1)));
+                } else if (type == 4) {
+                    add(new LedData(0, 20*(patternTime+1)));
+                    add(new LedData(0, 20*(patternTime+1)));
+                    add(new LedData(191, 20*(patternTime+1)));
+                }
+                add(new LedData(OP_END, 0));
+                break;
+            case EF_XMAS_2:
+                ledDatas.clear();
+                add(new LedData(OP_HEAD_PATTERN, EF_XMAS_2, DEFINED_PATTERN, effect));
+                add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                add(new LedData(OP_HEAD_START_DELAY, startTime));
+                add(new LedData(OP_START, 0));
+                if (type == 0) {
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10+50*patternTime));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10+50*patternTime));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(0, 10+50*patternTime));
+                } else if (type == 1) {
+                    add(new LedData(0, 10+50*patternTime));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10+50*patternTime));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10+50*patternTime));
+                    add(new LedData(OP_TRANS_START,0));
+                } else if (type == 2) {
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10+50*patternTime));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10+50*patternTime));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(0, 10+50*patternTime));
+                    add(new LedData(0, 10+50*patternTime));
+                } else if (type == 3) {
+                    add(new LedData(0, 10+50*patternTime));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10+50*patternTime));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10+50*patternTime));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(0, 10+50*patternTime));
+                } else if (type == 4) {
+                    add(new LedData(0, 10+50*patternTime));
+                    add(new LedData(0, 10+50*patternTime));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10+50*patternTime));
+                    add(new LedData(OP_TRANS_START,0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, OP_MACRO_MAX_VAL));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT,10+50*patternTime));
+                    add(new LedData(OP_TRANS_START,0));
+                }
+                add(new LedData(OP_END, 0));
+                break;
+            case EF_XMAS_3:
+                ledDatas.clear();
+                add(new LedData(OP_HEAD_PATTERN, EF_XMAS_2, DEFINED_PATTERN, effect));
+                add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                add(new LedData(OP_HEAD_START_DELAY, startTime));
+                add(new LedData(OP_START, 0));
+                if (type == 0) {
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 45));
+                } else if (type == 1) {
+                    add(new LedData(0, 45));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                } else if (type == 2) {
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 45));
+                    add(new LedData(0, 45));
+                } else if (type == 3) {
+                    add(new LedData(0, 45));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 45));
+                } else if (type == 4) {
+                    add(new LedData(0, 45));
+                    add(new LedData(0, 45));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                    add(new LedData(0, 4));
+                    add(new LedData(191, 4));
+                }
+                add(new LedData(OP_END, 0));
+                break;
+            case EF_ENGINE:
+                ledDatas.clear();
+                add(new LedData(OP_HEAD_PATTERN, EF_ENGINE, DEFINED_PATTERN, effect));
+                add(new LedData(OP_HEAD_OPTION, randomTime, patternTime));
+                add(new LedData(OP_HEAD_START_DELAY, startTime));
+                add(new LedData(OP_START, 0));
+                if (randomTime == 0) {
+                    add(new LedData(0, 100));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 26));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 42));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 66));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 82));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 106));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 146));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 146));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 146));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 146));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 146));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 100));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT, 190));
+                    add(new LedData(OP_TRANS_START, 0));
+                } else if (randomTime == 1) {
+                    add(new LedData(0, 100));
+                    add(new LedData(OP_FOR_START,100));
+                    add(new LedData(OP_RANDOM_VAL,0));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START,100));
+                    add(new LedData(OP_RANDOM_VAL,0));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START,100));
+                    add(new LedData(OP_RANDOM_VAL,26));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START,100));
+                    add(new LedData(OP_RANDOM_VAL,82));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START,100));
+                    add(new LedData(OP_RANDOM_VAL,130));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START,250));
+                    add(new LedData(OP_RANDOM_VAL,250));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START,250));
+                    add(new LedData(OP_RANDOM_VAL,250));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START,250));
+                    add(new LedData(OP_RANDOM_VAL,250));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START,250));
+                    add(new LedData(OP_RANDOM_VAL,250));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START,250));
+                    add(new LedData(OP_RANDOM_VAL,250));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 190));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT, 190));
+                    add(new LedData(OP_TRANS_START, 0));
+                } else if (randomTime == 2) {
+                    add(new LedData(0, 100));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 26));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 42));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 66));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 82));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 106));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 250));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 250));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 250));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 250));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 250));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 190));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT, 190));
+                    add(new LedData(OP_TRANS_START, 0));
+                } else if (randomTime == 3) {
+                    add(new LedData(0, 100));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 30));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 46));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 70));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 86));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 100));
+                    add(new LedData(OP_RANDOM_VAL, 126));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 134));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 150));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 198));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 250));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_FOR_START, 250));
+                    add(new LedData(OP_RANDOM_VAL, 250));
+                    add(new LedData(OP_FOR_END, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_START, 190));
+                    add(new LedData(OP_TRANS_BRIGHT_STOP, 0));
+                    add(new LedData(OP_TRANS_BRIGHT_COUNT, 190));
+                    add(new LedData(OP_TRANS_START, 0));
                 }
                 add(new LedData(OP_END, 0));
                 break;

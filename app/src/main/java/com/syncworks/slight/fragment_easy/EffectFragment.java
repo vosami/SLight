@@ -41,6 +41,7 @@ public class EffectFragment extends Fragment {
     private static int staticEffectTime = 2;
     private static int staticRandomTime = 0;
     private static int staticPatternOption = 0;
+    private static int staticType = 0;
 
 
     private Button btnRgb[] = new Button[Define.NUMBER_OF_COLOR_LED];
@@ -172,7 +173,7 @@ public class EffectFragment extends Fragment {
             mGroupList.add(listData[0]);
             mChildList.add(optionData[0]);
         } else if (getLedSelected() == LED_RGB_ONLY_SELECTED) {
-            listCount = 16;
+            listCount = 17;
             listData = new EffectListData[listCount];
             for (int i=0;i<listCount;i++) {
                 listData[i] = new EffectListData();
@@ -229,6 +230,9 @@ public class EffectFragment extends Fragment {
             listData[15].effectName = getString(R.string.easy_effect_rgb_rainbow);
             listData[15].imgId = R.drawable.ic_pattern_rainbow;
             mGroupList.add(listData[15]);
+            listData[16].effectName = getString(R.string.easy_effect_rgb_rainbow_patel);
+            listData[16].imgId = R.drawable.ic_pattern_rainbow;
+            mGroupList.add(listData[16]);
             optionData = new EffectOptionData[listCount];
             for (int i=0;i<listCount;i++) {
                 optionData[i] = new EffectOptionData();
@@ -271,10 +275,11 @@ public class EffectFragment extends Fragment {
             mChildList.add(optionData[13]);
             mChildList.add(optionData[14]);
             mChildList.add(optionData[15]);
+            mChildList.add(optionData[16]);
             /*mChildList.add(optionData[10]);
             mChildList.add(optionData[11]);*/
         } else {
-            listCount = 15;
+            listCount = 20;
             listData = new EffectListData[listCount];
             for (int i=0;i<listCount;i++) {
                 listData[i] = new EffectListData();
@@ -329,6 +334,21 @@ public class EffectFragment extends Fragment {
             listData[14].effectName = getString(R.string.easy_effect_pattern_energy);
             listData[14].imgId = R.drawable.ic_pattern_energy;
             mGroupList.add(listData[14]);
+            listData[15].effectName = getString(R.string.easy_effect_pattern_christmas);
+            listData[15].imgId = R.drawable.ic_pattern_christmas;
+            mGroupList.add(listData[15]);
+            listData[16].effectName = getString(R.string.easy_effect_pattern_christmas1);
+            listData[16].imgId = R.drawable.ic_pattern_christmas;
+            mGroupList.add(listData[16]);
+            listData[17].effectName = getString(R.string.easy_effect_pattern_christmas2);
+            listData[17].imgId = R.drawable.ic_pattern_christmas;
+            mGroupList.add(listData[17]);
+            listData[18].effectName = getString(R.string.easy_effect_pattern_christmas3);
+            listData[18].imgId = R.drawable.ic_pattern_christmas;
+            mGroupList.add(listData[18]);
+            listData[19].effectName = getString(R.string.easy_effect_pattern_engine);
+            listData[19].imgId = R.drawable.ic_pattern_jet_engine;
+            mGroupList.add(listData[19]);
             optionData = new EffectOptionData[listCount];
             for (int i=0;i<listCount;i++) {
                 optionData[i] = new EffectOptionData();
@@ -337,10 +357,20 @@ public class EffectFragment extends Fragment {
                     optionData[i].isShowEffectDelay = false;
                     optionData[i].isShowRandomDelay = false;
                     optionData[i].isShowPatternOption = true;
+                    optionData[i].isShowType = false;
+                } else if (i == 15 || i == 16 || i == 17 || i == 18) {
+                    optionData[i].isShowEffectDelay = true;
+                    optionData[i].isShowRandomDelay = false;
+                    optionData[i].isShowPatternOption = false;
+                    optionData[i].isShowType = true;
                 } else {
                     optionData[i].isShowEffectDelay = true;
                     optionData[i].isShowRandomDelay = true;
                     optionData[i].isShowPatternOption = false;
+                    optionData[i].isShowType = false;
+                }
+                if (i == 19) {
+                    optionData[i].randomString = getString(R.string.easy_effect_option_option_string);
                 }
                 if (staticEffectNum == i) {
                     optionData[i].timeStartDelay = staticStartTime;
@@ -370,8 +400,12 @@ public class EffectFragment extends Fragment {
             mChildList.add(optionData[12]);
             mChildList.add(optionData[13]);
             mChildList.add(optionData[14]);
-            /*mChildList.add(optionData[9]);
-            mChildList.add(optionData[10]);*/
+            mChildList.add(optionData[15]);
+            mChildList.add(optionData[16]);
+            mChildList.add(optionData[17]);
+            mChildList.add(optionData[18]);
+            mChildList.add(optionData[19]);
+
         }
 
         expandableAdapter = new BaseExpandableAdapter(getActivity(),mGroupList,mChildList);
@@ -401,7 +435,7 @@ public class EffectFragment extends Fragment {
                 expandableAdapter.setEffectTime(staticEffectNum, staticEffectTime);
                 expandableAdapter.setRandomTime(staticEffectNum, staticRandomTime);
                 expandableAdapter.notifyDataSetChanged();
-                doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime, staticPatternOption);
+                doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime, staticPatternOption, staticType);
                 return false;
             }
         });
@@ -419,21 +453,28 @@ public class EffectFragment extends Fragment {
                 //mChildList.get(curGroup).timeEffectDelay = effectTime;
                 expandableAdapter.notifyDataSetChanged();
                 staticEffectTime = effectTime;
-                doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime, staticPatternOption);
+                doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime, staticPatternOption,staticType);
             }
 
             @Override
             public void onRandomTime(int curGroup, int randomTime) {
                 expandableAdapter.notifyDataSetChanged();
                 staticRandomTime = randomTime;
-                doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime, staticPatternOption);
+                doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime, staticPatternOption,staticType);
             }
 
             @Override
             public void onPatternOption(int curGroup, int patternOption) {
                 expandableAdapter.notifyDataSetChanged();
                 staticPatternOption = patternOption;
-                doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime, staticPatternOption);
+                doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime, staticPatternOption,staticType);
+            }
+
+            @Override
+            public void onType(int curGroup, int type) {
+                expandableAdapter.notifyDataSetChanged();
+                staticType = type;
+                doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime, staticPatternOption,staticType);
             }
         });
 
@@ -488,7 +529,7 @@ public class EffectFragment extends Fragment {
             staticStartTime = time;
             expandableAdapter.setStartTime(staticEffectNum,time);
             expandableAdapter.notifyDataSetChanged();
-            doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime, staticPatternOption);
+            doPattern(staticEffectNum,staticEffectTime,staticRandomTime,staticStartTime, staticPatternOption,staticType);
         }
 
         @Override
@@ -585,13 +626,13 @@ public class EffectFragment extends Fragment {
     // EasyActivity 에 패턴 전달
     private void doPattern(int effect) {
         if (mListener != null) {
-            mListener.onEffect(effect, staticEffectTime, staticRandomTime, staticStartTime, staticPatternOption);
+            mListener.onEffect(effect, staticEffectTime, staticRandomTime, staticStartTime, staticPatternOption, staticType);
         }
     }
 
-    private void doPattern(int effect, int patternTime, int randomTime, int startTime, int patternOption) {
+    private void doPattern(int effect, int patternTime, int randomTime, int startTime, int patternOption, int type) {
         if (mListener != null) {
-            mListener.onEffect(effect,patternTime, randomTime, startTime, patternOption);
+            mListener.onEffect(effect,patternTime, randomTime, startTime, patternOption, type);
         }
     }
 

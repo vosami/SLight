@@ -152,7 +152,12 @@ public class LedSelectFragment extends Fragment {
             R.drawable.ic_pattern_cannon,
             R.drawable.ic_pattern_explosion,
             R.drawable.ic_pattern_energy,
-            R.drawable.ic_pattern_rainbow
+            R.drawable.ic_pattern_rainbow,
+            R.drawable.ic_pattern_christmas,
+            R.drawable.ic_pattern_christmas,
+            R.drawable.ic_pattern_christmas,
+            R.drawable.ic_pattern_christmas,
+            R.drawable.ic_pattern_jet_engine,
     };
 
     private void displayBtn() {
@@ -206,7 +211,11 @@ public class LedSelectFragment extends Fragment {
                 if (ledOptions != null) {
                     btnSingle[i].setBright(ledOptions[i].getRatioBright()*191/100);
                 }
-                ivSingle[i].setBackground(getResources().getDrawable(PATTERN[ledPattern[i]]));
+                if (ledPattern[i] == 15 || ledPattern[i]==16 || ledPattern[i] == 17 || ledPattern[i] == 18) {
+                    ivSingle[i].setBackground(getResources().getDrawable(R.drawable.ic_pattern_christmas));
+                } else {
+                    ivSingle[i].setBackground(getResources().getDrawable(PATTERN[ledPattern[i]]));
+                }
                 ivSingle[i].setVisibility(View.VISIBLE);
             } else {
                 btnSingle[i].setBtnBright(false);

@@ -8,4 +8,5 @@ public interface BaseExpandableInterface {
     public void onEffectTime(int curGroup, int effectTime);
     public void onRandomTime(int curGroup, int randomTime);
     public void onPatternOption(int curGroup, int patternOption);
+    public void onType(int curGroup, int type);
 }

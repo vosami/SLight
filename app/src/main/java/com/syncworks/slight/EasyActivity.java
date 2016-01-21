@@ -1500,7 +1500,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
     }
 
     @Override
-    public void onEffect(int effect, int patternTime, int randomTime, int startTime, int patternOption) {
+    public void onEffect(int effect, int patternTime, int randomTime, int startTime, int patternOption, int type) {
         txData(TxDatas.formatSleep(false));
         // 분 이벤트 종료
         txData(TxDatas.formatMinuteTimerStart(false));
@@ -1509,7 +1509,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 ledDataSeries.ledOptions[i].setDelayStartOption(startTime);
                 ledDataSeries.ledOptions[i].setPatternDelayOption(patternTime);
                 ledDataSeries.ledOptions[i].setRandomDelayOption(randomTime);
-                ledDataSeries.ledExeDatas[i].setEffect(effect, patternTime, randomTime, startTime, patternOption);
+                ledDataSeries.ledExeDatas[i].setEffect(effect, patternTime, randomTime, startTime, patternOption, type);
                 // LED 선택 프래그먼트에 효과 값 전달
                 fragment2nd.setPattern(false, i, effect);
                 List<byte[]> mDataList = TxDatas.formatMemWrite(i,
@@ -1536,7 +1536,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 ledDataSeries.ledOptions[i*3 + 2].setRandomDelayOption(randomTime);
                 List<byte[]> mDataList;
                 int dataCount;
-                ledDataSeries.ledExeDatas[i*3].setRgbEffect(effect, i * 3, patternTime, randomTime, startTime, patternOption);
+                ledDataSeries.ledExeDatas[i*3].setRgbEffect(effect, i * 3, patternTime, randomTime, startTime, patternOption, type);
                 // LED 선택 프래그먼트에 효과 값 전달
                 fragment2nd.setPattern(true, i, effect);
                 mDataList = TxDatas.formatMemWrite(i*3,
@@ -1545,7 +1545,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 for (int j=0;j<dataCount;j++) {
                     txData(mDataList.get(j));
                 }
-                ledDataSeries.ledExeDatas[i*3 + 1].setRgbEffect(effect, i * 3 +1, patternTime, randomTime, startTime, patternOption);
+                ledDataSeries.ledExeDatas[i*3 + 1].setRgbEffect(effect, i * 3 +1, patternTime, randomTime, startTime, patternOption, type);
                 // LED 선택 프래그먼트에 효과 값 전달
                 fragment2nd.setPattern(true, i, effect);
                 mDataList = TxDatas.formatMemWrite(i*3 + 1,
@@ -1554,7 +1554,7 @@ public class EasyActivity extends ActionBarActivity implements OnEasyFragmentLis
                 for (int j=0;j<dataCount;j++) {
                     txData(mDataList.get(j));
                 }
-                ledDataSeries.ledExeDatas[i*3 + 2].setRgbEffect(effect, i * 3 +2, patternTime, randomTime, startTime, patternOption);
+                ledDataSeries.ledExeDatas[i*3 + 2].setRgbEffect(effect, i * 3 +2, patternTime, randomTime, startTime, patternOption, type);
                 // LED 선택 프래그먼트에 효과 값 전달
                 fragment2nd.setPattern(true, i, effect);
                 mDataList = TxDatas.formatMemWrite(i*3 + 2,

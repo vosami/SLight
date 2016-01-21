@@ -75,6 +75,12 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    private void doType(int curGroup, int type) {
+        if (listener != null) {
+            listener.onType(curGroup, type);
+        }
+    }
+
     public void setStartTime(int group, int startTime) {
         this.childList.get(group).get(0).timeStartDelay = startTime;
         Logger.d(this,"setStartTime",startTime);
@@ -179,10 +185,12 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
             childHolder.btnPatternTime = (Button) v.findViewById(R.id.btn_pattern_time);
             childHolder.btnRandomTime = (Button) v.findViewById(R.id.btn_random_time);
             childHolder.btnPatternOption = (Button) v.findViewById(R.id.btn_pattern_option);
+            childHolder.btnType = (Button) v.findViewById(R.id.btn_pattern_type);
             childHolder.llStartTime = (LinearLayout) v.findViewById(R.id.ll_start_time);
             childHolder.llEffectTime = (LinearLayout) v.findViewById(R.id.ll_effect_time);
             childHolder.llRandomTime = (LinearLayout) v.findViewById(R.id.ll_random_time);
             childHolder.llOption = (LinearLayout) v.findViewById(R.id.ll_pattern_option);
+            childHolder.llType = (LinearLayout) v.findViewById(R.id.ll_type);
             childHolder.pbStartTime = (ProgressBar) v.findViewById(R.id.progressbar_start_time);
             childHolder.stepEffectTime = new View[5];
             childHolder.stepEffectTime[0] = v.findViewById(R.id.effect_step_0);
@@ -201,6 +209,12 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
             childHolder.stepOption[1] = v.findViewById(R.id.option_step_1);
             childHolder.stepOption[2] = v.findViewById(R.id.option_step_2);
             childHolder.stepOption[3] = v.findViewById(R.id.option_step_3);
+            childHolder.stepType = new View[5];
+            childHolder.stepType[0] = v.findViewById(R.id.type_0);
+            childHolder.stepType[1] = v.findViewById(R.id.type_1);
+            childHolder.stepType[2] = v.findViewById(R.id.type_2);
+            childHolder.stepType[3] = v.findViewById(R.id.type_3);
+            childHolder.stepType[4] = v.findViewById(R.id.type_4);
             v.setTag(childHolder);
         }else{
             childHolder = (ChildHolder)v.getTag();
@@ -229,6 +243,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
             childHolder.llEffectTime.setVisibility(View.GONE);
         }
         if (childList.get(groupPosition).get(0).isShowRandomDelay) {
+            childHolder.btnRandomTime.setText(childList.get(groupPosition).get(0).randomString);
             childHolder.btnRandomTime.setVisibility(View.VISIBLE);
             childHolder.llRandomTime.setVisibility(View.VISIBLE);
             int randomDelay = childList.get(groupPosition).get(0).timeRandomDelay;
@@ -260,6 +275,23 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
         } else {
             childHolder.btnPatternOption.setVisibility(View.GONE);
             childHolder.llOption.setVisibility(View.GONE);
+        }
+        if (childList.get(groupPosition).get(0).isShowType) {
+            childHolder.btnType.setVisibility(View.VISIBLE);
+            int patternType = childList.get(groupPosition).get(0).patternType;
+            String[] typeBtnText = context.getResources().getStringArray(R.array.easy_effect_option_array_type);
+            childHolder.btnType.setText(typeBtnText[patternType]);
+            childHolder.llType.setVisibility(View.VISIBLE);
+            for (int i=0;i<5;i++) {
+                if (patternType >= i) {
+                    childHolder.stepType[i].setVisibility(View.VISIBLE);
+                } else {
+                    childHolder.stepType[i].setVisibility(View.INVISIBLE);
+                }
+            }
+        } else {
+            childHolder.btnType.setVisibility(View.GONE);
+            childHolder.llType.setVisibility(View.GONE);
         }
 
         childHolder.btnStartTime.setOnClickListener(new View.OnClickListener() {
@@ -315,6 +347,21 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
             }
         });
 
+        childHolder.btnType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                childList.get(curGroupPosition).get(0).patternType++;
+                if (childList.get(curGroupPosition).get(0).patternType > 4) {
+                    childList.get(curGroupPosition).get(0).patternType = 0;
+                }
+                doType(curGroupPosition, childList.get(curGroupPosition).get(0).patternType);
+                if (mToast != null) {
+                    mToast.cancel();
+                }
+                //mToast = Toast.makeText(context, "")
+            }
+        });
+
         return v;
     }
 
@@ -336,14 +383,17 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
         public Button btnPatternTime;
         public Button btnRandomTime;
         public Button btnPatternOption;
+        public Button btnType;
         public LinearLayout llStartTime;
         public LinearLayout llEffectTime;
         public LinearLayout llRandomTime;
         public LinearLayout llOption;
+        public LinearLayout llType;
         public ProgressBar pbStartTime;
         public View stepEffectTime[];
         public View stepRandomTime[];
         public View stepOption[];
+        public View stepType[];
     }
 
 }
